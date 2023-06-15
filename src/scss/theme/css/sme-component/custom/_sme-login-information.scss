@@ -1,0 +1,58 @@
+.sme-login-information {
+  background: #fff;
+  color: #brand-grey-dark;
+
+  padding: 30px;
+
+  &__subtitle {
+    @include font($font-size-12);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-12 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-12 * $factor2);
+    }
+    margin-bottom: 6px;
+    opacity: 0.8;
+    color: #999;
+    display: block;
+  }
+
+  &__title {
+    @include heading1;
+  }
+
+  &__content {
+    @include font($font-size-16);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-16 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-16 * $factor2);
+    }
+    margin-top: 16px;
+  }
+
+  &__footer {
+    margin-top: 40px;
+
+    .btn-link {
+      @include anchor {
+        color: $brand-orange;
+      }
+    }
+  }
+
+  @media #{$sm-up} {
+    /*width: 560px;*/
+    height: 288px;
+
+    &__content {
+      height: 130px;
+    }
+
+    &__footer {
+      margin-top: 12px;
+    }
+  }
+}

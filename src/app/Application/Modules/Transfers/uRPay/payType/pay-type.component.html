@@ -1,0 +1,87 @@
+<arb-panel>
+  <div class='legend'>{{ 'uRPay.name' | translate }}  </div>
+  <div class='title'>{{ 'uRPay.title' | translate }}</div>
+  <div class='sme-wizard__content' style='height: auto;'>
+    <div>
+      <ul class='sme-radio-buttons'>
+        <li>
+          <div class='sme-radio radio' (click)='onChangeType("phone")'>
+            <label>
+              <input type='radio' [checked]='payType=="phone"'>
+              <i aria-hidden='true'></i>
+              <span>{{'uRPay.transferByPhone' | translate}}</span>
+            </label>
+          </div>
+        </li>
+        <li>
+          <div class='sme-radio radio' (click)='onChangeType("iban")'>
+            <label>
+              <input type='radio' [checked]='payType=="iban"'>
+              <i aria-hidden='true'></i>
+              <span>{{'uRPay.transferByIBAN' | translate}}</span>
+            </label>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</arb-panel>
+
+
+<arb-panel *ngIf='payType'>
+  <form autocomplete='off' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='row'>
+
+        <!--Phone-->
+        <div class='col-xs-12 col-sm-6' *ngIf='payType=="phone"'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.phone' | translate }}*</label>
+            <div class='form-group'>
+              <input class='form-control' formControlName='wallet' inputPattern='onlyDigits'
+                     maxlength='10' placeholder="{{ 'uRPay.phoneHint' | translate }}" />
+            </div>
+          </div>
+          <div
+            *ngIf="formModel.controls.wallet.hasError('required') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.phone' | translate }}</span>
+          </div>
+          <div
+            *ngIf=" formModel.controls.wallet.hasError('pattern') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.phoneInvalid' | translate }}</span>
+          </div>
+        </div>
+        <!--/Phone-->
+
+        <!--iban-->
+        <div class='col-xs-12 col-sm-6' *ngIf='payType=="iban"'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.iban' | translate }}*</label>
+            <div class='form-group'>
+              <input dir='ltr' class='form-control' formControlName='wallet' maxlength='24'
+                     placeholder="{{ 'uRPay.ibanHint' | translate }}" />
+            </div>
+          </div>
+          <div
+            *ngIf=" formModel.controls.wallet.hasError('required') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.iban' | translate }}</span>
+          </div>
+          <div
+            *ngIf=" formModel.controls.wallet.hasError('pattern') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.ibanInvalid' | translate }}</span>
+          </div>
+          <div
+            *ngIf=" formModel.controls.wallet.hasError('minlength') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.ibanInvalidLength' | translate }}</span>
+          </div>
+        </div>
+        <!--/iban-->
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>

@@ -1,0 +1,237 @@
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">
+      {{ 'fleet.requests.summaryStepTitle' | translate }}
+    </p>
+  </div>
+  <sme-card>
+    <div class="card-body">
+      <div class="sme-row">
+        <img src="assets/icons/info.svg" />
+        <p class="sme-card-msg">
+          {{ 'fleet.requests.summaryStepNote' | translate }}
+        </p>
+      </div>
+    </div>
+  </sme-card>
+</div>
+<!--Requested Financing Amount-->
+<div class="container-fluid">
+  <sme-card [startTitle]="'fleet.requests.amountDetails'|translate" [headerFontSize]="'md'">
+    <div class="card-body">
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.requestedFinancingAmount'|translate}}</label>
+            <p class="sme-form-group-txt">{{amtDetails?.requestedAmt | number : '1.2-2'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.totalAdminFees'|translate}}</label>
+            <p class="sme-form-group-txt">{{amtDetails?.totalAdminFee | number : '1.2-2'}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.totalRepaymentAmt'|translate}}</label>
+            <p class="sme-form-group-txt">{{amtDetails?.totalREPmtAmt | number : '1.2-2'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.totalDownPmt'|translate}}</label>
+            <p class="sme-form-group-txt">{{amtDetails?.DownPmt | number : '1.2-2'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>
+<!--Linked Account-->
+<div class="container-fluid">
+  <sme-card [startTitle]="'fleet.requests.linkedAccount'|translate" [headerFontSize]="'md'">
+    <div class="card-body">
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.accountNumber'|translate}}</label>
+            <p class="sme-form-group-txt">{{businessDetails?.accountNum}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>
+
+<!--Business Details-->
+<div class="container-fluid">
+  <sme-card [startTitle]="'fleet.requests.businessDetails'|translate" [headerFontSize]="'md'">
+    <div class="card-body">
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{ 'fleet.requests.dateEstablishment' | translate}} </label>
+            <p class="sme-form-group-txt">{{businessDetails?.establishmentDate}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.businessActivity' |translate}}</label>
+            <p class="sme-form-group-txt">{{businessDetails?.businessActivities}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.numberOfBusiness'|translate}}</label>
+            <p class="sme-form-group-txt">{{businessDetails?.businessOutletsNum}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.typeBusiness'|translate}}</label>
+            <p class="sme-form-group-txt">{{businessDetails?.businessType}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.typeBranches'|translate}}</label>
+            <p class="sme-form-group-txt">{{businessDetails?.businessOutletsType}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{ 'fleet.requests.primaryBusinessLocation' |translate}}</label>
+            <p class="sme-form-group-txt">{{businessDetails?.businessLocation}}</p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </sme-card>
+</div>
+
+<!--ExternalQuotation-->
+<ng-container *ngIf="externalQuotationList?.length > 0">
+    <ng-container  *ngFor="let quotation of externalQuotationList; let i = index" >
+    <div  *ngFor="let purpose of quotation?.purposes; let j = index" class="container-fluid">
+      <sme-card [startTitle]=" j === 0
+      ? title1 + (i + 1)
+      : title2 + (j + 1)" [headerFontSize]="'md'">
+        <div class="card-body">
+          <div class="sme-row-4-col">
+            <div *ngIf="j === 0" class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.quotationDocument'|translate}}</label>
+                <p class="sme-form-group-txt">
+                  <span class="pr-2"> <img src="assets/icons/doc.svg" /></span>
+                  {{'fleet.requests.signedAppForm'|translate}}
+                </p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.purposeUse'|translate}}</label>
+                <p class="sme-form-group-txt">{{getPurposeUseTxt(purpose?.purposeOfUse)}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.brandName'|translate}}</label>
+                <p class="sme-form-group-txt">{{purpose?.brandName}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.quantity'| translate}}</label>
+                <p class="sme-form-group-txt">{{purpose?.vehiclesNum}}</p>
+              </div>
+            </div>
+
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.purposeofUseValue'|translate}}</label>
+                <p class="sme-form-group-txt">{{purpose?.purposeValue}} {{'financeProduct.sar' | translate}}</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </sme-card>
+    </div>
+    </ng-container>
+</ng-container>
+
+<!--Internal Quotation Details-->
+<ng-container *ngIf="internalQuotationList?.length > 0">
+  <div  *ngFor="let purpose of internalQuotationList; let i = index" class="container-fluid">
+    <sme-card [startTitle]=" i === 0
+    ? title3 
+    : title2 + (i + 1)" [headerFontSize]="'md'">
+      <div class="card-body">
+        <div class="sme-row-4-col">
+          <div class="sme-col">
+            <div class="sme-form-group">
+              <label class="sme-form-group-label">{{'fleet.requests.purposeUse'|translate}}</label>
+              <p class="sme-form-group-txt">{{getPurposeUseTxt(purpose?.purposeOfUse)}}</p>
+            </div>
+          </div>
+          <div class="sme-col">
+            <div class="sme-form-group">
+              <label class="sme-form-group-label">{{'fleet.requests.brandName'|translate}}</label>
+              <p class="sme-form-group-txt">{{purpose?.brandName}}</p>
+            </div>
+          </div>
+          <div class="sme-col">
+            <div class="sme-form-group">
+              <label class="sme-form-group-label">{{'fleet.requests.quantity'| translate}}</label>
+              <p class="sme-form-group-txt">{{purpose?.vehiclesNum}}</p>
+            </div>
+          </div>
+
+          <div class="sme-col">
+            <div class="sme-form-group">
+              <label class="sme-form-group-label">{{'fleet.requests.purposeofUseValue'|translate}}</label>
+              <p class="sme-form-group-txt">{{purpose?.purposeValue}} {{'financeProduct.sar' | translate}}</p>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </sme-card>
+  </div>
+</ng-container>
+
+<!--ExternalQuotation-->
+<div class="container-fluid" *ngIf="documentationUploaded && documentationUploaded.length > 0">
+  <sme-card [startTitle]="'documentation'|translate" [headerFontSize]="'md'">
+    <div class="card-body">
+      <div class="sme-row-4-col">
+        <div *ngFor="let doc of documentationUploaded" class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{doc?.title}}</label>
+            <p class="sme-form-group-txt">
+              <span class="pr-2"> <img src="assets/icons/doc.svg" /></span>
+              {{doc?.name}}
+            </p>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </sme-card>
+</div>
+<!--Documentation-->
+<div class="container-fluid">
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class="btn btn-default btn-wide sme-back-btn" (click)="navigateTo(5)">
+      {{'fleet.btn.back'| translate}}
+    </button>
+    <button type="submit" class="btn btn-primary btn-wide" (click)="submitApplication()">
+      {{'fleet.btn.submitApplication' | translate}}
+    </button>
+  </div>
+</div>

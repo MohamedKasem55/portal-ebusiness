@@ -1,0 +1,23 @@
+<div [hidden]="sharedData.bulkPaymentsBatchDetail">
+    <app-bulkPayment-table
+            [items]="pageResult.items"
+            [modal]="modalAuth"
+            [tableDisplaySize]="tableDisplaySize"
+            [totalSize]="pageResult.total"
+            [futureLevels]="false"
+            [externalPagination]="true"
+            [selectable]="true"
+            [showDetailLink]="true"
+            (onDetailLinkClicked)="onDetailLinkClicked($event)"
+            (setPage)="setPage($event)"
+            (onSelect)="onSelect($event)"
+            (changeDisplaySize)="changeDisplaySize($event)">
+    </app-bulkPayment-table>
+</div>
+
+<ng-container *ngIf="sharedData.bulkPaymentsBatchDetail">
+    <app-bulk-payment-detail [bulkPaymentsBatchDetail]="sharedData.bulkPaymentsBatchDetail">
+    </app-bulk-payment-detail>
+</ng-container>
+
+<app-levels-popup #modalAuth></app-levels-popup>

@@ -1,0 +1,27 @@
+<app-moi-payment-table
+        [items]="paymentsPagedResults.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="paymentsDisplaySize"
+        [totalSize]="paymentsPagedResults.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPagePayments($event)"
+        (changeDisplaySize)="changeDisplayPayment($event)">
+</app-moi-payment-table>
+
+<app-moi-refund-table
+        [items]="refundsPagedResults.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="refundsDisplaySize"
+        [totalSize]="refundsPagedResults.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+
+        [selectable]="true"
+        (setPage)="setPageRefunds($event)"
+        (changeDisplaySize)="changeDisplayRefunds($event)">
+</app-moi-refund-table>
+
+
+<app-levels-popup #modalAuth></app-levels-popup>

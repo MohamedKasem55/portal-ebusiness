@@ -1,0 +1,31 @@
+<arb-breadcrumb [routes]="[
+    ['dashboard.sadad'],
+	['sadadOLP.caEnrollment.serviceDetails']
+]">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep"
+        [steps]="['sadadOLP.caEnrollment.serviceDetails', getWizarStepTitle() ,'public.summary']">
+</arb-steps>
+
+<app-sadad-olp-ca-enrollment-step1 *ngIf="isStepVisible(1)" (onInit)="onInitStep(1,$event)" [formCAEnrollment]="formCAEnrollment"
+                                   [title]="'sadadOLP.caEnrollment.serviceDetails'" >
+</app-sadad-olp-ca-enrollment-step1>
+
+<app-sadad-olp-ca-enrollment-step2 *ngIf="isStepVisible(2)" (onInit)="onInitStep(2,$event)" [formCAEnrollment]="formCAEnrollment"
+                            [title]="'sadadOLP.caEnrollment.serviceDetails'">
+</app-sadad-olp-ca-enrollment-step2>
+
+<app-sadad-olp-ca-enrollment-step3 *ngIf="isStepVisible(3)">
+</app-sadad-olp-ca-enrollment-step3>
+
+<arb-buttons>
+        <button class="btn btn-default btn-wide" (click)="previous()"
+                *ngIf="isPreviousAllowed()">{{ 'public.back' | translate }}</button>
+        <button class="btn btn-primary btn-wide" (click)="nextAction()"
+                *ngIf="isNextAllowed()" >{{'sadadOLP.caEnrollment.updateOLPServiceData' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="nextAction()" [disabled]="!formCAEnrollment.valid"
+                *ngIf="isConfirmAllowed()">{{'sadadOLP.caEnrollment.confirmUpdateOLPServiceData' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="finish()"
+                *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

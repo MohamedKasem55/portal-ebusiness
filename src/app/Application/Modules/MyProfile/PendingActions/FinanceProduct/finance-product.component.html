@@ -1,0 +1,193 @@
+<div class="container-fluid" *ngIf="pageName==='GRID'">
+
+    <div class="sme-head">
+        <!-- <div class="sme-head__title">
+        {{ 'financeProduct.posFinance' | translate }}
+    </div> -->
+        <div class="end">
+            <button class="btn btn-primary btn-wide" type="button" (click)="approved()">{{
+                'financeProduct.pending.workflow' | translate}}</button>
+        </div>
+    </div>
+</div>
+
+<arb-steps [currentStep]="wizardStep" [steps]="['financeProduct.pending.select','financeProduct.pending.confirm',
+'financeProduct.pending.summary']">
+</arb-steps>
+
+
+
+<div class="container-fluid" *ngIf="pageName==='GRID'">
+    <br>
+    <br>
+    <div class="sme-page-block">
+
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <!-- <div class="sme-data-table__title">{{'financeProduct.details.pending' | translate }}</div> -->
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="pendingTable" [header]="'financeProduct.details.pending' | translate" [columns]="[
+                                   {'title':'financeProduct.newRequest.initiationDate' | translate,'dataKey':'initiationDate'},
+                                   {'title':'financeProduct.newRequest.initialBy' | translate,'dataKey':'initiatedBy'},
+                                   {'title':'financeProduct.newRequest.financingAmount' | translate,'dataKey':'financingAmt'},
+                                   {'title':'financeProduct.newRequest.profitRate' | translate,'dataKey':'profitRate'},
+                                   {'title':'financeProduct.newRequest.fees' | translate,'dataKey':'feesPercentage'},
+                                   {'title':'financeProduct.newRequest.tener' | translate,'dataKey':'rePymtPeriod'},
+                                   {'title':'financeProduct.pending.status' | translate,'dataKey':'status'},
+                                   {'title':'financeProduct.pending.nextStatus' | translate,'dataKey':'nextStatus'}]">
+                    </table-export>
+                </div>
+            </div>
+            <div>
+
+
+                <div class="sme-table table headerDataTable">
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #pendingTable
+                        class="material  sme-table sme-table--responsive table" [columnMode]="defaultColumnMode"
+                        [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [rows]="pendingData"
+                        (select)="onSelect($event)" [count]="pendingData.length" [externalPaging]="false"
+                        [externalSorting]="false">
+
+                        <ngx-datatable-column prop="initiationDate" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.newRequest.initiationDate' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span class="form-control human-selectable">
+                                    <a (click)="goDetails(row)"> {{row.initiationDate | date: 'dd/MM/yyyy'}}</a>
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="initiatedBy" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.newRequest.initialBy' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.initiatedBy}}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="financingAmt" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.newRequest.financingAmount' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.financingAmt | amountCurrency}} {{row.currency}}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="profitRate" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.newRequest.profitRate' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.profitRate}}%
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="feesPercentage" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.newRequest.fees' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.feesPercentage}}%
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="rePymtPeriod" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.newRequest.tener' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.rePymtPeriod}} {{'financeProduct.pending.month' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="status" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.pending.status' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.status}}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="nextStatus" [width]="160" [resizeable]="false"
+                            headerClass="text-align-center" class="mobile-hidden">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'financeProduct.pending.nextStatus' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>
+                                    {{row.nextStatus}}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" *ngIf="pageName==='STEPER'">
+    <finance-product-step1 [formModel]="informationFormModel" *ngIf="wizardStep===1"> </finance-product-step1>
+
+    <arb-panel *ngIf="wizardStep===2">
+        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+            [requestValidate]="requestValidate" #authorization>
+        </app-secured-authentication>
+    </arb-panel>
+
+    <finance-product-step3 *ngIf="wizardStep===3" [formModel]="informationFormModel"></finance-product-step3>
+</div>
+
+<arb-buttons *ngIf="pageName==='STEPER' && wizardStep<3">
+    <button class="btn btn-default btn-wide" *ngIf="pageName==='STEPER' && wizardStep==1" type="button"
+        (click)="reject()">
+        {{ 'financeProduct.reject' | translate}}</button>
+
+    <button class="btn btn-primary btn-wide" *ngIf="pageName==='STEPER' && wizardStep==1" type="button"
+        (click)="approved()">{{
+        'financeProduct.approved' | translate}}</button>
+
+    <button class="btn btn-default btn-wide" *ngIf="pageName==='STEPER' && wizardStep==2" type="button"
+        (click)="back()">
+        {{ 'financeProduct.back' | translate}}</button>
+
+    <button class="btn btn-primary btn-wide" *ngIf="pageName==='STEPER' && wizardStep==2" type="button"
+        (click)="fialApproved()" [disabled]="canProceed()">
+        {{'financeProduct.proceed' | translate}}</button>
+
+</arb-buttons>

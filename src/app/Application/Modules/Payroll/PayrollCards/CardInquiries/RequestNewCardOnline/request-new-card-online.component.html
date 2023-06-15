@@ -1,0 +1,44 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li class="active">{{ 'payroll.requestNewCardOnline'| translate }}</li>
+    </ol>
+</div>
+
+<div class="sme-content-container container-fluid">
+
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+					<span class="num">1</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.select' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+					<span class="num">2</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3}"><span>
+					<span class="num">3</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+
+	<div>
+		<router-outlet (activate)="componentAdded($event)"></router-outlet>
+	</div>
+
+	<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	
+		<button *ngIf="wizardStep===1" (click)="backCardInquiries()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+		<button *ngIf="wizardStep===2" (click)="back()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+		<button *ngIf="wizardStep===1" (click)="proceed()" [disabled]="!actualForm.form.valid" class=" btn btn-primary btn-wide">{{ 'public.next' | translate }}</button>
+		<button *ngIf="wizardStep===2" (click)="confirm()" class=" btn btn-primary btn-wide" [disabled]="!isValid()">{{ 'public.confirm' | translate }}</button>
+
+	</div>
+
+</div>

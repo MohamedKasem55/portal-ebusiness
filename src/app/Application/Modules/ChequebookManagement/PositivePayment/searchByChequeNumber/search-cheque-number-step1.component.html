@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="account" class="required">{{ 'chequebook.account' | translate }}</label>
+                                            <span class="form-control disabled">{{chequeSelected?.account.fullAccountNumber}}</span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="chequeNumber" class="required">{{ 'chequebook.chequeNumber' | translate }}</label>
+
+                                            <span class="form-control disabled">{{chequeSelected?.positivePayCheckAccountsOutDTO[0].checkNumber}}</span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="status" class="required">{{ 'chequebook.chequeStatus' | translate }}</label>
+                                            <span class="form-control disabled">{{chequeSelected?.positivePayCheckAccountsOutDTO[0].checkStatusMsg | translate}}</span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="amount" class="required">{{ 'chequebook.amount' | translate }}</label>
+                                            <input id="amount" class="form-control" [(ngModel)]="chequeSelected.positivePayCheckAccountsOutDTO[0].amount" inputPattern="onlyPositiveDecimalNumbers" disabled/>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

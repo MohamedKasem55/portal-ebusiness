@@ -1,0 +1,127 @@
+<div class="sme-form">
+    <div class="sme-form__content">
+        <div class="sme-form__body">
+            <div class="row bottom-row" *ngIf="filteredSmsDataTable && filteredLimitsDataTable filteredUserDataTable">
+                <fieldset>
+                    <!-- <div class="col-xs-6 col-sm-3 avatar-class">
+                        <div class="form-group-information">
+                            <span class="sme-header__user-avatar">
+                                <a [routerLink]="['/preferences/user-profile']">
+                                    <img src="{{ userImage }}" />
+                                </a>
+                            </span>
+                        </div>
+                    </div> -->
+                    <div id="id" *ngFor="let userData of filteredUserDataTable; first as isFirst"
+                        class="form-group-information" [ngClass]="customLayout(userData)">
+
+                        <div *ngIf="isFirst; else noFirst" class="row">
+                            <div class="col-xs-6 col-sm-2">
+                                <span class="sme-header__user-avatar">
+                                    <a [routerLink]="['/preferences/user-profile']">
+                                        <img src="{{ userImage }}" />
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="col-xs-6 col-sm-10">
+                                <div class="label-data">
+                                    <label> {{userData.name | translate}}</label>
+                                </div>
+                                <div>
+                                    <span [ngClass]="customTextColor(userData.value)">{{userData.value}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ng-template #noFirst>
+
+                            <div class="label-data">
+                                <label> {{userData.name | translate}}</label>
+                            </div>
+
+                            <ng-container *ngIf="userData.name === 'welcome.lastLogonStatusLbl'">
+                                <div class="status-class">
+                                    <div *ngIf="lastLoginSuccesfull; else lastLoginError" class="icons status-class">
+                                        <div class="status-icon-first"> <span ng-reflect-ng-class="icon -success"
+                                                class="icon -success icons success-color"></span> </div>
+                                    </div>
+                                    <ng-template #lastLoginError>
+                                        <ng-container>
+                                            <div class="status-icon-first"> <span ng-reflect-ng-class="icon -close"
+                                                    class="icon -close icons error-color"></span> </div>
+                                        </ng-container>
+                                    </ng-template>
+                                    <div class="status-class">
+                                        <span class="text-color">{{userData.value}}</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="userData.name==='welcome.lastLogonDateTimeLbl'">
+                                <div class="status-class">
+                                    <div class="icons status-class">
+                                        <div class="status-icon-first"> <span ng-reflect-ng-class="icon -calendar"
+                                                class="icon -calendar icons date-time-color"></span> </div>
+                                        <div class="status-data"> <span
+                                                class="text-color">{{userData.value | lastLogonDateTime:'date'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="icons status-class">
+                                        <div class="status-icon"> <span ng-reflect-ng-class="icon -time"
+                                                class="icon -time icons date-time-color"></span> </div>
+                                        <div class="status-data"> <span
+                                                class="text-color">{{userData.value | lastLogonDateTime:'time'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="!isIconField(userData)">
+                                <div>
+                                    <span class="text-color">{{userData.value}}</span>
+                                </div>
+                            </ng-container>
+
+                        </ng-template>
+
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="title-group">{{'welcome.remainingLimits' | translate}}</div>
+            <hr class="home-hr">
+
+            <div class="row bottom-row" *ngIf="filteredSmsDataTable && filteredLimitsDataTable filteredUserDataTable">
+                <fieldset>
+                    <div *ngFor="let limitsData of filteredLimitsDataTable" class="col-xs-6 col-sm-3">
+                        <div class="form-group-information">
+                            <div class="label-data">
+                                <label>{{limitsData.name | translate}}</label>
+                            </div>
+                            <div>
+                                <span class="text-color">{{limitsData.value | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="title-group">{{'welcome.smsNotifications' | translate}}</div>
+            <hr class="home-hr">
+
+            <div class="row bottom-row" *ngIf="filteredSmsDataTable && filteredLimitsDataTable filteredUserDataTable">
+                <fieldset>
+                    <div *ngFor="let limitsData of filteredSmsDataTable" class="col-xs-6 col-sm-3">
+                        <div class="form-group-information">
+                            <div class="label-data">
+                                <label>{{limitsData.name | translate}}</label>
+                            </div>
+                            <div>
+                                <span class="text-color">{{limitsData.value | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

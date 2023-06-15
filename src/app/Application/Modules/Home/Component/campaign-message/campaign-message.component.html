@@ -1,0 +1,24 @@
+<div *ngIf="alertInfo && messages" class="message-container">
+  <div class="row align">
+    <div class="col-md-1">
+      <span class="glyphicon glyphicon-info-sign" style="top: 50%;"></span>
+    </div>
+    <div class="col-md-10 messageText">
+      <div *ngFor="let alert of messages">
+
+
+        <div class="msg-color" *ngIf="translate.currentLang === 'en'">
+          <span class="text-info" [innerHtml]="alert.englishMessage"></span></div>
+
+        <div class="msg-color" *ngIf="translate.currentLang === 'ar'">
+          <span class="text-info" [innerHtml]="alert.arabicMessage"></span></div>
+      </div>
+    </div>
+
+    <div class="col-md-1">
+      <button type="button" class="btn btn-info" (click)="onClosed(alert)">
+        {{ 'public.close' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

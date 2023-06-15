@@ -1,0 +1,818 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active"><a href="#" [routerLink]="['/businessCards/menu']">{{ 'commercialCards.name' | translate
+                }}</a>
+        </li>
+        <li class="active"><a href="#" [routerLink]="['/businessCards/creditcardlist']">{{
+                'commercialCards.creditCardListName' | translate }}</a>
+        </li>
+        <li class="active">{{ 'commercialCards.commercialCardsID' | translate:{id: indexSelected} }}</li>
+    </ol>
+</div>
+    <div>
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+
+                                <div id="target-data" class="target-data" *ngIf="selectedcard; else noData">
+
+                                    <div class="carousel-own-styles" style="width: 100%;">
+                                        <div>
+                                            <div class=" flex-wrap">
+                                                <div *ngIf="selectedcard" class="carousel-details">
+
+                                                    <div id="target" class="frame-target">
+                                                        <div class="head-list" style="margin-top: 5px">
+                                                            <div id="image" class="display-div-column">
+                                                                <img *ngIf="selectedcard && selectedcard.cardIcon; else imageCard"
+                                                                    [src]="selectedcard.cardIcon"
+                                                                    class="image-medium-target" />
+                                                                <ng-template #imageCard>
+                                                                    <span class="image-medium-target"></span>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="body-list-details">
+                                                            <div class="body-list">
+                                                                <div class="titlePin message">
+                                                                    <div>
+                                                                        <span
+                                                                            class="form-control disabled border-none">{{selectedcard?.embossingName}}</span>
+
+                                                                    </div>
+                                                                    <div>
+                                                                        <span
+                                                                            class="form-control link-target border-none"
+                                                                            (click)="cancelCard()">{{'commercialCards.cancelCard'
+                                                                            | translate }}</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="titlePin message">
+                                                                    <span class="border-none">{{
+                                                                        selectedcard?.cardNumber |
+                                                                        hiddenAccount }}</span>
+                                                                </div>
+
+                                                                <div class="progress-bar-ext">
+                                                                    <div
+                                                                        [ngStyle]="{'width': selectedcard | cardBalancePercentage}">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="titlePin message">
+                                                                    <div class="body-list-details">
+                                                                        <div> <span
+                                                                                class="text-legend">{{'commercialCards.25spent'
+                                                                                | translate }}</span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span
+                                                                                class="border-none">{{selectedcard?.rewardPoints
+                                                                                | amountCurrency }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="body-list-details line-separator">
+                                                                        <div> <span
+                                                                                class="text-legend">{{'commercialCards.totalCredit'
+                                                                                | translate }}</span>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <span
+                                                                                class="border-none navy-bold">{{selectedcard?.totalAmt
+                                                                                | amountCurrency }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="isSole && viewCredentialGroupIsActive">
+                                                                    <span class="form-control link-target border-none"
+                                                                        style="margin-top: 20px; padding-left: 0px; color: #2b4499"
+                                                                        (click)="sendMessageAndRequestOTPToValidate()">{{'viewCardsCredential.linkDisplayCards'
+                                                                        | translate }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <!-- <button (click)="goToSlide()">go-to</button> -->
+                                                        </div>
+                                                    </div>
+
+                                                    <div id=" data" class="frame-target-data border-separator">
+
+                                                        <div class="column-first-data">
+                                                            <div class="details-group">
+                                                                <label>{{
+                                                                    'commercialCards.list_of_cards'
+                                                                    | translate }}</label>
+                                                                <select [ngModel]="selectedcard" class="form-control"
+                                                                    (ngModelChange)="onSelectCard($event)">
+                                                                    <option [ngValue]="item"
+                                                                        *ngFor="let item of businessCardsList">
+                                                                        {{item.cardNumber}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span
+                                                                        class="text-legend">{{'commercialCards.payDateGregorian'
+                                                                        | translate }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails.dateG|
+                                                                        date: 'dd/MM/yyyy'}}</span>
+                                                                    <!-- <span *ngIf="selectedcardDetails?.businessCardsDetails"
+                                                                    class="form-control disabled border-none">
+                                                                    {{selectedcardDetails?.businessCardsDetails.dateG | date:'HH:mm:ss'}}
+                                                                </span> -->
+                                                                </div>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span
+                                                                        class="text-legend">{{'commercialCards.avalaibleCash'
+                                                                        | translate }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="border-none">SAR
+                                                                        {{selectedcardDetails?.businessCardsDetails?.accountsItemList[0]?.availableCash
+                                                                        | amountCurrency }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span
+                                                                        class="text-legend">{{'commercialCards.amounPayable'
+                                                                        | translate }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="border-none">SAR
+                                                                        {{selectedcardDetails?.businessCardsDetails.playableAmt
+                                                                        |
+                                                                        amountCurrency }}</span>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span
+                                                                        class="text-legend">{{'commercialCards.securityCode'
+                                                                        | translate}}</span>
+                                                                </div>
+                                                                <div> <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails.cardSeqNum
+                                                                        }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="column-second-data">
+                                                            <div class="details-group ">
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span
+                                                                        class="text-legend">{{'commercialCards.payDateHijiri'
+                                                                        | translate}}</span>
+                                                                </div>
+
+                                                                <div> <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails.dateH
+                                                                        | date: 'dd/MM/yyyy'}}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span
+                                                                        class="text-legend">{{'commercialCards.withdrawalLimit'
+                                                                        | translate }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails?.accountsItemList[0]?.limit
+                                                                        | amountCurrency }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span class="text-legend">
+                                                                        <!-- <span class="text-legend">SAR -->
+                                                                        {{'commercialCards.unbilledAmount' | translate
+                                                                        }}
+                                                                    </span>
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails.unbilledAmt
+                                                                        | amountCurrency }}</span>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span class="text-legend">
+                                                                        {{'commercialCards.status' | translate }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails.cardStatus
+                                                                        | businessCardStatus }}</span>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="details-group">
+                                                                <div>
+                                                                    <span class="text-legend">
+                                                                        {{'commercialCards.remainingLimit' | translate
+                                                                        }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        class="border-none">{{selectedcardDetails?.businessCardsDetails?.accountsItemList[0]?.availableBalance
+                                                                        | amountCurrency }}</span>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <ng-template #noData>
+                                    <div class="sme-form__body">
+                                        <div class="noTargetsData">
+                                            <span class="text-legend">{{'commercialCards.noTargetsData' | translate
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <arb-panel>
+
+        <ul class="nav nav-pills">
+            <li [class.active]="isActiveTab(1)" *ngIf="authenticationService.activateOption
+        ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+        ['BusinessCardsPayments'])">
+                <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(1)">
+                    {{'commercialCards.payments'| translate}}
+                </a>
+            </li>
+            <li [class.active]="isActiveTab(2)" *ngIf="authenticationService.activateOption
+        ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+        ['BusinessCardsManagementPIN'])">
+                <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(2)">
+                    {{'commercialCards.resetPin'| translate}}
+                </a>
+            </li>
+            <li [class.active]="isActiveTab(3)" *ngIf="authenticationService.activateOption
+        ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+        ['BusinessCardsBlock']) && canBlockCard()">
+                <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(3)">
+                    {{'commercialCards.blockCard'| translate}}
+                </a>
+            </li>
+            <li [class.active]="isActiveTab(4)" *ngIf="authenticationService.activateOption
+        ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+        ['BusinessCardsBlockReplace']) && canBlockCard()">
+                <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(4)">
+                    {{'commercialCards.blockReplCard'| translate}}
+                </a>
+            </li>
+            <li [class.active]="isActiveTab(5)" *ngIf="authenticationService.activateOption
+        ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+        ['BusinessCardsBlock']) && selectedcard?.cardStatus === 'blocked'">
+                <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(5)">
+                    {{'commercialCards.unblockCard'| translate}}
+                </a>
+            </li>
+            <li [class.active]="isActiveTab(6)" *ngIf="authenticationService.activateOption
+        ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+        ['BusinessCardsActivate']) && selectedcard?.cardStatus !=='2'">
+                <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(6)">
+                    {{'commercialCards.activate'| translate}}
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content" *ngIf="showTabs">
+            <div *ngIf="authenticationService.userHasAnyGroup(['BusinessCardsPayments'])" id="tab1"
+                class="tab-pane fade" [class.active]="isActiveTab(1)" [class.in]="isActiveTab(1)">
+                <app-CardPayment>
+                </app-CardPayment>
+            </div>
+            <div *ngIf="authenticationService.userHasAnyGroup(['BusinessCardsManagementPIN'])" id="tab2"
+                class="tab-pane fade" [class.active]="isActiveTab(2)" [class.in]="isActiveTab(2)">
+                <app-reset-card-pin>
+                </app-reset-card-pin>
+            </div>
+            <div *ngIf="authenticationService.userHasAnyGroup(['BusinessCardsBlock']) && canBlockCard()" id="tab3"
+                class="tab-pane fade" [class.active]="isActiveTab(3)" [class.in]="isActiveTab(3)">
+                <app-block-card>
+                </app-block-card>
+            </div>
+            <div *ngIf="authenticationService.userHasAnyGroup(['BusinessCardsBlockReplace']) && canBlockCard()"
+                id="tab4" class="tab-pane fade" [class.active]="isActiveTab(4)" [class.in]="isActiveTab(4)">
+                <app-block-card>
+                </app-block-card>
+            </div>
+            <div *ngIf="authenticationService.userHasAnyGroup(['BusinessCardsBlock']) && selectedcard?.cardStatus === 'blocked'"
+                id="tab5" class="tab-pane fade" [class.active]="isActiveTab(5)" [class.in]="isActiveTab(5)">
+                <app-block-card>
+                </app-block-card>
+            </div>
+            <div *ngIf="authenticationService.userHasAnyGroup(['BusinessCardsActivate']) && selectedcard?.cardStatus !=='2'"
+                id="tab6" class="tab-pane fade" [class.active]="isActiveTab(6)" [class.in]="isActiveTab(6)">
+                <app-ActivateCards>
+                </app-ActivateCards>
+            </div>
+        </div>
+
+
+    </arb-panel>
+
+    <div id=" tabs">
+        <div class="sme-page-block tabs-button">
+            <!-- <button type="button" class=" btn btn-default btn-wide tabs-cards btn-adapt" (click)="activeCharts()"
+            [disabled]="chartsTab">{{'commercialCards.charts' | translate | uppercase }}</button> -->
+            <button type="submit" class=" btn btn-default btn-wide tabs-cards btn-adapt" (click)="activeTransactions()"
+                [disabled]="transactionsTab">{{'commercialCards.transactions' | translate | uppercase}}</button>
+            <button type="submit" class=" btn btn-default btn-wide tabs-cards btn-adapt" (click)="activeDetails()"
+                [disabled]="detailsTab">{{'commercialCards.statements' | translate | uppercase}}</button>
+        </div>
+
+    </div>
+    <div id="transactionsTab" class="{{!transactionsTab? 'tab-disabled':'tab-enabled'}}">
+
+        <!-- <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <div id="target-data" class="target-data">
+                                <div id="table" class="search">
+                                    <div class="sme-form__content">
+                                        <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                                            class="sme-form__head human-selectable"
+                                            [ngClass]="{'collapsed': isSearchCollapsed}">
+                                            <span>{{ 'public.search' | translate }}</span>
+                                        </a>
+                                        <div class="sme-form__collapse" id="sme-demo--form--search-criteria-"
+                                            [collapse]="isSearchCollapsed">
+
+                                            <form class="sme-form__form" [formGroup]="searchForm"
+                                                (ngSubmit)="searchFormfilter()">
+                                                <div class="sme-form__body">
+                                                    <div class="payment-options-group">
+                                                        <div class="form-field-20">
+                                                            <div class="form-group">
+                                                                <label>{{ 'commercialCards.category' | translate }}</label>
+                                                                <div class="sme-select form-control select-flex-width">
+                                                                    <select id="categoryTypeSelect" class="form-control"
+                                                                        formControlName="category">
+                                                                        <option value="" [selected]>
+                                                                            -- {{ 'public.all' | translate }} --
+                                                                        </option>
+                                                                        <option *ngFor="let category of categories"
+                                                                            [value]="category.key">{{category.value}}
+                                                                        </option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-field-20">
+                                                            <div class="form-group">
+                                                                <label>{{ 'commercialCards.transactionType' | translate }}</label>
+                                                                <div class="sme-select form-control select-flex-width">
+                                                                    <select id="transactionTypeSelect"
+                                                                        class="form-control"
+                                                                        formControlName="transactionType">
+                                                                        <option value="" [selected]>
+                                                                            -- {{ 'public.all' | translate }} --
+                                                                        </option>
+                                                                        <option *ngFor="let type of transactionTypes"
+                                                                            [value]="type.key">{{type.value}}
+                                                                        </option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-field-15" formGroupName="amountForm">
+                                                            <div class="form-group input-flex-width">
+                                                                <label>{{ 'commercialCards.amount' | translate }}
+                                                                </label>
+                                                                <input
+                                                                    placeholder="{{ 'commercialCards.from' | translate }}"
+                                                                    type="number" step="0.01" name="amountFrom"
+                                                                    class="form-control" formControlName="amountFrom"
+                                                                    inputPattern="onlyDecimalNumbers">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-field-15" formGroupName="amountForm">
+                                                            <div class="form-group input-flex-width">
+                                                                <label>
+                                                                </label>
+                                                                <input
+                                                                    placeholder="{{ 'commercialCards.to' | translate }}"
+                                                                    type="number" step="0.01" name="amountTo"
+                                                                    class="form-control" formControlName="amountTo"
+                                                                    inputPattern="onlyDecimalNumbers">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-field-15" formGroupName="dateForm">
+                                                            <div class="input-flex-width">
+                                                                <label>{{ 'commercialCards.date' | translate }}
+                                                                </label>
+                                                                <input
+                                                                    placeholder="{{ 'commercialCards.from' | translate }}"
+                                                                    type="text" formControlName="dateFrom"
+                                                                    name="dateFrom" style="z-index: 1000"
+                                                                    class="form-control" #dateFrom="bsDatepicker"
+                                                                    bsDatepicker [bsConfig]="bsConfig" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-field-15" formGroupName="dateForm">
+                                                            <div class="input-flex-width">
+                                                                <label>
+                                                                </label>
+                                                                <input
+                                                                    placeholder="{{ 'commercialCards.to' | translate }}"
+                                                                    type="text" name="amountTo" style="z-index: 1000"
+                                                                    formControlName="dateTo" class="form-control"
+                                                                    #dateFrom="bsDatepicker" bsDatepicker
+                                                                    [bsConfig]="bsConfig" />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="payment-options-group">
+                                                        <div class="form-field-20"></div>
+                                                        <div class="form-field-20"></div>
+                                                        <div class="form-field-30">
+                                                            <div *ngIf="searchForm.get('amountForm').errors?.errorRange"
+                                                                class="alert alert-danger small-screen-error">
+                                                                <small>
+                                                                    {{'commercialCards.amountMessageError' | translate }}
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-field-30">
+                                                            <div *ngIf="searchForm.get('dateForm').errors?.errorRange"
+                                                                class="alert alert-danger small-screen-error">
+                                                                <small>
+                                                                    {{'commercialCards.dateMessageError' | translate }}
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sme-form__actions">
+                                                        <button type="button" class="btn btn-default btn-wide"
+                                                            (click)="resetSearchForm(searchForm)">
+                                                            {{ 'public.reset' | translate }}
+                                                        </button>
+                                                        <button type="submit" [disabled]="!searchForm.valid"
+                                                            class="btn btn-primary btn-wide">{{ 'public.search' | translate }}</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+        <div class="container-fluid">
+            <div class="sme-page-block">
+
+                <div class="sme-data-table">
+                    <div class="sme-data-table__head">
+                        <div class="sme-data-table__export">
+                            <table-export [dataTable]="detailsPageTable"
+                                [header]="'commercialCards.commercialCardDetails' | translate" [columns]="[
+                                {'title': 'commercialCards.date' | translate, 'dataKey': 'date'},
+                                {'title': 'commercialCards.merchant' | translate, 'dataKey': 'merchantName'},
+                                {'title': 'commercialCards.amount' | translate, 'dataKey': 'amount'},
+                                {'title': 'commercialCards.billingAmount' | translate, 'dataKey': 'billingAmount'}]">
+                            </table-export>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="sme-table table headerDataTable">
+                            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #detailsPageTable
+                                class="material sme-table sme-table--responsive table" [rows]="detailsPage.data"
+                                [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                                [rowHeight]="defaultHeight" [externalPaging]="false" [externalSorting]="false"
+                                [count]="tableDisplaySize" [limit]="detailsPage.page.pageSize"
+                                [selectionType]="defaultSelectionType" [rowIdentity]="getIdFunction()"
+                                (page)="setPage($event)">
+                                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                    (toggle)="onDetailToggle($event)">
+                                    <ng-template let-row="row" let-expanded="expanded"
+                                        ngx-datatable-row-detail-template>
+
+                                        <div class="row">
+                                            <fieldset>
+                                                <div class="col-xs-6">
+                                                    <!-- sme-form-group -->
+                                                    <div class="form-group">
+                                                        <label for="user1-input-name">{{'commercialCards.date' |
+                                                            translate
+                                                            }}</label>
+                                                        <div>
+                                                            <span>{{ row.date | date:'dd/MM/yyyy' }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <!-- sme-form-group -->
+                                                    <div class="form-group">
+                                                        <label for="user1-input-name">{{'commercialCards.merchant' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <span>{{ row.merchantName }}</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="row">
+                                            <fieldset>
+                                                <div class="col-xs-6">
+                                                    <!-- sme-form-group -->
+                                                    <div class="form-group">
+                                                        <label for="user1-input-name">{{'commercialCards.amount' |
+                                                            translate
+                                                            }}</label>
+                                                        <div>
+                                                            <span>{{ row.amount }}
+                                                                {{ row.currency | amountCurrency }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <!-- sme-form-group -->
+                                                    <div class="form-group">
+                                                        <label for="user1-input-name">{{'commercialCards.billingAmount'
+                                                            |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <span>{{ row.billingAmount }}
+                                                                {{ row.billingCurrency | amountCurrency }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </ng-template>
+
+                                </ngx-datatable-row-detail>
+
+                                <ngx-datatable-column prop="date">
+                                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'commercialCards.date' | translate }}
+                                        </span>
+                                    </ng-template>
+                                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                        <span class="mobile-hidden">{{ value | date:'dd/MM/yyyy' }}</span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column prop="merchantName">
+                                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'commercialCards.merchant' | translate }}
+                                        </span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column prop="amount">
+                                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'commercialCards.amount' | translate }}
+                                        </span>
+                                    </ng-template>
+                                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                        <span class="mobile-hidden">{{ value }} {{ row.currency }}</span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-column prop="billingAmount">
+                                    <ng-template let-value="name" let-row="row" let-sort="sortFn"
+                                        ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'commercialCards.billingAmount' | translate }}
+                                        </span>
+                                    </ng-template>
+                                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                        <span class="mobile-hidden">{{ value }}
+                                            {{ row.billingCurrency }}</span>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                                <ngx-datatable-footer>
+                                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                        let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                                        let-offset="offset">
+                                        <div class="sme-data-table__footer">
+                                            <app-datatable-pager
+                                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                [hidden]="!((rowCount / pageSize) > 1)"
+                                                [visiblePagesCount]="visiblePagesCount"
+                                                (change)="detailsPageTable.onFooterPage($event)">
+                                            </app-datatable-pager>
+
+                                            <div class="sme-data-table__actions form-inline">
+                                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' |
+                                                    translate}}
+                                                    {{this.detailsPage.page.size}}
+                                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                                <span class="hidden-xs">|</span>
+                                                <span class="sme-data-table__action-group">
+                                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                    <div class="sme-select form-control">
+                                                        <select class="form-control"
+                                                            [(ngModel)]="this.detailsPage.page.pageSize"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            (change)=" this.setPage(null)">
+                                                            <option [value]="15">15</option>
+
+                                                        </select>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </ngx-datatable-footer>
+                            </ngx-datatable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- <div id="charts" class="{{!chartsTab? 'tab-disabled':'tab-enabled'}}">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body graphic-align">
+
+                            <div *ngIf="detailsListIterable && detailsListIterable.length>0" class="form-center"
+                                style="font-weight: 500">
+                                <div class="form-center" style="margin-bottom: 20px">
+                                    <div>{{'commercialCards.outstandingBalance' | translate | uppercase}}</div>
+                                    <div class="form-center"><span
+                                            style="
+                                        margin-top: 5px">{{detailsListIterable[indexSelected]?.details?.businessCardsDetails?.totalAmt | amountCurrency }}
+                                            SAR</span>
+                                    </div>
+                                </div>
+                                <div class="message" style="margin-bottom: 35px">
+                                    <div class="body-list-details-graphic" style="margin-right: 15px">
+                                        <div>{{'commercialCards.remainingLimit' | translate | uppercase}}</div>
+                                        <div class="form-center"><span
+                                                style="
+                                              margin-top: 5px">{{detailsListIterable[indexSelected]?.details?.businessCardsDetails?.accountsItemList[0]?.availableBalance | amountCurrency }}
+                                                SAR</span>
+                                        </div>
+                                    </div>
+                                    <div class="body-list-details-graphic line-separator">
+                                        <div>{{'commercialCards.dueBalance' | translate | uppercase}}</div>
+                                        <div><span
+                                                style="
+                                            margin-top: 5px">{{detailsListIterable[indexSelected]?.details?.businessCardsDetails?.stmtAmt | amountCurrency }}
+                                                SAR</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>{{'commercialCards.spendingDistribution' | translate | uppercase}}</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="chart-wrapper" style="padding-bottom: 20px; padding-top:10px">
+                            <canvas class="graphic" baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels"
+                                [chartType]="doughnutChartType" [colors]="colors" [plugins]="doughnutChartPlugins"
+                                [options]="DonutChartOptions" [legend]="false" (chartHover)="chartHovered($event)"
+                                (chartClick)="chartClicked($event)" #mycanvas (select)="onPieSliceSelect($event)">
+                            </canvas>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+    <div id="details" class="{{!detailsTab? 'tab-disabled':'tab-enabled'}}">
+        <app-card-details-statements *ngIf="cardSeqNum && cardSeqNum !=''" [selectedCard]="this.cardSeqNum">
+        </app-card-details-statements>
+    </div>
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide"
+            [routerLink]="['/businessCards/creditcardlist']">{{'public.back' | translate }}</button>
+
+        <!-- <button type="submit" class=" btn btn-primary btn-wide" (click)="next()">{{'public.proceed' |
+        translate}}</button> -->
+    </div>
+ <!-- Modal -->
+ <div class="modal fade" bsModal #displayCardCredential="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header title-Popup">
+                <h4 class="modal-title" [ngClass]="{ 'justifyLeft': translate.currentLang === 'en','justifyRight':translate.currentLang === 'ar'}">{{ 'viewCardsCredential.popUpTitle' | translate }}</h4>
+                <div class="modal-header" [ngClass]="{ 'justifyLeft': translate.currentLang === 'en','justifyRight':translate.currentLang === 'ar'}">
+                    <button (click)="closePopUp()" type="button" class="close">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'viewCardsCredential.popUpMessage' | translate }}</p>
+            </div>
+
+            <form [formGroup]="form" *ngIf="form">
+                <div class="container-fluid">
+                    <div class="sme-page-block">
+                        <div class="sme-form">
+                            <div class="sme-form__form">
+                                <div class="sme-form__content">
+                                    <div class="sme-form__body">
+                                        <fieldset>
+
+                                            <ng-container formGroupName="newPin">
+                                                <div class="inputPin" style="justify-content: center;">
+                                                    <input type="password" #pin1 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin1"
+                                                        inputPattern="onlyDigits" (keyup)="focus(1)">
+                                                    <input type="password" #pin2 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin2"
+                                                        inputPattern="onlyDigits" (keyup)="focus(2)">
+                                                    <input type="password" #pin3 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin3"
+                                                        inputPattern="onlyDigits" (keyup)="focus(3)">
+                                                    <input type="password" #pin4 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin4"
+                                                        inputPattern="onlyDigits" (keyup)="focus(4)">
+                                                </div>
+                                            </ng-container>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <span *ngIf="countDown" class="title-Popup">{{display}}</span>
+
+            <div>
+                <span class="form-control link-target border-none title-Popup"
+                    style="margin-top: 20px; padding-left: 0px; color: #2b4499"
+                    (click)="sendMessageAndRequestOTPToValidate()">{{'viewCardsCredential.linkResendOTP'
+                    | translate }}</span>
+            </div>
+        </div>
+    </div>
+</div>

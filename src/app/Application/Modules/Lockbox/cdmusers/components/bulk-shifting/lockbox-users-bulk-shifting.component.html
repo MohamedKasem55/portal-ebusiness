@@ -1,0 +1,124 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep" [steps]="['public.completeDetails','public.confirm','public.summary']">
+</arb-steps>
+
+<arb-panel *ngIf="(isStepVisible(1) || isStepVisible(2)) && form">
+    <form autocomplete="off" class="sme-form__form" [formGroup]="searchForm">
+        <ng-container [formGroup]="searchForm">
+            <fieldset>
+                <app-dynamic-simple-extras-form-fields [fieldsConfigs]="entityProperties"
+                                                       [translate_prefix]="translatePrefix"
+                                                       [combosData]="combosData"
+                                                       [formModel]="form"
+                                                       (onAllFieldsCreated)="onAllFieldsCreated($event)"
+                                                       (onInit)="onInitForm($event)">
+                </app-dynamic-simple-extras-form-fields>
+            </fieldset>
+        </ng-container>
+    </form>
+</arb-panel>
+
+<ng-container *ngIf="(isStepVisible(1) || isStepVisible(2)) && form">
+    <arb-table-panel [title]="'lockbox.cdmUsers.usersList'">
+        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                       class="material sme-table sme-table--responsive table"
+                       [rows]="isStepVisible(1) ? elementsPage.data : tableSelectedRows"
+                       [columnMode]="defaultColumnMode" [headerHeight]="60" [footerHeight]="footerHeight"
+                       [rowHeight]="defaultHeight" [externalPaging]="isStepVisible(1)? true : false"
+                       [externalSorting]="isStepVisible(1) ? true : false"
+                       [count]="elementsPage.page.totalElements" [offset]="elementsPage.page.pageNumber-1"
+                       [limit]="elementsPage.data.length == elementsPage.page.totalElements? elementsPage.page.totalElements: elementsPage.page.pageSize"
+                       [selectionType]="defaultSelectionType" (page)='setPage($event)' (sort)="setSort($event)"
+                       (select)="onSelect($event)" [rowIdentity]="getIdFunction()" (select)='onSelect($event)'>
+
+            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                                  [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true"
+                                  *ngIf="isStepVisible(1)">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="userId">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'lockbox.cdmUsers.userId' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <span [innerHTML]="row.userId"></span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="userName" [width]="250">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'lockbox.cdmUsers.userName' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <span [innerHTML]="row.userName"></span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                             let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                    <div class="sme-data-table__footer">
+                        <app-datatable-pager
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                (change)="elementsTable.onFooterPage($event)">
+                        </app-datatable-pager>
+                        <div class="sme-data-table__actions form-inline">
+                            <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                            <span class="hidden-xs"> | </span>
+                            <span class="sme-data-table__action-group">
+                                <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                <div class="sme-select form-control">
+                                    <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                            (change)="this.setPage(null)">
+                                        <option [value]="10">10</option>
+                                        <option [value]="20">20</option>
+                                        <option [value]="50">50</option>
+                                        <option [value]="100">100</option>
+                                    </select>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-footer>
+
+        </ngx-datatable>
+    </arb-table-panel>
+</ng-container>
+
+<arb-panel *ngIf="isStepVisible(3)">
+    <arb-confirm-panel [pending]="false" [hasFinishAction]="false">
+    </arb-confirm-panel>
+</arb-panel>
+
+<arb-buttons>
+    <button class="btn btn-default btn-wide" (click)="previous()"
+            *ngIf="isPreviousAllowed()"
+            [disabled]="!isPreviousAllowed()">
+        {{ 'public.previous' | translate }}
+    </button>
+    <button class="btn btn-default btn-wide" (click)="back()"
+            *ngIf="isBackAllowed()">
+        {{ 'public.back' | translate }}
+    </button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="!isNextAllowed() || (this.form.invalid) || this.tableSelectedRows.length < 1">
+        {{'public.proceed' | translate}}
+    </button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()"
+            [disabled]="!isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

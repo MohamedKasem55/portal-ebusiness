@@ -1,0 +1,131 @@
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="false">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.responseValidate
+    && sharedData.responseValidate?.batchListsContainer?.toProcess.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<ng-container>
+
+    <app-salary-payment-table *ngIf="sharedData.salarySelected.length > 0" [items]="salaryPending" [modal]="modalAuth"
+                              [futureLevels]="false"
+                              [externalPagination]="false" [selectable]="false">
+    </app-salary-payment-table>
+
+</ng-container>
+
+<!--
+<app-salary-payment-table *ngIf="sharedData.aproveFlow
+    && sharedData.salarySelected.length > 0
+    && sharedData.responseValidate.batchList
+    && sharedData.responseValidate.batchList['toProcess'].length>0"
+                          [items]="sharedData.responseValidate.batchList.toProcess" [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false" [selectable]="false">
+</app-salary-payment-table>
+
+<app-salary-payment-table *ngIf="sharedData.aproveFlow
+    && sharedData.salarySelected.length > 0
+    && sharedData.responseValidate.batchList
+    && sharedData.responseValidate.batchList['toAuthorize'].length>0"
+                          [items]="sharedData.responseValidate.batchList.toAuthorize" [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false" [selectable]="false">
+</app-salary-payment-table>
+-->
+
+<ng-container>
+
+    <app-payroll-table *ngIf="sharedData.payrollSelected.length > 0" [items]="payrollPending" [modal]="modalAuth"
+                       [futureLevels]="false"
+                       [externalPagination]="false" [selectable]="false">
+    </app-payroll-table>
+
+</ng-container>
+
+
+<!--
+<app-payroll-table *ngIf="sharedData.aproveFlow
+    && sharedData.payrollSelected.length > 0
+    && sharedData.responseValidate.batchList
+    && sharedData.responseValidate.batchList['toProcess'].length>0"
+                   [items]="sharedData.responseValidate.batchList.toProcess" [modal]="modalAuth" [futureLevels]="true"
+                   [externalPagination]="false" [selectable]="false">
+</app-payroll-table>
+
+<app-payroll-table *ngIf="sharedData.aproveFlow
+    && sharedData.payrollSelected.length > 0
+    && sharedData.responseValidate.batchList
+    && sharedData.responseValidate.batchList['toAuthorize'].length>0"
+                   [items]="sharedData.responseValidate.batchList.toAuthorize" [modal]="modalAuth" [futureLevels]="true"
+                   [externalPagination]="false" [selectable]="false">
+</app-payroll-table>
+-->
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="!sharedData.aproveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                    <textarea class="form-control" rows="3" maxlength="150"
+                                              [(ngModel)]="rejectReason"
+                                              name="rejectReason"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="sharedData.aproveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group"
+                                     *ngIf="sharedData.responseValidate && sharedData.responseValidate.generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.responseValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

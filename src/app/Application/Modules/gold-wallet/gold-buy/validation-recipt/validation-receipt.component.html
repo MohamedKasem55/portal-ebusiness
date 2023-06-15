@@ -1,0 +1,164 @@
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.gold-price-now'| translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <arb-count-down-progress *ngIf="timeToLive"
+                                                 (onTimeUp)="redirectToWalletDashboard()"
+                                                 [TIME_LIMIT]="timeToLive"
+                        >
+                        </arb-count-down-progress>
+                        <br>
+                        <b>
+                            {{'gold-wallet.price-at-moment'|translate}}
+                        </b>
+                        <br>
+                        <span class="One-Time-Pin">
+                                  {{goldWalletBuyRequest.buyGoldValidateRes.rate}}
+                            <span class="text-style-1"
+                            >{{'gold-wallet.sar' |
+                                translate}}
+                                / {{goldWalletBuyRequest.buyGoldValidateRes.measureUnit}}</span>
+                            </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.buy-gold'| translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row" style="margin-left: 1%;">
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.selected-qty' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.weight"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.total-cost' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.totalCost"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.account' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="walletDashboard.linkedAccountNumber"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 1%;">
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.gold-source' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.goldSource"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.gold-vendor' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.goldVendor"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.gold-info'| translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row" style="margin-left: 1%;">
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.weight' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.weight"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.gold-qty' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.qty"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 1%;">
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.gold-purity' |
+                                        translate }}</label>
+                                    <input [ngModelOptions]="{standalone: true}" type="text"
+                                           [ngModel]="goldWalletBuyRequest.buyGoldValidateRes.purity"
+                                           class="form-control"
+                                           disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

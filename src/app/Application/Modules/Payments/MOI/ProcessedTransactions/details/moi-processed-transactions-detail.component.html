@@ -1,0 +1,157 @@
+<p style="padding-left: 15px">{{'companyAdmin.user.govPayments' | translate}}</p>
+<arb-panel>
+    <fieldset>
+        <app-dynamic-simple-extras-form-fields [translate_prefix]="'payments'" [combosData]="combosData"
+            [formModel]="moiProcessTransactionsForm" [fieldsConfigs]="entityPropertiesMoiProcessTransactions">
+        </app-dynamic-simple-extras-form-fields>
+    </fieldset>
+</arb-panel>
+
+<!-- FEES -->
+
+<arb-table-panel [title]="'dashboard.feesManagement'" *ngIf="selectedItem?.fees">
+    <!-- <arb-table-panel [title]="'dashboard.feesManagement'"> -->
+
+    <!--
+    <table-export
+            [header]="'dashboard.feesManagement' | translate"
+            [columns]="getExportColumns()"
+            [rows]="selectedItem.fees && selectedItem.fees.length > 0 ? selectedItem.fees:null"
+            [dataTable]="feesTable"
+            [pdfPageSize]="{width: 1200,height: 800}">
+    </table-export> -->
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #feesTable
+        class="material  sme-table sme-table--responsive table" [columnMode]="defaultColumnMode"
+        [rows]="selectedItem.fees" [headerHeight]="defaultHeight" [footerHeight]="defaultHeight"
+        [rowHeight]="defaultHeight" [externalPaging]="false" [externalSorting]="false" [limit]="tablePageSize">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <!-- feeType -->
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'payments.moiPayments.feeType' | translate }}</label>
+                                <div>
+                                    <span>{{ row.feeType }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <!-- row.feesAmount -->
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'payments.moiPayments.totalFees' | translate }}</label>
+                                <div>
+                                    <span>{{ row.feeAmount }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </ng-template>
+        </ngx-datatable-row-detail>
+        <!--Columnas-->
+        <!--  checkbox necesario para otra vista-->
+        <ngx-datatable-column [width]="0" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="feeType" [width]="700">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'payments.moiPayments.feeType' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span>
+                    <span [innerHTML]="row.feeType"></span>
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="feeAmount" [width]="70">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template
+                let-allRowsSelected="allRowsSelected">
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'payments.moiPayments.totalFees' | translate }}<br />
+                </span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <!-- <a class="human-selectable" (click)="onClickRow(row)">-->
+                <span> {{value | amountCurrency }} </span>
+
+                <!-- </a>-->
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <!--footer con la paginacion -->
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="accountTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{ selectedItem.fees.length }} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="tablePageSize">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+
+<arb-panel *ngIf="selectedItem?.fees">
+    <fieldset>
+        <div class="col-sm-2 col-xs-12 ng-star-inserted">
+            <div class="form-group input_readonly">
+                <label class="dynamic-form-field-label">{{'payments.moiPayments.totalFees' | translate}}</label>
+                <input type="text"
+                    class="form-control dynamic-form-field-input ng-untouched ng-pristine ng-star-inserted"
+                    [value]="totalAmountsFee">
+
+            </div>
+        </div>
+    </fieldset>
+</arb-panel>
+
+<!-- FIN FEES -->
+
+<app-levels-table *ngIf="selectedItem?.securityLevelsDTOList"
+    [futureSecurityLevels]="selectedItem.securityLevelsDTOList">
+</app-levels-table>
+
+
+<arb-panel-buttons>
+    <a class=" btn btn-default btn-wide" [routerLink]="[getBackUrl()]">{{
+        'public.back' | translate }}
+    </a>
+</arb-panel-buttons>

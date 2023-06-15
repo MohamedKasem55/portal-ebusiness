@@ -1,0 +1,412 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary',['/beneficiaries/AddBeneficiaries']],
+                        ['beneficiaries.beneficiaryTypes.addInternationalBeneficiary']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]" [currentStep]="2">
+</arb-steps>
+<arb-panel>
+
+    <div class="sme-head__title">{{ 'beneficiaries.beneficiaryListFields.category' | translate}}</div>
+
+    <arb-panel>
+        <div class="row">
+            <div class="col-sm-6">
+                <!-- CATEGORY -->
+                <div class="form-group">
+                    <div class="form-control" style="border-bottom: 0px; margin-bottom: 0px">
+                        <div class="sme-radio radio">
+                            <label>
+                                <input
+                                        type="radio"
+                                        [(ngModel)]="formData.category"
+                                        [value]="'INDIVIDUAL'"
+                                        (change)="onChangeCategory($event)"
+                                        name="indvidual"
+                                        required
+                                />
+                                <i aria-hidden="true"></i>
+                                <span>{{ 'beneficiaries.selectIndividual' | translate }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /CATEGORY -->
+            </div>
+            <div class="col-sm-6">
+                <!-- CATEGORY -->
+                <div class="form-group">
+                    <div class="form-control" style="border-bottom: 0px; margin-bottom: 0px">
+                        <div class="sme-radio radio">
+                            <label>
+                                <input
+                                        type="radio"
+                                        [(ngModel)]="formData.category"
+                                        [value]="'COMPANY'"
+                                        (change)="onChangeCategory($event)"
+                                        name="company"
+                                        required
+                                />
+                                <i aria-hidden="true"></i>
+                                <span>{{ 'beneficiaries.selectCompany' | translate }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /CATEGORY -->
+            </div>
+        </div>
+    </arb-panel>
+
+    <form autocomplete="off" #detailInternationalBeneficiary="ngForm" class="sme-form__form" novalidate>
+
+        <div class="sme-head__title">{{ 'beneficiaries.beneficiaryBankDetails' | translate}}</div>
+
+        <arb-panel>
+            <fieldset>
+                <!-- Selection Criteria -->
+                <div class="sme-radio radio">
+                    <label>
+                        <input
+                                type="radio"
+                                [(ngModel)]="formData.selectionCriteria"
+                                [value]="'countrySelection'"
+                                (change)="onChangeSelectionType()"
+                                name="countrySelection"
+                                required
+                        />
+                        <i aria-hidden="true"></i>
+                        <span>{{ 'beneficiaries.countrySelection' | translate }}</span>
+                    </label>
+                </div>
+                <div class="sme-radio radio">
+                    <label>
+                        <input
+                                type="radio"
+                                [(ngModel)]="formData.selectionCriteria"
+                                [value]="'swiftSelection'"
+                                (change)="onChangeSelectionType()"
+                                name="swiftSelection"
+                                required
+                        />
+                        <i aria-hidden="true"></i>
+                        <span>{{ 'beneficiaries.swiftSelection' | translate }}</span>
+                    </label>
+                </div>
+                <div *ngIf="isCountrySelection">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- COUNTRY -->
+                            <label class="required">{{ 'public.country' | translate }}</label>
+                            <div [formGroup]="form">
+                                <ng-select [notFoundText]="'public.noData' | translate" name="country" [items]="formData.countriesName" bindLabel="value" formControlName="country" required (change)="onChangeCountry($event)" (clear)="onRemoveCountry()" [virtualScroll]="true" notFoundText="{{'public.noData' | translate}}">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- SWIFT CODE -->
+                            <label *ngIf="!isIndia && isSelectionDone">{{ 'beneficiaries.beneficiaryListFields.swiftCode' | translate
+                                }}</label
+                            >
+                            <label *ngIf="isIndia"
+                            >{{ 'beneficiaries.beneficiaryListFields.ifcs' | translate
+                                }}</label
+                            >
+                            <div>
+                                <input
+                                        *ngIf="!isIndia"
+                                        #swiftCode
+                                        type="text"
+                                        class="form-control"
+                                        name="swiftCode"
+                                        [disabled]="isCountrySelection"
+                                        maxlength="11"
+                                        minlength="11"
+                                        placeholder="{{ 'beneficiaries.beneficiaryListFields.swiftCode' | translate }}"
+                                        [(ngModel)]="formData.swiftCode"
+                                        (focusout)="onChangeSwiftCode($event)"
+                                />
+                                <input
+                                        *ngIf="isIndia"
+                                        #swiftCode
+                                        type="text"
+                                        class="form-control"
+                                        name="swiftCode"
+                                        maxlength="11"
+                                        minlength="11"
+                                        [disabled]="isCountrySelection"
+                                        placeholder="{{ 'beneficiaries.beneficiaryListFields.ifcs' | translate }}"
+                                        [(ngModel)]="formData.swiftCode"
+                                        (focusout)="onChangeSwiftCode($event)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label
+                            >{{ 'beneficiaries.beneficiaryListFields.bankName' | translate
+                                }} *</label
+                            >
+                            <div [formGroup]="form">
+                                <ng-select
+                                        [notFoundText]="'public.noData' | translate"
+                                        name="bank"
+                                        [items]="formData.bankNames"
+                                        formControlName="bankName"
+                                        bindLabel="bankName"
+                                        required
+                                        (change)="onChangeBankName($event)"
+                                        (clear)="onRemoveBankName()"
+                                        [virtualScroll]="true"
+                                        notFoundText="{{'public.noData' | translate}}"
+                                >
+                                </ng-select>
+                            </div>
+                            <!-- /BANK NAME -->
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- BRANCH NAME -->
+                            <label class="required"
+                            >{{ 'beneficiaries.beneficiaryListFields.branchName' | translate
+                                }}
+                            </label>
+                            <div [formGroup]="form">
+                                <ng-select [notFoundText]="'public.noData' | translate" name="branchName" formControlName="branchName" required (change)="onChangeBranch($event)" (clear)="onDeleteBranch()" notFoundText="{{'public.noData' | translate}}" [items]="formData.branchsNames"
+                                    bindLabel="beneficiaryBankBranch">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- CURRENCY -->
+                            <label class="required">{{ 'beneficiaries.currency' | translate }}</label
+                            >
+                            <div [formGroup]="form">
+                                <ng-select
+                                        [notFoundText]="'public.noData' | translate"
+                                        name="currency"
+                                        [items]="formData.currencyList"
+                                        formControlName="currency"
+                                        bindLabel="currencyName"
+                                        required
+                                        (change)="onChangeCurrency($event)"
+                                        (clear)="onChangeCurrency($event)"
+                                        [virtualScroll]="false"
+                                        notFoundText="{{'public.noData' | translate}}"
+                                >
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!isCountrySelection">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- SWIFT CODE -->
+                            <label
+                            >{{ 'beneficiaries.beneficiaryListFields.ifcs' | translate
+                                }}</label
+                            >
+                            <input
+                                #swiftCode
+                                type="text"
+                                class="form-control"
+                                name="swiftCode"
+                                [disabled]="isCountrySelection"
+                                maxlength="11"
+                                minlength="11"
+                                placeholder="{{ 'beneficiaries.beneficiaryListFields.ifcs' | translate }}"
+                                [(ngModel)]="formData.swiftCode"
+                                (focusout)="onChangeSwiftCode($event)"
+                            />
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- COUNTRY -->
+                            <label class="required">{{ 'public.country' | translate }}</label>
+                            <div [formGroup]="form">
+                                <div *ngIf="isCountrySelection">
+                                    <ng-select [notFoundText]="'public.noData' | translate" name="country" [items]="formData.countriesName" bindLabel="value" formControlName="country" required (change)="onChangeCountry($event)" (clear)="onRemoveCountry()" [virtualScroll]="true" notFoundText="{{'public.noData' | translate}}">
+                                    </ng-select>
+                                </div>
+                                <div *ngIf="!isCountrySelection">
+                                    <input formControlName="country" class="form-control" type="text" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate
+                                }} *</label
+                            >
+                            <div [formGroup]="form">
+                                <div *ngIf="isCountrySelection">
+                                    <ng-select
+                                            [notFoundText]="'public.noData' | translate"
+                                            name="bank"
+                                            [items]="formData.bankNames"
+                                            formControlName="bankName"
+                                            bindLabel="bankName"
+                                            required
+                                            (change)="onChangeBankName($event)"
+                                            (clear)="onRemoveBankName()"
+                                            [virtualScroll]="true"
+                                            notFoundText="{{'public.noData' | translate}}"
+                                    >
+                                    </ng-select>
+                                </div>
+                                <div *ngIf="!isCountrySelection">
+                                    <input
+                                            formControlName="bankName"
+                                            class="form-control"
+                                            type="text"
+                                            readonly
+                                    />
+                                </div>
+                            </div>
+                            <!-- /BANK NAME -->
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- BRANCH NAME -->
+                            <label class="required"
+                            >{{ 'beneficiaries.beneficiaryListFields.branchName' | translate
+                                }}
+                            </label>
+                            <div [formGroup]="form">
+                                <div *ngIf="isCountrySelection">
+                                    <ng-select [notFoundText]="'public.noData' | translate" name="branchName" formControlName="branchName" required (change)="onChangeBranch($event)" (clear)="onDeleteBranch()" notFoundText="{{'public.noData' | translate}}" [items]="formData.branchsNames"
+                                        bindLabel="beneficiaryBankBranch" [readonly]="true">
+                                    </ng-select>
+                                </div>
+                                <div *ngIf="!isCountrySelection">
+                                    <input formControlName="branchName" class="form-control" type="text" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- CURRENCY -->
+                            <label class="required">{{ 'beneficiaries.currency' | translate }}</label
+                            >
+                            <div [formGroup]="form">
+                                <ng-select
+                                        [notFoundText]="'public.noData' | translate"
+                                        name="currency"
+                                        [items]="formData.currencyList"
+                                        formControlName="currency"
+                                        bindLabel="currencyName"
+                                        required
+                                        (change)="onChangeCurrency($event)"
+                                        (clear)="onChangeCurrency($event)"
+                                        [virtualScroll]="false"
+                                        notFoundText="{{'public.noData' | translate}}"
+                                >
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /SelectionCriteria -->
+            </fieldset>
+        </arb-panel>
+
+
+            <div class="sme-head__title">{{ 'beneficiaries.beneficiaryDetails' | translate}}</div>
+            <arb-panel>
+                <div class="row">
+                    <div
+                            class="col-sm-6"
+                            *ngFor="let field of mandatoryFields"
+                            [formGroup]="form"
+                    >
+                        <div class="form-group" *ngIf="field.type == 'string' && field.name">
+                            <label>{{ field.label }}</label>
+                            <input  type="text" class="form-control" [formControlName]="field.name" placeholder="" ngDefaultControl />
+                            <div *ngIf="form.controls[field.name].errors && (form.controls[field.name].dirty || form.controls[field.name].touched)" class="alert alert-danger">
+                                <p *ngIf="form.controls[field.name].errors.required">
+                                    {{ 'error.required' | translate }}
+                                </p>
+                                <p *ngIf="form.controls[field.name].errors.pattern || form.controls[field.name].errors.maxlength || form.controls[field.name].errors.minlength ">
+                                    {{ field.validation | trnaslateValidatoin }}
+                                </p>
+                                <p *ngIf="form.controls[field.name].errors.validateIBAN">
+                                    {{'validation.IBAN' | translate}}
+                                </p>
+                                <p *ngIf="form.controls[field.name].errors.validateAccount">
+                                    {{'validation.account' | translate}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="field.type == 'date' && field.name">
+                            <label>{{ field.label }}</label>
+                            <input type="text"
+                                   class="form-control dynamic-form-field-input"
+                                   [formControlName]="field.name" placeholder=""
+                                   ngDefaultControl
+                                   [maxDate]="getMaxDateToday(birthDate)"
+                                   [bsConfig]="bsConfig"
+                                   bsDatepicker placement="top"
+
+                            />
+                            <div *ngIf="form.controls[field.name].errors && (form.controls[field.name].dirty || form.controls[field.name].touched)" class="alert alert-danger">
+                                <p *ngIf="form.controls[field.name].errors.required">
+                                    {{ 'error.required' | translate }}
+                                </p>
+                                <p *ngIf="form.controls[field.name].errors.maxDate" >
+                                    {{ 'error.earlierThanToday' | translate }}
+                                </p>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group" *ngIf="field.type == 'numeric' && field.name">
+                            <label>{{ field.label }}</label>
+                            <input  type="text" class="form-control" [formControlName]="field.name" placeholder="" inputPattern="onlyDigits" ngDefaultControl />
+                            <div *ngIf="form.controls[field.name].errors && (form.controls[field.name].dirty || form.controls[field.name].touched)" class="alert alert-danger">
+                                <p *ngIf="form.controls[field.name].errors.required">
+                                    {{ 'error.required' | translate }}
+                                </p>
+                                <p *ngIf="form.controls[field.name].errors.pattern || form.controls[field.name].errors.minlength || form.controls[field.name].errors.maxlength">
+                                    {{ field.validation | trnaslateValidatoin }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="field.type =='mixed' && field.name">
+                            <label>{{ field.label }}</label>
+                            <ng-select [notFoundText]="'public.noData' | translate" name="field.name" [items]="field.items" [formControlName]="field.name" ngDefaultControl bindLabel="value" bindValue="key" (change)="onChangeDropDown($event,field.name)" [virtualScroll]="false" notFoundText="{{'public.noData' | translate}}">
+                            </ng-select>
+                            <div *ngIf="form.controls[field.name].errors && (form.controls[field.name].dirty || form.controls[field.name].touched)" class="alert alert-danger">
+                                <p *ngIf="form.controls[field.name].errors.required">
+                                    {{ 'error.required' | translate }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </arb-panel>
+    </form>
+</arb-panel>
+
+<arb-panel-buttons>
+    <!-- Bottoms -->
+    <button type="button" (click)="goBack()" class="btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+
+    <button type="button" class="btn btn-primary btn-wide" (click)="saveValidateInternationalBeneficiary()" [disabled]=" !isValid() || isError">
+        {{ 'public.next' | translate }}
+    </button>
+</arb-panel-buttons>

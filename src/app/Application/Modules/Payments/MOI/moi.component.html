@@ -1,0 +1,31 @@
+<arb-breadcrumb [routes]="[
+	['dashboard.payments'],
+	['payments.moiPayments.menu']
+]">
+</arb-breadcrumb>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                {{ 'payments.moiPayments.options' | translate }}
+            </div>
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <ng-container *ngFor="let moi of moiComponents">
+                                    <li *ngIf="checkAuthorization(moi.key)">
+                                        <a routerLinkActive="active" [routerLink]="moi.route">
+                                            {{ moi.translate | translate }}
+                                        </a>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers', '/transfers'],
+                        ['payments.requestStatus', '/transfers/requestStatus'],
+                        ['activation']
+                        ]">
+</arb-breadcrumb>
+
+<arb-steps
+        [currentStep]="this.wizardStep">
+</arb-steps>
+
+<international-reactivation-step1-component *ngIf="wizardStep===1"
+                                            [beneficiaries]="beneficiaries"
+                                            [batches]="batches"
+                                            [accounts]="accounts"
+                                            [forms]="forms"
+                                            [formsFieldsConfigs]="formsFieldsConfigs"
+                                            [transferReasons]="transferReasons">
+</international-reactivation-step1-component>
+
+<international-reactivation-step2-component *ngIf="wizardStep===2"
+                                            [currentAction]="this.currentAction"
+                                            [validateResponse]="this.validationResponse"
+                                            [beneficiaries]="beneficiaries"
+                                            [batches]="batches"
+                                            [accounts]="accounts"
+                                            [forms]="forms"
+                                            [formsFieldsConfigs]="formsFieldsConfigs"
+                                            [transferReasons]="transferReasons">
+</international-reactivation-step2-component>
+
+<arb-panel class="sme-form"
+           *ngIf="wizardStep===2 && this.validationResponse?.generateChallengeAndOTP && this.currentAction !== 'DELETE'">
+    <app-secured-authentication [generateChallengeAndOTP]="this.validationResponse.generateChallengeAndOTP"
+                                [requestValidate]="requestValidate" #authorization>
+    </app-secured-authentication>
+</arb-panel>
+
+<international-reactivation-step3-component *ngIf="wizardStep===3" [validateResponse]="this.validationResponse"
+                                            [currentAction]="this.currentAction">
+</international-reactivation-step3-component>
+
+<arb-panel>
+    <arb-buttons>
+        <button *ngIf="wizardStep === 1" (click)="cancel()"
+                class="btn btn-default btn-wide">{{ 'public.cancel' | translate }}</button>
+        <button *ngIf="wizardStep === 2" (click)="previous()"
+                class="btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+        <button *ngIf="wizardStep === 1" type="submit" class="btn btn-primary btn-wide"
+                (click)="delete()">{{'public.delete' | translate}}</button>
+        <button *ngIf="wizardStep === 1"
+                type="submit" class="btn btn-primary btn-wide" (click)="initiate()"
+                [disabled]="isDisabled()">{{'public.initiate' | translate}}</button>
+        <button [disabled]="this.validationResponse !== undefined && this.validationResponse !== null ?
+                                (!(this.validationResponse.generateChallengeAndOTP !== undefined && this.validationResponse.generateChallengeAndOTP !== null ? this.authorization?.valid() : true)) :
+                                false"
+                (click)="next()" type="submit"
+                *ngIf="this.wizardStep === 2"
+                class=" btn btn-primary btn-wide">
+            {{ 'public.confirm' | translate }}</button>
+        <button *ngIf="wizardStep === 3"
+                type="submit" class="btn btn-primary btn-wide" (click)="finish()">
+            {{'public.finish' | translate}}</button>
+    </arb-buttons>
+</arb-panel>

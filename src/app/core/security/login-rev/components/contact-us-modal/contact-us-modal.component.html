@@ -1,0 +1,131 @@
+<div class="container">
+
+  <button *ngIf="translate.currentLang === 'en'" type="button" class="close close-en" (click)="closeForm()">
+    <span aria-hidden="true" class="icon -close"></span>
+  </button>
+
+  <button *ngIf="translate.currentLang !== 'en'" type="button" class="close close-ar" (click)="closeForm()">
+    <span aria-hidden="true" class="icon -close"></span>
+  </button>
+
+  <div [ngClass]="infoContainerClass()">
+    <div class="info-container__details">
+      <br />
+      <br />
+      <div>
+        <span class="strong">{{'public.tollfree' | translate}}</span>
+        <br />
+        <span dir="ltr" style="direction: ltr">9200 04550</span>
+      </div>
+      <br />
+      <br />
+      <div>
+        <span class="strong">{{ 'public.riyadh' | translate }}</span> <span
+          class="glyphicon glyphicon-map-marker"></span>
+        <br />
+        <span class="text">{{'public.riyadhbankAddress' | translate }}</span>
+      </div>
+      <br />
+      <div>
+        <span class="strong">{{ 'public.jedah' | translate }}</span> <span
+          class="glyphicon glyphicon-map-marker"></span>
+        <br />
+        <span class="text">{{'public.jedahbankAddress' | translate }}</span>
+      </div>
+      <br />
+      <div>
+        <span class="strong">{{ 'public.damman' | translate }}</span> <span
+          class="glyphicon glyphicon-map-marker"></span>
+        <br />
+        <span class="text">{{'public.dammanbankAddress' | translate }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-container">
+
+    <div class="title-container">
+      <h1 class="title-contact">{{ 'login.contact-info' | translate }}</h1>
+    </div>
+
+    <form autocomplete="off" class="sme-login-form__form sme-form" [formGroup]="contactUsForm" (ngSubmit)="sendForm()"
+      novalidate>
+      <div class="sme-login-form__form-body contact-form-content">
+        <div class="form-group">
+          <label for="rev-login-form-input-organization" class="contact-form-text">
+            {{ 'login.contact-name' | translate | uppercase }}
+          </label>
+          <input type="text" name="username" formControlName="contactName" id="rev-login-form-input-organization"
+            placeholder="{{ 'registration.pleaseEnterName' | translate }}" class="form-control contact-form-text"
+            maxlength="30">
+          <div *ngIf="contactUsForm.controls.contactName.hasError('required')
+              && contactUsForm.controls.contactName.touched" class="alert alert-danger">
+            <small>
+              {{ 'error.contactusFormErrors.contactNameRequired' | translate }}
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="rev-login-form-input-email" class="contact-form-text">
+            {{ 'public.email' | translate | uppercase }}
+          </label>
+          <input type="text" name="email" formControlName="email" id="rev-login-form-input-id"
+            placeholder="{{ 'registration.pleaseEnterEmail' | translate }}" class="form-control contact-form-text">
+          <div *ngIf="contactUsForm.controls.email.hasError('required')
+              && contactUsForm.controls.email.touched" class="alert alert-danger">
+            <small>
+              {{ 'error.contactusFormErrors.emailRequired' | translate }}
+            </small>
+          </div>
+          <div *ngIf="contactUsForm.controls.email.hasError('email')
+              && contactUsForm.controls.email.touched" class="alert alert-danger">
+            <small>
+              {{ 'error.contactusFormErrors.emailFormat' | translate }}
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="rev-login-form-input-phone" class="contact-form-text">
+            {{ 'public.phoneNumber' | translate | uppercase }}
+          </label>
+          <input type="text" name="phoneNumber" formControlName="mobileNumber" id="rev-login-form-input-phone"
+            placeholder="{{ 'registration.pleaseEnterPhoneNumber' | translate }}" class="form-control contact-form-text"
+            maxlength=15 inputPattern="onlyMobileNumbers">
+          <div
+            *ngIf="contactUsForm.controls.mobileNumber.hasError('required') && (contactUsForm.controls.mobileNumber.touched)"
+            class="alert alert-danger">
+            <small>{{'companyAdmin.user.error.movilNumberRequired' | translate }}</small>
+          </div>
+          <div
+            *ngIf="contactUsForm.controls.mobileNumber.hasError('maxlength') && (contactUsForm.controls.mobileNumber.touched)"
+            class="alert alert-danger">
+            <small>{{ 'error.maxlength' | translate:{size: 15} }}</small>
+          </div>
+          <div
+            *ngIf="contactUsForm.controls.mobileNumber.hasError('pattern') && (contactUsForm.controls.mobileNumber.touched)"
+            class="alert alert-danger">
+            <small>{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="rev-login-form-input-message" class="contact-form-text">
+            {{ 'public.message' | translate | uppercase }}
+          </label>
+          <textarea type="text" name="message" formControlName="comments" id="rev-login-form-input-message"
+            placeholder="{{ 'registration.pleaseTypeMessage' | translate }}" class="form-control contact-form-text"
+            maxlength="150"></textarea>
+          <div *ngIf="contactUsForm.controls.comments.hasError('required') && (contactUsForm.controls.comments.touched)"
+            class="alert alert-danger">
+            <small>{{'error.contactusFormErrors.commentsRequired' | translate }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="submit-container">
+        <button type="submit" class="btn btn-primary btn-wide proceed-button" [disabled]="!contactUsForm.valid">
+          {{ 'public.sendmessage' | translate }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

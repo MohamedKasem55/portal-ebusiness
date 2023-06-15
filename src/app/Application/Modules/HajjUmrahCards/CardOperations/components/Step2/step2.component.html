@@ -1,0 +1,53 @@
+<arb-panel>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{'payroll.operationType' | translate }}</label>
+                <p> {{ operationType }}</p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <b><h4>{{'Expected Fees' | translate }}<br/>{{ expectedFees }}</h4></b>
+                <p> {{'(Fees will be deducted from card(s) balance.)' | translate }}</p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3" *ngIf="showAmountToProcess()">
+            <div class="form-group">
+                <b><h4>{{ 'myProfile.pending_actions.grandAmountProcess' | translate }}</h4></b>
+                <p> {{ form.get('amountToProcess').value | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3" *ngIf="showAmountToRefund()">
+            <div class="form-group">
+                <b><h4>{{ 'myProfile.pending_actions.grandRefundProcess' | translate }}</h4></b>
+                <p> {{ form.get('amountToRefund').value | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<app-card-operation-form [form]="form"></app-card-operation-form>
+
+<div class="sme-content-container container-fluid" *ngIf="generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

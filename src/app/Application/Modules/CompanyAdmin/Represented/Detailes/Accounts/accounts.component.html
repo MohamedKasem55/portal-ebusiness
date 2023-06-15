@@ -1,0 +1,91 @@
+<div class='table_div'>
+  <div class='legend table_head'>{{ 'represented.authorizedMsg' | translate }}</div>
+  <div class='sme-data-table'>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #AccountTable
+                   class='material sme-table sme-table--responsive table' [rows]='accounts' [headerHeight]='30'
+                   [footerHeight]='footerHeight' [columnMode]="'force'" [rowHeight]='defaultHeight'
+                   [externalPaging]='false' [count]='accounts.length' [externalSorting]='false'>
+
+      <ngx-datatable-column
+                            [width]='80'
+                            [sortable]='false'
+                            [canAutoResize]='false'
+                            [draggable]='false'
+                            [resizeable]='false'>
+        <ng-template ngx-datatable-header-template let-value='value'>
+          <label class='addPadding'>
+            <input type='checkbox' [checked]='isAllSelected' [disabled]='disable'
+                   (change)='selectAll()' />
+          </label>
+        </ng-template>
+        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+          <label class='addPadding'>
+            <input type='checkbox' [disabled]='disable'
+                   [checked]='row.enabled'
+                   (change)='onChangeAccount(row)' />
+          </label>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='profit' [width]='250' [resizeable]='false'
+                            headerClass='text-align-center'>
+        <ng-template let-value='profit' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.accountNumber' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+                            <span class=''>
+                                {{row.fullAccountNumber}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='profit' [width]='220' [resizeable]='false'
+                            headerClass='text-align-center'>
+        <ng-template let-value='profit' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.accountName' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.alias}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='profit' [width]='220' [resizeable]='false'
+                            headerClass='text-align-center'>
+        <ng-template let-value='profit' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.amount' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.availableBalance | amountCurrency}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='profit' [width]='220' [resizeable]='false'
+                            headerClass='text-align-center'>
+        <ng-template let-value='profit' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.currency' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+                            <span>
+                              {{ 'currencyIso' | modelPipe:row.currency}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
+
+  </div>
+</div>

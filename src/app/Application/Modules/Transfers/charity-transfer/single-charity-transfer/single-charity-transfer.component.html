@@ -1,0 +1,197 @@
+<arb-breadcrumb [routes]="[
+	['menu.transfers.transfers.transfer'],
+	['charity.communityServices'],
+	['charity.singleCharityHead']]">
+</arb-breadcrumb>
+
+<arb-steps
+        [steps]="['charity.singleCharity', 'public.summary', 'public.finish']"
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<div *ngIf="wizardStep == 1" [formGroup]="formModel">
+    <arb-panel-title [title]="'charity.singleCharityHead'"></arb-panel-title>
+
+    <arb-panel>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <app-select-account [accounts]="accounts"
+                                        (onAccountChange)="selectAccount($event)"
+                                        [selectedFullAccountNumber]="selectedAccount?.fullAccountNumber"
+                                        [headerText]="'governmentRevenue.accountFrom'">
+                    </app-select-account>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <div>
+                        <label>{{ 'transfer.amount' | translate }}</label>
+                        <input type="text" formControlName="transferAmount" inputPattern="onlyPositiveDecimalNumbers"
+                               name="amount" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <div>
+                        <label>{{ 'transfer.remarks' | translate }}</label>
+                        <input type="text" formControlName="remarks"
+                               name="remarks" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'charity.charityCat' | translate }}</label>
+                    <ng-select [notFoundText]="'public.noData' | translate" [ngModelOptions]="{standalone: true}" [(ngModel)]="charityCategory" class="form-control" (change)="selectCategory($event)">
+                        <ng-option *ngFor="let charityCategory of charityBaseModels" [value]="charityCategory"  >
+                            {{charityCategory?.value?.description}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'charity.charityOrg' | translate }}</label>
+                    <ng-select [notFoundText]="'public.noData' | translate" [ngModelOptions]="{standalone: true}" [(ngModel)]="charityGroup" class="form-control" (change)="selectGroup($event)">
+                        <ng-option *ngFor="let charityGroup of charityCategoryGroups" [value]="charityGroup" >
+                            {{charityGroup.description}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'charity.toBenAcc' | translate }}</label>
+                    <ng-select [notFoundText]="'public.noData' | translate" [ngModelOptions]="{standalone: true}"
+                               [(ngModel)]="charityGroupAccount" class="form-control" (change)="selectGroupAccount($event)">
+                        <ng-option *ngFor="let charityGroupAccount of charityGroupAccounts" [value]="charityGroupAccount">
+                            {{charityGroupAccount?.account + ' - ' + charityGroupAccount?.description}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 2" [formGroup]="formModel">
+
+    <arb-panel>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <div>
+                        <label>{{ 'governmentRevenue.accountFrom' | translate }}</label>
+                        <input type="text" class="form-control" value="{{selectedAccount.fullAccountNumber
+                        +' - '+ selectedAccount.alias}}" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <div>
+                        <label>{{ 'transfer.amount' | translate }}</label>
+                        <input type="text" formControlName="transferAmount" name="amount" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <div>
+                        <label>{{ 'transfer.remarks' | translate }}</label>
+                        <input type="text" formControlName="remarks"
+                               name="remarks" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'charity.charityCat' | translate }}</label>
+                    <input type="text" class="form-control" value="{{charityCategory.value.description}}" disabled>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'charity.charityOrg' | translate }}</label>
+                    <input type="text" class="form-control" value="{{charityGroup.description}}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'charity.toBenAcc' | translate }}</label>
+                    <input type="text" class="form-control"
+                           value="{{charityGroupAccount.account +' - ' +charityGroupAccount.description}}" disabled>
+
+                </div>
+            </div>
+        </div>
+
+    </arb-panel>
+        <arb-panel>
+            <app-secured-authentication *ngIf='generateChallengeAndOTP'
+                                        [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                        [requestValidate]='requestValidate'></app-secured-authentication>
+        </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 3" [formGroup]="formModel">
+    <arb-panel>
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -check -success ticks-success"></div>
+                <h2>{{'charity.singleTransferSuccessHeader' | translate}}</h2>
+            </div>
+        </div>
+    </arb-panel>
+</div>
+<arb-buttons>
+
+    <div class="row" *ngIf="wizardStep < 3">
+        <div class="col-xs-12 col-sm-8" style="text-align: start">
+            <button style="margin-right: auto" class="btn btn-default btn-wide" type="button" (click)="cancel()">
+                {{ 'public.cancel' | translate}}
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <button [disabled]="!canGoBack()" (click)="back()" class=" btn btn-default btn-wide">
+                {{ 'public.back' | translate }}
+            </button>
+            <button [disabled]="!canGoNext()" (click)="next()" class="btn btn-primary btn-wide">
+                {{'public.proceed' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="wizardStep == 3" style="float: right">
+        <div class="col-12">
+            <button style="align-self: self-end" class="btn btn-primary btn-wide" (click)="dashboard()">
+                {{'bfm.backtodashboard'| translate}}
+            </button>
+            <button style="align-self: self-end" class="btn btn-default btn-wide" type="button" (click)="cancel()">
+                {{ 'charity.goToTransfer' | translate}}
+            </button>
+        </div>
+    </div>
+</arb-buttons>

@@ -1,0 +1,132 @@
+<!--Header-->
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">
+      {{ 'fleet.requests.businessDetails' | translate }}
+    </p>
+    <p class="sme-page-info">
+      {{ 'fleet.requests.businessDetailsNote' | translate }}
+    </p>
+  </div>
+</div>
+<form [formGroup]="businessDetailsForm">
+  <div class="container-fluid">
+    <sme-card>
+      <div class="card-body">
+        <div class="sme-row-4-col">
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">{{
+                'fleet.requests.dateEstablishment' | translate
+              }}</label>
+              <input
+                type="date"
+                class="form-control"
+                id="dateEstablishment"
+                formControlName="establishmentDate"
+              />
+            </div>
+          </div>
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">{{
+                'fleet.requests.businessActivity' | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control"
+                id="businessActivity"
+                formControlName="businessActivities"
+              />
+            </div>
+          </div>
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">
+                {{ 'fleet.requests.numberOfBusiness' | translate }}</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="numberBranches"
+                formControlName="businessOutletsNum"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </sme-card>
+  </div>
+  <div class="container-fluid">
+    <sme-card>
+      <div class="card-body">
+        <div class="sme-row-4-col">
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">{{
+                'fleet.requests.typeBusiness' | translate
+              }}</label>
+              <select
+                class="form-control"
+                id="typeBusiness"
+                formControlName="businessType"
+              >
+                <option
+                  *ngFor="let item of businessTypes; let i = index"
+                  [value]="item"
+                >
+                  {{ item | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">{{
+                'fleet.requests.typeBranches' | translate
+              }}</label>
+              <select
+                class="form-control"
+                id="typeBranches"
+                formControlName="businessOutletsType"
+              >
+                <option
+                  *ngFor="let item of branchesTypes; let i = index"
+                  [value]="item"
+                >
+                  {{ item | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">{{
+                'fleet.requests.primaryBusinessLocation' | translate
+              }}</label>
+              <select
+                class="form-control"
+                id="primaryLocation"
+                formControlName="businessLocation"
+              >
+                <option
+                  *ngFor="let item of businessLocations; let i = index"
+                  [value]="item"
+                >
+                  {{ item | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sme-card>
+  </div>
+  <div class="container-fluid">
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button class="btn btn-primary btn-wide" (click)="navigateTo(2)" [disabled]="businessDetailsForm.invalid" >
+        {{ 'fleet.btn.proceed' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

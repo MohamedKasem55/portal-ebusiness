@@ -1,0 +1,80 @@
+<form autocomplete="off" class="sme-wizard" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="sme-wizard__content" style="height: auto;">
+        <div class="sme-radio-buttons">
+            <div class="row col-xs-6 col-sm-12">
+                <div class="col-sm-3">
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="localTransfer" formControlName="operationType">
+                            <i aria-hidden="true"></i>
+                            <span>{{'transfer.normal' | translate}}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-xs-6 col-sm-12" [ngClass]="{divDisabled:disableQuickTransfer}">
+                <div class="col-sm-3">
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="quickTransfer" formControlName="operationType">
+                            <i aria-hidden="true"></i>
+                            <span>{{'transfer.quick' | translate}}</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-3" style="margin: 10px">
+                    <label for="ipsAmount">{{ 'transfer.ips.inputAmount' |
+                        translate }}</label>
+                    <input type="text" class="form-control" id="ipsAmount" formControlName="ipsAmount">
+                    <div *ngIf="!isValid()"
+                         class="alert alert-danger">
+                        <small>{{'transfer.ips.amountLimit' | translate }} {{currentTransferLimit}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-sm-12" style="margin: 10px">
+        <span>{{ 'transfer.ips.InfoLabel' |translate :{value: currentTransferLimit} }}</span>
+    </div>
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+
+        <button type="button" class=" btn btn-default btn-wide"
+                (click)="back()">{{'public.back' | translate }}</button>
+
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!isValid()">{{buttonLabel}}</button>
+    </div>
+
+
+</form>
+
+
+<div class="modal fade" bsModal #ipsModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content__stretched">
+            <div class="modal-header">
+                <img src="assets/img/SARIE.png">
+                <div class="modal-font-header">
+                    {{'transfer.ips.modal.messageHeader' | translate}}
+                </div>
+            </div>
+            <div class="modal-body modal-side-align-text">
+                <p>{{ 'transfer.ips.modal.messageBody' | translate }}</p>
+                <br/><br/>
+                <ul>
+                    <li>{{ 'transfer.ips.modal.messageItem1' | translate }}</li>
+                    <li>{{ 'transfer.ips.modal.messageItem2' | translate }}</li>
+                </ul>
+            </div>
+            <div class="modal-footer modal-side-align-button">
+                <button type="button" (click)="later()" class="btn btn-default"
+                        data-dismiss="modal">{{ 'transfer.ips.buttons.later' | translate }}</button>
+                <button type="button" (click)="activate()" class=" btn btn-primary btn-wide"
+                        data-dismiss="modal">{{ 'transfer.ips.buttons.activate' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

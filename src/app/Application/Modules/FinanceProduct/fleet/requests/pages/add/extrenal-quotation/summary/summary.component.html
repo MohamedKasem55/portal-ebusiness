@@ -1,0 +1,97 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">{{'fleet.requests.summaryStepTitle'|translate}}</p>
+  </div>
+</div>
+
+<ng-container *ngIf="quotationList?.length > 0">
+  <ng-container *ngFor="let item of quotationList ; let i = index" >
+    <div *ngFor="let purposes of quotationList[i].purposes; let j = index" class="container-fluid">
+      <sme-card [headerFontSize]="'md'" [startTitle]="  j === 0
+      ? title1 + (exQuotation !=null ? i + exQuotation.length + 1 : i+1 )
+      : title2 + ( j + 1)">
+        <div class="card-body">
+          <!--Data-->
+          <div class="sme-row-4-col">
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.purposeUse'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.purposeOfUse}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.brandName'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.brandName}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.model'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.modelName}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.variant'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.vehicleVariant}}</p>
+              </div>
+            </div>
+          </div>
+         
+          <div class="sme-row-4-col">
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.exteriorColor'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.vehicleColor | translate}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.quantity'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.vehiclesNum}}</p>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.vehiclePrice'|translate}}</label>
+                <p class="sme-form-group-txt">{{purposes.vehiclePrice}}</p>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="purposes.documentsInfo" class="sme-row-col">
+            <div class="sme-col">
+              <div class="sme-form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.document'|translate}}</label>
+                <p class="sme-form-group-txt">
+                  <span class="pr-2"><img src="assets/icons/doc.svg" /></span>
+                 {{purposes.documentsInfo.fileName}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <!--editBtn-->
+        
+        </div>
+        <!--End of Card body-->
+      </sme-card>
+    </div>
+  </ng-container>
+</ng-container>
+<div *ngIf="!quotationList?.length" class="container-fluid">
+  <sme-check [img]="'assets/icons/check-error.svg'" [status]="'error'" [title]="'Please Go back to Add External Quotation'"></sme-check>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class=" btn btn-default btn-wide sme-back-btn" *ngIf="quotationList?.length >= 0" [routerLink]="['/financeProduct/fleet/request/external-upload']">
+      {{'fleet.btn.back'|translate}}
+    </button>
+    <button type="submit" class=" btn btn-primary btn-wide" *ngIf="quotationList?.length > 0" (click)="uploadCustomerQuotation()">
+      {{'fleet.btn.proceed'|translate}}
+    </button>
+  </div>
+</div>
+

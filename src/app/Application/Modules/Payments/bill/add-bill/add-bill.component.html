@@ -1,0 +1,183 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li>{{ 'dashboard.payments' | translate }}</li>
+		<li class="human-selectable" [routerLink]="['/payments/billPayments']">{{ 'payments.bill-payments' | translate
+			}}</li>
+		<li>{{ 'public.add' | translate }} {{ 'payments.bill' | translate }}</li>
+	</ol>
+</div>
+
+<div class="container-fluid">
+
+	<ul class="sme-box sme-wizard__steps">
+		<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1}"><span>
+				<span class="num">1</span>
+				<span class="text">{{ 'public.add' | translate }} {{ 'payments.bill' | translate }}</span>
+			</span></li>
+		<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2}"><span>
+				<span class="num">2</span>
+				<span class="text">{{ 'public.confirm' | translate }}</span>
+			</span></li>
+		<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3}"><span>
+				<span class="num">3</span>
+				<span class="text">{{ 'public.summary' | translate }}</span>
+			</span></li>
+	</ul>
+</div>
+<div class="container-fluid">
+
+
+	<div class="sme-panel">
+		<div class="sme-panel__head">
+			<div *ngIf="wizardStep==1" class="sme-panel__title">{{ 'public.add' | translate }} {{ 'payments.bill' |
+				translate }}</div>
+			<div *ngIf="wizardStep==2" class="sme-panel__title">{{ 'public.confirm' | translate }}</div>
+			<div *ngIf="wizardStep==3" class="sme-panel__title">{{ 'public.summary' | translate }}</div>
+		</div>
+
+		<div class="sme-panel__body">
+
+			<div *ngIf="wizardStep==1" class="sme-data-table__advisory">
+				<span>{{'payments.advisoryadd' | translate}}</span>
+
+			</div>
+			<form autocomplete="off" class="sme-form">
+
+				<div class="sme-form__body" *ngIf="wizardStep==1">
+
+					<div>
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<div class="col-xs-12 col-md-12">
+										<div class="form-group">
+											<label class="required">{{ 'payments.unity-service-provider' | translate
+												}}</label>
+											<div class="form-control">
+												<ng-select [notFoundText]="'public.noData' | translate"
+													*ngIf="translate.currentLang!=='ar'"
+													placeholder="{{(!wizardData.unityServiceProvider ? '--'+('public.selectDropdown' | translate)+'--' : '' )}}"
+													bindLabel="detailsDescriptionAr"
+													notFoundText="{{'public.noData' | translate}}" [items]="group"
+													bindLabel="detailsDescriptionEn"
+													[(ngModel)]="wizardData.unityServiceProvider"
+													name="unityServiceProvider">
+												</ng-select>
+												<ng-select [notFoundText]="'public.noData' | translate"
+													*ngIf="translate.currentLang==='ar'"
+													placeholder="{{(!wizardData.unityServiceProvider ? '--'+('public.selectDropdown' | translate)+'--' : '' )}}"
+													[items]="group" bindLabel="detailsDescriptionAr"
+													notFoundText="{{'public.noData' | translate}}"
+													[virtualScroll]="true" [(ngModel)]="wizardData.unityServiceProvider"
+													name="unityServiceProvider">
+												</ng-select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<div class="form-group">
+										<label class="required">{{ 'payments.subscriber-number' | translate }}</label>
+										<input [(ngModel)]="wizardData.subscriberNumber" name="subscriberNumber"
+											type="text" class="form-control" required maxlength="16"
+											inputPattern="onlyDigits">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<div class="form-group">
+										<label class="required">{{ 'payments.nick-name' | translate }}</label>
+										<input [(ngModel)]="wizardData.nickName" name="nickName" type="text"
+											class="form-control" required maxlength="20">
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+
+				<div *ngIf="wizardStep==2" class="sme-form__body">
+					<div>
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+										<label>{{ 'payments.unity-service-provider' | translate }}</label>
+										<p *ngIf="wizardData.unityServiceProvider && translate.currentLang==='ar'"
+											style="color: #999999;"><span
+												[innerHTML]="wizardData.unityServiceProvider.detailsDescriptionAr"></span>
+										</p>
+										<p *ngIf="wizardData.unityServiceProvider && translate.currentLang!=='ar'"
+											style="color: #999999;"><span
+												[innerHTML]="wizardData.unityServiceProvider.detailsDescriptionEn"></span>
+										</p>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+										<label>{{ 'payments.subscriber-number' | translate }}</label>
+										<p style="color: #999999;">{{wizardData.subscriberNumber}}</p>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+										<label>{{ 'payments.nick-name' | translate }}</label>
+										<p style="color: #999999;">{{wizardData.nickName}}</p>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+
+				<app-levels-table *ngIf="dataValidate['billAddBatch'] && wizardStep ==2"
+					[futureSecurityLevels]="dataValidate.billAddBatch.futureSecurityLevelsDTOList">
+				</app-levels-table>
+
+
+				<div class="sme-form__body" *ngIf="dataValidate['generateChallengeAndOTP'] && wizardStep ==2">
+					<div>
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 ">
+									<app-secured-authentication
+										[generateChallengeAndOTP]="dataValidate['generateChallengeAndOTP']"
+										[requestValidate]="requestValidate" #authorization>
+									</app-secured-authentication>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+
+				<div *ngIf="wizardStep==3" class="sme-wizard__content">
+
+					<div class="sme-wizard__success" *ngIf="statusOk && !isPending()">
+						<span class="icon -check"></span>
+						{{ 'payments.billAddedSuccesfully' | translate }}
+					</div>
+					<div class="sme-wizard__success" *ngIf="statusOk && isPending()">
+						<span class="icon -check"></span>
+						{{ 'payments.sucessPendingRequest' | translate }}
+					</div>
+					<div *ngIf="!statusOk" class="sme-wizard__success">
+						<span class="icon -close icon-failure" style="color:red"></span> {{ 'payments.failedRequest' |
+						translate }}
+					</div>
+
+				</div>
+
+				<div class="sme-wizard__navigation sme-form__actions">
+					<button *ngIf="wizardStep>1&&wizardStep<3" (click)="back()" type="submit"
+						class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+					<button *ngIf="wizardStep==1" (click)="next()" type="submit" class=" btn btn-primary btn-wide"
+						[disabled]="!validForm()">{{ 'public.next' | translate }}</button>
+					<button *ngIf="wizardStep==2" (click)="finish()" type="submit" class=" btn btn-primary btn-wide"
+						[disabled]="!validAuthForm()">{{ 'public.next' | translate }}</button>
+					<a *ngIf="wizardStep==3" [routerLink]="['/payments/billPayments']"
+						class=" btn btn-primary btn-wide">{{ 'public.finish' | translate }}</a>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>

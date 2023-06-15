@@ -1,0 +1,83 @@
+<div *ngIf="details; else noDetails">
+    <div [formGroup]="detailsList">
+        <div>
+            <div class="sme-table table headerDataTable " [class.customSize]="isMobile">
+                <table class="sme-table sme-table--responsive sme-table--check-list table">
+                    <thead>
+                        <tr [class.rowFormat]="isMobile">
+                            <th>{{'workflow.minAmount' | translate}}</th>
+                            <th>{{'workflow.maxAmount' | translate}}</th>
+                            <th>{{'public.l1' | translate}}</th>
+                            <th>{{'public.l2' | translate}}</th>
+                            <th>{{'public.l3' | translate}}</th>
+                            <th>{{'public.l4' | translate}}</th>
+                            <th>{{'public.l5' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let accountDetails of detailsList.value; let i = index">
+                        <tr>
+                            <td>
+                                <label class="sme-checkbox.checkbox-inline" [ngClass]="{'rowFormat' : isMobile}">
+                                    <span class="borderDelete">
+                                        {{accountDetails.amountMin}}</span>
+                                    <i aria-hidden="false"></i>
+                                    <span class="visible-xs">{{'workflow.minAmount' | translate}}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="sme-checkbox.checkbox-inline" [ngClass]="{'rowFormat' : isMobile}">
+                                    <span class="borderDelete">
+                                        {{accountDetails.amountMax}}</span>
+                                    <i aria-hidden="false"></i>
+                                    <span class="visible-xs">{{'workflow.maxAmount' | translate}}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="sme-checkbox checkbox-inline">
+                                    <input type="checkbox" [disabled]="true" [checked]="accountDetails.l1"> <i
+                                        aria-hidden="false"></i>
+                                    <span class="visible-xs">{{'public.l1' | translate}}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="sme-checkbox checkbox-inline">
+                                    <input type="checkbox" [disabled]="true" [checked]="accountDetails.l2"> <i
+                                        aria-hidden="true"></i>
+                                    <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="sme-checkbox checkbox-inline">
+                                    <input type="checkbox" [disabled]="true" [(checked)]="accountDetails.l3"> <i
+                                        aria-hidden="true"></i>
+                                    <span class="visible-xs">{{'public.l3' | translate}}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="sme-checkbox checkbox-inline">
+                                    <input type="checkbox" [disabled]="true" [(checked)]="accountDetails.l4"> <i
+                                        aria-hidden="true"></i>
+                                    <span class="visible-xs">{{'public.l4' | translate}}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="sme-checkbox checkbox-inline">
+                                    <input type="checkbox" [disabled]="true" [(checked)]="accountDetails.l5"> <i
+                                        aria-hidden="true"></i>
+                                    <span class="visible-xs">{{'public.l5' | translate}}</span>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #noDetails>
+    <div class="sme-form__body">
+        <div class="noDetails">
+            <span class="text-legend">{{'public.noData' | translate }}</span>
+        </div>
+    </div>
+</ng-template>

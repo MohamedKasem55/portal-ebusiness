@@ -1,0 +1,13 @@
+<arb-panel>
+    <arb-panel-title [title]="'gold-wallet.select-account' | translate">
+    </arb-panel-title>
+    <div class="row" style="margin-left: 2%;">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <app-select-account [accounts]="accounts" [useOldDesign]="true" (onAccountChange)="selectAccount($event)">
+                </app-select-account>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+<br>

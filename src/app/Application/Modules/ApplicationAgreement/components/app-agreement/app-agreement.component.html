@@ -1,0 +1,74 @@
+<arb-breadcrumb [routes]="[['app_and_agreement.'+currentAgreementName],[ 'app_and_agreement.download']]"></arb-breadcrumb>
+
+
+<arb-panel-buttons>
+    <a class="btn btn-primary btn-wide"
+       [routerLink]="['/app_and_agreement/app-agreement/file-upload/'+currentAgreementName]">
+        {{'app_and_agreement.upload-file' | translate }}
+    </a>
+</arb-panel-buttons>
+
+
+<arb-panel>
+    <div class="sme-panel instructions_panal">
+        <div class="sme-panel__head">
+
+            <div class="sme-panel__title">
+                {{'payroll-agreement.instructions'| translate}}
+            </div>
+
+        </div>
+        <div class="sme-panel__body">
+            <div class="sme-panel__body">
+                <div *ngFor="let instruction of currentAgreement.downLoadInstructions" class="row instructions_row">
+                    <ul class="col col-sm-12" >
+                        <li class="instructions_body">{{instruction | translate}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row instructions_row">
+                <div class="col col-sm-12 ">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</arb-panel>
+
+<arb-table-panel [title]="'app_and_agreement.download-templates'">
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="currentAgreement.files"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="defaultHeight"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [selectionType]="defaultSelectionType"
+                   (select)='onSelect($event)'>
+
+        <ngx-datatable-column prop="name">
+            <ng-template let-row="row" let-value="value" ngx-datatable-header-template>
+                <span>
+                     {{'app_and_agreement.download-page.columns.template' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span>
+                <a class="human-selectable" (click)="downloadAgreement(row)">
+                    <p innerHTML="{{ value | translate}}"></p>
+                </a>
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+
+</arb-table-panel>
+

@@ -1,0 +1,327 @@
+<arb-breadcrumb [routes]="[
+	['dashboard.payments'],
+	['payments.moiPayments.menu', ['/payments/moi']],
+    ['payments.moiPayments.feedBack.name', ['/payments/moi/feedback-files']],
+    ['payments.moiPayments.feedBack.detail']
+]">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <!-- DOWNLOADABLE FILES -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'payments.moiPayments.feedBack.downloadFile' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="downloadedFiles"
+                                  *ngIf="isPaymentType()"
+                                  [header]="'payments.moiPayments.feedBack.downloadFile' | translate"
+                                  [columns]="[
+                                    {'title': 'payments.moiPayments.feedBack.accountNumber' | translate, 'dataKey':'accountNumberPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.civilianId' | translate, 'dataKey':'civilianIdPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.type' | translate, 'dataKey':'typePrint'},
+                                    {'title': 'payments.moiPayments.feedBack.process' | translate, 'dataKey':'processPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.beneficiaryName' | translate, 'dataKey':'beneficiaryNamePrint'},
+                                    {'title': 'payments.moiPayments.feedBack.amount' | translate, 'dataKey':'amount'},
+                                    {'title': 'payments.moiPayments.feedBack.result' | translate, 'dataKey':'resultTxt'}
+                                    ]">
+                    </table-export>
+                    <table-export [dataTable]="downloadedFiles"
+                                  *ngIf="isRefundType()"
+                                  [header]="'payments.moiPayments.feedBack.downloadFile' | translate"
+                                  [columns]="[
+                                    {'title': 'payments.moiPayments.feedBack.accountNumber' | translate, 'dataKey':'accountNumberPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.civilianId' | translate, 'dataKey':'civilianIdPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.type' | translate, 'dataKey':'typePrint'},
+                                    {'title': 'payments.moiPayments.feedBack.process' | translate, 'dataKey':'processPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.beneficiaryName' | translate, 'dataKey':'beneficiaryNamePrint'},
+                                    {'title': 'payments.moiPayments.feedBack.refundStatus' | translate, 'dataKey':'refundStatusPrint'},
+                                    {'title': 'payments.moiPayments.feedBack.refundId' | translate, 'dataKey':'refundId'},
+                                    {'title': 'payments.moiPayments.feedBack.result' | translate, 'dataKey':'resultTxt'}
+                                    ]">
+                    </table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <!-- EXPORT TYPES -->
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #downloadedFiles
+                                   class="material sme-table sme-table--responsive table"
+                                   [rows]="feedBackFilesListPage.data"
+                                   [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30"
+                                   [footerHeight]="footerHeight"
+                                   [rowHeight]="defaultHeight"
+                                   [count]="feedBackFilesListPage.page.totalElements"
+                                   [offset]="feedBackFilesListPage.page.pageNumber"
+                                   [limit]="feedBackFilesListPage.page.pageSize"
+                                   (page)='setPageFeedBackDetailPages($event)'
+                                   (sort)="setSortPayments($event)"
+                                   [externalPaging]="true"
+                                   [externalSorting]="true">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.accountNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.dbDetails.accountNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.civilianId' | translate }}</label>
+                                                <div>
+                                                    <span>{{this.extractCivilianIdFromRefoundId(row.dbDetails)}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.type' | translate }}</label>
+                                                <div>
+                                                    <span>{{ 'eGovSadadType' | modelPipe : row.dbDetails.serviceType}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.process' | translate }}</label>
+                                                <div>
+                                                    <span>{{ 'eGovProcess' | modelPipe : row.recordType}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.beneficiaryName' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.dbDetails.beneficiaryName }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.amount' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.amount | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.refundStatus' | translate }}</label>
+                                                <div>
+                                                    <span>{{ 'eGovSadadRefundStatus' | modelPipe : row.refundStatus}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.refundId' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.refundId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.moiPayments.feedBack.errorDescription' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.errorDescription }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column
+                                [width]="50"
+                                [sortable]="false"
+                                [canAutoResize]="false"
+                                [draggable]="false"
+                                [resizeable]="false"
+                                [headerCheckboxable]="true">
+                        </ngx-datatable-column>
+
+                        <!-- account number -->
+                        <ngx-datatable-column prop="dbDetails.accountNumber" [width]="170">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.accountNumber' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- civilian id -->
+                        <ngx-datatable-column prop="civilianID" [resizeable]="true" [width]="140">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.civilianId' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{this.extractCivilianIdFromRefoundId(row.dbDetails)}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- Type -->
+                        <ngx-datatable-column prop="dbDetails.serviceType" [width]="60">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.type' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ 'eGovSadadType' | modelPipe : value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- Process -->
+                        <ngx-datatable-column prop="recordType" [width]="30">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.process' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ 'eGovProcess' | modelPipe : value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- Beneficiary Name -->
+                        <ngx-datatable-column prop="dbDetails.beneficiaryName" [width]="100">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.beneficiaryName' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- Amount -->
+                        <ngx-datatable-column prop="amount" [width]="50" *ngIf="isPaymentType()">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.amount' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- Refund status -->
+                        <ngx-datatable-column prop="refundStatus" [width]="200" *ngIf="isRefundType()">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.refundStatus' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ 'eGovSadadRefundStatus' | modelPipe : value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- refundId -->
+                        <ngx-datatable-column prop="refundId" [width]="250" *ngIf="isRefundType()">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.refundId' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <!-- errorDescription -->
+                        <ngx-datatable-column prop="errorCode" [width]="150">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.moiPayments.feedBack.result' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ row.resultTxt }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template
+                                    ngx-datatable-footer-template
+                                    let-rowCount="rowCount"
+                                    let-pageSize="pageSize"
+                                    let-selectedCount="selectedCount"
+                                    let-curPage="curPage"
+                                    let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage"
+                                            [size]="pageSize"
+                                            [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="downloadedFiles.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+
+                </div>
+            </div>
+        </div><!-- ./sme-data-table -->
+        <!-- /DOWNLOADABLE FILES -->
+
+    </div>
+</div>
+<!-- Bottoms -->
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" (click)="goBack()"
+            class=" btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+
+</div>

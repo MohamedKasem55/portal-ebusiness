@@ -1,0 +1,260 @@
+<arb-breadcrumb [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+	['sadadOLP.testing.menuView']
+]">
+</arb-breadcrumb>
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()">
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'sadadOLP.testing.testRqId' | translate }}</label>
+                    <input type="text" name="transactionId" class="form-control" formControlName="testRqId">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'sadadOLP.testing.status' | translate }}</label>
+                    <input type="text" name="refundId" class="form-control" formControlName="status">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{'sadadOLP.testing.startDate' | translate }}</label>
+                    <input type="text" #startDate bsDatepicker
+                           formControlName="startDate" class="form-control"/>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{'sadadOLP.testing.endDate' | translate }}</label>
+                    <input type="text" #endDate bsDatepicker
+                           formControlName="endDate" class="form-control"/>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-searchable-panel>
+<arb-table-panel [title]="'sadadOLP.testing.menuView'">
+    <table-export [dataTable]="elementsTable" [header]="'sadadOLP.testing.menuView' | translate" [columns]="[
+                        {'title':'sadadOLP.testing.testRqId' | translate ,'dataKey':'testRqId'},
+                        {'title':'sadadOLP.testing.bopId' | translate ,'dataKey':'bopId'},
+                        {'title':'sadadOLP.testing.bopVersion' | translate ,'dataKey':'bopVersion'},
+                        {'title':'sadadOLP.testing.requestedDate' | translate ,'dataKey':'requestedDate'},
+                        {'title':'sadadOLP.testing.testReviewId' | translate ,'dataKey':'testReviewId'},
+                        {'title':'sadadOLP.testing.startDate' | translate,'dataKey':'startDate'},
+                        {'title':'sadadOLP.testing.endDate' | translate,'dataKey':'endDate'},
+                        {'title':'sadadOLP.testing.status' | translate,'dataKey':'status'}
+                        ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                   class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [externalPaging]="true"
+                   [externalSorting]="true" [count]="elementsPage.page.totalElements"
+                   [offset]="elementsPage.page.pageNumber-1"
+                   [limit]="elementsPage.page.pageSize" [selectionType]="defaultSelectionTypeSingle"
+                   [selected]="tableSelectedRows"
+                   (page)='setPage($event)' (sort)="setSort($event)" (select)='onSelect($event)'
+                   [displayCheck]="displayCheck">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="testRqId-id">{{'sadadOLP.testing.testRqId' | translate }}</label>
+                                <div>
+                                    <span id="testRqId-id">{{row.testRqId}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="bopId-id">{{'sadadOLP.testing.bopId' | translate }}</label>
+                                <div>
+                                    <span id="bopId-id">{{row.bopId}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="bopVersion-id">{{'sadadOLP.testing.bopVersion' | translate }}</label>
+                                <div>
+                                    <span id="bopVersion-id">{{row.bopVersion}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="requestedDate-id">{{'sadadOLP.testing.requestedDate' | translate }}</label>
+                                <div>
+                                    <span id="requestedDate-id">{{row.requestedDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="testReviewId-id">{{'sadadOLP.testing.testReviewId' | translate }}</label>
+                                <div>
+                                    <span id="testReviewId-id">{{row.testReviewId}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="startDate-id">{{'sadadOLP.testing.startDate' | translate }}</label>
+                                <div>
+                                    <span id="startDate-id">{{row.startDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="endDate-id">{{'sadadOLP.testing.endDate' | translate }}</label>
+                                <div>
+                                    <span id="endDate-id">{{row.endDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="status-id">{{'sadadOLP.testing.status' | translate }}</label>
+                                <div>
+                                    <span id="status-id">{{row.status}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="testRqId" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.testRqId' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <a class="pointer-link">
+                    <span (click)="getDetails(row)" class="datatable-header-cell-wrapper">
+                        {{value}}
+                    </span>
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="bopId" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.bopId' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="bopVersion" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.bopVersion' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="requestedDate" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.requestedDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="testReviewId" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.testReviewId' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="startDate" [width]="200" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.startDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="endDate" [width]="200" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.endDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="status" [width]="200" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.status' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)"
+                            [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                        (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

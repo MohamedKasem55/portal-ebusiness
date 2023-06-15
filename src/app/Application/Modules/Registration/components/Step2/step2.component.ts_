@@ -1,0 +1,92 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
+import { SimpleMQ } from "ng2-simple-mq";
+import { Subscription } from "rxjs";
+import { RegistrationService } from "../../../../Modules/Registration/registration.service";
+
+@Component({
+    templateUrl: './step2.component.html',
+    styleUrls: ['../../registration.component.scss']
+})
+export class Step2Component implements OnInit{
+
+    @ViewChild('stepForm', { static: true }) stepForm: NgForm;
+
+    step = 2;
+    formData: any;
+    accountsNumber = Array(1).fill(1);
+    token: any = "";
+
+    constructor(
+        private service: RegistrationService,
+        private smq: SimpleMQ
+    ) { }
+
+    ngOnInit() {
+
+    }
+
+    addAcount() {
+        const data: any = {};
+        let subcriptor: Subscription;
+        const lastAccountIndex: number = this.accountsNumber.length - 1;
+        data.account = this.formData.accounts[lastAccountIndex]["iban"];
+        data.registrationPk = this.formData.registrationPk;
+        if (this.formData.accounts[lastAccountIndex]["valid"] === undefined ||
+            this.formData.accounts[lastAccountIndex]["valid"] === null ||
+            !this.formData.accounts[lastAccountIndex]["valid"]) {
+            subcriptor = this.service.callAddAccount(data, this.token)
+                .subscribe((result) => {
+                    subcriptor.unsubscribe();
+                    if (result['status'] === 'OK') {
+                        this.formData.accounts[lastAccountIndex]["valid"] = true;
+                        this.accountsNumber.push(this.accountsNumber.length + 1);
+                        this.formData.accounts[this.formData.accounts.length] = {};
+                    }
+                });
+        } else {
+            this.accountsNumber.push(this.accountsNumber.length + 1);
+            this.formData.accounts[this.formData.accounts.length] = {};
+        }
+    }
+
+    removeaccount(accountNumber) {
+        if (this.formData.accounts[accountNumber]["valid"] == true) {
+            this.service.borrarAcount(this.formData.accounts[accountNumber], this.formData.registrationPk).subscribe((result) => {
+                this.accountsNumber.splice(accountNumber, 1);
+                this.formData.accounts.splice(accountNumber, 1);
+                if (this.formData.accounts.length == 0) {
+                    this.accountsNumber.push(this.accountsNumber.length + 1);
+                    this.formData.accounts[this.formData.accounts.length] = {};
+                }
+            });
+        } else {
+            this.accountsNumber.splice(accountNumber, 1);
+            this.formData.accounts.splice(accountNumber, 1);
+        }
+        //Nunca se puede quedar con 0 cuentas
+
+        if (this.formData.accounts.length == 0) {
+            this.accountsNumber.push(this.accountsNumber.length + 1);
+            this.formData.accounts[this.formData.accounts.length] = {};
+        }
+
+
+
+    }
+
+    valid(): boolean {
+        let validate = true;
+        for (let i = this.formData.accounts.length - 1; i >= 0; i--) {
+            if (!this.formData.accounts[i]["iban"] || this.formData.accounts[i]["iban"] == "") {
+                validate = false;
+            }
+        }
+        return validate;
+    }
+
+    isPrint(){
+        return false;
+    }
+}

@@ -1,0 +1,15 @@
+<div class="sme-progress-container">
+  <div class="sme-progress-header">
+    <div class="sme-progress-header-start">{{topTitle}}: {{totalLimit}} {{ 'financeProduct.sar' | translate }}</div>
+    <div class="sme-progress-header-end">{{percentage | number: '1.2-2'}} %</div>
+  </div>
+  <div class="sme-progress-body">
+    <div class="sme-progress">
+      <div  [ngClass]="percentage >100 ? 'sme-progress-danger': 'sme-progress-success'" role="progressbar" [style.width.%]="percentage">
+      </div>
+    </div>
+  </div>
+  <div class="sme-progress-footer">
+    <div class="sme-progress-footer-start">{{downTitle}}: <span  [ngClass]="percentage > 100 ? 'sme-progress-footer-danger' : ''">{{remainingLimit}}</span></div>
+  </div>
+</div>

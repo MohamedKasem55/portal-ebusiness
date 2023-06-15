@@ -1,0 +1,180 @@
+<arb-breadcrumb [routes]="[
+	['accounts.creditCards.name'],
+	['accounts.creditCards.cardList',['/credit-cards/list']],
+	['accounts.creditCards.details']
+]">
+</arb-breadcrumb>
+
+<arb-panel>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="sme-credit-card-slider__item item active">
+                <div class="sme-credit-card-slider__card">
+                    <div class="sme-credit-card-slider__item-media">
+                        <img src="assets/img/405433.png" style="max-width: 250px;">
+                        <!--<img src="assets/img/{{selectedItem.cardNumber.substring(0,6)}}.jpg">-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-8">
+
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <div class="row">
+                                    <fieldset>
+
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.cardNumber' | translate }}</label>
+                                                <span class="form-control">{{selectedItem.cardNumber }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.cardType' | translate }}</label>
+                                                <span class="form-control">{{getCardType(selectedItem)}}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.date' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.date | date}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.hijraDate' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.hijraDate }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.creditCardLimit' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.balance.creditLimit | amountCurrency }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.availableCash' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.balance.availableBalance | amountCurrency}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.withdrowLimit' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.balance.availableCash | amountCurrency}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.amountPayableOnDueDate' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.amountPayableOnDueDate | amountCurrency}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.paymentDueDate' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.paymentDueDate | date }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.unbilledAmount' | translate }}</label>
+                                                <span class="form-control">{{cardInformation?.unbilledAmount | amountCurrency }}</span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xs-12 col-sm-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">{{ 'accounts.creditCards.rewardPoints' | translate }}</label>
+                                                <span class="form-control">{{selectedItem.rewardPoints |amountCurrency}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</arb-panel>
+
+<arb-panel>
+
+    <ul class="nav nav-pills">
+        <li [class.active]="isActiveTab(1)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(1)">
+                {{'accounts.creditCards.tabTransactionList' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(2)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(2)">
+                {{'accounts.creditCards.tabStatementList' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(3)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(3)">
+                {{'accounts.creditCards.tabPaymentsInAdvance' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(4)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(4)">
+                {{'accounts.creditCards.tabChangeMailingAddress' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(5)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(5)">
+                {{'accounts.creditCards.tabActivation' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(6)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(6)">
+                {{'accounts.creditCards.tabCancellation' | translate}}
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="tab1" class="tab-pane fade" [class.active]="isActiveTab(1)" [class.in]="isActiveTab(1)">
+            <app-credit-card-details-transactions [selectedCard]="selectedItem">
+            </app-credit-card-details-transactions>
+        </div>
+        <div id="tab2" class="tab-pane fade" [class.active]="isActiveTab(2)" [class.in]="isActiveTab(2)">
+            <app-credit-card-details-statements [selectedCard]="selectedItem">
+            </app-credit-card-details-statements>
+        </div>
+        <div id="tab3" class="tab-pane fade" [class.active]="isActiveTab(3)" [class.in]="isActiveTab(3)">
+            <app-credit-cards-details-payments-in-advance [selectedCard]="selectedItem">
+            </app-credit-cards-details-payments-in-advance>
+        </div>
+        <div id="tab4" class="tab-pane fade" [class.active]="isActiveTab(4)" [class.in]="isActiveTab(4)">
+            <app-credit-cards-details-change-mailing-address [selectedCard]="selectedItem">
+            </app-credit-cards-details-change-mailing-address>
+        </div>
+        <div id="tab5" class="tab-pane fade" [class.active]="isActiveTab(5)" [class.in]="isActiveTab(5)">
+            <app-credit-cards-activation-wizard [selectedCard]="selectedItem">
+            </app-credit-cards-activation-wizard>
+        </div>
+        <div id="tab6" class="tab-pane fade" [class.active]="isActiveTab(6)" [class.in]="isActiveTab(6)">
+            <app-credit-cards-cancellation-wizard [selectedCard]="selectedItem">
+            </app-credit-cards-cancellation-wizard>
+        </div>
+    </div>
+
+
+</arb-panel>
+
+<arb-buttons>
+    <button class="btn btn-default btn-wide" type="button" (click)="back()">{{ 'public.back' | translate}} - {{'accounts.creditCards.cardList' | translate}}</button>
+</arb-buttons>

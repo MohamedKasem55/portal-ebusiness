@@ -1,0 +1,302 @@
+import { DatePipe } from '@angular/common';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { NgForm } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
+import { SimpleMQ } from "ng2-simple-mq";
+import { Subscription } from "rxjs";
+import { StorageService } from '../../../core/storage/storage.service';
+import { RegistrationService } from "../../Modules/Registration/registration.service";
+
+
+@Component({
+    selector: 'app-registration',
+    templateUrl: './registration.component.html',
+    styleUrls: ['./registration.component.scss']
+})
+export class RegistrationComponent implements OnDestroy, OnInit {
+
+    subcriptor: Subscription;
+    wizardStep: number;
+    formData: any = [];
+    actualForm: NgForm;
+    datafourth = {}
+    token: any = "";
+    cr = '';
+    cic = '';
+    registrationPk = '';
+    currentComponent: any;
+
+    translate: TranslateService;
+
+
+
+    constructor(public injector: Injector, private router: Router,
+        private route: ActivatedRoute,
+        private service: RegistrationService,
+        private smq: SimpleMQ,
+        private storage: StorageService,
+        public datePipe: DatePipe) {
+        this.wizardStep = 1;
+        this.formData = {};
+    }
+
+    ngOnInit() {
+        this.translate = this.injector.get(TranslateService);
+        const lang = this.translate.currentLang;
+        const currentLang = this.storage.retrieve('currentLanguage');
+        if (lang == null || lang == "undefined") {
+            this.translate.use((currentLang != "undefined" && currentLang != null ? currentLang : 'ar'));
+            this.translate.reloadLang(this.translate.currentLang);
+        } else {
+            this.translate.reloadLang(lang);
+        }
+    }
+
+    proceedButton() {
+        if (this.wizardStep == 1) {
+            this.formData.accounts = [];
+            this.formData.accounts[0] = {};
+            this.firstStep();
+        }
+        else if (this.wizardStep == 2) {
+            this.secondStep();
+        }
+        else if (this.wizardStep == 3) {
+            this.thirdStep();
+        }
+        else if (this.wizardStep == 4) {
+            this.fourthStep();
+        }
+        else if (this.wizardStep == 5) {
+            this.fifthstep();
+        }
+        else if (this.wizardStep == 6) {
+            this.sixStep();
+        }
+        else {
+            this.wizardStep++;
+            this.router.navigate(['./step' + this.wizardStep], { relativeTo: this.route });
+        }
+    }
+
+    backButton() {
+        this.wizardStep--;
+        this.router.navigate(['./step' + this.wizardStep], { relativeTo: this.route });
+    }
+
+    cancelFirstButton() {
+        this.router.navigateByUrl('/login');
+    }
+
+    cancelLastButton() {
+
+    }
+
+    componentAdded(component) {
+        this.wizardStep = component.step;
+        component.formData = this.formData;
+        this.actualForm = component.stepForm;
+        this.currentComponent = component;
+    }
+
+    validForm() {
+        if (this.wizardStep == 3 || this.wizardStep == 2) {
+            return this.currentComponent.valid();
+        } else if (this.wizardStep == 3) {
+            return this.actualForm.form.valid && this.currentComponent.valid() && this.currentComponent.validOTP;
+        } else if (this.wizardStep == 4) {
+
+            return this.actualForm.form.valid && this.currentComponent.formData.codigoTelefono != null && this.currentComponent.valid() && this.currentComponent.formDatafileNationalIdname != "" && !this.currentComponent.formDatafileNationalIderror && !this.currentComponent.formDatafilePowerAttorneyerror && !this.currentComponent.formDataotherDocumentserror;
+        }
+        else {
+            return this.actualForm.valid && this.currentComponent.valid();
+        }
+    }
+
+    componentRemoved(component) { }
+
+    firstStep() {
+        this.cr = this.formData.cr;
+
+        this.service.firstStep(this.formData.cr, this.formData.cic).subscribe((result) => {
+            this.token = result.token
+            if (result.status != "OK") {
+                console.assert("error 1")
+                this.smq.publish('error-mq', result.errorDescription);
+                this.router.navigate(['./step1'], { relativeTo: this.route });
+            } else {
+                this.service.firstStepsecontservice(this.formData.cr, this.formData.cic, this.token)
+                    .subscribe((_result) => {
+                        if (_result.error == true) {
+                            this.smq.publish('error-mq', _result.errorDescription);
+                            this.router.navigate(['./step1'], { relativeTo: this.route });
+                            console.assert("error 2")
+                        }
+                        else {
+                            this.registrationPk = _result["registrationPk"];
+                            this.formData.registrationPk = _result["registrationPk"];
+                            this.router.navigate(['./step2'], { relativeTo: this.route });
+                        }
+                    });
+            }
+        });
+    }
+
+    secondStep() {
+        const data: any = {};
+        for (let i = 0; i < this.formData.accounts.length; i++) {
+            data.account = this.formData.accounts[i]["iban"];
+            data.registrationPk = this.registrationPk;
+            if (this.formData.accounts[i]["valid"] === undefined
+                || this.formData.accounts[i]["valid"] === null
+                || !this.formData.accounts[i]["valid"]) {
+                this.subcriptor = this.service.callAddAccount(data, this.token).subscribe((result) => {
+                    this.subcriptor.unsubscribe();
+                    if (result['status'] === 'OK') {
+                        this.formData.accounts[i]["valid"] = true;
+                    } else {
+                        this.formData.accounts[i]["valid"] = false;
+                    }
+                    this.completeSecond();
+                });
+            }
+        }
+        this.completeSecond();
+    }
+
+    completeSecond() {
+        let nextstep = true;
+        for (let i = 0; i < this.formData.accounts.length; i++) {
+            nextstep = nextstep && this.formData.accounts[i]["valid"];
+        }
+        if (nextstep && this.formData.accounts.length > 0) {
+            this.router.navigate(['./step3'], { relativeTo: this.route });
+        }
+    }
+
+    thirdStep() {
+        //console.log("Step3");
+        const data: any = { registrationPk: this.registrationPk }
+
+        // //console.log(data);
+        this.subcriptor = this.service.validateMinOTP(data)
+            .subscribe((result) => {
+                if (result.error) {
+                    this.smq.publish('error-mq', result.errorDescription);
+                }
+                else {
+                    this.formData.adminName = result.adminName;
+                    this.formData.companyName = result.companyName;
+                    this.router.navigate(['./step4'], { relativeTo: this.route });
+                }
+            });
+
+
+
+    }
+
+    fourthStep() {
+
+        // this.service.services().subscribe( result => {
+        //                 this.formData.validateAdmin = result;
+        //                 this.formData.validateAdmin.transferLimit = 600;
+        //                 this.formData.validateAdmin.tokenType ="S";
+        //                 this.formData.validateAdmin.status ="OK";
+        //                 this.router.navigate(['./step5'], { relativeTo: this.route });
+        //            });
+
+        //descomentar
+        const data: any = {
+            birthDate: this.datePipe.transform(this.formData.birdDate, 'dd-MM-yyyy'),
+            companyName: this.formData.companyName,
+            email: this.formData.email,
+            expiryDate: this.datePipe.transform(this.formData.expiryDate, 'dd-MM-yyyy'),
+            iqama: this.formData.nationalid,
+            mobile: this.formData.mobileNumber,
+            name: this.formData.nameUser,
+            registrationPk: this.registrationPk,
+            telephoneNationalCode: this.formData.prefix
+        }
+        data.registrationPk = this.registrationPk;
+
+        this.subcriptor = this.service.fourthStep(data)
+            .subscribe((result) => {
+                if (result.error) {
+                    console.log(result.status);
+                } else {
+                    this.formData.validateAdmin = result;
+                    console.log('cuarto paso', result);
+                    this.router.navigate(['./step5'], { relativeTo: this.route });
+                }
+            });
+    }
+
+    fifthstep() {
+        const data: any = {
+            registrationPk: this.registrationPk,
+            services: [],
+            status: this.formData.status,
+            tokenType: this.formData.tokenType,
+            transferLimit: this.formData.limit
+        }
+
+        //envia solo los aprobados
+        for (let i = this.formData.options.length - 1; i >= 0; i--) {
+            for (let j = this.formData.options[i].length - 1; j >= 0; j--) {
+                if (this.formData.options[i][j]['check']) {
+                    this.formData.options[i][j].agreement = "Y";
+                    data.services.push(this.formData.options[i][j]);
+                }
+            }
+        }
+        console.log(this.formData.options);
+
+        this.subcriptor = this.service.sendProductsAndServices(data)
+            .subscribe((result) => {
+                if (result.error) {
+                    console.log('error borrar')
+                    this.formData.lastStep = {};
+                    this.formData.lastStep.accountsTelephones = [];
+                    //this.router.navigate(['./step6'], { relativeTo: this.route });
+                } else {
+                    this.formData.lastStep = result;
+                    this.router.navigate(['./step6'], { relativeTo: this.route });
+                }
+            });
+
+
+
+
+
+    }
+
+    sixStep() {
+
+        this.currentComponent.sendPdf();
+
+
+
+    }
+
+    ngOnDestroy() {
+        if (this.subcriptor) {
+            this.subcriptor.unsubscribe();
+        }
+    }
+
+    isPrint() {
+        return this.currentComponent.isPrint();
+    }
+
+    changeEnglish() {
+        this.translate.use('en');
+        const _router = this.injector.get(Router);
+        _router.navigateByUrl(_router.url);
+    }
+    changeArabic() {
+        this.translate.use('ar');
+        const _router = this.injector.get(Router);
+        _router.navigateByUrl(_router.url);
+    }
+}

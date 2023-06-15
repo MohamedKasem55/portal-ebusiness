@@ -1,0 +1,84 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+		<ol class="breadcrumb">
+		  <li>{{ 'accounts.accounts'| translate }}</li>
+	  
+		  <li class="active">{{ 'accounts.downloadStatement.downloadStatement' | translate }}</li>
+		</ol>
+	  </div>
+
+	  <div class="container-fluid">
+			<div class="sme-page-block">
+				<div class="sme-data-table">
+					<div class="sme-data-table__head">
+						<div class="sme-data-table__title">
+							{{ 'accounts.downloadStatement.downloadStatement'| translate }}
+						</div>
+						<div class="sme-data-table__export">
+							<table-export [dataTable]="downloadsTable" [header]="'accounts.downloadStatement.downloadStatement' | translate"
+								[columns]="[
+		{'title':'accounts.downloadStatement.requestedStatementFiles' | translate, 'dataKey': 'element'}
+		]"></table-export>
+						</div>
+					</div>
+					<div class="sme-table table headerDataTable">
+		
+						<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #downloadsTable
+							class="material  sme-table sme-table--responsive table" [rows]="viewMolFilesPage" [columnMode]="defaultColumnMode"
+							[headerHeight]="30" [footerHeight]="defaultHeight" [rowHeight]="defaultHeight" [limit]="25" [count]="25"
+							[rowIdentity]="getIdFunction()" [selectionType]="defaultSelectionType" (select)='onSelect($event)'>
+		
+							<ngx-datatable-column [width]="100" prop="element" [resizeable]="false">
+								<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+									<span (click)="sort()" class="datatable-header-cell-wrapper">
+										{{ 'accounts.downloadStatement.requestedStatementFiles' | translate }}
+									</span>
+								</ng-template>
+								<ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+									<span class="human-selectable"><a (click)="download(value)"> {{value}}</a></span>
+								</ng-template>
+							</ngx-datatable-column>
+							
+							<ngx-datatable-column [width]="100" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+							[resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.delete' | translate}} </span>
+							</ng-template>
+							</ngx-datatable-column>
+						
+
+						<ngx-datatable-footer>
+							<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+								let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+								<div class="sme-data-table__footer">
+									<app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+										[pagerRightArrowIcon]="'datatable-icon-right'"
+										[pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'"
+										[page]="curPage" [size]="pageSize" [count]="rowCount"
+										[hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+										(change)="viewMolFilesTable.onFooterPage($event)">
+									</app-datatable-pager>
+									<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{rowCount}}
+											{{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+										</div>
+								</div>
+							</ng-template>
+						</ngx-datatable-footer>
+					</ngx-datatable>
+
+						<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+
+								<button type="button" class=" btn btn-primary btn-wide" [disabled]="!(tableSelected.length > 0)"
+								(click)="deleteFiles()">{{'accounts.downloadStatement.deleteSelectedFiles' | translate}}</button>
+		
+						</div>
+		
+					</div>
+				</div>
+				
+			</div>
+		
+	</div>
+	  

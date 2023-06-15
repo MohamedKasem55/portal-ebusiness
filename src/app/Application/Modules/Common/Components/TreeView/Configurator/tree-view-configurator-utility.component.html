@@ -1,0 +1,83 @@
+<div class="row">
+
+    <div class="col-xs-12" *ngIf="action == null">
+        <app-tree-view-utility [service]="service"
+                               (onTreeAction)="onTreeAction($event)">
+        </app-tree-view-utility>
+    </div>
+
+    <div class="col-xs-12" *ngIf="action != null">
+
+        <ng-container [formGroup]="actionForm">
+
+            <fieldset>
+
+                <div class="row">
+
+                    <app-dynamic-simple-extras-form-fields
+                            [formModel]="actionForm"
+                            [fieldsConfigs]="actionFormParentFieldConfig"
+                            [custom_fields_templates]="custom_fields_templates"
+                            [combosData]="combosData"
+                            [translate_prefix]="this.service.getTranslationPrefix()"
+                            (onAllFieldsCreated)="emitAllFieldsCreated($event, 0)"
+                    >
+
+                    </app-dynamic-simple-extras-form-fields>
+
+                    <app-dynamic-simple-extras-form-fields
+                            [formModel]="actionForm"
+                            [fieldsConfigs]="actionFormChildFieldConfig"
+                            [custom_fields_templates]="custom_fields_templates"
+                            [combosData]="combosData"
+                            [translate_prefix]="this.service.getTranslationPrefix()"
+                            (onAllFieldsCreated)="emitAllFieldsCreated($event, 1)"
+                    >
+                    </app-dynamic-simple-extras-form-fields>
+
+                </div>
+
+                <div class="row">
+
+                    <app-dynamic-simple-extras-form-fields
+                            [formModel]="actionForm"
+                            [fieldsConfigs]="actionFormExtraFieldsConfig"
+                            [combosData]="combosData"
+                            [custom_fields_templates]="custom_fields_templates"
+                            [translate_prefix]="this.service.getTranslationPrefix()">
+
+                    </app-dynamic-simple-extras-form-fields>
+
+                </div>
+
+                <div class="row">
+
+                    <arb-buttons>
+
+<!--                        <button type="reset" class="btn btn-default btn-wide"-->
+<!--                                (click)="resetAction()">-->
+<!--                            {{ 'public.reset' | translate }}-->
+<!--                        </button>-->
+
+                        <button type="reset" class="btn btn-default btn-wide"
+                                (click)="cancelAction()">
+                            {{ 'public.cancel' | translate }}
+                        </button>
+
+                        <button class="btn btn-primary btn-wide"
+                                [disabled]="!actionForm.valid"
+                                (click)="confirmAction()">{{'public.confirm' | translate}}
+                        </button>
+
+                    </arb-buttons>
+
+                </div>
+
+            </fieldset>
+
+        </ng-container>
+
+    </div>
+
+</div>
+

@@ -1,0 +1,98 @@
+<arb-panel>
+    <form autocomplete="off" #posProduct="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.wps-new.feesStructure' | translate }}</div>
+            <div class="row">
+                <!-- Number Of Employees -->
+                <div class="col-xs-12 col-sm-9">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.numberOfEmployees' | translate }}</label>
+                        <div class="input-group">
+                            <input class="form-control" formControlName="numberOfEmployees"
+                                [readOnly]="showDetails"
+                                placeholder="{{'newProduct.wps-new.numberOfEmployees' | translate}}"
+                                inputPattern="onlyPositiveDecimalNumbers" maxlength="6" />
+                        </div>
+                    </div>
+                    <div *ngIf="formModel.controls.numberOfEmployees.hasError('required') && formModel.controls.numberOfEmployees.touched"
+                        class="alert alert-danger">
+                        {{ 'newProduct.wps-new.numberOfEmployees' | translate }} is required
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+<arb-panel *ngIf="showDetails">
+    <form autocomplete="off" #posProduct="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.wps-new.payrollAgreementFees' | translate }}
+            </div>
+            <div class="row">
+                <!-- Monthly Fees -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.monthlyFees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['monthlyFees'].value | amountCurrency}} {{currency}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Monthly Fees -->
+
+                <!-- Employee Fees -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.employeeFees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['employeeFees'].value | amountCurrency}} {{currency}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Employee Fees -->
+            </div>
+            <div class="row">
+                <!-- MOL-ID -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.molID' | translate }}</label>
+                        <div class="input-group">
+                            <input class="form-control" formControlName="molID"
+                                placeholder="{{'newProduct.wps-new.molID' | translate}}" maxlength="18"/>
+                        </div>
+                    </div>
+                    <div *ngIf="formModel.controls.molID.hasError('required') && formModel.controls.molID.touched"
+                        class="alert alert-danger">
+                        {{ 'newProduct.wps-new.molIDRequired' | translate }}
+                    </div>
+                    <div *ngIf="formModel.controls.molID.hasError('pattern') && formModel.controls.molID.touched"
+                         class="alert alert-danger">
+                        {{ 'newProduct.wps-new.molIDInvalid' | translate }}
+                    </div>
+                </div>
+                <!-- /MOL-ID -->
+
+                <!-- Charge Account -->
+                <div class="col-xs-12 col-sm-5">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.chargeAccount' | translate }}</label>
+                        <div class="form-control">
+                            <ng-select [notFoundText]="'public.noData' | translate" formControlName="chargeAccount"
+                                       bindLabel="displayAccount" [items]="combosData['chargeAccounts']" >
+                                <ng-option selected="selected" value="" disabled="disabled" >
+                                    --{{ 'public.selectOption' | translate }}--
+                                </ng-option>
+                            </ng-select>
+                            <div *ngIf="formModel.controls.chargeAccount.hasError('required') && formModel.controls.chargeAccount.touched"
+                                class="alert alert-danger">
+                                <small> {{ 'newProduct.wps-new.chargeAccount' | translate }} is required </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Charge Account -->
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>

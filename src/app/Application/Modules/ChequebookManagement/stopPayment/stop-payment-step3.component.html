@@ -1,0 +1,62 @@
+<form autocomplete="off" [formGroup]="form" class="sme-wizard">
+<div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+    
+                <div class="sme-form__content">
+
+                        <label class="sme-form__title">
+                                <span class="sme-data-table__title">{{ 'chequebook.stopChequebook' | translate }}</span>
+                            </label>
+
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div>
+    
+                                <div class="sme-wizard__success" *ngIf="isPending()">
+                               <!-- <div class="sme-wizard__success"> -->
+                                    <span class="icon -check"></span>
+                                    {{'payments.sucessPendingRequest' | translate}}
+                                    <small>{{'public.thanks' | translate }}</small>
+                                </div>
+                                <div class="sme-wizard__success" *ngIf="!isPending()">
+                                 <!-- <div class="sme-wizard__success" > -->
+                                     <span class="icon -check"></span>
+                                    {{'public.requestOk' | translate}}
+                                    <small>{{'public.thanks' | translate }}</small>
+                                </div>
+    
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+<!-- OVERLAY DELETE BENEFICIARY -->
+<div class="modal fade" bsModal #oppSuccess="bs-modal" tabindex="-1" role="dialog" aria-labelledby="requestSubmittedModal"
+aria-hidden="true">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="oppSuccess.hide()">
+                   <span class="icon -close"></span>
+               </button>
+           </div>
+           <div class="modal-body">
+               <span class="icon -check icon-success"></span>
+               <p>{{ 'public.requestOk' | translate }}</p>
+           </div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-primary btn-wide" data-dismiss="modal" aria-label="Close" (click)="oppSuccess.hide()">
+                   {{ 'public.ok' | translate }}
+               </button>
+           </div>
+       </div>
+   </div>
+</div>
+</form>

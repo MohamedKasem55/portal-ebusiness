@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="sme-page-title-info">
+        <p class="sme-page-title">{{'financeProduct.newRequest.initialOffer'|translate}}</p>
+        <p class="sme-page-info">
+            {{'fleet.requests.initialOfferSubTitle'|translate}}
+        </p>
+    </div>
+    <div class="sme-card">
+        <div class="sme-row">
+            <img src="assets/icons/info.svg"/>
+            <p class="sme-card-msg">{{'fleet.requests.initialOfferNote'|translate}}</p>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="sme-card">
+        <div class="sme-card-header">
+            <div class="sme-card-header-start">
+                {{'fleet.requests.totalAmountDetails'|translate}}
+            </div>
+        </div>
+        <div class="sme-card-body">
+            <div class="sme-row-4-col">
+                <div class="sme-col">
+                    <div class="sme-form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.requestedFinancingAmount'|translate}}</label>
+                        <span class="sme-form-group-txt">{{this.totalReqFinanceAmt  | number : '1.2-2' || '0' }}</span>
+                    </div>
+                </div>
+                <div class="sme-col">
+                    <div class="sme-form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.totalAdminFees'|translate}}</label>
+                        <span class="sme-form-group-txt">{{this.totalAdminFee | number : '1.2-2' || '0'}}</span>
+                    </div>
+                </div>
+                <div class="sme-col">
+                    <div class="sme-form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.totalRepaymentAmt'|translate}}</label>
+                        <span class="sme-form-group-txt">{{this.totalREPmtAmt | number : '1.2-2' || '0'}}</span>
+                    </div>
+                </div>
+                <div class="sme-col">
+                    <div class="sme-form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.totalDownPmt'|translate}}</label>
+                        <span class="sme-form-group-txt">{{this.totalDownPmt | number : '1.2-2' || '0'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+            <button class=" btn btn-default btn-wide " (click)="viewBreakdown()">
+                {{'fleet.requests.viewBreakdown'|translate}}
+                <img src="assets/icons/right-arrow.svg" class="arrow" width="10px" height="6px"/>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" *ngIf="hashSet">
+    <div class="sme-card">
+        <div class="sme-card-header">
+            <div class="sme-card-header-start">
+                {{'fleet.requests.installmentBreakdown'|translate}}
+            </div>
+        </div>
+        <sme-card>
+            <div class="card-body">
+                <div class="sme-row-2-col">
+                    <div class="sme-col">
+                        {{'fleet.requests.tenure'|translate}}
+                    </div>
+                    <div class="sme-col">
+                        {{'fleet.requests.totalMonthlyInstallment'|translate}}
+                    </div>
+                </div>
+                <div class="sme-row-2-col" *ngFor="let element of hashSet">
+                    <div class="sme-col">
+                        <div> {{element?.tenure}} {{'fleet.requests.months'|translate}}</div>
+                    </div>
+                    <div class="sme-col">
+                        <div >{{element?.MonthlyInstallmentAmt}}</div>
+                    </div>
+                </div>
+            </div>
+        </sme-card>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button class=" btn btn-default btn-wide sme-back-btn" (click)="navigateTo(4)">
+            {{'fleet.btn.back'|translate}}
+        </button>
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!(hashSet.length > 0)" (click)="navigateTo(6)"  >
+            {{'fleet.btn.proceed'|translate}}
+        </button>
+    </div>
+</div>

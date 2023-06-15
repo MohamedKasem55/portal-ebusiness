@@ -1,0 +1,20 @@
+<arb-panel>
+    <h3>{{ 'accounts.debitCards.stopStep2Title' | translate }}</h3>
+    <hr>
+    <app-debit-card-stop-form
+            [formModel]="formModel"
+            [card]="card">
+    </app-debit-card-stop-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.debitCards.helpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.debitCards.stopStep2HelpText' | translate }}
+        </div>
+    </div>
+</arb-panel>

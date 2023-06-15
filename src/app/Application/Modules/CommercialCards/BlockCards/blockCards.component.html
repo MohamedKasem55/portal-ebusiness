@@ -1,0 +1,127 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active"><a href="#"
+				[routerLink]="['/businessCards/menu']">{{ 'commercialCards.name' | translate }}</a>
+		</li>
+		<li class="active"><a href="#"
+				[routerLink]="['/businessCards/creditcardlist']">{{ 'commercialCards.creditCardListName' | translate }}</a>
+		</li>
+
+		<li *ngIf="blockCardsService.getBlockOperationType() === blockOpType" class="active">
+			{{ 'commercialCards.blockCard'| translate }}</li>
+		<li *ngIf="blockCardsService.getBlockOperationType() === unblockOpType" class="active">
+			{{ 'commercialCards.unblockCard'| translate }}</li>
+		<li *ngIf="blockCardsService.getBlockOperationType() === blockReplOpType" class="active">
+			{{ 'commercialCards.blockAndReplace'| translate }}</li>
+	</ol>
+</div>
+
+<h1 *ngIf="blockCardsService.getBlockOperationType() === blockOpType" class="padding-title">
+	{{ 'commercialCards.blockCard'| translate }}</h1>
+<h1 *ngIf="blockCardsService.getBlockOperationType() === blockReplOpType" class="padding-title">
+	{{ 'commercialCards.blockAndReplace'| translate }}</h1>
+<h1 *ngIf="blockCardsService.getBlockOperationType() === unblockOpType" class="padding-title">
+	{{ 'commercialCards.unblockCard'| translate }}</h1>
+
+<div class="container-fluid sme-content-container">
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+				<span>
+					<span class="num">1</span>
+					<span class="text">{{ 'commercialCards.breadcrumb.stepReason' | translate | uppercase}}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+				<span>
+					<span class="num">2</span>
+					<span class="text">{{ 'commercialCards.breadcrumb.stepPreview' | translate | uppercase}}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+				<span>
+					<span class="icon -check"></span>
+					<span class="text">{{ 'commercialCards.breadcrumb.stepSummary' | translate | uppercase }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+<app-block-card-step1 *ngIf="step === 1" [form]="this.form" (onInit)="onInitStep1($event)">
+
+</app-block-card-step1>
+
+<app-block-card-step2 *ngIf="step === 2" [form]="this.form" (onInit)="onInitStep2($event)" [requestValidate]="requestValidate"
+	[generateChallengeAndOTP]="generateChallengeAndOTP">
+
+</app-block-card-step2>
+
+<app-block-card-step3 *ngIf="step === 3" [generateChallengeAndOTP]="generateChallengeAndOTP" (onInit)="onInitStep3($event)">
+
+</app-block-card-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	<!-- <button type="button" class=" btn btn-default btn-wide" (click)="previous()"
+		*ngIf="step >= 1 && step < 3">{{'public.back' | translate }}</button> -->
+	<button type="submit" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step < 3">
+		{{'public.cancel' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step ===1"
+		[disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="modalErrorCodeOTP.show()" *ngIf="step ===2"
+		[disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="finish()"
+		*ngIf="step == 3">{{'public.finish' | translate}}</button>
+</div>
+
+<div class="modal fade" bsModal #modalErrorAccount="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalErrorhide()" type="button" class="close">&times;</button>
+			</div>
+			<div class="modal-body modal-error">
+				<span class="icon -close icon-failure"></span>
+				<div class="display-div-column">
+					<p>{{'commercialCards.inputErrorNumberAccount' | translate}}</p>
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer flex">
+				<button (click)="modalErrorhide()" type="button"
+					class="tryAgain btn btn-primary btn-wide">{{ 'commercialCards.again' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" bsModal #modalErrorCodeOTP="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalErrorCodeOTP.hide();blockCancel()" type="button" class="close">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="display-div-column" style="margin-bottom: 30px">
+					<p style="font-weight: bold;font-size:18px;">{{'commercialCards.blocKCardModal' | translate}}</p>
+				</div>
+				<div *ngIf="isBloackAndReplace(); else blockModal" class="display-div-column">
+					<p>{{'commercialCards.blockReplCardQuestion' | translate}}</p>
+				</div>
+				<ng-template #blockModal>
+					<p>{{'commercialCards.blockCardQuestion' | translate}}</p>
+				</ng-template>
+				<br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" (click)="modalErrorCodeOTP.hide();blockCancel()" class="btn btn-default btn-wide"
+					data-dismiss="modal" aria-label="Close">{{ 'public.no' | translate }}</button>
+				<button type="button" class="btn btn-primary btn-wide" data-dismiss="modal" aria-label="Close"
+					(click)="modalErrorCodeOTP.hide();blockConfirm()">{{ 'public.yes' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>

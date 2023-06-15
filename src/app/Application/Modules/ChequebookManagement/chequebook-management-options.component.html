@@ -1,0 +1,50 @@
+   <div class="sme-breadcrumb">
+       <ol class="breadcrumb">
+           <li class="active">{{ 'dashboard.accounts' | translate }}</li>
+           <li class="active">{{ 'dashboard.chequebook' | translate }}</li>
+       </ol>
+   </div>
+   	
+	<div class="container-fluid">	
+      <div class="sme-page-block">
+           <div class="sme-form">
+			<div class="sme-form__title"></div>
+
+                <div class="sme-form__content">
+					<form autocomplete="off" class="sme-form__form">
+						<div class="sme-form__body">
+						  <div class="row">
+                <ul>
+                    <li *ngIf="authenticationService.activateOption('ChequeBookRequest',[],['RequestCheckBookGroup'])">
+                        <a routerLinkActive="active" (click)="goViewRequest()">
+                            {{ 'chequebook.searchByNumber' | translate }}
+                        </a>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('ChequeInquiry',[],['RequestCheckBookGroup'])">
+                        <a routerLinkActive="active" (click)="goCreateCheckebook()">
+                            {{ 'chequebook.createChequebook' | translate }}
+                        </a>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('ChequeStop',[],['StopCheckBookGroup'])">
+                        <a routerLinkActive="active" (click)="goStopChequebook()">
+                            {{ 'chequebook.stopChequebook' | translate }}
+                        </a>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('ChequeBookRequestStatus',[],['RequestCheckBookGroup', 'StopCheckBookGroup'])">
+                        <a routerLinkActive="active" (click)="goRequestStatus()">
+                            {{ 'chequebook.requestStatus' | translate }}
+                        </a>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('ChequePositivePayMenu',['POSITIVEPAYCHECK_PRIVILEGE'],['PositivePayCheckGroup'])">
+                        <a routerLinkActive="active" (click)="goPositivePayChequebook()">
+                            {{ 'chequebook.positivePayChequebook' | translate }}
+                        </a>
+                    </li>
+                </ul> 
+              </div>
+            </div>	
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

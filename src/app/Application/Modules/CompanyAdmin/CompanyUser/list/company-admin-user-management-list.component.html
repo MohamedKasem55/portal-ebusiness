@@ -1,0 +1,498 @@
+<arb-breadcrumb [routes]="[['companyAdmin.companyAdmin'], ['companyAdmin.user.management']]">
+</arb-breadcrumb>
+
+<arb-panel-buttons>
+  <a class="btn btn-primary btn-wide" *ngIf="this.dualAuthorization" routerLinkActive="active" [routerLink]="['/companyadmin/user/requeststatus']">
+    {{'companyAdmin.user.requestStatus' | translate }}
+  </a>
+  <a class="btn btn-primary btn-wide" routerLinkActive="active" [routerLink]="['/companyadmin/user/add']">
+    {{'companyAdmin.user.add' | translate }}
+  </a>
+</arb-panel-buttons>
+
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (reset)="reset()" #searchPanel>
+  <fieldset [formGroup]="searchForm">
+    <div class="sme-form__body">
+      <div class="row">
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'companyAdmin.user.loginId' | translate }}</label>
+            <input type="text" class="form-control" formControlName="userId" maxlength="30" />
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'companyAdmin.user.userName' | translate }}</label>
+            <input type="text" class="form-control" formControlName="userName" maxlength="30" />
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'companyAdmin.user.nationalId' | translate }}</label>
+            <input type="text" class="form-control" formControlName="iqama" inputPattern="onlyNumbers" maxlength="15" />
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'companyAdmin.user.userType' | translate }}</label>
+            <div class="form-control">
+              <ng-select [notFoundText]="'public.noData' | translate" formControlName="userType">
+                <ng-option disabled="disabled" value="">
+                  -- {{ 'public.selectOption' | translate }} --
+                </ng-option>
+                <ng-option value="CA">{{
+                  'userType' | modelPipe: 'CA'
+                  }}</ng-option>
+                <ng-option value="CU">{{
+                  'userType' | modelPipe: 'CU'
+                  }}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'companyAdmin.user.city' | translate }}</label>
+            <input type="text" class="form-control" formControlName="city" maxlength="10" />
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'companyAdmin.user.region' | translate }}</label>
+            <input type="text" class="form-control" formControlName="region" maxlength="10" />
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'login.user-mobile-number' | translate }}</label>
+            <input type="text" class="form-control" formControlName="mobileNumber" inputPattern="onlyNumbers"
+              maxlength="15" />
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+          <div class="form-group">
+            <label>{{ 'login.user-departament' | translate }}</label>
+            <input type="text" class="form-control" formControlName="department" maxlength="20" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sme-form__content">
+      <a class="sme-form__head collapsed" role="button"
+        (click)="isCollapsedASearchContent = !isCollapsedASearchContent">
+        <span>{{ 'companyAdmin.user.advancedSearch' | translate }}</span>
+      </a>
+      <div class="sme-form__collapse collapse" [collapse]="isCollapsedASearchContent">
+        <div class="sme-form__body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.userStatus' | translate }}</label>
+                <div class="form-control">
+                  <ng-select [notFoundText]="'public.noData' | translate" formControlName="status">
+                    <ng-option disabled="disabled" value="">
+                      -- {{ 'public.selectOption' | translate }} --
+                    </ng-option>
+                    <ng-option *ngFor="let item of combosData['userStatus']" [value]="item.key"
+                      [innerHTML]="item.value">
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.createdBy' | translate }}</label>
+                <input type="text" class="form-control" formControlName="createdBy" name="createdBy" value=""
+                  maxlength="30" />
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.dateFrom' | translate }} </label>
+                <input type="text" class="form-control" #createdDateFromPop="bsDatepicker" bsDatepicker
+                  autocomplete="off" placement="top" [bsConfig]="bsConfig" formControlName="createdDateFrom"
+                  name="createdDateFrom" style="z-index: 1000" />
+                <!--          [maxDate]="getMaxDateToday(searchForm.controls.createdDateTo.value)" -->
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.dateTo' | translate }} </label>
+                <input type="text" class="form-control" #createdDateToPop="bsDatepicker" bsDatepicker autocomplete="off"
+                  placement="top" [bsConfig]="bsConfig" formControlName="createdDateTo" name="createdDateTo"
+                  style="z-index: 1000" />
+                <!--  [minDate]="getMinDate(searchForm.controls.createdDateFrom.value)"
+                                       [maxDate]="getMaxDateToday(null)"-->
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-3">
+              <!-- sme-form-group -->
+              <div class="form-group">
+                <label>{{
+                  'companyAdmin.user.employeeCompanyId' | translate
+                  }}</label>
+                <input type="text" class="form-control" formControlName="empRef" value="" inputPattern="onlyNumbers"
+                  maxlength="15" />
+              </div>
+              <!-- ./sme-form-group -->
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.nickname' | translate }}</label>
+                <input type="text" class="form-control" formControlName="nickname" value="" maxlength="40" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</arb-searchable-panel>
+
+<arb-table-panel [title]="'companyAdmin.user.managementUser'">
+  <table-export [dataTable]="companyUserPageTable" [header]="'companyAdmin.user.title' | translate" [columns]="[
+      { title: 'companyAdmin.user.loginId' | translate, dataKey: 'userId','width':'auto' },
+      {
+        title: 'companyAdmin.user.userType' | translate,
+        dataKey: 'userTypeExport','width':'auto'
+      },
+      { title: 'companyAdmin.user.name' | translate, dataKey: 'userName','width':'auto' },
+      { title: 'companyAdmin.user.nickname' | translate, dataKey: 'nickname','width':'auto' },
+      { title: 'companyAdmin.user.nationalId' | translate, dataKey: 'idIqama','width':'auto' },
+      {
+        title: 'companyAdmin.alerts.expiryDate' | translate,
+        dataKey: 'expiryDate','width':'auto'
+      },
+      {
+        title: 'companyAdmin.user.employee-reference' | translate,
+        dataKey: 'empRef','width':'auto'
+      },
+      {
+        title: 'companyAdmin.user.department' | translate,
+        dataKey: 'department','width':'auto'
+      },
+      {
+        title: 'companyAdmin.user.userStatus' | translate,
+        dataKey: 'userStatus' , 'modelKey':'userStatus'
+      },
+      {
+        title: 'companyAdmin.user.action' | translate,
+        dataKey: 'userActionExport','width':'auto'
+      },
+      {
+        title: 'companyAdmin.user.createdBy' | translate,
+        dataKey: 'createdBy'
+      },
+      {
+        title: 'companyAdmin.user.createdDate' | translate,
+        dataKey: 'createdDate'
+      }
+    ]"></table-export>
+
+  <ngx-datatable [messages]="{ emptyMessage: 'public.noData' | translate }" #companyUserPageTable
+    class="material sme-table sme-table--responsive table" [rows]="companyUserPage.data"
+    [columnMode]="defaultColumnMode" [headerHeight]="60" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+    [externalPaging]="false" [externalSorting]="false"
+    [limit]="+companyUserPage.page.pageSize">
+    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+        <div class="row">
+          <fieldset>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label> {{ 'public.userId' | translate }} </label>
+                <div>
+                  <span *ngIf="allowDetails(row)"><a (click)="details(row.userId)" class="human-selectable">
+                      {{ row.userId }}</a>
+                  </span>
+                  <span *ngIf="!allowDetails(row)">
+                    <p>{{ row.userId }}</p>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.userType' | translate }}</label>
+                <div>
+                  <span>{{ 'userType' | modelPipe: row.type }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'public.userName' | translate }}</label>
+                <div>
+                  <span>{{ row.userName }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.nickname' | translate }}</label>
+                <div>
+                  <span>{{ row.nickname }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.nationalId' | translate }}</label>
+                <div>
+                  <span>{{ row.idIqama }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{
+                  'companyAdmin.alerts.expiryDate' | translate
+                  }}</label>
+                <div>
+                  <span>{{ row.expiryDate | date: 'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{
+                  'companyAdmin.user.customerName' | translate
+                  }}</label>
+                <div>
+                  <span>{{ row.customerName }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{
+                  'companyAdmin.user.employeeCompanyId' | translate
+                  }}</label>
+                <div>
+                  <span>{{ row.empRef }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.department' | translate }}</label>
+                <div>
+                  <span>{{ row.department }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.userStatus' | translate }}</label>
+                <div>
+                  <span>{{ 'userStatus' | modelPipe: row.userStatus }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="dualAuthorization" class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.action' | translate }}</label>
+                <div>
+                  <span>
+                    {{ 'lockBoxFeesStatus' | modelPipe: row?.processStatus }} /
+                    {{ 'process' | modelPipe: row?.process }} </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{ 'companyAdmin.user.createdBy' | translate }}</label>
+                <div>
+                  <span>{{ row.createdBy }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{
+                  'companyAdmin.user.creationDate' | translate
+                  }}</label>
+                <div>
+                  <span>{{ row.createdDate | date: 'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </ng-template>
+    </ngx-datatable-row-detail>
+
+    <ngx-datatable-column prop="userImage">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.userPicture' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <a *ngIf="allowDetails(row)" (click)="details(row.userId)" class="human-selectable">
+          <img [src]="value ? value : 'img/default-avatar.svg'" style="
+              border-radius: 50%;
+              width: 50px;
+              height: 50px;
+              margin-left: 10px;
+              margin-right: 10px;
+            " />
+        </a>
+        <a *ngIf="!allowDetails(row)">
+          <img [src]="value ? value : 'img/default-avatar.svg'" style="
+              border-radius: 50%;
+              width: 50px;
+              height: 50px;
+              margin-left: 10px;
+              margin-right: 10px;
+            " />
+        </a>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="userId">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.loginId' | translate }}<br />
+          {{ 'companyAdmin.user.userType' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <p *ngIf="allowDetails(row)">
+          <a (click)="details(row.userId)" class="human-selectable">
+            {{ value }}</a>
+        </p>
+        <p *ngIf="!allowDetails(row)">
+            {{ value }}
+        </p>
+        <p>{{ 'userType' | modelPipe: row.type }}</p>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="userName">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.userName' | translate }}<br />
+          {{ 'companyAdmin.user.nickname' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <p>{{ value }}</p>
+        <p>{{ row.nickname }}</p>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="idIqama">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.nationalId' | translate }}<br />
+          {{ 'companyAdmin.alerts.expiryDate' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <p>{{ row.idIqama }}</p>
+        <p>{{ row.expiryDate | date: 'dd/MM/yyyy' }}</p>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="empRef">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.employeeCompanyId' | translate }}<br />
+          {{ 'companyAdmin.user.department' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <p>{{ value }}</p>
+        <p>{{ row.department }}</p>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="userStatus">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span *ngIf="!dualAuthorization" (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.userStatus' | translate }}
+        </span>
+        <span *ngIf="dualAuthorization" (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.userStatus' | translate }}<br />
+          {{ 'companyAdmin.user.action' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <span>{{ 'userStatus' | modelPipe: row.userStatus }}</span>
+        <span *ngIf="dualAuthorization"><br />
+          {{ 'lockBoxFeesStatus' | modelPipe: row?.processStatus }} /
+          {{ 'process' | modelPipe: row?.process }}
+        </span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="createdBy">
+      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'companyAdmin.user.createdBy' | translate }}<br />
+          {{ 'companyAdmin.user.creationDate' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <span>
+          {{ value }}<br />
+          {{ row.createdDate | date: 'dd/MM/yyyy' }}
+        </span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-footer>
+      <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+        <div class="sme-data-table__footer">
+          <app-datatable-pager [pagerLeftArrowIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-left'
+                : 'datatable-icon-right'
+            " [pagerRightArrowIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-right'
+                : 'datatable-icon-left'
+            " [pagerPreviousIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-prev'
+                : 'datatable-icon-skip'
+            " [pagerNextIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-skip'
+                : 'datatable-icon-prev'
+            " [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!(rowCount / pageSize > 1)"
+            [visiblePagesCount]="visiblePagesCount" (change)="companyUserPageTable.onFooterPage($event)">
+          </app-datatable-pager>
+
+          <div class="sme-data-table__actions form-inline">
+            <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate }}
+              {{ getTableCurrentPageSize(companyUserPageTable) }}
+              {{ 'public.ofLabel' | translate }} {{ rowCount }}</span>
+            <span class="hidden-xs"> | </span>
+            <span class="sme-data-table__action-group">
+              <span>{{ 'public.showRowsLabel' | translate }}</span>
+              <div class="sme-select form-control">
+                <select class="form-control" [(ngModel)]="this.companyUserPage.page.pageSize">
+                  <option [value]="10">10</option>
+                  <option [value]="20">20</option>
+                  <option [value]="50">50</option>
+                  <option [value]="100">100</option>
+                </select>
+              </div>
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-datatable-footer>
+  </ngx-datatable>
+</arb-table-panel>

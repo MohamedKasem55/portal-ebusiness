@@ -1,0 +1,143 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{title | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid" formArrayName="refunds" *ngFor="let refund of refunds; let i=index">
+        <div [formGroupName]="i">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <arb-panel>
+                                <span class="form-control"
+                                      id="title-input">{{refund.get('detailsTitleProperty').value}}
+                                </span>
+                                <arb-panel-title [title]="'sadadOLP.refunds.transactionDetails'">
+                                </arb-panel-title>
+                                <arb-panel>
+                                    <div class="row">
+                                        <fieldset [disabled]="this.readonly">
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="amount-input" class="required">{{ 'public.amount' |
+                                                        translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                           id="amount-input"
+                                                           formControlName="transactionAmount">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="date-input" class="required">{{ 'public.date'
+                                                        | translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                           id="date-input"
+                                                           formControlName="transactionDate">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </arb-panel>
+                                <arb-panel-title [title]="'sadadOLP.refunds.refundDetails'">
+                                </arb-panel-title>
+                                <arb-panel>
+                                    <div class="row">
+                                        <fieldset [disabled]="this.readonly">
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="requestedAmount-input"
+                                                           class="required">{{ 'sadadOLP.refunds.requestedAmount'
+                                                        | translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                           id="requestedAmount-input" formControlName="requestedAmount">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label class="required">{{ 'sadadOLP.refunds.refundReason'
+                                                        | translate }}</label>
+                                                    <span class="form-control">{{ 'olpRefundRejectionReason' | modelPipe:refund.get('reason').value}}
+                                                    </span>
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="requestedDate-input"
+                                                           class="required">{{ 'sadadOLP.refunds.requestedDate'
+                                                        | translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                           id="requestedDate-input" formControlName="requestedDate">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label class="required">{{ 'sadadOLP.refunds.refundStatus'
+                                                        | translate }}</label>
+                                                    <span class="form-control">{{ 'sadadOLPRefundsStatus' | modelPipe:refund.get('status').value}}
+                                                    </span>
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="approvedAmount-input"
+                                                           class="required">{{ 'sadadOLP.refunds.approvedAmount'
+                                                        | translate }}</label>
+                                                    <input type="text" class="form-control" id="approvedAmount-input"
+                                                           formControlName="approvedAmount">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="rejectionReason-input"
+                                                           class="required">{{ 'sadadOLP.refunds.rejectionReason'
+                                                        | translate }}</label>
+                                                    <input type="text" class="form-control" id="rejectionReason-input"
+                                                           formControlName="refundRejectionReason">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="remarks-input"
+                                                           class="required">{{ 'sadadOLP.refunds.remarks'
+                                                        | translate }}</label>
+                                                    <input type="text" class="form-control" id="remarks-input"
+                                                           formControlName="resolutionRemarks">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </arb-panel>
+                            </arb-panel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

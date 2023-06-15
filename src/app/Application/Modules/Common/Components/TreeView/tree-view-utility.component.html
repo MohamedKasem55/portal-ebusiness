@@ -1,0 +1,114 @@
+<div style="display: block; overflow-x: scroll; padding-bottom: 40px;">
+    <google-chart
+            [title]="chart.title"
+            [type]="chart.type"
+            [data]="chart.data"
+            [columns]="chart.columnNames"
+            [options]="chart.options">
+    </google-chart>
+</div>
+
+<!--
+<ng-container *ngFor="let node of nodes; index as i;">
+
+    <div style="display: flex; margin-bottom: 5px;">
+
+        <div style="display: inline-block; padding-top: 10px;">
+
+            <ng-container *ngFor="let level of getLevelIteratorArray(node); index as j">
+
+                <ng-container *ngIf="j < node['tree_level']-2">
+                    <ng-container *ngIf="markers[(i+1)][j+1] == '1'">
+                        <span class="glyphicon glyphicon-option-vertical"
+                              style="position: relative;top: -20px; left: 1px;"></span>
+                        <span class="glyphicon glyphicon-option-vertical hidden-xs hidden-sm hidden-md"
+                              style="position: relative;top: -3px; left: -13px;"></span>
+                        <span class="glyphicon glyphicon-option-vertical hidden-lg"
+                              style="position: relative;top: -3px; left: -11px;"></span>
+                        <span class="glyphicon glyphicon-option-horizontal"
+                              style="position: relative; top: 7px; left: -10px;visibility: hidden;"></span>
+                    </ng-container>
+                    <ng-container *ngIf="markers[(i+1)][j+1] != '1'">
+                        <span class="glyphicon glyphicon-option-vertical"
+                              style="position: relative;top: -20px; left: 1px; visibility: hidden;"></span>
+                        <span class="glyphicon glyphicon-option-vertical"
+                              style="position: relative;top: -3px; left: -13px; visibility: hidden;"></span>
+                        <span class="glyphicon glyphicon-option-horizontal"
+                              style="position: relative; top: 7px; left: -10px; visibility: hidden;"></span>
+                    </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="j == node['tree_level']-2">
+                    <span class="glyphicon glyphicon-option-vertical"
+                          style="position: relative;top: -20px; left: 1px;"></span>
+                    <span class="glyphicon glyphicon-option-vertical hidden-xs hidden-sm hidden-md"
+                          style="position: relative;top: -3px; left: -13px;"></span>
+                    <span class="glyphicon glyphicon-option-vertical hidden-lg"
+                          style="position: relative;top: -3px; left: -11px;"></span>
+                    <span class="glyphicon glyphicon-option-horizontal"
+                          style="position: relative; top: 7px; left: -10px;"></span>
+                </ng-container>
+
+            </ng-container>
+
+        </div>
+
+        <div style="display: inline-block; padding-top: 10px;">
+                 <span>
+                    <span class="glyphicon glyphicon-list-alt"></span>
+                    <span>&nbsp;</span>
+                    <span>{{ node['title']}}</span>
+                </span>
+        </div>
+
+        <div style="display: inline-block; flex-grow: 100; border-bottom: 2px dotted #ddd; width: auto;text-align: right;"
+             *ngIf="showActions">
+            <div>
+                <a class="human-selectable" style="margin: 5px;"
+                   *ngIf="isAllowedNodeAction(node, allowedActions.APPEND_CHILD_TO_SELECTED_ITEM)"
+                   (click)="onNodeAction(node, allowedActions.APPEND_CHILD_TO_SELECTED_ITEM)">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </a>
+
+                <a class="human-selectable" style="margin: 5px;"
+                   *ngIf="isAllowedNodeAction(node, allowedActions.REMOVE_ALL_SELECTED_TREE_ITEMS_AS_CHILDREN)"
+                   (click)="onNodeAction(node, allowedActions.REMOVE_ALL_SELECTED_TREE_ITEMS_AS_CHILDREN)">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </a>
+
+                <a class="human-selectable" style="margin: 5px;"
+                   *ngIf="isAllowedNodeAction(node, allowedActions.CONFIGURE_ITEM)"
+                   (click)="onNodeAction(node, allowedActions.CONFIGURE_ITEM)">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-pencil"
+                              (click)="onNodeAction(node, allowedActions.CONFIGURE_ITEM)"></span>
+                    </button>
+                </a>
+
+                <a class="human-selectable" style="margin: 5px;"
+                   *ngIf="isAllowedNodeAction(node, allowedActions.CHANGE_PARENT_FOR_SELECTED_ITEM)"
+                   (click)="onNodeAction(node, allowedActions.CHANGE_PARENT_FOR_SELECTED_ITEM)">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-cloud-upload"></span>
+                        <span class="glyphicon glyphicon-tree-conifer"></span>
+                    </button>
+                </a>
+                <a class="human-selectable" style="margin: 5px;"
+                   *ngIf="isAllowedNodeAction(node, allowedActions.UNLINK_SELECTED_ITEM_AS_CHILD_OF_PARENT)"
+                   (click)="onNodeAction(node, allowedActions.UNLINK_SELECTED_ITEM_AS_CHILD_OF_PARENT)">
+                    <button class="btn btn-default">
+                        <span class="glyphicon glyphicon-cloud-download"></span>
+                        <span class="glyphicon glyphicon-tree-conifer"></span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</ng-container>
+-->

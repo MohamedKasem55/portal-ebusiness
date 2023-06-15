@@ -1,0 +1,108 @@
+<div class="billList">
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                   class='scrollable-grid material sme-table sme-table--responsive table' [rows]='bills'
+                   [headerHeight]='30'
+                   [footerHeight]='0' [columnMode]="'force'" [rowHeight]='defaultHeight'
+                   [externalPaging]='false' [externalSorting]='false'>
+
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='padding datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.applicationType' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                <span class="padding"> {{ 'eGovApplicationTypeAll' | modelPipe : row.applicationType }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'public.account' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{ row.accountNumber | translate }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.iqamaID' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{ row.iqamaId ? row.iqamaId : row.borderNumber }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.visaDuration' | translate  }}
+                                / {{'MOIBulkPayment.iqamaDuration' | translate}}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{ row.visaDuration ? row.visaDuration : row.iqamaDuration }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.sponsorID' | translate  }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{ row.sponsorId }}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='padding datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.jobCategory' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                <span class="padding"> {{ 'eGovSadadJobCategory' | modelPipe : row.jobCategory }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.amount' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{ row.amount | translate }}
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column [width]='300' [resizeable]='false' *ngIf="showLevels"
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.level' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                <span>{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                <span class="human-selectable icon -info"
+                      (click)="openModal(row.futureSecurityLevelsDTOList,modalaramcoAuth)"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+    </ngx-datatable>
+
+</div>
+
+
+<app-levels-popup #modalaramcoAuth></app-levels-popup>

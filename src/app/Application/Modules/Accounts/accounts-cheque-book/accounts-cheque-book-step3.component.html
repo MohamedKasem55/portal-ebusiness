@@ -1,0 +1,59 @@
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'accounts.accounts'| translate }}</li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a>
+        </li>
+        <li class="active">{{ 'accounts.chequeBook.request' | translate }}</li>
+	</ol>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block sme-wizard-steps">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'accounts.chequeBook.details' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'accounts.chequeBook.confirmation' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step current">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'accounts.chequeBook.summary' | translate }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+    <br/>
+    <div class="sme-box sme-wizard__content">
+        <div>
+            <div class="sme-wizard__success">
+                <span class="icon -check"></span>
+
+                <span *ngIf="futureSecurityLevelsLength == 1">{{ 'accounts.chequeBook.lastStepText1' | translate }}</span>
+                <span *ngIf="futureSecurityLevelsLength > 1">{{ 'accounts.chequeBook.lastStepText1Pending' | translate }}</span>
+                <!-- <br/>
+                {{ 'accounts.chequeBook.lastStepText2' | translate }} -->
+                <br/><br/>
+                {{ 'accounts.chequeBook.lastStepText3' | translate }}
+                <span ><small>{{ 'chequebook.thanks' | translate}}</small></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button (click)="lastWizardStep()" type="submit" class=" btn btn-primary btn-wide">
+            {{ 'public.finish' | translate }}
+        </button>
+    </div>
+
+</div>

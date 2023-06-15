@@ -1,0 +1,80 @@
+.sme-checkbox,
+.sme-radio {
+  $bullet-size: 22px;
+
+  &.checkbox-inline,
+  &.radio-inline,
+  label {
+    padding-#{$left}: $bullet-size;
+    min-height: $bullet-size;
+    min-width: $bullet-size;
+
+    color: $text-color;
+    letter-spacing: 0;
+
+    @include font($font-size-base);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-base * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-base * $factor2);
+    }
+  }
+
+  input {
+    display: none;
+  }
+
+  i {
+    @include square($bullet-size);
+    /*@include center-y;*/
+    position: absolute;
+    top: 0;
+    #{$left}: 0;
+    display: inline-block;
+    border: 1px solid $input-border;
+    background-color: $input-checkBox-color;
+
+    @include icon {
+      content: '';
+      @include icon-size($bullet-size * 0.5);
+      @include center;
+    }
+  }
+
+  span {
+    margin-#{$left}: 10px;
+    display: block;
+  }
+}
+
+.sme-checkbox {
+  i {
+    border-radius: 3px;
+  }
+
+  input:checked + i {
+    background: $brand-primary;
+    border-color: $brand-primary;
+
+    &:before {
+      color: #fff;
+      content: $icon-check;
+    }
+  }
+}
+
+.sme-radio {
+  i {
+    border-radius: 50%;
+    border-color: $brand-primary;
+  }
+
+  /*    input:checked + i:before {
+        border: 6px solid;
+        border-radius: 50%;
+    }*/
+  input:checked + i {
+    border-width: 9px;
+  }
+}

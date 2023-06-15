@@ -1,0 +1,48 @@
+.input_readonly.form-group,
+.input_readonly input,
+.input_readonly select,
+.input_readonly ng-select,
+.input_readonly textarea,
+.input_readonly span,
+.input_readonly .ng-select,
+.input_readonly .ng-select .ng-value {
+  pointer-events: none !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+}
+
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+  margin: 10px;
+}
+
+.fileUpload input.upload {
+  position: relative;
+  top: -30px;
+  width: 100%;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.fileUpload .btn {
+  color: #bf4500;
+}
+
+.fileUpload input.filename {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  display: none;
+  filter: alpha(opacity=0);
+}

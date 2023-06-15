@@ -1,0 +1,131 @@
+<!--[if IE]>
+<style>
+    .sme-slide__value, .sme-slide__handler {
+    position: absolute;
+    top: 50%;
+    left: 50%; 
+    right:50% !important;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    
+    }
+</style>
+<![endif]-->
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'registration.selectProductsServices' | translate }}</div>
+</div>
+
+<div class="sme-page-block">
+	<div class="sme-form">
+		<div class="sme-form__content">
+			<form class="sme-form__form" #stepForm="ngForm">
+				<div class="sme-form__body" *ngIf="groupsServices.length > 0">
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									
+									<div class="sme-checkbox checkbox" *ngFor="let service of groupsServices[0]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										  [checked]="service.check" (change)="service.check = !service.check"
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang==='ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang==='en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									
+									<div class="sme-checkbox checkbox" *ngFor="let service of groupsServices[1]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										 [checked]="service.check" (change)="service.check = !service.check"
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang === 'ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang === 'en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.transfersUser' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox" *ngFor="let service of groupsServices[2]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										 [checked]="service.check" (change)="service.check = !service.check"
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang === 'ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang === 'en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.transferUserLimit' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox" *ngFor="let service of groupsServices[3]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										 [checked]="service.check" (change)="service.check = !service.check"
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang === 'ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang === 'en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.dailyTransferLimit' | translate }}</label>
+										
+									</div>
+									<div class="sme-slide">
+										<div class="sme-slide__wrapper">
+										
+										<input type="range" name="points"  min="0" class="sme-slide__handler"  style="width: 100%" max="1000000" [(ngModel)]="this.formData.limit" required/>
+										<span class="sme-slide__value" style="left: 60%">{{this.formData.limit}}  SAR</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.token.token' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox">
+										<label> <input type="radio" name="token"
+											[(ngModel)]="formData.tokenType" value="S"
+											required> <i aria-hidden="true"></i> <span>{{ 'companyAdmin.user.softToken' | translate }}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+

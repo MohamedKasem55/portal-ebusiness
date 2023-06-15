@@ -1,0 +1,495 @@
+<div class="sme-wizard">
+
+    <div *ngIf="errorMessage?.code" class="alert alert-danger">
+        <small>{{errorMessage['code']}} {{errorMessage['description']}}</small>
+    </div>
+
+    <arb-panel-buttons>
+        <button class="btn btn-primary"
+                [routerLink]="['/beneficiaries/InternationalBeneficiary/AddStep2',{back:'transfer'}]">
+            {{'beneficiaries.addBeneficiary' | translate }}
+        </button>
+    </arb-panel-buttons>
+
+    <arb-table-panel [class.hidden]="tableSelectedRows.length == 0"
+                     [title]="'beneficiaries.beneficiaryTypes.SelectedBeneficiaries'">
+        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #beneficiaryTableSelected
+                       class="material sme-table sme-table--responsive table"
+                       [rows]="tableSelectedRows"
+                       [columnMode]="defaultColumnMode"
+                       [headerHeight]="30"
+                       [footerHeight]="footerHeight"
+                       [rowHeight]="defaultHeight"
+                       [externalPaging]="false">
+
+            <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRowSelected
+                                      (toggle)="onDetailToggle($event)">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}</label>
+                                    <div>
+                                        <span>{{ row.beneficiaryFullName }}</span>
+                                        <span *ngIf="!row.beneficiaryCategory"
+                                              class="glyphicon glyphicon-exclamation-sign"></span>
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}</label>
+                                    <div>
+                                        <span>{{row.beneficiaryAccountCode}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.bankName' | translate }}</label>
+                                    <div>
+                                        <span>{{ row.bankName }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'public.country' | translate }}</label>
+                                    <div>
+                                        <span>{{'backEndCountryCode' | modelPipe: row.countryCode}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.currency' | translate }}</label>
+                                    <div>
+                                        <span>{{'currency' | modelPipe: row.beneficiaryCurrency}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.category' | translate }}</label>
+                                    <div>
+                                        <span>{{'beneficiaryCategory' | modelPipe: row.beneficiaryCategory}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>{{'public.email' | translate }}</label>
+                                    <div>
+                                        <span>{{row.email}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <div>
+                                        <button class="btn btn-default" (click)="removeFromSelected(row)">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </ng-template>
+            </ngx-datatable-row-detail>
+
+            <ngx-datatable-column prop="beneficiaryFullName" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryAccountCode" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="bankName" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.bankName' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="countryCode" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'public.country' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{'backEndCountryCode' | modelPipe: value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryCurrency" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.currency' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{'currency' | modelPipe: value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryCategory" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.category' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                        <span *ngIf="value==='I' || value ==='C'"
+                              class="mobile-hidden"> {{'beneficiaryCategory' | modelPipe: value}}</span>
+                    <ng-container *ngIf="value!=='I' && value !=='C'" class="mobile-hidden">
+                        <a><span
+                                (click)="this.updateCategory(row)"> {{'beneficiaries.updateCategory' | translate}}</span></a>
+                    </ng-container>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="email" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'public.email' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="_removeAction" class="mobile-hidden"
+                                  [width]="50" [canAutoResize]="false" [draggable]="false"
+                                  [resizeable]="false">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                        </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                        <span class="mobile-hidden">
+                            <button class="btn btn-default" (click)="removeFromSelected(row)">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                        </span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                             let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                    <div class="sme-data-table__footer">
+                        <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{rowCount}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-footer>
+
+        </ngx-datatable>
+    </arb-table-panel>
+
+    <arb-searchable-panel #searchPanel
+                          [searchForm]="formSearch"
+                          (resetAction)="reset()"
+                          (searchAction)="getBeneficiaries()">
+        <div class="row" [formGroup]="formSearch">
+            <div class="col-xs-12 col-sm-4" style="display: flex !important; align-items: center;">
+                <div class="col-xs-1" style="text-align: center;">
+                    <input type="radio" class="human-selectable" formControlName="filterCriteria"
+                           value="beneficiary">
+                </div>
+                <div class="col-xs-11">
+                    <div class="form-group">
+                        <label>{{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}</label>
+                        <div>
+                            <input class="form-control"
+                                   type="text" formControlName="filterBenefName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4" style="display: flex !important; align-items: center;">
+                <div class="col-xs-1" style="text-align: center;">
+                    <input type="radio" class="human-selectable" formControlName="filterCriteria"
+                           value="bank">
+                </div>
+                <div class="col-xs-11">
+                    <div class="form-group">
+                        <label>{{'beneficiaries.beneficiaryListFields.bankName' | translate }}</label>
+                        <input class="form-control" type="text"
+                               formControlName="filterBankName">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4" style="display: flex !important; align-items: center;">
+                <div class="col-xs-1" style="text-align: center;">
+                    <input type="radio" class="human-selectable" formControlName="filterCriteria"
+                           value="currency">
+                </div>
+                <div class="col-xs-11">
+                    <div class="form-group">
+                        <label>{{'beneficiaries.beneficiaryListFields.currency' | translate }}</label>
+
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                   formControlName="filterCurrency"
+                                   style="min-width:200px;">
+                            <ng-option *ngFor="let currency of currencys"
+                                       [value]="currency.key"> {{ currency.value }} </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </arb-searchable-panel>
+
+    <arb-table-panel [title]="'beneficiaries.beneficiaryTypes.InternationalBeneficiaries'">
+        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                       #beneficiaryTable
+                       class="material sme-table sme-table--responsive table"
+                       [rows]="beneficiaryPage.data"
+                       [columnMode]="defaultColumnMode"
+                       [headerHeight]="30" [footerHeight]="footerHeight"
+                       [rowHeight]="defaultHeight"
+                       [externalPaging]="true"
+                       [count]="beneficiaryPage.page.totalElements"
+                       [offset]="beneficiaryPage.page.pageNumber-1"
+                       [limit]="beneficiaryPage.page.pageSize"
+                       [displayCheck]="displayCheck"
+                       [selected]="tableSelectedRows"
+                       [selectionType]="defaultSelectionType" [rowIdentity]="getIdFunction()"
+                       (page)='setPage($event)'
+                       (select)='onSelect($event)'>
+
+            <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}</label>
+                                    <div>
+                                        <span>{{ row.beneficiaryFullName }}</span>
+                                        <span *ngIf="!row.beneficiaryCategory"
+                                              class="glyphicon glyphicon-exclamation-sign"></span>
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}</label>
+                                    <div>
+                                        <span>{{row.beneficiaryAccountCode}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.bankName' | translate }}</label>
+                                    <div>
+                                        <span>{{ row.bankName }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'public.country' | translate }}</label>
+                                    <div>
+                                        <span>{{'backEndCountryCode' | modelPipe: row.countryCode}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.currency' | translate }}</label>
+                                    <div>
+                                        <span>{{'currency' | modelPipe: row.beneficiaryCurrency}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'beneficiaries.beneficiaryListFields.category' | translate }}</label>
+                                    <div>
+                                        <span>{{'beneficiaryCategory' | modelPipe: row.beneficiaryCategory}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>{{'public.email' | translate }}</label>
+                                    <div>
+                                        <span>{{row.email}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </ng-template>
+            </ngx-datatable-row-detail>
+
+            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                                  [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryFullName" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryAccountCode" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="bankName" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.bankName' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="countryCode" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'public.country' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{'backEndCountryCode' | modelPipe: value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryCurrency" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.currency' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{'currency' | modelPipe: value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="beneficiaryCategory" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.category' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                        <span *ngIf="value==='I' || value ==='C'"
+                              class="mobile-hidden"> {{'beneficiaryCategory' | modelPipe: value}}</span>
+                    <ng-container *ngIf="value!=='I' && value !=='C'" class="mobile-hidden">
+                        <a><span
+                                (click)="this.updateCategory(row)"> {{'beneficiaries.updateCategory' | translate}}</span></a>
+                    </ng-container>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="email" class="mobile-hidden">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'public.email' | translate }}
+                        </span>
+                </ng-template>
+                <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span class="mobile-hidden"> {{value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                             let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                    <div class="sme-data-table__footer">
+                        <app-datatable-pager
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                (change)="beneficiaryTable.onFooterPage($event)">
+                        </app-datatable-pager>
+                        <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{beneficiaryPage.page.size}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                            <span class="hidden-xs"> | </span>
+                            <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control"
+                                                [value]="this.beneficiaryPage.page.pageSize"
+                                                (change)="setPageSize($event)">
+                                            <option [value]="10">10</option>
+                                            <option [value]="15">15</option>
+                                            <!--
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                            -->
+                                        </select>
+                                    </div>
+                                </span>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-footer>
+
+        </ngx-datatable>
+    </arb-table-panel>
+
+    <arb-panel-buttons>
+        <button type="button" class=" btn btn-default btn-wide"
+                (click)="cancel()">{{'public.back' | translate }}</button>
+
+        <button type="button" class=" btn btn-primary btn-wide"
+                (click)="submit()"
+                [disabled]="!isValidData()">{{buttonLabel}}</button>
+    </arb-panel-buttons>
+
+</div>

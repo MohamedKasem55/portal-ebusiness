@@ -1,0 +1,96 @@
+<div class='sme-head'>
+  <div class='sme-head__title'>
+    <P>{{ 'financeProduct.details.applicationStatus' | translate }}</P>
+  </div>
+</div>
+
+<arb-panel>
+  <form autocomplete='off' #posDetails='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='legend'>{{ 'financeProduct.details.information' | translate }}</div>
+      <span>{{ 'financeProduct.details.informationBody-1' | translate }}</span>
+      <span class='bold'>{{formModel.controls['requiredAmt'].value | amountCurrency}}
+        {{formModel.controls['currency'].value}}</span>
+      <br>
+      <span>{{ 'financeProduct.details.informationBody-2' | translate }}</span>
+    </fieldset>
+  </form>
+</arb-panel>
+
+<arb-panel>
+  <form autocomplete='off' #posRequest='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel' *ngIf='formModel.controls["productCode"].value==POS_PRODUCT_CODE'>
+      <div class='legend'>{{ 'financeProduct.details.applicationDetails' | translate }}</div>
+      <div class='row'>
+        <!-- Finance Amount -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.financeAmount' | translate }} </label>
+            <div class='input-group'>
+                            <span>{{formModel.controls['financeAmount'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Finance Amount -->
+        <!-- Month Instalment -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.n-monthInstalment' | translate }} </label>
+            <div class='input-group'>
+              <span>{{formModel.controls['tenure'].value}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Month Instalment -->
+        <!-- Tenure -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.tenure' | translate }} </label>
+            <div class='input-group'>
+              <span>{{formModel.controls['tenure'].value}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Tenure -->
+        <!-- Month Instalment Amount -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.monthInstalmentAmount' | translate }} </label>
+            <div class='input-group'>
+                            <span>{{formModel.controls['monthInstalmentAmount'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Month Instalment Amount -->
+      </div>
+    </fieldset>
+    <fieldset [formGroup]='formModel' *ngIf='formModel.controls["productCode"].value==MRCC_PRODUCT_CODE'>
+      <div class='legend'>{{ 'financeProduct.details.ccDetails' | translate }}</div>
+      <div class='row'>
+        <!-- Card Limit -->
+        <div class='col-xs-12 col-sm-6'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.cardLimit' | translate }} </label>
+            <div class='input-group'>
+                            <span>{{formModel.controls['cardLimit'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Card Limit -->
+        <!-- Application Type -->
+        <div class='col-xs-12 col-sm-6'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.applicationType' | translate }} </label>
+            <div class='input-group'>
+              <span>{{'financeProduct.details.murabahaCard' | translate}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Application Type -->
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>

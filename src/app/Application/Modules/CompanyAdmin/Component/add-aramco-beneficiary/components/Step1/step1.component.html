@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'aramcoPayments.beneficiaryBankDetails' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- PASS NUMBER -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                        <div>
+                                            <input type="text" class="form-control" formControlName="passNumber" (change)="savePassNumber()" name="passNumber" number
+                                                required inputPattern="onlyDigits" maxlength="10">
+                                        </div>
+                                        <div *ngIf="form.controls.passNumber.hasError('required') && form.controls.passNumber.touched" class="alert alert-danger">
+                                            <small>
+                                                {{'aramcoPayments.passNumber' | translate }} {{ 'error.required' | translate}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <!-- /PASS NUMBER -->
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

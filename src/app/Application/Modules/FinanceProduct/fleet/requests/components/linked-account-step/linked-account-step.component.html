@@ -1,0 +1,38 @@
+<!--Header-->
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">{{'fleet.requests.linkedAccount'|translate}}</p>
+    <p class="sme-page-info">
+        {{'fleet.requests.linkedAccountNote'|translate}}
+    </p>
+  </div>
+</div>
+  <div class="container-fluid">
+    <sme-card [startTitle]="'fleet.requests.linkedAccount'|translate" [headerFontSize]="'sm'">
+      <div class="card-body">
+        <div class="sme-row">
+            <p class="sme-page-info">{{'fleet.requests.linkedAccountSubNote'|translate}}</p>
+        </div>
+        <div class="sme-row-4-col">
+          <div class="sme-col">
+            <div class="form-group">
+              <label class="sme-form-group-label">{{'fleet.requests.account'|translate}}</label>
+              <select class="form-control" id="linkAccount" (change)="setAccountNum()" [(ngModel)]="linkAccount" [disabled]="dossairID">
+                <option *ngFor="let element of linkAccountList; let i = index " value="{{element}}">{{element}}</option>
+              </select>
+            </div>
+          </div>
+          </div>
+      </div>
+    </sme-card>
+  </div>
+  <div class="container-fluid">
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button
+        type="submit"
+        class="btn btn-default btn-wide sme-back-btn"  (click)="navigateTo(1)">
+        {{'fleet.btn.back'|translate}}
+      </button>
+      <button class="btn btn-primary btn-wide" [disabled]="linkAccount== undefined" (click)="navigateTo(3)" >{{'fleet.btn.next'|translate}}</button>
+    </div>
+  </div>

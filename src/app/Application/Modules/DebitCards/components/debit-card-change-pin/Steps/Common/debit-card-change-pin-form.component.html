@@ -1,0 +1,58 @@
+<ng-container [formGroup]="formModel">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-cardNumberDisplay">{{ 'accounts.debitCards.cardNumberDisplay' | translate }}</label>
+                <span id="search-cardNumberDisplay" class="form-control" name="cardNumberDisplay">
+                        {{ card?.cardNum }}
+                    </span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-2">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-newPin">{{ 'accounts.debitCards.newPin' | translate }}</label>
+                <input type="password" id="search-newPin" class="form-control" name="newPin" formControlName="newPin" maxlength="4"
+                       inputPattern="onlyPositiveDecimalNumbers"
+                       pattern="^[1-9]{1}[0-9]{3}$"/>
+                <div *ngIf="formModel.controls.newPin.hasError('required') && formModel.controls.newPin.touched"
+                     class="alert alert-danger">
+                    <small>{{'accounts.debitCards.error.newPinRequired' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.newPin.hasError('pattern') && formModel.controls.newPin.touched"
+                     class="alert alert-danger">
+                    <small>{{'accounts.debitCards.error.pinRule' | translate }}</small>
+                </div>
+                <div *ngIf=" sameOldAndNewPin && formModel.controls.newPin.touched"
+                     class="alert alert-danger">
+                    <small>{{'accounts.debitCards.error.samePinRule' | translate }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-2">
+
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-confirmNewPin">{{ 'accounts.debitCards.confirmNewPin' | translate }}</label>
+                <input type="password" id="search-confirmNewPin" class="form-control" name="confirmNewPin" formControlName="confirmNewPin" maxlength="4"
+                       inputPattern="onlyPositiveDecimalNumbers"
+                       pattern="^{{formModel.controls.newPin.value}}$"/>
+                <div *ngIf="formModel.controls.confirmNewPin.hasError('required') && formModel.controls.confirmNewPin.touched"
+                     class="alert alert-danger">
+                    <small>{{'accounts.debitCards.error.confirmNewPinRequired' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.confirmNewPin.hasError('pattern') && formModel.controls.confirmNewPin.touched"
+                     class="alert alert-danger">
+                    <small>{{ 'accounts.debitCards.error.pinMatch' | translate }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

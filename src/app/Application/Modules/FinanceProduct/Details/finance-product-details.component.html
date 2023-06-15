@@ -1,0 +1,53 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'financeProduct.menu' | translate }}</li>
+        <li class="active">{{ 'financeProduct.details.current' | translate }}</li>
+    </ol>
+</div>
+
+
+
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">
+            {{ 'financeProduct.menu' | translate }}
+        </div>
+        <div class="end">
+            <button class="btn btn-primary btn-wide" type="button" (click)="newFinanceRequest()">{{
+                'financeProduct.newFinanceRequest' | translate}}</button>
+        </div>
+    </div>
+
+    <arb-panel>
+        <ul class="nav nav-pills">
+            <li [class.active]="tabNumber===1">
+                <a data-toggle="tab" class="human-selectable" (click)="tabNumber=1;">
+                    {{ 'financeProduct.details.current' | translate }}
+                </a>
+            </li>
+            <li [class.active]="tabNumber===2">
+                <a data-toggle="tab" class="human-selectable" (click)="tabNumber=2;">
+                    {{ 'financeProduct.details.requested' | translate }}
+                </a>
+            </li>
+        </ul>
+    </arb-panel>
+
+    <div *ngIf="tabNumber===1">
+        <div *ngIf="!showDetails">
+            <current-finance (showDetails)="viewInstallmentsDetails($event)" *ngFor="let finaceDataItem of financeData"
+                [data]="finaceDataItem"></current-finance>
+        </div>
+        <installments-details *ngIf="showDetails" [data]="installmentsDetails"></installments-details>
+
+        <div class="emptyDiv" *ngIf="financeData.length==0">{{'public.noData' | translate}}</div>
+    </div>
+    <requested-finance *ngIf="tabNumber===2"></requested-finance>
+
+
+    <arb-buttons class="start" *ngIf="tabNumber===1  && showDetails">
+        <button class="btn btn-default btn-wide" type="button" (click)="hideInstallmentsDetails()">
+            {{ 'public.back' | translate}}</button>
+    </arb-buttons>
+
+</div>

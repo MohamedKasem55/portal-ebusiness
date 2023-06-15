@@ -1,0 +1,7 @@
+<div *ngIf="list?.length > 0" class="sme-breadcrumb">
+  <ol class="breadcrumb">
+    <li *ngFor="let item of list" [routerLink]="item.router" [ngClass]="item.active ? 'sme-breadcrumb-active' : ''" class="sme-breadcrumb-item">
+      {{ item.txt | translate }}
+    </li>
+  </ol>
+</div>

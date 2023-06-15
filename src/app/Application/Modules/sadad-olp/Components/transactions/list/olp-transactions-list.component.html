@@ -1,0 +1,235 @@
+<arb-breadcrumb [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+	['sadadOLP.transaction.menu']
+]">
+</arb-breadcrumb>
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()">
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'sadadOLP.transaction.transactionID' | translate }}</label>
+                    <input type="text" name="transactionID" class="form-control" formControlName="transactionID">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="transactionStatusSelect">{{ 'sadadOLP.transaction.transactionStatus' | translate
+                        }}</label>
+                    <ng-select class="form-control" name="transactionStatusSelect" id="transactionStatusSelect"
+                        formControlName="transactionStatus">
+                        <ng-option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</ng-option>
+                        <ng-option *ngFor="let transactionStatusSelectValue of transactionStatusSelect"
+                            [value]="transactionStatusSelectValue['key']">
+                            {{transactionStatusSelectValue['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{'sadadOLP.transaction.dateFrom' | translate }}</label>
+                    <input type="text" #dateFrom bsDatepicker formControlName="dateFrom" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{
+                        'sadadOLP.transaction.dateTo' | translate }}</label>
+                    <input type="text" #dateTo bsDatepicker formControlName="dateTo" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-searchable-panel>
+<arb-table-panel [title]="'sadadOLP.transaction.menu'">
+    <table-export [dataTable]="elementsTable" [header]="'sadadOLP.transaction.menu' | translate" [columns]="[
+                            {'title':'sadadOLP.transaction.transactionID' | translate ,'dataKey':'transactionID'},
+                            {'title':'sadadOLP.transaction.merchantName' | translate,'dataKey':'merchantName'},
+                            {'title':'sadadOLP.transaction.transactionStatus' | translate,'dataKey':'transactionStatus'},
+                            {'title':'sadadOLP.transaction.transactionAmount' | translate,'dataKey':'transactionAmount'},
+                            {'title':'sadadOLP.transaction.transactionDate' | translate,'dataKey':'transactionDate'},
+                            {'title':'sadadOLP.transaction.transactionType' | translate,'dataKey':'transactionType'}
+                            ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+        [externalPaging]="true" [externalSorting]="true" [count]="elementsPage.page.totalElements"
+        [offset]="elementsPage.page.pageNumber-1" [limit]="elementsPage.page.pageSize"
+        [selectionType]="defaultSelectionType" [selected]="tableSelectedRows" (page)='setPage($event)'
+        (sort)="setSort($event)" (select)='onSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transactionID">{{'sadadOLP.transaction.transactionID' | translate }}</label>
+                                <div>
+                                    <span id="transactionID">{{row.transactionID}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="merchantName">{{'sadadOLP.transaction.merchantName' | translate }}</label>
+                                <div>
+                                    <span id="merchantName">{{row.merchantName}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transactionStatus">{{'sadadOLP.transaction.transactionStatus' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="transactionStatus">{{row.transactionStatus}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transactionAmount">{{'sadadOLP.transaction.transactionAmount' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="transactionAmount">{{row.transactionAmount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transactionDate">{{'sadadOLP.transaction.transactionDate' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="transactionDate">{{row.transactionDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transactionType">{{'sadadOLP.transaction.transactionType' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="transactionType">{{row.transactionType}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="transactionID" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.transaction.transactionID' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="merchantName" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.transaction.merchantName' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="transactionStatus" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.transaction.transactionStatus' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{'sadadOLPTransactionStatus' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="transactionAmount" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.transaction.transactionAmount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="transactionDate" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.transaction.transactionDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="transactionType" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.transaction.transactionType' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

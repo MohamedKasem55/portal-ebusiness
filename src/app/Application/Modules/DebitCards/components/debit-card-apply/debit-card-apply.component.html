@@ -1,0 +1,51 @@
+<div class='sme-breadcrumb'>
+    <ol class='breadcrumb'>
+        <li>{{ 'mada-cards.list_of_cards' | translate }}</li>
+        <li class='active'>{{ 'mada-cards.apply' | translate }}</li>
+    </ol>
+</div>
+
+<div *ngIf="pageName === 'OTP'">
+    <div class='sme-head'>
+        <div class='sme-head__title'>
+            {{ 'mada-cards.apply' | translate }}
+        </div>
+    </div>
+    <arb-panel>
+        <app-secured-authentication *ngIf='generateChallengeAndOTP' [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                    [requestValidate]='requestValidate'></app-secured-authentication>
+    </arb-panel>
+</div>
+
+<arb-steps *ngIf="pageName !== 'OTP'" [currentStep]='step' [steps]="steps">
+</arb-steps>
+
+<div class='container-fluid' *ngIf="pageName ==='STEPPER'">
+
+    <arb-card-details [applyMadaCardRequest]="applyMadaCardRequest" (onApplyRequest)="changeRequest($event)"
+                      *ngIf="step === 1"></arb-card-details>
+    <arb-select-pick-up *ngIf="step === 2"
+                        [applyMadaCardRequest]="applyMadaCardRequest"
+                        [selectedBranches]="applyMadaCardRequest.branch ? [applyMadaCardRequest.branch] : []"
+                        (onApplyRequest)="changeRequest($event)">
+    </arb-select-pick-up>
+    <arb-summary [applyMadaCardRequest]="applyMadaCardRequest" *ngIf="step===3"></arb-summary>
+    <arb-finish [success]="isSuccess" *ngIf="step === 4"></arb-finish>
+</div>
+
+<arb-buttons *ngIf='step!==4'>
+
+    <button class='btn btn-default btn-wide'  (click)="cancel()" [ngStyle]="{'float': language === 'en' ?'left':'right'}"
+            type='button'>{{ 'mada-cards.cancel' |translate}}</button>
+    <button class='btn btn-default btn-wide' (click)="stepBack()"
+            type='button'>{{ 'mada-cards.back' |translate}}</button>
+    <!--    [disabled]='canProceed()' (click)='proceed()'-->
+    <button class='btn btn-primary btn-wide' [disabled]="!canProceed()" (click)="nextStep()"
+            type='button'>{{'mada-cards.next' |translate}}</button>
+
+</arb-buttons>
+
+<arb-buttons *ngIf='step === 4'>
+    <button class='btn btn-primary btn-wide' (click)="goToDashboard()" type='button'>{{
+        'mada-cards.to-dashboard' | translate}}</button>
+</arb-buttons>

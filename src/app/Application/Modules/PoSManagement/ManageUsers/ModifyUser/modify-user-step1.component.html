@@ -1,0 +1,287 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'posManagement.detailEmployee' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posManagement.userId' | translate }}</label>
+                                        <span class="form-control">{{selectedUser.userId}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posManagement.userName' |
+										translate }}</label>
+                                        <span class="form-control">{{selectedUser.userName}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posManagement.mobile' |
+										translate }}</label>
+                                        <span class="form-control">{{selectedUser.mobile}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'posManagement.termialList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+
+                    <table-export [dataTable]="table" [header]="'accounts.pos.name' | translate  " [columns]="[{'title':'accounts.pos.terminal_name' | translate | uppercase,'dataKey':'name'},
+                    {'title':'accounts.pos.terminal_id' | translate | uppercase,'dataKey':'terminalId'},
+                    {'title': 'public.account' | translate | uppercase,'dataKey':'account'},
+                    {'title': 'accounts.pos.region' |  translate | uppercase,'dataKey': 'region'},
+                    {'title': 'accounts.pos.location' |  translate | uppercase,'dataKey': 'location'},
+                    {'title': 'public.city' |  translate | uppercase,'dataKey': 'city'},
+                    {'title': 'accounts.pos.mobile_number' |  translate | uppercase,'dataKey': 'mobile'}
+                    
+                    
+                    
+                    ]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                        #accountsPosSearchPanelTable class="material sme-table sme-table--responsive table"
+                        [rows]="selectedUser.userPosTerminals" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [columnMode]="defaultColumnMode" [rowHeight]="defaultHeight" [count]="selectedUser.userPosTerminals.length"
+                        [limit]="terminalPageSize" [externalPaging]="false" [externalSorting]="false">
+                        <!-- lo quito de arriba y debo ponerlo       (sort)="setSort($event)" -->
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'accounts.pos.terminal_name' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.name}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'accounts.pos.terminal_id' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.terminalId}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.account' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.account }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'accounts.pos.region' | translate }}</label>
+                                                <div>
+                                                    <span>{{ 'terminalRegion' | modelPipe: row.region }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'accounts.pos.location' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.location }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.city' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.city }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'accounts.pos.mobile_number' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mobile }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="name">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'accounts.pos.terminal_name' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="terminalId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'accounts.pos.terminal_id' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="account">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.account' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="region">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'accounts.pos.region' | translate }}
+                                </span>
+                            </ng-template>
+                            <!--     TRANSFORM VALUE -> id -> BANK NAME        -->
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ 'terminalRegion' | modelPipe: value }}</span>
+                            </ng-template>
+
+
+
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="location">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'accounts.pos.location' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="city">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.city' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="mobile">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'accounts.pos.mobile_number' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+
+
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="accountsPosSearchPanelTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="terminalPageSize">
+                                                    <option [value]="5">5</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </ng-template>
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

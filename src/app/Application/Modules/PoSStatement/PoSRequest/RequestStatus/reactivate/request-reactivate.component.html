@@ -1,0 +1,48 @@
+<arb-breadcrumb 
+[routes]="[
+['menu.collections_management.menu'],
+['posStatement.name',['/posstatement']],
+['posStatement.newRequest',['/posstatement/pos-request']],
+['posRequest.requestStatus',['/posstatement/pos-request']],
+['posRequest.activate']
+]">
+</arb-breadcrumb>
+
+<arb-steps
+[currentStep]="step">
+</arb-steps>  
+
+
+<app-request-reactivate-step1 *ngIf="step === 1"
+[batch]="this.requestReactivate['initialBatch']"
+[accounts]="comboAccounts"
+(onInit)="onInitStep1($event)">
+
+	
+</app-request-reactivate-step1>
+
+<app-request-reactivate-step2 *ngIf="step === 2"
+[batch]="initiateBatch"
+[accounts]="accounts"
+[option]="option"
+[DeleteOption]="DeleteOption"
+[InitiateOption]="InitiateOption"
+[generateChallengeAndOTP]="generateChallengeAndOTP"
+[requestValidate]="requestValidate"
+(onInit)="onInitStep2($event)">
+
+</app-request-reactivate-step2>
+
+<app-request-reactivate-step3 *ngIf="step === 3"
+[generateChallengeAndOTP]="generateChallengeAndOTP"
+>
+</app-request-reactivate-step3>
+
+<arb-buttons>
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-default btn-wide" (click)="goCancel()" *ngIf="step == 1"> {{'public.cancel' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="delete()" *ngIf="step == 1 "> {{'public.delete' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="initiate()" *ngIf="step == 1 " > {{'public.initiate' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="next()" *ngIf="step == 2" [disabled]="!isValidForm()"> {{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="finish()" *ngIf="step == 3">{{'public.finish' | translate}}</button>
+</arb-buttons>

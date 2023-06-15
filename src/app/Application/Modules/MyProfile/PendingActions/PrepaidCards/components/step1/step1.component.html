@@ -1,0 +1,17 @@
+<!-- app-prepaid-cards-table -->
+<app-prepaid-cards-table [items]="prepaidCardsResults.items" [modal]="modalAuth" [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="prepaidCardsResults.total" [futureLevels]="false" [externalPagination]="true" [selectable]="true"
+        (setPage)="setPage($event)" (onSelect)="onSelect($event)" (changeDisplaySize)="changeDisplaySize($event)"
+        [title]="'prePaidCard.namePayment'" [paymentMode]="true">
+
+</app-prepaid-cards-table>
+
+<!-- <app-prepaid-cards-table [items]="replacePrepaidCardsResults.items" [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySizeReplace" [totalSize]="replacePrepaidCardsResults.total"
+        [futureLevels]="false" [externalPagination]="true" [selectable]="true" (setPage)="setPageReplace($event)"
+        (onSelect)="onSelectReplace($event)" (changeDisplaySize)="changeDisplaySizeReplace($event)"
+        [title]="'prePaidCard.nameReplace'" [paymentMode]="false">
+
+</app-prepaid-cards-table> -->
+
+<app-levels-popup #modalAuth></app-levels-popup>

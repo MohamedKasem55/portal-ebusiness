@@ -1,0 +1,154 @@
+.sme-credit-card-slider {
+  margin: 13px 0;
+  padding: 0 50px;
+
+  &__item {
+    @include clearfix;
+  }
+
+  &__card {
+    margin: 0 auto 30px;
+    border: 1px solid #ccc;
+
+    & + & {
+      margin-#{$left}: 2%;
+    }
+  }
+
+  &__item-media {
+    height: 198px;
+    height: 168px;
+    overflow: hidden;
+    padding: (198px - 153px) 15px 0;
+
+    img {
+      margin: 0 auto;
+      display: block;
+      max-width: 100%;
+    }
+  }
+
+  &__content {
+    padding: 22px 15px;
+    background: #fafafa;
+  }
+
+  &__name {
+    @include font($font-size-18);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-18 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-18 * $factor2);
+    }
+    font-weight: 300;
+    color: $brand-black;
+  }
+
+  &__num {
+    @include font($font-size-12);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-12 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-12 * $factor2);
+    }
+    color: $brand-grey-light;
+  }
+
+  &__balance {
+    padding-top: 10px;
+
+    .progress {
+      height: 8px;
+      background: #bac0c4;
+      box-shadow: none;
+    }
+
+    &-info {
+      display: table;
+      width: 80%;
+
+      dl {
+        display: table-cell;
+        width: 50%;
+        position: relative;
+      }
+
+      dt {
+        @include font($font-size-12);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-12 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-12 * $factor2);
+        }
+        color: $brand-grey-light;
+      }
+
+      dd {
+        @include font($font-size-18);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-18 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-18 * $factor2);
+        }
+        margin: 0;
+        color: $brand-black;
+      }
+    }
+
+    &-total {
+      padding-#{$left}: 10px;
+
+      dd {
+        color: $brand-primary;
+      }
+
+      @include before {
+        @include center-y;
+        #{$left}: 0;
+        width: 1px;
+        height: 32px;
+        background: $brand-grey-light;
+      }
+    }
+  }
+
+  &__activation {
+    text-align: center;
+    padding: 27px 10px 0;
+  }
+
+  @media #{$sm-up} {
+    &__item-media {
+      height: 198px;
+    }
+  }
+}
+
+.sme-credit-card-slider--3cards {
+  display: none;
+
+  .sme-credit-card-slider {
+    &__card {
+      width: 100%;
+      float: $left;
+    }
+  }
+
+  @media #{$lg-only} {
+    padding: 0 50px;
+  }
+}
+
+@media #{$md-up} {
+  .sme-credit-card-slider--3cards {
+    display: block;
+
+    & + .sme-credit-card-slider--1card {
+      display: none;
+    }
+  }
+}

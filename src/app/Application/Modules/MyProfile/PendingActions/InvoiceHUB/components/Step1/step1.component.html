@@ -1,0 +1,13 @@
+<app-invoiceHUB-table
+        [items]="pageResult"
+        [modal]="modalAuth"
+        [tableDisplaySize]="this.pageResult.page.pageSize"
+        [totalSize]="pageResult.page.totalElements"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (changeDisplaySize)="changeDisplaySize($event)">
+</app-invoiceHUB-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

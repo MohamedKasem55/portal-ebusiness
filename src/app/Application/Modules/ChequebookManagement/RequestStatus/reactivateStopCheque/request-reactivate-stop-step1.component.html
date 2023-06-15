@@ -1,0 +1,73 @@
+<form autocomplete="off">
+    <div class="container-fluid" *ngIf="batch">
+        <div class="sme-head">
+            <div class="sme-head__title">{{'chequebook.bookTypeDetails' | translate}}</div>
+        </div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="account">{{ 'chequebook.account' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <span id="account" class="form-control">{{batch.accountNumber}}</span>
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'chequebook.chequeNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{batch.checkNumber}}</span>
+                                                </div>
+                                            </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="status">{{ 'chequebook.status' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <span id="status" class="form-control">{{batch.status | statusPipe}}</span>
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'myProfile.pending_actions.rejectedReason' |
+                                                translate }}</label>
+                                                <span class="form-control"
+                                                   >{{batch.rejectedReason}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>

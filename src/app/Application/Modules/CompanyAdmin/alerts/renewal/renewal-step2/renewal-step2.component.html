@@ -1,0 +1,281 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+        <li><a class="human-selectable" href="#" routerLinkActive="active" [routerLink]="['/companyadmin/alerts']">{{ 'companyAdmin.alerts.sms' |
+            translate }}</a></li>
+        <li class="active">{{'companyAdmin.alerts.smsRenewal' | translate}}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div *ngIf="messageError?.code" class="alert alert-danger">
+            <small>{{messageError['code']}} {{messageError['description']}}</small>
+        </div>
+        <!-- sme-demo--form--user1 -->
+        <!-- sme-form -->
+        <ul class="sme-wizard__steps">
+            <li class="sme-wizard__step current"><span> <span class="num">1</span> <span
+                    class="text">{{'companyAdmin.alerts.entitle' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step current"><span> <span class="num">2</span>
+                    <span class="text">{{'companyAdmin.alerts.confirmation' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step"><span> <span class="icon -check"></span> <span
+                    class="text">{{'companyAdmin.alerts.summary' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+<form autocomplete="off" [formGroup]="form" (ngSubmit)="confirm()">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <!-- sme-demo--form--user1 -->
+            <!-- sme-form -->
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label
+                                                for="search-criteria--input-date">{{ 'public.account' | translate }}</label>
+                                        <div class="sme-select form-control">
+                                            <select id="search-criteria--input-date" class="form-control"
+                                                    formControlName="account">
+                                                <option *ngFor="let account of accounts" [value]="account.key">
+                                                    {{account.value.fullAccountNumber}}</option>
+                                            </select>
+                                            <div *ngIf="!form.controls.account.valid && form.controls.account.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{'public.account' | translate }}{{ 'error.required' | translate }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="userAlertTable"
+                                      [header]="'companyAdmin.alerts.smsRenewal' | translate"></table-export>
+                    </div>
+                </div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #userAlertTable
+                                   class="material sme-table sme-table--responsive table" [rows]="userAlerts"
+                                   [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="50" [rowHeight]="defaultHeight"
+                                   [count]="userAlerts.length">
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label> {{'public.userId' | translate }} </label>
+                                                <div>
+                                                    <span>{{ row.userId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.userName' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.userName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mobileNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'companyAdmin.alerts.fees' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.userFee | amountCurrency }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label> {{'public.userId' | translate }} </label>
+                                                <div>
+                                                    <span>{{ row.userId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.userName' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.userName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mobileNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'companyAdmin.alerts.fees' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.userFee | amountCurrency }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"
+                                              [draggable]="false" [resizeable]="false" [headerCheckboxable]="false"
+                                              [checkboxable]="false">
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="userId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.userId' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="userName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'companyAdmin.user.name' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="mobileNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="userFee">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'companyAdmin.alerts.fees' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency }} </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <!-- <table style="width:100%">
+                                        <tr>
+                                            <td width="25%">
+                                                <span></span>
+                                            </td>
+                                            <td width="25%">
+                                                <span></span>
+                                            </td>
+                                            <td width="25%">
+                                                <span>{{sumaryAlerts['mobile']}}</span>
+                                            </td>
+                                            <td width="25%">
+                                                <span>{{sumaryAlerts['fee'] | number: '1.2-2'}}</span>
+                                            </td>
+                                        </tr>
+                                    </table> -->
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{sumaryAlerts['mobile']}}
+                                            {{sumaryAlerts['fee'] | number: '1.2-2'}}</span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <li>{{'transfer.totalFee' | translate}}
+                            {{sumaryAlerts['fee'] | amountCurrency}}
+                            <app-vat-calculator [fee]="sumaryAlerts['fee']"></app-vat-calculator>
+                        </li>
+                    </div>
+                </div>
+                <div class="sme-form__actions">
+                    <a href="#" class="btn btn-default btn-wide" routerLinkActive="active"
+                       [routerLink]="['/companyadmin/alerts/renewal']">
+                        {{'public.back' | translate }}</a>
+                    <button type="submit" class="btn btn-primary btn-wide">
+                        {{'public.proceed' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

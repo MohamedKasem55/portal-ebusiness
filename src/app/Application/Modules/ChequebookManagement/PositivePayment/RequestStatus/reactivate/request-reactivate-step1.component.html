@@ -1,0 +1,79 @@
+<form autocomplete="off" [formGroup]="form" *ngIf="form">
+    <div class="container-fluid" *ngIf="batch">
+        <div class="sme-head">
+            <div class="sme-head__title">{{'chequebook.bookTypeDetails' | translate}}</div>
+        </div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                               <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="account" class="required">{{ 'chequebook.account' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div class="sme-select form-control">
+                                                <select id="account" class="form-control" formControlName="account">
+                                                    <option selected value disabled>--{{ 'public.selectAccount' | translate }}--</option>
+                                                    <option *ngFor="let account of accounts" [value]="account.fullAccountNumber">
+                                                        {{account.fullAccountNumber}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="form.controls.account.hasError('required') && form.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.error.accountRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="amount" class="required">{{ 'chequebook.amount' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="amount" class="form-control" formControlName="amount" inputPattern="onlyPositiveDecimalNumbers" />
+                                                <div *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched" class="alert alert-danger">
+                                                    <small>{{ 'error.amountRequired' | translate }} </small>
+                                                </div>
+                                                <div *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.amount' | translate }}{{ 'error.positiveNumeric' | translate
+                                                        }} </small>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="chequeNumber" class="required">{{ 'chequebook.chequeNumber' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="chequeNumber" class="form-control" formControlName="chequeNumber" maxlength=10 inputPattern="onlyPositiveDecimalNumbers"/>
+                                                <div *ngIf="form.controls.chequeNumber.hasError('required') && form.controls.chequeNumber.touched" class="alert alert-danger">
+                                                    <small>{{ 'chequebook.error.chequeNumberRequired' | translate }} </small>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>

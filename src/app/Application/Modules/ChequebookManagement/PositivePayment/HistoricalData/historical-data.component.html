@@ -1,0 +1,275 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.accounts' | translate }}</li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a>
+        </li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook/positive-payment']">{{ 'chequebook.positivePayment'| translate }}</a>
+        </li>
+        <li class="active">{{ 'chequebook.processedOperations'| translate }}</li>
+
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container" *ngIf="step >= 2">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 4, 'completed' : step > 4}">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="sme-head">
+    <div class="sme-head__title">{{'chequebook.processedOperations' | translate}}</div>
+</div>
+
+<form autocomplete="off" [formGroup]="form" *ngIf="step == 0">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="account" class="required">{{ 'chequebook.account' | translate }}</label>
+                                            <div class="sme-select form-control">
+                                                <select id="account" class="form-control" formControlName="account">
+                                                    <option selected value disabled>--{{ 'public.selectAccount' | translate }}--</option>
+                                                    <option *ngFor="let account of accounts" [value]="account.fullAccountNumber">
+                                                        {{account.fullAccountNumber}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="form.controls.account.hasError('required') && form.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.error.accountRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="form-group">
+                                            <label for="chequeNumber" class="required">{{ 'chequebook.status' | translate }}</label>
+                                            <div class="sme-select form-control">
+                                                <select id="status" class="form-control" formControlName="status">
+                                                    <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                                    <option *ngFor="let stat of status" [value]="stat.key">
+                                                        {{stat.value | translate}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="form.controls.status.hasError('required') && form.controls.status.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.error.statusRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="container-fluid" *ngIf="step == 1">
+    <div class="sme-page-block">
+        <div class="sme-account-status">
+            <div class="sme-account-status__info row">
+                <div class="col-xs-3 col-sm-4">
+                    <span class="sme-account-status__info-label">
+                        <span>{{'chequebook.account' | translate}}</span>
+                    </span>
+                </div>
+                <div class="col-xs-9 col-sm-8">
+                    <span class="sme-account-status__info-value">
+
+                        <span>{{ positivePayRequest?.fullAccountNumber }}</span>
+
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <!-- <div class="sme-data-table__title">{{'chequebook.historicalList' | translate }}</div> -->
+                <div class="sme-data-table__export">
+                    <div style="display: block;">
+                        <a class="btn btn-export btn-export--xlsx" (click)="getXlsx()">
+                            <span class="icon -excel"></span>
+                            <span class="text">{{'public.xlsx' | translate}}</span>
+                        </a>
+                        <a class="btn btn-export btn-export--pdf" (click)="getPdf()">
+                            <span class="icon -pdf"></span>
+                            <span class="text">{{'public.pdf' | translate}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                #historicalTable class="material sme-table sme-table--responsive table"
+                [rows]="positivePayRequest.items"
+                [columnMode]="defaultColumnMode"
+                [headerHeight]="30"
+                [footerHeight]="footerHeight"
+                [rowHeight]="defaultHeight"
+                [count]="positivePayRequest?.totalElements"
+                [limit]="positivePayRequest?.pageSize"
+                [externalPaging]="true"
+                [externalSorting]="true"
+                (page)='setPage($event)'>
+ <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)" >
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <div class="row">
+                                <fieldset>
+                                     <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.amount' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.amount  | amountCurrency }}</span>
+                                            </div>
+                                        </div>
+                                    </div><div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.chequeNumber' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.chequeNumber }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.chequeStatus' | translate }}</label>
+                                            <div>
+                                                 <span><a (click)="goToDetails(row.checkStatusMsg,row)" style="cursor:pointer;" DIR="ltr" *ngIf="row.checkStatusMsg == 'chequebook.unpaid'">{{ row.checkStatusMsg | translate }}</a></span>
+                            <span *ngIf="row.checkStatusMsg != 'chequebook.unpaid'">{{ row.checkStatusMsg | translate}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                <ngx-datatable-column prop="amount" headerClass="text-align-center" cellClass="text-align-center">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper"> {{'chequebook.chequeAmount' | translate }} </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | amountCurrency: row.currency }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="checkNumber" headerClass="text-align-center" cellClass="text-align-center">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper"> {{'chequebook.chequeNumber' | translate }} </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ +value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="checkStatusMsg" headerClass="text-align-center" cellClass="text-align-center">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper"> {{'chequebook.chequeStatus' | translate }} </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span><a (click)="goToDetails(value,row)" style="cursor:pointer;" DIR="ltr" *ngIf="value == 'chequebook.unpaid'">{{ value | translate }}</a></span>
+                            <span *ngIf="value != 'chequebook.unpaid'">{{ value | translate}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+                        let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"  (change)="historicalTable.onFooterPage($event)">
+                            </app-datatable-pager>
+
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="tablePageSize" (change)="this.setPage(null);">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+
+<app-details-positive-pay-step1 *ngIf="step === 2"
+    [form]="this.form"
+    [positivePayDetails]="this.positivePayDetails"
+    (onInit)="onInitStep1($event)">
+</app-details-positive-pay-step1>
+
+<app-details-positive-pay-step2 *ngIf="step === 3"
+    [form]="this.form"
+    [positivePayDetails]="this.positivePayDetails"
+    [generateChallengeAndOTP]="generateChallengeAndOTP"
+    (onInit)="onInitStep2($event)">
+</app-details-positive-pay-step2>
+
+<app-details-positive-pay-step3 *ngIf="step === 4"
+[positivePayDetails]="this.positivePayDetails"
+[generateChallengeAndOTP]="generateChallengeAndOTP">
+</app-details-positive-pay-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 0 && step < 4">{{'public.back' | translate }}</button>
+    <button class="btn btn-default btn-wide" [routerLink]="['/accounts/chequebook/positive-payment']" *ngIf="step == 0">{{'public.cancel' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step != 1 && step != 2 && step < 4" [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="goToDeletePositivePay()" *ngIf="step == 2">{{'public.delete' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="goToUpdatePositivePay()" *ngIf="step == 2">{{'public.update' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()" *ngIf="step == 4">{{'public.finish' | translate}}</button>
+</div>

@@ -1,0 +1,66 @@
+<arb-breadcrumb [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+	['sadadOLP.refunds.menu']
+]">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep"
+        [steps]="['public.selectDropdown', 'sadadOLP.refunds.refundStep', 'public.confirm','public.summary']">
+</arb-steps>
+
+<arb-panel *ngIf="wizardStep === 2 || wizardStep ===3">
+        <form [formGroup]="this.formRefunds" >
+                <fieldset>
+                        <div class="col-xs-12 col-sm-12">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                        <label for="genericRefundRejectReason-input" class="required">{{ 'sadadOLP.refunds.rejectionReason'
+                                                | translate }}</label>
+
+                                        <textarea type="text" [maxlength]="150" [rows]="3" id="rejectedReason"
+                                                  class="form-control" id="genericRefundRejectReason-input"
+                                                  formControlName="genericRefundRejectReason"
+                                                  required name="rejectedReason"></textarea>
+                                </div>
+                                <!-- ./sme-form-group -->
+                        </div>
+                </fieldset>
+        </form>
+</arb-panel>
+
+<app-refund-sadad-olp-step1 *ngIf="isStepVisible(1)" (onInit)="onInitStep(1,$event)">
+</app-refund-sadad-olp-step1>
+
+<app-refund-sadad-olp-step2 *ngIf="isStepVisible(2)" (onInit)="onInitStep(2,$event)" [formRefunds]="formRefunds"
+        [title]="'sadadOLP.refunds.header'">
+</app-refund-sadad-olp-step2>
+
+<app-refund-sadad-olp-step3 *ngIf="isStepVisible(3)" (onInit)="onInitStep(3,$event)" [formRefunds]="formRefunds"
+        [title]="'sadadOLP.refunds.header'">
+</app-refund-sadad-olp-step3>
+
+<app-refund-sadad-olp-step4 *ngIf="isStepVisible(4)">
+</app-refund-sadad-olp-step4>
+
+<arb-buttons>
+        <button type="button" class="btn btn-default btn-wide" (click)="back()"
+                *ngIf="isBackAllowed()">{{ 'public.back' | translate}}</button>
+        <button class="btn btn-default btn-wide" (click)="previous()"
+                *ngIf="isPreviousAllowed()">{{ 'public.back' | translate }}</button>
+        <button class="btn btn-primary btn-wide" (click)="nextAction('')"
+                *ngIf="isNextAllowed()" [disabled]="step1.child.tableSelectedRows.length == 0">{{'public.proceed' | translate}}</button>
+
+        <button class="btn btn-primary btn-wide" (click)="nextAction('R')"
+                *ngIf="isApproveRejectAllowed()"
+                [disabled]="this.formRefunds.controls['refunds'].status !== 'VALID' || this.formRefunds.status !== 'VALID'
+                                || refundsControls.length === 0">
+                {{'myProfile.pending_actions.reject' | translate}}
+        </button>
+
+        <button class="btn btn-primary btn-wide" (click)="nextAction('A')"
+                *ngIf="isApproveRejectAllowed()"
+                [disabled]="refundsControls.length === 0">{{'myProfile.pending_actions.approve' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="finish()"
+                *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

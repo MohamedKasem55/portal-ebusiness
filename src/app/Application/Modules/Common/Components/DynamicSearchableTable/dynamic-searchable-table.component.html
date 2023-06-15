@@ -1,0 +1,275 @@
+<arb-searchable-panel
+        *ngIf="showSearchForm && searchForm"
+        [searchForm]="searchForm"
+        [checkFormValid]="searchForm_checkValid"
+        (searchAction)="search()"
+        (resetAction)="reset()" #searchPanel>
+
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <fieldset>
+                <app-dynamic-simple-extras-form-fields
+                    #dynamicExtraFormFields
+                    [fieldsConfigs]="fieldsConfigForSearchForm"
+                    [custom_fields_templates]="search_form_custom_fields_templates"
+                    [translate_prefix]="search_form_translate_prefix"
+                    [combosData]="search_form_combosData"
+                    [formModel]="searchForm"
+                    (onAllFieldsCreated)="searchFormCreated($event)"
+                    (onInit)="searchFormInited($event)">
+                </app-dynamic-simple-extras-form-fields>
+            </fieldset>
+        </div>
+    </ng-container>
+
+</arb-searchable-panel>
+
+<arb-table-panel [title]="table_title">
+
+    <table-export
+            *ngIf="table_export_show_buttons"
+            [dataTable]="elementsTable"
+            [header]="table_export_header"
+            [columns]="table_export_columns"
+            [rows]="table_export_selected_rows && table_export_selected_rows.length > 0 ? table_export_selected_rows : null"
+            [pdfPageSize]="table_export_pdf_size">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: table_empty_data_message | translate}"
+                   #elementsTable class="material sme-table sme-table--responsive table"
+
+                   [columnMode]="table_columnMode"
+                   [selectionType]="table_selectionType"
+                   [rowIdentity]="table_rowIdentity"
+
+                   [rowHeight]="table_rowHeight"
+                   [headerHeight]="table_headerHeight"
+                   [footerHeight]="table_footerHeight"
+                   [externalPaging]="table_externalPaging"
+                   [externalSorting]="table_externalSorting"
+
+                   [rows]="table_elements_rows"
+                   [count]="table_elements_count ? table_elements_count : 0"
+                   [offset]="table_elements_offset ? table_elements_offset : 0"
+                   [limit]="table_elements_limit ? table_elements_limit : 0"
+
+                   [selected]="table_elements_selected_rows?table_elements_selected_rows:[]"
+
+                   (page)="setPage($event)"
+                   (sort)="setSort($event)"
+                   (select)="onSelect($event)">
+
+        <ngx-datatable-row-detail #myDetailRow
+                                  [rowHeight]="table_rowHeight"
+                                  (toggle)="onDetailToggle($event)">
+
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <ng-container *ngFor="let fieldConfig of fieldsConfigForList; index as i">
+                            <div class="{{ fieldConfig.parent_div_class ? fieldConfig.parent_div_class : 'col-xs-6'}}">
+                                <div class="form-group">
+                                    <label>{{ getTranslationKey(table_translate_prefix, fieldConfig.translate) | translate }}</label>
+                                    <div>
+                                        <span *ngIf="!fieldConfig.link_to_detail || !table_allow_link_to_detail">
+                                            <p [innerHTML]="fieldConfig.propValue(row, service, combosData)"></p>
+                                        </span>
+                                        <span *ngIf="fieldConfig.link_to_detail && table_allow_link_to_detail">
+                                            <a class="human-selectable" (click)="onClickRow(row, fieldConfig.propName)">
+                                                <p [innerHTML]="fieldConfig.propValue(row, service, combosData)"></p>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="table_hasFixedColumns">
+                            <ng-container *ngFor="let fieldName of service.getTableFixedFieldsNames()">
+
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{service.getTableFixedColumnNameByField(fieldName) | translate }}</label>
+                                        <div>
+                                    <span>
+                                        {{ service.getTableFixedColumnValueByField(fieldName, row, combosData) }}
+                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+
+                    </fieldset>
+                </div>
+
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column
+                *ngIf="isSelectItemsAllowed() && !table_selection_disabled && table_selectionType!==false && table_selectionType!==undefined"
+                [width]="50"
+                [sortable]="false"
+                [canAutoResize]="false"
+                [draggable]="false"
+                [resizeable]="false"
+                [headerCheckboxable]="true"
+                [checkboxable]="true">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+                *ngIf="isSelectItemsAllowed() && table_selection_disabled && table_selectionType!==false && table_selectionType!==undefined"
+                [width]="50"
+                [sortable]="false"
+                [canAutoResize]="false"
+                [draggable]="false"
+                [resizeable]="false"
+                [headerCheckboxable]="false"
+                [checkboxable]="false">
+            <ng-template ngx-datatable-header-template let-value="value">
+                <label class="datatable-checkbox">
+                </label>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row"
+                         let-value="value" let-isSelected="isSelected"
+                         let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <label class="datatable-checkbox">
+                    <input type="checkbox"
+                           [disabled]="true"
+                           [checked]="isSelected"/>
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ng-container *ngFor="let fieldConfig of fieldsConfigForList; index as i">
+
+            <ng-container *ngIf="fieldConfig['append_next_column'] === true">
+
+                <ngx-datatable-column prop="{{fieldConfig.propName}}"
+                                      [width]="fieldConfig['column_width']?fieldConfig['column_width']:''"
+                                      [canAutoResize]="fieldConfig['column_width']?false:true">
+
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <div (click)="sort()" class="datatable-header-cell-wrapper">
+                            <p [innerHTML]="getTranslationKey(table_translate_prefix, fieldsConfigForList[i].translate) | translate"></p>
+                            <p [innerHTML]="getTranslationKey(table_translate_prefix, fieldsConfigForList[i + 1].translate) | translate"></p>
+                        </div>
+                    </ng-template>
+
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span style="width: 100%; white-space: pre-wrap;">
+                            <ng-container *ngIf="!fieldsConfigForList[i].link_to_detail || !table_allow_link_to_detail">
+                                <p [innerHTML]="fieldsConfigForList[i].propValue(row, service, combosData)"></p>
+                            </ng-container>
+                            <ng-container *ngIf="fieldsConfigForList[i].link_to_detail && table_allow_link_to_detail">
+                                <a class="human-selectable" (click)="onClickRow(row, fieldsConfigForList[i].propName)">
+                                    <p [innerHtml]="fieldsConfigForList[i].propValue(row, service, combosData)"></p>
+                                </a>
+                            </ng-container>
+                            <ng-container
+                                    *ngIf="!fieldsConfigForList[i+1].link_to_detail || !table_allow_link_to_detail">
+                                <p [innerHTML]="fieldsConfigForList[i + 1].propValue(row, service, combosData)"></p>
+                            </ng-container>
+                            <ng-container *ngIf="fieldsConfigForList[i+1].link_to_detail && table_allow_link_to_detail">
+                                <a class="human-selectable"
+                                   (click)="onClickRow(row, fieldsConfigForList[i+1].propName)">
+                                    <p [innerHtml]="fieldsConfigForList[i + 1].propValue(row, service, combosData)"></p>
+                                </a>
+                            </ng-container>
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+            </ng-container>
+
+            <ng-container
+                    *ngIf="fieldConfig['append_next_column'] !== true && (i==0 || fieldsConfigForList[i-1]['append_next_column'] !== true)">
+                <ngx-datatable-column prop="{{fieldConfig.propName}}"
+                                      [width]="fieldConfig['column_width']?fieldConfig['column_width']:''"
+                                      [canAutoResize]="fieldConfig['column_width']?false:true">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <div (click)="sort()" class="datatable-header-cell-wrapper">
+                            <p [innerHTML]="getTranslationKey(table_translate_prefix, fieldConfig.translate) | translate"></p>
+                        </div>
+                    </ng-template>
+
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span style="width: 100%; white-space: pre-wrap;">
+                            <ng-container *ngIf="!fieldConfig.link_to_detail || !table_allow_link_to_detail">
+                                <p [innerHTML]="fieldConfig.propValue(row, service, combosData)"></p>
+                            </ng-container>
+                            <ng-container *ngIf="fieldConfig.link_to_detail && table_allow_link_to_detail">
+                                <a class="human-selectable"
+                                   (click)="onClickRow(row, fieldConfig.propName)">
+                                    <p [innerHTML]="fieldConfig.propValue(row, service, combosData)"></p>
+                                </a>
+                            </ng-container>
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ng-container>
+
+        </ng-container>
+
+        <ng-container *ngIf="table_hasFixedColumns">
+            <ng-container *ngFor="let fieldName of service.getTableFixedFieldsNames()">
+
+                <ngx-datatable-column prop="{{fieldName}}"
+                                      [width]="service.getColumnWidthByTableFixedField(fieldName)?service.getColumnWidthByTableFixedField(fieldName):''"
+                                      [canAutoResize]="service.getColumnWidthByTableFixedField(fieldName)?false:true">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <div class="datatable-header-cell-wrapper" style="cursor: default">
+                            {{ service.getTableFixedColumnNameByField(fieldName) | translate }}
+                        </div>
+                    </ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span style="width: 100%; white-space: pre-wrap;">
+                            <p [innerHTML]="service.getTableFixedColumnValueByField(fieldName, row, combosData)"></p>
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+            </ng-container>
+        </ng-container>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer" *ngIf="table_footer_show_buttons">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage"
+                            [size]="pageSize"
+                            [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)"
+                            [visiblePagesCount]="table_footer_visiblePagesCount"
+                            (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{ getTableCurrentPageSize(elementsTable) }} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="table_footer_pageSize"
+                                        (change)="this.onChangePageSize($event)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+
+</arb-table-panel>

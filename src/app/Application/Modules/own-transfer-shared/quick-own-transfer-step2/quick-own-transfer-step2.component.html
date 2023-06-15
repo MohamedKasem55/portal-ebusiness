@@ -1,0 +1,130 @@
+<arb-panel>
+    <form autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label class="required">{{
+                            'transfer.accountFrom' | translate }}</label>
+                        <div class="form-control" style="padding-top: 9px">
+                            <ng-select formControlName="accountFrom" (change)="accountSelected($event)">
+                                <ng-option selected="selected" value="" disabled="disabled">
+                                    --{{ 'public.selectAccount' | translate }}--
+                                </ng-option>
+                                <ng-option *ngFor="let account of accountsFrom" [value]="account.key">
+                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}} {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                                </ng-option>
+                            </ng-select>
+                            <div *ngIf="form.controls.accountFrom.hasError('required') && form.controls.accountFrom.touched"
+                                 class="alert alert-danger">
+                                <small>{{'transfer.error.accountFromRequired' | translate }}</small>
+                            </div>
+                            <div *ngIf="form.hasError('notSameAccount') && (form.controls.accountFrom.touched || form.controls.accountTo.touched)"
+                                 class="alert alert-danger">
+                                <small>{{ 'error.sameAccount' | translate }}</small>
+                            </div>
+                            <div *ngIf="form.hasError('balance0') && (form.controls.accountFrom.touched || form.controls.accountTo.touched)"
+                                 class="alert alert-danger">
+                                <small>{{ 'error.balance0' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label class="required">{{
+                            'transfer.accountTo' | translate }}</label>
+                        <div class="form-control" style="padding-top: 9px">
+                            <ng-select [notFoundText]="'public.noData' | translate" formControlName="accountTo"
+
+                                       (change)="enableAmount($event)">
+                                <ng-option selected="selected" value="" disabled="disabled">
+                                    --{{ 'public.selectAccount' | translate }}--
+                                </ng-option>
+                                <ng-option *ngFor="let account of accountsTo" [value]="account.key"
+                                           [disabled]="account.key == accountFromSelected">
+
+                                    {{account?.value?.fullAccountNumber}}{{(account?.value?.alias != '' ? ' - ' + account?.value?.alias : '')}} {{(account?.value?.inquiry ? (' - ' + (account?.value?.availableBalance | amountCurrency:account?.value?.currency)) : '')}}
+                                    {{(account?.value?.inquiry ? ('currencyIso' | modelPipe:account?.value?.currency) : '')}}
+                                </ng-option>
+                            </ng-select>
+                            <div *ngIf="form.controls.accountTo.hasError('required') && form.controls.accountTo.touched"
+                                 class="alert alert-danger">
+                                <small>{{'transfer.error.accountToRequired' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-1">
+                    <div class="form-group">
+                        <label class="required">{{
+                            'transfer.amount' | translate }}</label>
+                        <div>
+                            <input class="form-control" formControlName="amount" (change)="onAmountChange()"
+                                   [maxlength]="18"
+                                   inputPattern="onlyPositiveDecimalNumbers" amount-format/>
+
+                            <div *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched"
+                                 class="alert alert-danger">
+                                <small>{{ 'error.amountRequired' | translate }} </small>
+                            </div>
+                            <div *ngIf="form.controls.amount.hasError('min') && form.controls.amount.touched"
+                                 class="alert alert-danger">
+                                <small>{{'transfer.amount' | translate }}{{ 'error.minValue' | translate }} </small>
+                            </div>
+                            <div *ngIf="form.controls.amount.hasError('max') && form.controls.amount.touched"
+                                 class="alert alert-danger">
+                                <small>{{'transfer.amount2' | translate }}{{ 'error.maxValue' | translate:{value: transferLimit} }} </small>
+                            </div>
+                            <div *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched"
+                                 class="alert alert-danger">
+                                <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric' | translate }} </small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{
+                            'transfer.currency' | translate }}</label>
+                        <div class="form-control" style="padding-top: 9px">
+                            <ng-select #ngSelectComponent formControlName="currency" [(ngModel)]="selectedCurrency"
+                                       (change)="currencySelected($event)">
+                                <ng-option selected="selected" value="" [disabled]="!isSarSourceDestination">
+                                    --{{ 'public.selectCurrency' | translate }}--
+                                </ng-option>
+                                <ng-option *ngFor="let currency of selectedCurrencies ; let i = index"
+                                           [value]="{index:i,currency:currency}">
+                                    {{'currencyType'|modelPipe :currency}}
+                                </ng-option>
+                            </ng-select>
+                            <div *ngIf="form.controls.currency.hasError('required') && form.controls.currency.touched"
+                                 class="alert alert-danger" style="margin-bottom:10%">
+                                <small>{{'transfer.error.currencyRequired' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.remarks' | translate }}</label>
+                        <div>
+                            <input class="form-control" formControlName="additional1"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+            <button type="button" class=" btn btn-default btn-wide"
+                    (click)="cancel()">{{'public.back' | translate }}</button>
+            <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!form.valid">
+                {{buttonLabel}}</button>
+        </div>
+    </form>
+</arb-panel>

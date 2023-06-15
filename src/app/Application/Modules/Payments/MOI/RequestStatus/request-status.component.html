@@ -1,0 +1,421 @@
+<arb-breadcrumb [routes]="[
+	['dashboard.payments'],
+	['payments.moiPayments.menu', ['/payments/moi']],
+    ['payments.moiPayments.request.name']
+]">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- PAYMENTS TABLE -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'payments.moiRequestStatus.payments' | translate }}
+                </div>
+
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="paymentsListTable"
+                                  [header]="'payments.moiRequestStatus.payments' | translate"
+                                  [columns]="[
+                        {'title':'payments.moiRequestStatus.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'payments.moiRequestStatus.serviceType' | translate ,'dataKey':'applicationType','modelKey': 'eGovApplicationTypeAll'},
+                        {'title':'payments.moiRequestStatus.beneficiaryName' | translate,'dataKey':'beneficiaryName'},
+                        {'title':'payments.moiRequestStatus.amount' | translate ,'dataKey':'amount'},
+                        {'title':'payments.moiRequestStatus.fees' | translate,'dataKey':'fees'},
+                         {'title':'myProfile.pending_actions.status' | translate,'dataKey':'statusExport'},
+                        {'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusExport'},
+                        {'title':'public.status' | translate,'dataKey':'status'}
+                    ]"></table-export>
+                </div>
+
+            </div>
+            <div class="sme-data-table__advisory">
+                {{ 'payments.moiRequestStatus.advisoryp'| translate }}
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <!-- EXPORT TYPES -->
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #paymentsListTable
+                                   class="material" [rows]="paymentsListPage.data" [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30"
+                                   [footerHeight]="50" [rowHeight]="defaultHeight"
+                                   [count]="paymentsListPage.page.totalElements"
+                                   [offset]="paymentsListPage.page.pageNumber" [limit]="paymentsListPage.page.pageSize"
+                                   (page)='setPagePayments($event)' (sort)="setSortPayments($event)"
+                                   [externalPaging]="true"
+                                   [externalSorting]="true">
+
+                        <ngx-datatable-column
+                                [width]="50"
+                                [sortable]="false"
+                                [canAutoResize]="false"
+                                [draggable]="false"
+                                [resizeable]="false"
+                                [headerCheckboxable]="true">
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="initiationDate" [width]="40">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiRequestStatus.initiationDate' | translate }}
+                                    </span>
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | date }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="applicationType">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper" style="display: inline-block; width: 100%; white-space: pre-wrap;">
+                                        {{'payments.moiRequestStatus.serviceType' | translate }}
+                                    </span>
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span style="display: inline-block; width: 100%; white-space: pre-wrap;">{{'eGovApplicationTypeAll' | modelPipe:value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="beneficiaryName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiPayments.request.beneficiaryName' | translate }}
+                                    </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiPayments.request.amount' | translate }}
+                                    </span>
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | amountCurrency: row.currency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="fees">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiPayments.request.fees' | translate }}
+                                    </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <ul *ngIf="value" style="padding: 0">
+                                    <li *ngFor="let val of value"
+                                        style="list-style-type:none">{{ val.feeAmount | amountCurrency }}
+<!--                                        <app-vat-calculator [fee]="val.feeAmount"></app-vat-calculator>-->
+                                    </li>
+                                </ul>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="80" class="mobile-hidden"
+                                              *ngIf="futureLevels">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | levels:'status' }}</span>
+                                <span class="human-selectable icon -info"
+                                      (click)="openModal(value,modalaramcoAuth)"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                              *ngIf="!futureLevels">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'public.curstatus' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | levels:'status' }}</span>
+                                <span class="human-selectable icon -info"
+                                      (click)="openModal(value,modalaramcoAuth)"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                              
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()"
+                                                  class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{ value | levels:'nextStatus' }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                              
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <span>{{ value | levels:'nextStatus' }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="status">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                   <span *ngIf="value=='R'">
+                                       <a class="human-selectable"
+                                          (click)="goActivate(row,'payment')">{{value | statusPipe}}</a>
+                                   </span>
+                                <span *ngIf="value=='A'">
+                                        <a class="human-selectable"
+                                           (click)="goDetail(row,'refuse')">{{value | statusPipe}}</a>
+                                    </span>
+                                <span *ngIf="value!='R' && value!='A'">{{value | statusPipe}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template
+                                    ngx-datatable-footer-template
+                                    let-rowCount="rowCount"
+                                    let-pageSize="pageSize"
+                                    let-selectedCount="selectedCount"
+                                    let-curPage="curPage"
+                                    let-offset="offset">
+                                <div class="sme-datatable-footer">
+                                    <datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            (change)="paymentsListTable.onFooterPage($event)">
+                                    </datatable-pager>
+
+                                    <div class="page-count">
+                                        <span>{{ 'public.showingLabel' | translate}}
+                                            {{(paymentsListPage.data.length > pageSize ? pageSize : paymentsListPage.data.length)}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span> |
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <select [(ngModel)]="this.paymentsListPage.page.pageSize"
+                                                (change)="this.setPagePayments(null)">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+            </div>
+        </div><!-- ./sme-data-table -->
+        <!-- /PAYMENTS TABLE -->
+
+        <!-- REFUNDS TABLE -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'payments.moiRequestStatus.refunds' | translate }}
+                </div>
+
+                <div class="sme-data-table__export">
+
+
+                    <table-export [dataTable]="refundsListTable"
+                                  [header]="'payments.moiRequestStatus.refunds' | translate"
+                                  [columns]="[
+                        {'title':'payments.moiRequestStatus.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'payments.moiRequestStatus.serviceType' | translate ,'dataKey':'applicationType','modelKey': 'eGovApplicationTypeAll'},
+                        {'title':'payments.moiRequestStatus.beneficiaryName' | translate,'dataKey':'beneficiaryName'},
+                        {'title':'payments.moiRequestStatus.fees' | translate,'dataKey':'fees'},
+                         {'title':'myProfile.pending_actions.status' | translate,'dataKey':'statusExport'},
+                        {'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusExport'},
+                        {'title':'public.status' | translate,'dataKey':'status'}
+                    ]"></table-export>
+                </div>
+            </div>
+            <div class="sme-data-table__advisory">
+                {{ 'payments.moiRequestStatus.advisoryp'| translate }}
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+
+                    <!-- EXPORT TYPES -->
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #refundsListTable
+                                   class="material" [rows]="refundsListPage.data" [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30"
+                                   [footerHeight]="50" [rowHeight]="defaultHeight"
+                                   [count]="refundsListPage.page.totalElements"
+                                   [offset]="refundsListPage.page.pageNumber" [limit]="refundsListPage.page.pageSize"
+                                   (page)='setPageRefunds($event)' (sort)="setSortRefunds($event)"
+                                   [externalPaging]="true"
+                                   [externalSorting]="true">
+
+                        <ngx-datatable-column
+                                [width]="50"
+                                [sortable]="false"
+                                [canAutoResize]="false"
+                                [draggable]="false"
+                                [resizeable]="false"
+                                [headerCheckboxable]="true">
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="initiationDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiRequestStatus.initiationDate' | translate }}
+                                    </span>
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | date }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="applicationType">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper" style="display: inline-block; width: 100%; white-space: pre-wrap;">
+                                        {{'payments.moiRequestStatus.serviceType' | translate }}
+                                    </span>
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span style="display: inline-block; width: 100%; white-space: pre-wrap;">{{'eGovApplicationTypeAll' | modelPipe:value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="beneficiaryName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiRequestStatus.beneficiaryName' | translate }}
+                                    </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="fees">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.moiRequestStatus.fees' | translate }}
+                                    </span>
+                            </ng-template>
+
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <ul *ngIf="value">
+                                    <li *ngFor="let val of value" style="list-style-type:none">
+                                        {{ val.feeAmount | amountCurrency }}
+                                        <app-vat-calculator [fee]="val.feeAmount"></app-vat-calculator>
+                                    </li>
+                                </ul>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="80" class="mobile-hidden"
+                                              *ngIf="futureLevels">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                  class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | levels:'status' }}</span>
+                                <span class="human-selectable icon -info"
+                                      (click)="openModal(value,modalaramcoAuth)"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                              *ngIf="!futureLevels">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                  class="datatable-header-cell-wrapper">{{ 'public.curstatus' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | levels:'status' }}</span>
+                                <span class="human-selectable icon -info"
+                                      (click)="openModal(value,modalaramcoAuth)"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                 <span (click)="sort()"
+                                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{ value | levels:'nextStatus' }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                  class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <span>{{ value | levels:'nextStatus' }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="status">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                  class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span *ngIf="value=='R'"><a class="human-selectable"
+                                                        (click)="goActivate(row,'refuse')">{{value | statusPipe}}</a></span>
+                                <span *ngIf="value=='A'">
+                                        <a class="human-selectable"
+                                           (click)="goDetail(row,'refuse')">{{value | statusPipe}}</a>
+                                    </span>
+                                <span *ngIf="value!='R' && value!='A'">{{value | statusPipe}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-datatable-footer">
+                                    <datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            (change)="refundsListTable.onFooterPage($event)">
+                                    </datatable-pager>
+
+                                    <div class="page-count">
+                                        <span>{{ 'public.showingLabel' | translate}}
+                                            {{(refundsListPage.data.length > pageSize ? pageSize : refundsListPage.data.length)}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span> |
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <select [(ngModel)]="this.refundsListPage.page.pageSize"
+                                                (change)="this.setPageRefunds(null)">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+            </div>
+        </div><!-- ./sme-data-table -->
+        <!-- /REFUNDS TABLE -->
+    </div>
+    <app-levels-popup #modalaramcoAuth></app-levels-popup>
+
+</div>

@@ -1,0 +1,33 @@
+<app-Hajj-Umrah-Allocations-table
+        [items]="pageResultAllocation.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="pageResultAllocation.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (onSelect)="onSelectAllocation($event)"
+        (changeDisplaySize)="changeDisplaySize($event)"
+        (onRowSelected)="emit('tableAllocations')"
+        [tableToEmpty]="tableToEmpty"
+        [name]="'tableAllocations'">
+</app-Hajj-Umrah-Allocations-table>
+
+<app-Hajj-Umrah-table
+        [items]="pageResult.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="pageResult.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (onSelect)="onSelectOperation($event)"
+        (changeDisplaySize)="changeDisplaySize($event)"
+        (onRowSelected)="emit('tableOperations')"
+        [tableToEmpty]="tableToEmpty"
+        [name]="'tableOperations'">
+</app-Hajj-Umrah-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

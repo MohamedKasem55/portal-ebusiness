@@ -1,0 +1,38 @@
+import { NgModule } from '@angular/core';
+import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
+import { AppSharedModule } from "../../../core/shared/shared.module";
+import { Step1Component } from "../../Modules/Registration/components/Step1/step1.component";
+import { Step2Component } from "../../Modules/Registration/components/Step2/step2.component";
+import { Step3Component } from "../../Modules/Registration/components/Step3/step3.component";
+import { Step4Component } from "../../Modules/Registration/components/Step4/step4.component";
+import { Step5Component } from "../../Modules/Registration/components/Step5/step5.component";
+import { Step6Component } from "../../Modules/Registration/components/Step6/step6.component";
+import { Step7Component } from "../../Modules/Registration/components/Step7/step7.component";
+import { RegistrationRoutingModule } from "../../Modules/Registration/registration-routing.module";
+import { RegistrationComponent } from "../../Modules/Registration/registration.component";
+import { RegistrationService } from "../../Modules/Registration/registration.service";
+
+
+
+
+@NgModule({
+  imports: [
+    AppSharedModule,
+    RegistrationRoutingModule,
+    BsDatepickerModule.forRoot()
+  ],
+  declarations: [
+    RegistrationComponent,
+    Step1Component,
+    Step2Component,
+    Step3Component,
+    Step4Component,
+    Step5Component,
+    Step6Component,
+    Step7Component
+  ],
+  providers: [
+    RegistrationService
+  ]
+})
+export class RegistrationModule { }

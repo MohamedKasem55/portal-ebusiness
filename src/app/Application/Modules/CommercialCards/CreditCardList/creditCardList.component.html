@@ -1,0 +1,143 @@
+<!-- <div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active"><a href="#"
+                [routerLink]="['/businessCards/menu']">{{ 'commercialCards.name' | translate }}</a></li>
+        <li class="active">{{ 'commercialCards.creditCardListName'| translate }}</li>
+    </ol>
+</div> -->
+<arb-breadcrumb [routes]="getRoutes()">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-data-table__head padding">
+                    <div class="sme-data-table__title">
+                        {{ 'commercialCards.creditCardListName'| translate }}
+                    </div>
+                    <div class="center-table-buttons">
+                        <div>
+                            <div class="sme-data-table__head">
+                                <!-- <div class="sme-data-table__title">{{'commercialCards.requestStatus' | translate }}
+                                </div> -->
+                                <div class="sme-data-table__export">
+                                    <table-export [dataTable]="businessCardsListTable"
+                                        [header]="'commercialCards.businessCardsList' | translate" [columns]="[
+                                              {'title': 'commercialCards.cardAccount' | translate, 'dataKey':'cardAccount'},
+                                              {'title': 'commercialCards.holderName' | translate, 'dataKey':'embossingName'},
+                                              {'title': 'commercialCards.cardNumber' | translate, 'dataKey':'cardNumber'},
+                                              {'title': 'commercialCards.availableCash' | translate, 'dataKey':'availableCash'},
+                                              {'title': 'commercialCards.dueAmount' | translate, 'dataKey':'dueAmount'},
+                                              {'title': 'commercialCards.unbilledAmount' | translate, 'dataKey':'unbilledAmt'}
+                                              ]">
+                                    </table-export>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="sme-table table headerDataTable" style="display: none">
+                                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                                        #businessCardsListTable [rows]="businessCardsList" [count]="total"
+                                        [externalPaging]="false" [headerHeight]="30" [externalSorting]="false"
+                                        [limit]="tableDisplaySize">
+                                        <!--  (page)='setPage($event)'> -->
+                                    </ngx-datatable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid" style="padding-top: 0px;">
+                    <div class="sme-page-block">
+                        <div class="sme-form">
+                            <div class="sme-form__content">
+                                <div class="sme-form__body" *ngIf="businessCardsList && slides.length>0; else noData">
+                                    <ngb-carousel [showNavigationArrows]="showArrowsOption()" [interval]=0
+                                        [pauseOnHover]="false" class="carousel-own-styles" (slide)="onSlide($event)"
+                                        #myCarousel="ngbCarousel">
+                                        <ng-template ngbSlide
+                                            *ngFor="let businessCardsListArray of slides;let j = index" ngbSlide
+                                            [id]="'slideId_'+j">
+                                            <div class="flex-wrap">
+                                                <div class="list-line" (click)="infoDetails(businessCardsItem)"
+                                                    *ngFor="let businessCardsItem of businessCardsListArray.businessCardsList;let i=index">
+                                                    <div class="head-list" style="margin-top: 5px; cursor:pointer">
+                                                        <div id="image" class="display-div-column">
+                                                            <img *ngIf="businessCardsItem.cardIcon; else imageCard"
+                                                                [src]="businessCardsItem.cardIcon"
+                                                                class="image-little-target" />
+                                                            <ng-template #imageCard>
+                                                                <span class="image-little-target"></span>
+                                                            </ng-template>
+                                                        </div>
+                                                    </div>
+                                                    <div class="cap-targets-list">
+                                                        <div class="body-list little-font">
+                                                            <div class="titlePin message"> <span
+                                                                    class="display-div-column text-name">{{businessCardsItem.cardNickName}}</span>
+                                                            </div>
+                                                            <div *ngIf="businessCardsItem.cardStatus" class="message">
+                                                                <span
+                                                                    class="display-div-column navy-bold">{{businessCardsItem.cardNumber
+                                                                    | hiddenAccount:businessCardsItem.cardStatus}}
+                                                                    - {{businessCardsItem.creditCardType}}</span>
+                                                            </div>
+                                                            <div *ngIf="!businessCardsItem.cardStatus" class="message">
+                                                                <span
+                                                                    class="display-div-column">{{businessCardsItem.cardNumber
+                                                                    |
+                                                                    hiddenAccount:businessCardsItem.cardStatus}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div *ngIf="businessCardsItem.cardStatus;else activate"
+                                                            class="footer-list little-font">
+                                                            <div class="titlePin message"> <span
+                                                                    class="display-div-column">{{'commercialCards.rewardpoints'
+                                                                    | translate | uppercase}}</span>
+                                                            </div>
+                                                            <div class="message"> <span
+                                                                    class="display-div-column navy">{{businessCardsItem.rewardPoints
+                                                                    | amountCurrency}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <ng-template #activate>
+                                                            <!-- activate cards functionality temporarily disabled -->
+                                                            <div class="footer-list little-font">
+                                                                <div class="center-button-active">
+                                                                    <button type=" button" class="button-card-active"
+                                                                        (click)="activateCard(businessCardsItem)">
+                                                                        {{ 'public.activate' | translate }}</button>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngb-carousel>
+                                    <div class="footer-carousel">
+                                    </div>
+
+                                </div>
+                                <ng-template #noData>
+                                    <div class="sme-form__body">
+                                        <div class="noTargetsData">
+                                            <span class="text-legend">{{'commercialCards.noTargetsData' | translate
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="submit" class=" btn btn-default btn-wide" (click)="back()"> {{'public.back' | translate}}</button>
+        <button type="submit" class=" btn btn-primary btn-wide" (click)="next()" [disabled]="nextDisabled()">
+            {{'public.next' | translate}}</button>
+    </div>

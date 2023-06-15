@@ -1,0 +1,61 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+                            <div class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                <span *ngIf="aliasDetails.proxyAction == 'LINK'">
+                                    {{ 'menu.company_admin.alias-management.success' | translate }} <br> </span>
+                                <span *ngIf="aliasDetails.proxyAction != 'LINK'">
+                                    {{ 'menu.company_admin.alias-management.successUnLink' | translate }} <br> </span>
+                                <br>
+                                <div>
+                                    <label *ngIf="aliasDetails.proxyType=='UNN'">{{
+                                        'menu.company_admin.alias-management.crNumber' | translate
+                                        }}</label>
+                                    <label *ngIf="aliasDetails.proxyType=='MOBILE'">{{
+                                        'menu.company_admin.alias-management.mobile' | translate
+                                        }}</label>
+                                    <label *ngIf="aliasDetails.proxyType=='EMAIL'">{{
+                                        'menu.company_admin.alias-management.email' | translate
+                                        }}</label>
+                                    <div class="titlePin " style="margin-top: 10px">
+                                        <span class="border-none">{{aliasDetails.proxyValue }}</span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    <label>{{
+                                        'menu.company_admin.alias-management.account' | translate
+                                        }}</label>
+                                    <div class="titlePin " style="margin-top: 10px">
+                                        <span class="border-none">{{aliasDetails.iban }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="sme-form__actions">
+                    <a class="btn btn-default btn-wide addBtn" routerlinkactive="active" (click)="add()">{{
+                        'menu.company_admin.alias-management.add' |
+                        translate }}</a>
+                    <a class="btn btn-primary btn-wide" routerlinkactive="active" (click)="home()">{{
+                        'menu.company_admin.alias-management.home' |
+                        translate }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

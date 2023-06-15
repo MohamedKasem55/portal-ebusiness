@@ -1,0 +1,116 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'directDebits.newPayer' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+
+<form autocomplete="off" [formGroup]="form">
+<div class="container-fluid" formArrayName="elements" *ngFor="let element of elements; let i=index">
+	<div [formGroupName]="i">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+					<div class="sme-form__body">
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'directDebits.mandateReference' |
+											translate }}</label> 
+										<span class="form-control disabled">{{element.controls.mandate?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.personalName'
+											| translate }}</label> 
+										<span class="form-control disabled">{{element.controls.personalName?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+							</div>
+							<div class="row">	
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{
+											'directDebits.payerAccount' | translate }}</label> 
+										<span class="form-control disabled">{{element.controls.account?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{
+											'public.bank' | translate }}</label> 
+										<span class="form-control disabled" [innerHTML]="banksMap.get(element.controls.bank?.value)"></span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{
+											'directDebits.amount' | translate }}</label> 
+										<span class="form-control disabled">{{element.controls.amount?.value | amountCurrency}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.personalAddress1' |
+											translate }}</label> 
+										<span class="form-control disabled">{{element.controls.personalAddress1?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.personalAddress2' |
+											translate }}</label> 
+										<span class="form-control disabled">{{element.controls.personalAddress2?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.description1' |
+											translate }}</label> 
+										<span class="form-control disabled">{{element.controls.description1?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.description2' |
+											translate }}</label> 
+										<span class="form-control disabled">{{element.controls.description2?.value}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+							</div>
+							
+					</div>			
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>
+</div>
+</form>	

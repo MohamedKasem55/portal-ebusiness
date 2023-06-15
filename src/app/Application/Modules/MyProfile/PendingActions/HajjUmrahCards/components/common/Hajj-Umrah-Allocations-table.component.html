@@ -1,0 +1,300 @@
+<div class="sme-content-container container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.cardAllocations' | translate }}
+            </div>
+
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="tableAllocations"
+                              [header]="'myProfile.pending_actions.cardAllocations' | translate"
+                              [columns]="[
+                                {'title': 'payments.hajjumrahcards.cardOperation.InitiationDate' | translate, 'dataKey':'initiationDate'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.CardNumber' | translate, 'dataKey':'cardNumber'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.cardHolderName' | translate, 'dataKey':'cardHolderName'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.passportNumber' | translate, 'dataKey':'passportNumber'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.visaNumber' | translate, 'dataKey':'visaNumber'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.visaExpiryDate' | translate, 'dataKey':'visaExpiryDate'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.Amount' | translate, 'dataKey':'amount'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.Fees' | translate, 'dataKey':'expectedFees'},
+                                {'title': 'payments.hajjumrahcards.cardOperation.status' | translate, 'dataKey':'statusExport'},
+                                {'title': 'myProfile.pending_actions.nextStatus' | translate, 'dataKey':'nextStatusExport'}
+                                ]"></table-export>
+            </div>
+        </div>
+
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tableAllocations
+                           class="material sme-table sme-table--responsive table" [columnMode]="defaultColumnMode"
+                           [headerHeight]="30"
+                           [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [rows]="items" [count]="totalSize"
+                           [limit]="tableDisplaySize" [externalPaging]="externalPagination"
+                           [externalSorting]="externalPagination"
+                           [rowIdentity]="getIdFunction()" [selectionType]="defaultSelectionType"
+                           (page)='setInnerPage($event)'
+                           (select)='onInnerSelect($event)' (change)="emitChange()">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.InitiationDate' | translate }}</label>
+                                        <div>
+                                            <span>{{row.initiationDate | date:'dd/MM/yyyy HH:mm'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.CardNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.cardNumber}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.cardHolderName' | translate }}</label>
+                                        <div>
+                                            <span>{{row.cardHolderName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.passportNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.passportNumber}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.visaNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.visaNumber}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.Operation' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.visaExpiryDate | date:'dd/MM/yyyy' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.Amount' | translate }}</label>
+                                        <div>
+                                            <span>{{row.amount | amountCurrency}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.Fees' | translate }}</label>
+                                        <div>
+                                            <span>{{row.expectedFees}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.status' | translate }}</label>
+                                        <div>
+                                            <span>{{row.CurrentStatusNextLevels}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.hajjumrahcards.cardOperation.NextLevels' | translate }}</label>
+                                        <div>
+                                            <span>{{row.NextLevels}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+                <ngx-datatable-column *ngIf="selectable" [width]="50" [sortable]="false" [canAutoResize]="false"
+                                      [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"
+                                      [checkboxable]="true">
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="CardNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.InitiationDate' | translate }}
+                        </span>
+                        <br/>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.CardNumber' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{row.initiationDate | date:'dd/MM/yyyy HH:mm'}}</span>
+                        <br/>
+                        <span>{{row.cardNumber}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="passportNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.cardHolderName' | translate }}
+                        </span>
+                        <br/>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.passportNumber' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{row.cardHolderName}}</span>
+                        <br/>
+                        <span>{{row.passportNumber}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="visaNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.visaNumber' | translate }}
+                        </span>
+                        <br/>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.visaExpiryDate' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{row.visaNumber}}</span>
+                        <br/>
+                        <span>{{ row.visaExpiryDate | date:'dd/MM/yyyy' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="Amount">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.Amount' | translate }}
+                        </span>
+                        <br/>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.hajjumrahcards.cardOperation.Fees' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{row.amount | amountCurrency}}</span>
+                        <br/>
+                        <span>{{row.expectedFees}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" *ngIf="!futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="50" *ngIf="futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [visiblePagesCount]="visiblePagesCount"
+                                    (change)="tableAllocations.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(items.length > pageSize ? pageSize : items.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [ngModel]="tableDisplaySize"
+                                                (ngModelChange)="onChangeSize($event)">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

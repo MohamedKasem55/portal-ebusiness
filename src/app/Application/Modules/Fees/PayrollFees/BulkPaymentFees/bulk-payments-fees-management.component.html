@@ -1,0 +1,242 @@
+<arb-breadcrumb [routes]="[
+['companyAdmin.companyAdmin'],
+['dashboard.feesManagement'],
+['feesManagement.bulkPaymentsFees']
+]">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+
+    <div class="sme-head">
+        <div class="sme-head__title">
+            <h2>{{ 'feesManagement.bulkPaymentsFees'| translate }}</h2>
+        </div>
+    </div>
+
+    <div class="sme-panel__body">
+        <div class="sme-panel__body">
+            <div class="row">
+                <div class="col col-sm-12">
+                    <div class="sme-table table headerDataTable">
+                        <table *ngIf="bulkPaymentFees"
+                               class="material sme-table sme-table--responsive table ngx-datatable virtualized">
+                            <!--                            <thead class="datatable-header ">-->
+                            <!--                            <tr class="datatable-row-center datatable-header-cell">-->
+                            <!--                                <td colspan="3"><span class="datatable-header-cell-wrapper "></span></td>-->
+                            <!--                            </tr>-->
+                            <!--                            </thead>-->
+                            <tr class="datatable-body datatable-row-wrapper datatable-body-row">
+                                <td style="width: 20%;padding-left: 10px;"
+                                    class="datatable-body-cell datatable-body-cell-label">
+                                    <b>{{ 'feesManagement.companyLbl' | translate }}</b></td>
+                                <td style="width: 30%;"
+                                    class="datatable-body-cell datatable-body-cell-label">{{ bulkPaymentFees.profileNumber !== null ? bulkPaymentFees.profileNumber : ''}}</td>
+                                <td style="width: 50%;" class="datatable-body-cell datatable-body-cell-label"
+                                    colspan="2"></td>
+                            </tr>
+                            <tr class="datatable-body datatable-row-wrapper datatable-body-row">
+                                <td style="width: 20%;padding-left: 10px"
+                                    class="datatable-body-cell datatable-body-cell-label">
+                                    <b>{{ 'feesManagement.organizationBulkCode' | translate }}</b></td>
+                                <td style="width: 30%;" colspan="3"
+                                    class="datatable-body-cell datatable-body-cell-label">{{ bulkPaymentFees.companyCode }}</td>
+                                <td style="width: 50%;" colspan="3"
+                                    class="datatable-body-cell datatable-body-cell-label"></td>
+                            </tr>
+                            <tr class="datatable-body datatable-row-wrapper datatable-body-row">
+                                <td style="width: 20%;padding-left: 10px;"
+                                    class="datatable-body-cell datatable-body-cell-label">
+                                    <b>{{ 'feesManagement.chargeAccount' | translate }}</b></td>
+                                <td style="width: 30%;" colspan="3"
+                                    class="datatable-body-cell datatable-body-cell-label"> {{ bulkPaymentFees.chargeAccountNumber }}</td>
+                                <td style="width: 50%;" colspan="3"
+                                    class="datatable-body-cell datatable-body-cell-label"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-3"></div>
+
+    <br/>
+
+    <div class="sme-data-table">
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #feesTable
+                           class="material  sme-table sme-table--responsive table" [rows]="feesPage.data"
+                           [columnMode]="defaultColumnMode"
+                           [headerHeight]="30" [footerHeight]="defaultHeight" [rowHeight]="defaultHeight"
+                           [limit]="tableDisplaySize">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow>
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'public.type' | translate}}</label>
+                                        <div>
+                                            <span>{{ 'feesDataType' | modelPipe:row.dataType }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'public.code' | translate}}</label>
+                                        <div>
+                                            <span>{{ getFeesTranslationCode(row.code) | translate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'public.totalFeeAmount' | translate}}</label>
+                                        <div>
+                                            <span class="human-selectable">{{ row.amount | amountCurrency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'public.feeWithoutVat' | translate}}</label>
+                                        <div>
+                                            <span *ngIf="row.dataType==='02'"
+                                                  class="human-selectable">{{ row.amount | baseAmount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'public.vat' | translate}}</label>
+                                        <div>
+                                            <span *ngIf="row.dataType==='02'"
+                                                  class="human-selectable">{{ row.amount | vatAmount }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="dataType" [width]="200"
+                                      [canAutoResize]="false" [draggable]="false"
+                                      [resizeable]="false" headerClass="text-align-center"
+                                      class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'feesManagement.type' | translate}} </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span> {{ 'feesDataType' | modelPipe:value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="code" [resizeable]="true"
+                                      [canAutoResize]="true"
+                                      headerClass="text-align-center"
+                                      class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.code' | translate}} </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span> {{ getFeesTranslationCode(value) | translate}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amount" [width]="150"
+                                      [canAutoResize]="false" [draggable]="false"
+                                      [resizeable]="false"
+                                      headerClass="text-align-center"
+                                      class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.totalFeeAmount' | translate}} </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>
+                            {{ value | amountCurrency}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amount" [width]="150"
+                                      [canAutoResize]="false" [draggable]="false"
+                                      [resizeable]="false"
+                                      headerClass="text-align-center"
+                                      class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.feeWithoutVat' | translate}} </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span *ngIf="row.dataType=='02'"> {{value | baseAmount}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amount" [width]="150"
+                                      [canAutoResize]="false" [draggable]="false"
+                                      [resizeable]="false"
+                                      headerClass="text-align-center"
+                                      class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.vat' | translate}} </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span *ngIf="row.dataType=='02'"> {{value | vatAmount}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-footer>
+                    <ng-template *ngIf="feesPage.data.length < feesPage.page.totalElements"
+                                 ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                    (change)="feesTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{feesPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="this.tableDisplaySize">
+                                                (change)="this.setPage(null)">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+
+
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+

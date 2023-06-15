@@ -1,0 +1,132 @@
+<arb-panel>
+    <h3 style="margin-bottom: 1%">{{'prePaidCard.applyForPrePaid' | translate}}</h3>
+    <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+
+
+    <label style="color: black">{{'prePaidCard.prepaidCardDetails' | translate}}</label>
+    <hr class="hr-no-margin">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.companyEmbossingName' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.companyEmbossingName?.value}} </label>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.account' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.account?.value}} </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.holderFirstName' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.holderFirstName?.value}} </label>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.holderLastName' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.holderLastName?.value}} </label>
+            </div>
+        </div>
+    </div>
+
+    <label style="color: black">{{'prePaidCard.ownerCardDetails' | translate}}</label>
+    <hr class="hr-no-margin">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.dataOfBirth' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.dataOfBirth?.value | dateFormat: 'dd/MM/yyyy' }} </label>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.gender' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.gender?.value.value ? form.controls.gender?.value.value : getGender(form.controls.gender?.value)}} </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.memberPhoneNumber' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.memberPhoneNumber?.value}} </label>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.city' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.city?.value.value ? form.controls.city?.value.value : ('cityType'| modelPipe:form.controls.city?.value)}} </label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.nationality' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.nationality?.value.value ? form.controls.nationality?.value.value : ( 'nationalityCode'| modelPipe:form.controls.nationality?.value  )}} </label>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label >{{'prePaidCard.national_id' | translate }}</label>
+                <br/><br/>
+                <label class="labelInfo-summery"> {{form.controls.national_id?.value}} </label>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="selectedUserJourney == 0 || (selectedUserJourney == 1 && form.controls.companyCR?.value)">
+        <label style="color: black">{{'prePaidCard.attached' | translate}}</label>
+        <hr class="hr-no-margin">
+
+        <div *ngIf="selectedUserJourney == 0" class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label >{{'prePaidCard.id_iqama' | translate }}</label>
+                    <br/><br/>
+                    <label class="labelInfo-summery"> {{form.controls.id_iqamaAttach?.value.fileName}} </label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label >{{'prePaidCard.empCertificate' | translate }}</label>
+                    <br/><br/>
+                    <label class="labelInfo-summery"> {{form.controls.empCertificateAttach?.value.fileName}} </label>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="selectedUserJourney == 1 && form.controls.companyCR?.value" class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label >{{'prePaidCard.companyCR' | translate }}</label>
+                    <br/><br/>
+                    <label class="labelInfo-summery"> {{form.controls.companyCR?.value}} </label>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+</arb-panel>
+
+

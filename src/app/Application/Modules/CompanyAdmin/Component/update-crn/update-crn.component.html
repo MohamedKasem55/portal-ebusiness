@@ -1,0 +1,71 @@
+<div class="sme-breadcrumb focus_index " tabindex="-1">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'menu.company_admin.menu' | translate }}</li>
+        <li class="active">{{ 'menu.company_admin.updateCR' | translate }}</li>
+    </ol>
+</div>
+
+
+<div class="sme-content-container container-fluid">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'public.updateCRN.crnID' | translate }}</span>
+                </span>
+            </li>
+
+            <li class="sme-wizard__step"
+                [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2 }"><span> <span
+                    class="icon -check"></span> <span
+                    class="text">{{'companyAdmin.alerts.summary' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+
+                <div class="sme-form__body">
+
+                    <div class="sme-form__title">
+                        <div class="col-xs-12 col-sm-6">{{ 'public.updateCRN.UpdateIDExpiryDate' | translate }}</div>
+                    </div>
+                    <div class="row" style="margin-top:2%">
+                        <div class="col-xs-12 col-sm-12 text-left">
+                            <div *ngIf="wizardStep==1"><p>{{'public.updateCRN.message1' | translate }}</p>
+                                <p>{{'public.updateCRN.message2' | translate }}</p></div>
+                            <div class="sme-wizard__success" *ngIf="wizardStep==2">
+                                <span class="icon -check"></span>
+                                {{'preferences.updateDone' | translate}}
+                                <div *ngIf="expiaryDate">
+                                    <p>{{'public.updateCRN.currentExpiryDate'| translate}}</p>
+                                    <small>{{expiaryDate}}</small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="container-fluid" *ngIf="wizardStep==1">
+                        <div class="sme-form__actions">
+                            <a class="btn btn-primary btn-wide" routerlinkactive="active"
+                               (click)="nextStep()">{{ 'public.update' | translate }}</a>
+                        </div>
+                    </div>
+                    <div class="container-fluid" *ngIf="wizardStep==2">
+                        <div class="sme-form__actions">
+                            <a class="btn btn-primary btn-wide" routerlinkactive="active"
+                               (click)="backToHome()">{{ 'public.updateCRN.backButton' | translate }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

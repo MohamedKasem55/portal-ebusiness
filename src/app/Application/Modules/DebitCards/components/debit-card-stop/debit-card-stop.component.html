@@ -1,0 +1,31 @@
+<!-- BREADCRUMB -->
+<arb-steps
+        [steps]="['public.completeDetails', 'public.confirm','public.summary']"
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<app-debit-card-stop-step1 *ngIf="wizardStep == 1"
+                                                    [formModel]="formModel"
+                                                    [card]="selectedCard">
+</app-debit-card-stop-step1>
+
+<app-debit-card-stop-step2 *ngIf="wizardStep == 2"
+                                                    [formModel]="formModel"
+                                                    [card]="selectedCard">
+</app-debit-card-stop-step2>
+
+<app-debit-card-stop-step3 *ngIf="wizardStep == 3">
+</app-debit-card-stop-step3>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed() && wizardStep!=1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()"
+            (click)="previous()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

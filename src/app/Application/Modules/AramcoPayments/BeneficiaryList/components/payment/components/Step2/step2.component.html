@@ -1,0 +1,97 @@
+<form autocomplete="off" [formGroup]="form">
+    <div formArrayName="beneficiaries">
+        <div class="container-fluid" *ngFor="let item of form.controls.beneficiaries['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="sme-page-block">
+                    <div class="sme-form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__head">{{ 'aramcoPayments.aramcoPayment' | translate }} {{i+1}}
+                                <a class="sme-form__close btn" (click)="removeBeneficiary(i)">
+                                        <span class="icon -close"></span>
+                                    </a>
+                            </div>
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="legend">{{'aramcoPayments.paymentDetails' | translate}}</div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-account" class="required">{{ 'aramcoPayments.account' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div class="form-control">
+                                                    <ng-select id="aramcoPayments-account" formControlName="account" (change)="setBalanceLimit(i, $event.target)">
+                                                        <ng-option selected value disabled>--{{ 'public.selectAccount' | translate }}--</ng-option>
+                                                        <ng-option *ngFor="let account of sharedData.accounts" [value]="account.key">{{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}} {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}}</ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="item.controls.account.hasError('required') && item.controls.account.touched" class="alert alert-danger">
+                                                        <small>{{'public.account' | translate }} {{ 'error.required' | translate }}</small>
+                                                    </div>
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-amount" class="required">{{ 'aramcoPayments.amount' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input id="aramcoPayments-amount" class="form-control" formControlName="amount"
+                                                           inputPattern="onlyPositiveDecimalNumbers" (blur)="transformAmount($event,i)" />
+                                                    <div *ngIf="item.controls.amount.hasError('required') && item.controls.amount.touched" class="alert alert-danger">
+                                                        <small>{{ 'error.amountRequired' | translate }} </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('min') && item.controls.amount.touched" class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.minValue' | translate }} </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('max') && item.controls.amount.touched" class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.maxValue' | translate:{value:transfersLimit[i]} }} </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('pattern') && item.controls.amount.touched" class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric' | translate }} </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="legend">{{'aramcoPayments.beneficiarySummary' | translate}}</div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-name">{{ 'aramcoPayments.name' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input id="aramcoPayments-name" class="form-control" formControlName="customerName" />
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-passNumber">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input id="aramcoPayments-passNumber" class="form-control" formControlName="customerId" />
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

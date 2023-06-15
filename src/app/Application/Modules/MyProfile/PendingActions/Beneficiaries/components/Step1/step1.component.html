@@ -1,0 +1,41 @@
+<!-- <app-beneficiaries-within-table *ngIf="authenticationService.activateOption('PendingActionBeneficiaries',['TRANSFER_PRIVILEGE'],['TfGroup'])"
+    [items]="withinPagedResults.items"
+    [modal]="modalAuth"
+    [tableDisplaySize]="withinDisplaySize"
+    [totalSize]="withinPagedResults.total"
+    [futureLevels]="false"
+    [externalPagination]="true"
+    [selectable]="true"
+    (setPage)="setPageWithin($event)"
+    (onSelect)="onSelectWithin($event)"
+    (changeDisplaySize)="changeDisplayWithin($event)">
+</app-beneficiaries-within-table>
+
+<app-beneficiaries-local-table *ngIf="authenticationService.activateOption('PendingActionBeneficiaries',[  'TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])"
+    [items]="localPagedResults.items"
+    [modal]="modalAuth"
+    [tableDisplaySize]="localDisplaySize"
+    [totalSize]="localPagedResults.total"
+    [futureLevels]="false"
+    [externalPagination]="true"
+    [selectable]="true"
+    (setPage)="setPageLocal($event)"
+    (onSelect)="onSelectLocal($event)"
+    (changeDisplaySize)="changeDisplayLocal($event)">
+</app-beneficiaries-local-table> -->
+
+<app-beneficiaries-table
+        [items]="pagedResults.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="displaySize"
+        [totalSize]="pagedResults.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (onSelect)="onSelect($event)"
+        (changeDisplaySize)="changeDisplay($event)"
+        [selected]="sharedData.beneficiariesSelected">
+</app-beneficiaries-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

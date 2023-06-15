@@ -1,0 +1,43 @@
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'registration.selectAccount' | translate }}</div>
+
+	<div class="sme-head__actions">
+		<button class="btn  btn-primary btn-wide" (click)="addAcount()" [disabled]="!formData.accounts[formData.accounts.length-1].iban">
+			<span class="icon -plus-bold"></span>
+			<span class="text">{{ 'registration.addAccount' | translate }}</span>
+		</button>
+	</div>
+</div>
+
+
+<div class="sme-form__content">
+	<form class="sme-form__form" #stepForm="ngForm">
+		<div class="sme-form__body">
+			<div class="sme-form__group-title">{{ 'registration.enterAccountsNumberToRegister' | translate }}</div>
+			<fieldset>
+				<div class="sme-page-block">
+					<div class="sme-form">
+
+						<div *ngFor="let accountNumber of accountsNumber; let i = index" class="row">
+
+							<div class="col-xs-12 col-sm-3">
+								<a (click)="removeaccount(i)" class="sme-form__close btn">
+		                   			 <span class="icon -close"></span>
+		                		</a>
+								<div class="form-group form-group-help">
+									<label for="search-criteria--input-registration-iban">{{ 'registration.account' | translate }} {{accountNumber}}</label>
+									<div class="form-group__input">
+										<input type="text" class="form-control" id="search-criteria--input-registration-iban" placeholder="{{ 'registration.pleaseEnterIban' | translate }}"
+										 [(ngModel)]="formData.accounts[i].iban" name="iban{{accountNumber}}" autocomplete="off" maxlength="21" minlength="21" [required]="!formData.accounts[i]['valid']" inputPattern="onlyDigits" [disabled]="formData.accounts[i]['valid']">
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		
+	</form>
+</div>

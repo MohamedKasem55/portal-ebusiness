@@ -1,0 +1,422 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{title | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <arb-panel>
+                            <arb-panel>
+                                <div class="row">
+                                    <fieldset [disabled]="!this.readonly">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.organization' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ company.profileNumber }}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.organizationName' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ company.companyName }}
+                                                </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.crNumber' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ caEnrollmentData?.idNumber }}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.crIssueDate' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ caEnrollmentData?.crIssueDate }}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.crExpiryDate' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ caEnrollmentData?.crExpiryDate }}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.merchantIdentifier' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ caEnrollmentData?.olpId }}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.registrationDate' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ caEnrollmentData?.registrationDate }}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.merchantStatus' | translate }}</label>
+                                                <span class="form-control">
+                                                    {{ caEnrollmentData?.merchantStatus | serviceOLPStatus}}
+                                                    </span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                    <fieldset *ngIf="this.readonly">
+                                        <div class="col-xs-12 col-sm-12 form-control">
+                                                <span *ngIf="serviceOLPStatusActive()">
+                                                    {{ 'sadadOLP.caEnrollment.statusActiveMessage' | translate }}
+                                                </span>
+                                            <span *ngIf="serviceOLPStatusDisable()">
+                                                    {{ 'sadadOLP.caEnrollment.statusDisableMessage' | translate }}
+                                                </span>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.dateFrom' | translate }} </label>
+                                                <input name="fromDate" type="text" id="fromDate" class="form-control"
+                                                       required #fromDate="bsDatepicker" bsDatepicker
+                                                       formControlName="dateFrom" [bsConfig]="bsConfig"
+                                                       [minDate]="today"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label>{{ 'sadadOLP.caEnrollment.dateTo' | translate }} </label>
+                                                <input name="toDate" type="text" id="toDate" class="form-control"
+                                                       required #toDate="bsDatepicker" bsDatepicker
+                                                       formControlName="dateTo" [bsConfig]="bsConfig"
+                                                       [minDate]="dateFrom"/>
+                                            </div>
+                                        </div>
+                                        <arb-buttons>
+                                            <button class="btn btn-primary btn-wide"
+                                                    [disabled]="dateSelected()"
+                                                    *ngIf="serviceOLPStatusActive() && !serviceOLPOperationSelected()"
+                                                    (click)="updateService(service.serviceDisableOperation)">
+                                                {{'sadadOLP.caEnrollment.buttonDisable' | translate}}
+                                            </button>
+                                            <button class="btn btn-primary btn-wide"
+                                                    [disabled]="dateSelected()"
+                                                    *ngIf="serviceOLPStatusDisable() && !serviceOLPOperationSelected()"
+                                                    (click)="updateService(service.serviceActiveOperation)">
+                                                {{'sadadOLP.caEnrollment.buttonActivate' | translate}}
+                                            </button>
+                                            <button class="btn btn-primary btn-wide"
+                                                    *ngIf="serviceOLPOperationSelected()" (click)="confirmOperation()">
+                                                {{'sadadOLP.caEnrollment.buttonConfirm' | translate}}
+                                            </button>
+                                            <button class="btn btn-primary btn-wide"
+                                                    *ngIf="serviceOLPOperationSelected()" (click)="cancel()">
+                                                {{'sadadOLP.caEnrollment.buttonCancel' | translate}}
+                                            </button>
+                                        </arb-buttons>
+                                    </fieldset>
+                                </div>
+                            </arb-panel>
+                            <hr>
+                            <arb-panel>
+                                <div class="row">
+                                    <fieldset [disabled]="this.readonly">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="sicCode-select"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.account' | translate }}</label>
+                                                <select class="form-control" name="account-select" id="account-select"
+                                                        formControlName="accountNumber">
+                                                    <option selected value disabled>
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </option>
+                                                    <option *ngFor="let account of  accountOptions "
+                                                            [value]="account['numberAccount']">
+                                                        {{ account['numberAccount']}} - {{account['alias'] }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="caEnrollmentForm.controls.accountNumber.hasError('required')
+                                                        && caEnrollmentForm.controls.accountNumber.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.accountRequired' | translate }}</small>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="companyNameEN-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.companyNameEN' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       id="companyNameEN-input" formControlName="companyNameEN">
+                                                <div *ngIf="caEnrollmentForm.controls.companyNameEN.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.companyNameENRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="companyNameAR-input">{{ 'sadadOLP.caEnrollment.companyNameAR' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       id="companyNameAR-input" formControlName="companyNameAR">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="sicCode-select"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.sicCode' | translate }}</label>
+                                                <select class="form-control" name="sicCode-select" id="sicCode-select"
+                                                        formControlName="sicCode">
+                                                    <option selected value disabled>
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </option>
+                                                    <option *ngFor="let sicCode of getComboOptions('sicCode')"
+                                                            [value]="sicCode['key']">
+                                                        {{ sicCode['value'] }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="caEnrollmentForm.controls.sicCode.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.sicCodeRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="webSiteUrl-span">{{ 'sadadOLP.caEnrollment.webSiteUrl' | translate }}</label>
+                                                <span type="text" class="form-control" id="webSiteUrl-span">
+                                                        {{ caEnrollmentData?.webSiteUrl }}
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </arb-panel>
+                            <arb-panel-title [title]="'sadadOLP.caEnrollment.contactPerson'">
+                            </arb-panel-title>
+                            <arb-panel>
+                                <div class="row">
+                                    <fieldset [disabled]="this.readonly">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="firstName-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.firstName' | translate }}</label>
+                                                <input type="text" class="form-control" id="firstName-input"
+                                                       formControlName="firstName">
+                                                <div *ngIf="caEnrollmentForm.controls.firstName.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.firstNameRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="middleName-input">{{ 'sadadOLP.caEnrollment.middleName' | translate }}</label>
+                                                <input type="text" class="form-control" id="middleName-input"
+                                                       formControlName="middleName">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="lastName-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.lastName' | translate }}</label>
+                                                <input type="text" class="form-control" id="lastName-input"
+                                                       formControlName="lastName">
+                                                <div *ngIf="caEnrollmentForm.controls.lastName.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.lastNameRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="phoneNumber-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.phoneNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="phoneNumber-input"
+                                                       formControlName="telephoneNumber">
+                                            </div>
+                                            <div *ngIf="caEnrollmentForm.controls.telephoneNumber.hasError('required')"
+                                                 class="alert alert-danger">
+                                                <small>{{'sadadOLP.caEnrollment.error.telephoneNumberRequired' | translate }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="emailAddress-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.emailAddress' | translate }}</label>
+                                                <input type="text" class="form-control" id="emailAddress-input"
+                                                       formControlName="emailAddress">
+                                                <div *ngIf="caEnrollmentForm.controls.emailAddress.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.emailAddressRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </arb-panel>
+                            <arb-panel-title [title]="'sadadOLP.caEnrollment.contactPerson2'">
+                            </arb-panel-title>
+                            <arb-panel>
+                                <div class="row">
+                                    <fieldset [disabled]="this.readonly">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="firstName2-input">{{ 'sadadOLP.caEnrollment.firstName' | translate }}</label>
+                                                <input type="text" class="form-control" id="firstName2-input"
+                                                       formControlName="firstName2">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="middleName2-input">{{ 'sadadOLP.caEnrollment.middleName' | translate }}</label>
+                                                <input type="text" class="form-control" id="middleName2-input"
+                                                       formControlName="middleName2">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="lastName2-input">{{ 'sadadOLP.caEnrollment.lastName' | translate }}</label>
+                                                <input type="text" class="form-control" id="lastName2-input"
+                                                       formControlName="lastName2">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="phoneNumber2-input">{{ 'sadadOLP.caEnrollment.phoneNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="phoneNumber2-input"
+                                                       formControlName="telephoneNumber2">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="emailAddress2-input">{{ 'sadadOLP.caEnrollment.emailAddress' | translate }}</label>
+                                                <input type="text" class="form-control" id="emailAddress2-input"
+                                                       formControlName="emailAddress2">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </arb-panel>
+                            <arb-panel-title [title]="'sadadOLP.caEnrollment.merchantAddress'">
+                            </arb-panel-title>
+                            <arb-panel>
+                                <div class="row">
+                                    <fieldset [disabled]="this.readonly">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="addressLine1-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.addressLine1' | translate }}</label>
+                                                <input type="text" class="form-control" id="addressLine1-input"
+                                                       formControlName="addressLine1">
+                                                <div *ngIf="caEnrollmentForm.controls.addressLine1.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.addressLine1Required' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="addressLine2-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.addressLine2' | translate }}</label>
+                                                <input type="text" class="form-control" id="addressLine2-input"
+                                                       formControlName="addressLine2">
+                                                <div *ngIf="caEnrollmentForm.controls.addressLine2.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.addressLine2Required' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="city-input"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.city' | translate }}</label>
+                                                <input type="text" class="form-control" id="city-input"
+                                                       formControlName="city">
+                                                <div *ngIf="caEnrollmentForm.controls.city.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.cityRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="postalCode-input">{{ 'sadadOLP.caEnrollment.postalCode' | translate }}</label>
+                                                <input type="text" class="form-control" id="postalCode-input"
+                                                       formControlName="postalCode">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="country-select"
+                                                       class="required">{{ 'sadadOLP.caEnrollment.country' | translate }}</label>
+                                                <select class="form-control" name="country-select" id="country-select"
+                                                        formControlName="country">
+                                                    <option selected value disabled>
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </option>
+                                                    <option *ngFor="let country of getComboOptions('countryName')"
+                                                            [value]="country['key']">
+                                                        {{ country['value'] }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="caEnrollmentForm.controls.country.hasError('required')"
+                                                     class="alert alert-danger">
+                                                    <small>{{'sadadOLP.caEnrollment.error.countryRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="currency-span">{{ 'sadadOLP.caEnrollment.currency' | translate }}</label>
+                                                <span type="text" class="form-control" id="currency-span">
+                                                        {{ getCurrency() }}
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </arb-panel>
+                        </arb-panel>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

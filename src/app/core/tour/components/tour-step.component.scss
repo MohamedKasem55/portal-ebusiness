@@ -1,0 +1,229 @@
+@mixin arrow($pos: "down", $offset: 1rem, $width: 0.4rem, $color: white) {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    @if $pos == "right" {
+        border-right: $width solid $color;
+        border-top: $width solid transparent;
+        border-bottom: $width solid transparent;
+        left: -$width;
+        top: $offset;
+    } @else if $pos == "left" {
+        border-left: $width solid $color;
+        border-top: $width solid transparent;
+        border-bottom: $width solid transparent;
+        right: -$width;
+        top: $offset;
+    } @else if $pos == "down" {
+        border-bottom: $width solid $color;
+        border-left: $width solid transparent;
+        border-right: $width solid transparent;
+        top: -$width;
+        right: $offset;
+    } @else if $pos == "top" {
+        border-top: $width solid $color;
+        border-left: $width solid transparent;
+        border-right: $width solid transparent;
+        bottom: -$width;
+        right: $offset;
+    }
+}
+
+.tour-step-wrapper {
+    &.fade-on .tour-step-modal {
+        opacity: 0;
+    }
+    &:not(.animation-on) .tour-step-modal {
+        animation: fade 0.4s ease-in-out;
+    }
+    &.pos-down {
+        &.animation-on .tour-step-modal {
+            animation: stepDown 0.4s ease-in-out;
+        }
+        &.with-arrow {
+            &.with-arrow-left .tour-step-modal::after {
+                @include arrow("down", 90%);
+            }
+            &.with-arrow-center .tour-step-modal::after {
+                @include arrow("down", 45%);
+            }
+            &.with-arrow-right .tour-step-modal::after {
+                @include arrow("down", 10%);
+            }
+        }
+    }
+    &.pos-top {
+        &.animation-on .tour-step-modal {
+            animation: stepTop 0.4s ease-in-out;
+        }
+        &.with-arrow {
+            &.with-arrow-left .tour-step-modal::after {
+                @include arrow("top", 90%);
+            }
+            &.with-arrow-center .tour-step-modal::after {
+                @include arrow("top", 45%);
+            }
+            &.with-arrow-right .tour-step-modal::after {
+                @include arrow("top", 10%);
+            }
+        }
+    }
+    &.pos-left {
+        &.animation-on .tour-step-modal {
+            animation: stepLeft 0.4s ease-in-out;
+        }
+        &.with-arrow {
+            &.with-arrow-top .tour-step-modal::after {
+                @include arrow("left");
+            }
+            &.with-arrow-center .tour-step-modal::after {
+                @include arrow("left", 6rem);
+            }
+            &.with-arrow-bottom .tour-step-modal::after {
+                @include arrow("left", 12rem);
+            }
+        }
+    }
+    &.pos-right {
+        &.animation-on .tour-step-modal {
+            animation: stepRight 0.4s ease-in-out;
+        }
+        &.with-arrow {
+            &.with-arrow-top .tour-step-modal::after {
+                @include arrow("right");
+            }
+            &.with-arrow-center .tour-step-modal::after {
+                @include arrow("right", 6rem);
+            }
+            &.with-arrow-bottom .tour-step-modal::after {
+                @include arrow("right", 12rem);
+            }
+        }
+    }
+    &.pos-center {
+        &.animation-on .tour-step-modal {
+            animation: fade 0.4s ease-in-out;
+        }
+    }
+}
+.tour-step-modal {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.55);
+    z-index: 2100;
+    &__content {
+        padding: 0.8rem;
+        box-sizing: border-box;
+    }
+    &__header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding-left: 12px;
+    }
+    &__title {
+        font-weight: 500;
+        font-size: 22px;
+        padding-top: 10px;
+    }
+    &__body {
+        padding: 1rem 0;
+        min-height: 50px;
+        flex-grow: 2;
+        padding: 16px;
+    }
+    &__description {
+        line-height: 24px;
+    }
+    .tour-btn-close {
+        background: transparent;
+        border: none;
+        color: darkgrey;
+        font-size: 1.6rem;
+        margin: -5px 5px 0 0;
+        cursor: pointer;
+        &:hover {
+            color: var(--pale-grey);
+        }
+    }
+    &__footer {
+        padding: 1px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        justify-self: end;
+        width: 100%;
+        padding-top: 16px;
+        padding-bottom: 10px;
+    }
+}
+
+.tour-btn {
+    color: #2f2f2f;
+    width: auto;
+    height: auto;
+    border-radius: 4px;
+    background: transparent;
+    color: grey;
+    cursor: pointer;
+    padding: 6px 36px;
+    // box-shadow: 0 0 2px 2px  rgba(0, 0, 0, 0.24), inset 0 1px 3px 0 rgba(0, 0, 0, 0.16);
+    border: solid 1px grey;
+    transition: all 0.3s;
+    &:hover,
+    &:focus {
+        border-color: darken(grey, 5%);
+        // box-shadow: 1px 1px 2px 1px  rgba(0, 0, 0, 0.34);
+        outline: none;
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes stepDown {
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes stepLeft {
+    0% {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes stepRight {
+    0% {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes stepTop {
+    0% {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

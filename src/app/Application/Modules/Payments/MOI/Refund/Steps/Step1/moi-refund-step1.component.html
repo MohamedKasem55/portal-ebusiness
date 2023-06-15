@@ -1,0 +1,81 @@
+<arb-panel>
+    <h3>{{ 'payments.moiPayments.refunds.doStep1Title' | translate }}</h3>
+    <hr>
+    <app-moi-refund-form
+            [combosData]="combosData"
+            [formModel]="formModel"
+            [fieldsConfigs]="fieldsConfigs">
+    </app-moi-refund-form>
+
+    <arb-buttons>
+        <button class="btn btn-default btn-wide" type="reset" (click)="onResetRefund()">
+            {{ 'public.cancel' | translate}}
+        </button>
+        <button class="btn btn-primary btn-wide" (click)="onAddRefund()"
+                [disabled]="!this.formModel.valid">{{'public.add' | translate}}</button>
+    </arb-buttons>
+
+</arb-panel>
+
+<arb-panel>
+
+    <ng-container *ngFor="let pd of preparedData; index as i">
+
+        <div style="padding: 0 15px; border: 1px solid #d1d1d1;">
+
+            <div class="row" style="background-color: #d1d1d1; color: #0000cc; padding-top: 15px;">
+
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label style="background-color: #d1d1d1; color: #0000cc;">
+                            {{ 'payments.moiPayments.refunds.serviceType' | translate }}
+                        </label>
+                        <span class="form-control" style="background-color: #d1d1d1; color: #0000cc;">
+                            <b>{{getServiceTypeText(pd.formData.serviceType)}}</b>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label style="background-color: #d1d1d1; color: #0000cc;">
+                            {{ 'payments.moiPayments.refunds.applicationType' | translate }}
+                        </label>
+                        <span class="form-control" style="background-color: #d1d1d1; color: #0000cc;">
+                            <b>{{ getApplicationTypeText(pd.formData.serviceType, pd.formData.applicationType) }}</b>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-5">
+                    <div class="form-group">
+                        <label style="background-color: #d1d1d1; color: #0000cc;">
+                            {{ 'payments.moiPayments.refunds.account' | translate }}
+                        </label>
+                        <span class="form-control" style="background-color: #d1d1d1; color: #0000cc;">
+                            <b>{{ getAccountText(pd.formData.account) }}</b>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="button" class=" btn btn-primary" style="position: absolute; right: 30px;"
+                        (click)="removePreparedData(i)">
+                    <span class="human-selectable glyphicon glyphicon-trash">
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="row" style="padding-top: 15px;">
+                <app-dynamic-simple-extras-form-fields
+                        [formModel]="pd.formModel"
+                        [fieldsConfigs]="pd.fieldsConfigs"
+                        [combosData]="combosData"
+                        [translate_prefix]="'payments.moiPayments'">
+                </app-dynamic-simple-extras-form-fields>
+            </div>
+        </div>
+    </ng-container>
+
+</arb-panel>
+

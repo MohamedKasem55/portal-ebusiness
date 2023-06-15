@@ -1,0 +1,39 @@
+<!--Breadcrumb-->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards/view-sent-files']">{{ 'payroll.viewSentFiles'| translate }}</a></li>
+        <li class="active" *ngIf="wizardStep===1">{{ 'payroll.viewUploadedFile'| translate }}></li>
+        <li class="active" *ngIf="wizardStep!=1 && wizardStep!=4">{{ 'payroll.deleteUploadedFile'| translate }}></li>
+        <li class="active" *ngIf="wizardStep===4">{{ 'payroll.uploadedFile'| translate }}></li>
+    </ol>
+</div>
+
+ <!-- sme-head -->
+<div class="sme-head" *ngIf="wizardStep===1">
+    <div class="sme-head__title"><h2>{{ 'payroll.viewUploadedFileTitle'| translate }}</h2></div>
+</div>
+<div class="sme-head" *ngIf="wizardStep!=1 && wizardStep!=4">
+    <div class="sme-head__title"><h2>{{ 'payroll.deleteUploadedFile'| translate }}</h2></div>
+</div>
+<div class="sme-head" *ngIf="wizardStep===4">
+    <div class="sme-head__title"><h2>{{ 'payroll.uploadedFile'| translate }}</h2></div>
+</div>
+
+<!-- ROUTER OUTLET -->
+<div>
+    <router-outlet (activate)="componentAdded($event)"></router-outlet>
+</div>
+
+<!-- WizardSteps -->
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	
+		<button *ngIf="wizardStep===1" (click)="backViewSentFiles()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+        <button *ngIf="wizardStep===4" (click)="backViewUploadedFiles()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+        
+		<button *ngIf="wizardStep===2" (click)="back()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+		<button *ngIf="wizardStep===1" (click)="proceed()" class=" btn btn-primary btn-wide">{{ 'public.delete' | translate }}</button>
+		<button *ngIf="wizardStep===2" (click)="confirm()" class=" btn btn-primary btn-wide">{{ 'public.confirm' | translate }}</button>
+        <button *ngIf="wizardStep===3" (click)="accept()" class=" btn btn-primary btn-wide">{{ 'public.accept' | translate }}</button>
+</div>

@@ -1,0 +1,22 @@
+<!-- <div [ngClass]="status === 'accept' ? 'sme-check-acceptance' : 'sme-check'"> -->
+<div [ngClass]="{'sme-check-acceptance': status === 'accept','sme-check': status!= 'accept', 'sme-check-modal': status ==='modal'}">
+  <div *ngIf="status === 'accept';else other_status" class="sme-check-acceptance-icon">
+    <img [src]="img" alt="">
+  </div>
+  <ng-template #other_status>
+    <div  *ngIf="status != 'accept'" [ngClass]="className">
+      <img [src]="img" src="assets/icons/check-success.svg" alt="">
+    </div>
+  </ng-template>
+  <div class="sme-check-title">
+    <p>
+      {{title}}
+    </p>
+  </div>
+  <div *ngIf="hasBody" class="sme-check-desc">
+    <ng-content select=".check-body"></ng-content>
+  </div>
+</div>
+
+
+

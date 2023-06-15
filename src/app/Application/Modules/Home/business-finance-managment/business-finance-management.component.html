@@ -1,0 +1,253 @@
+<div class="sme-panel">
+    <arb-panel>
+        <div class="row" *ngIf="accounts && accounts.length>0">
+            <div class="col-xs-12 col-sm-12">
+                <app-select-account [useOldDesign]="false"
+                                    [accounts]="accounts"
+                                    (onAccountChange)="onAccountChange($event)"
+                                    (onScrollToEnd)="getAccounts()"
+                                    [logo]="'img/alrajhi-logo-circular.svg'"
+                ></app-select-account>
+            </div>
+        </div>
+
+        <br>
+        <div *ngIf='isAllAccountsSelected()'
+             style="display: flex; flex-flow: row; justify-content: space-between">
+            <div [ngClass]="{'currencies-ar': language === 'ar','currencies-en': language === 'en'}">
+                {{'bfm.CURRENCIES'|translate}}
+            </div>
+            <div style="display: flex; gap: 16px; margin: 0 24px 0 24px">
+                <div class="btn"
+                     [ngClass]="{'selected-tag': changeColorEvent(i), 'Tag-Filter': !changeColorEvent(i)}"
+                     (click)="changeCurrency(currencyObj.currency.toString(), i)"
+                     *ngFor="let currencyObj of currenciesList; let i = index">
+                    {{ 'currencyIso' | modelPipe: currencyObj.currency.toString() }}
+                </div>
+            </div>
+        </div>
+        <hr *ngIf="isAllAccountsSelected()" style="margin-top: 11px; margin-bottom: 24px">
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <app-collapse-card (onSelectAction)="changePeriod($event)" title="{{'bfm.CASH-FLOW'| translate}}"
+                                   [selectedIndex]="1"
+                                   [showCollapseArrow]="false" [containActions]="true" [actions]="actionsCashFlow">
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <span style="margin-left: 2%; margin-right: 2%">
+                                         {{ 'bfm.ACTUAL-CASH-FLOW' |translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <span style="margin-left: 2%; margin-right: 2%">
+                                 {{(actualIncomeAmount) ? (actualIncomeAmount - (-1 * actualExpenseAmount) | amountCurrency) :
+                                (actualExpenseAmount | amountCurrency)}}
+                                {{(actualExpenseCurrency) ? actualExpenseCurrency : ''}}
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                </app-collapse-card>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <app-card-view title="{{'bfm.INCOME'|translate}}" (clickEmitter)="changeView(1)"
+                               [hasLinkedAction]="selectedPeriodIndex != 0"
+                               hasLinkedActionTitle="{{'bfm.VIEW_ALL'|translate}}">
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-6" *ngIf="showActualIncomeAndExpenseAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                         {{'bfm.ACTUAL-INCOME'|translate}}
+                            </span>
+                        </div>
+                        <div class="col-xs-6" *ngIf="showExpensesAndDashboardAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                         {{'bfm.EXPECTED-INCOME'|translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-6" *ngIf="showActualIncomeAndExpenseAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                        {{actualIncomeAmount| amountCurrency}} {{actualExpenseCurrency}}
+                            </span>
+                        </div>
+                        <div class="col-xs-6" *ngIf="showExpensesAndDashboardAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                         {{expectedIncomeAmount| amountCurrency}} {{expectedIncomeCurrency}}
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                </app-card-view>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <app-card-view title="{{'bfm.EXPENSES'|translate}}" (clickEmitter)="changeView(2)"
+                               [hasLinkedAction]="selectedPeriodIndex != 0"
+                               hasLinkedActionTitle="{{'bfm.VIEW_ALL'|translate}}">
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-6" *ngIf="showActualIncomeAndExpenseAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                          {{'bfm.ACTUAL-EXPENSES'|translate}}
+                            </span>
+                        </div>
+                        <div class="col-xs-6" *ngIf="showExpensesAndDashboardAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                         {{'bfm.EXPECTED-EXPENSE'|translate}}
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-6" *ngIf="showActualIncomeAndExpenseAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                        {{actualExpenseAmount < 0 ? ((-1 * actualExpenseAmount) | amountCurrency) : actualExpenseAmount | amountCurrency}} {{actualExpenseCurrency}}
+                            </span>
+                        </div>
+                        <div class="col-xs-6" *ngIf="showExpensesAndDashboardAnalytics">
+                            <span style="margin-left: 3%; margin-right: 3%">
+                                         {{expectedExpenseAmount < 0 ? ((-1 * expectedExpenseAmount) | amountCurrency) : expectedExpenseAmount| amountCurrency}} {{expectedExpenseCurrency}}
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                </app-card-view>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div *ngIf="(view === 1 || view === 4) && selectedPeriodIndex != 0">
+            <div style="display: flex; margin-bottom: 25px" (click)="navigateToMainDashboard()">
+                <div [ngClass]="{'right': language === 'ar','left': language === 'en'}">
+                </div>
+                <span style="margin: 2px 10px 0 10px; color: #221afb; cursor: pointer">
+                {{'bfm.BACK'|translate}}
+            </span>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <app-card-view [title]="'bfm.TOP_INCOME'" >
+                        <div class="container-fluid">
+                            <app-doughnut-chart class="multiple-charts-minor"
+                                                [chartType]="'doughnut'"
+                                                height="44.5vh"
+                                                [chartData]="topIncomeDoughnutChartData"
+                                                [useDefaultLegend]="false"
+                                                [interactiveLegend]="false"
+                                                [labelExtras]="topIncomeCategories"
+                                                (onLabelClick)="getTopSubCategory($event.extras)"
+                                                [valueText]="totalIncomeDoughnutChart | digitsLetterFormatterPipe"
+                                                [titleText]="'bfm.TOTAL_INCOME'|translate">
+                            </app-doughnut-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+                <div class="col-xs-12 col-sm-4" *ngIf="topIncomePOSByLocationChartData?.data?.length > 0">
+                    <app-card-view title="{{'bfm.POS_TOTAL_INCOME'|translate}}">
+                        <div class="container-fluid">
+                            <app-doughnut-chart class="multiple-charts-minor"
+                                                [chartType]="'doughnut'"
+                                                height="44.5vh"
+                                                [chartData]="topIncomePOSByLocationChartData"
+                                                [useDefaultLegend]="false"
+                                                [interactiveLegend]="false"
+                                                [valueText]="totalIncomePOSByLocation | digitsLetterFormatterPipe"
+                                                [titleText]="'bfm.POS_BY_LOCATION'|translate">
+                            </app-doughnut-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+                <div [ngClass]="(topIncomePOSByLocationChartData?.data?.length > 0)?'col-xs-12 col-sm-4':'col-xs-12 col-sm-8'">
+                    <app-card-view title="{{'bfm.INCOME_BY_CATEGORY'|translate}}">
+                        <div class="container-fluid">
+                            <app-bar-chart [chartType]="'bar'"
+                                           [chartData]="topIncomeByCategoryBarChartData"
+                                           [labelExtras]="topIncomeCategories"
+                                           (onLabelClick)="getTopSubCategory($event)"
+                                           height="44.5vh">
+                            </app-bar-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="(view === 2 || view === 5) && selectedPeriodIndex != 0">
+            <div style="display: flex; margin-bottom: 25px" (click)="navigateToMainDashboard()">
+                <div [ngClass]="{'right': language === 'ar','left': language === 'en'}">
+                </div>
+                <span style="margin: 2px 10px 0 10px; color: #221afb; cursor: pointer">
+                {{'bfm.BACK'|translate}}
+            </span>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <app-card-view [title]="'bfm.TOP_EXPENSES'|translate">
+                        <div class="container-fluid">
+                            <app-doughnut-chart class="multiple-charts-minor"
+                                                [chartType]="'doughnut'"
+                                                height="44.5vh"
+                                                [chartData]="topExpenseDoughnutChartData"
+                                                [useDefaultLegend]="false"
+                                                [interactiveLegend]="false"
+                                                [labelExtras]="topExpenseCategories"
+                                                (onLabelClick)="getTopSubCategory($event.extras)"
+                                                [valueText]="(totalExpenseByCategory< 0)?
+                                        ((-1 * totalExpenseByCategory) | digitsLetterFormatterPipe):
+                                        (totalExpenseByCategory | digitsLetterFormatterPipe)"
+                                                [titleText]="'bfm.TOTAL_EXPENSE'|translate"
+                            >
+                            </app-doughnut-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+                <div class="col-xs-12 col-sm-8">
+                    <app-card-view [title]="'bfm.EXPENSES_BY_CATEGORY'|translate">
+                        <div class="container-fluid">
+                            <app-bar-chart [chartType]="'bar'"
+                                           [chartData]="topExpenseByCategoryBarChartData"
+                                           [labelExtras]="topExpenseCategories"
+                                           (onLabelClick)="getTopSubCategory($event)"
+                                           height="44.5vh">
+                            </app-bar-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="view === 3 && selectedPeriodIndex != 0">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <app-card-view [title]="'bfm.CASH_FLOW_OVERVIEW'|translate">
+                        <div class="container-fluid">
+                            <app-bar-chart [chartType]="'bar'"
+                                           [chartData]="cashOverFlowChartData"
+                                           height="44.5vh">
+                            </app-bar-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <app-card-view [title]="'bfm.AVAILABLE_BALANCE'|translate">
+                        <div class="container-fluid">
+                            <app-line-chart
+                                    [chartData]="availableBalanceChartData"
+                                    [timeUnit]="selectedPeriodIndex == 1 ? 'day' : 'month'"
+                                    height="44.5vh">
+                            </app-line-chart>
+                        </div>
+                    </app-card-view>
+                </div>
+            </div>
+        </div>
+    </arb-panel>
+</div>
+<br>

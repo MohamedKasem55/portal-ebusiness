@@ -1,0 +1,300 @@
+<arb-breadcrumb [routes]="[
+                        ['dashboard.payrolls'],
+                        ['dashboard.payrollManagment', ['/payroll/payroll-management']],
+                        ['payroll.manageEmployees']
+                        ]">
+</arb-breadcrumb>
+
+<arb-panel-buttons>
+    <a class="btn btn-primary btn-wide" style="margin-left: 5px; margin-right: 5px;"
+       (click)="goAddEmployee()">{{
+        'payroll.addEmployee' | translate }}
+    </a>
+    <a class="btn btn-primary btn-wide" style="margin-left: 5px; margin-right: 5px;"
+       [routerLink]="['/payroll/payroll-management/employee-upload-file']">{{
+        'payroll.uploadEmployeeFile' | translate }}</a>
+
+    <a class="btn btn-primary btn-wide" style="margin-left: 5px; margin-right: 5px;"
+       [routerLink]="['/payroll/payroll-management/salary-payment-upload-file']">{{
+        'payroll.salaryPaymentUploadFile' | translate }}</a>
+</arb-panel-buttons>
+
+<arb-panel>
+    <form autocomplete="off" [formGroup]="searchForm" (ngSubmit)="search()">
+        <a class="sme-form__head collapsed" role="button"
+           (click)="isCollapsedContent = !isCollapsedContent"> <span>{{
+            'public.search' | translate }}</span>
+        </a>
+        <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+            <div class="sme-form__body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'payroll.employeeNumber' |
+                                translate }}</label>
+                            <input type="text" class="form-control"
+                                   formControlName="employeeNumber">
+                        </div>
+                        <!-- ./sme-form-group -->
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'payroll.employeeName'
+                                | translate }}</label>
+                            <input type="text" class="form-control"
+                                   formControlName="employeeName">
+                        </div>
+                        <!-- ./sme-form-group -->
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label for="civilian-id-input">{{
+                                'payroll.civilianID' | translate }}</label>
+                            <input type="text" class="form-control" id="civilian-id-input"
+                                   formControlName="civilianId">
+                        </div>
+                        <!-- ./sme-form-group -->
+                    </div>
+                </div>
+            </div>
+            <div class="sme-form__actions">
+                <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                    'public.reset' | translate }}</button>
+                <button type="submit" class="btn btn-primary btn-wide">{{
+                    'public.search' | translate }}</button>
+            </div>
+        </div>
+    </form>
+</arb-panel>
+
+<arb-table-panel [title]="'payroll.employeeList'">
+    <table-export [dataTable]="employeePageTable" [header]="'payroll.employeeList' | translate"
+                  [columns]="[
+        {'title':'payroll.employeeNumber' | translate,'dataKey':'employeeReference'},
+        {'title':'payroll.employeeName' |translate ,'dataKey':'name'},
+        {'title':'payroll.civilianID' | translate,'dataKey':'civilianId'},
+        {'title':'public.bank' | translate,'dataKey':'bankCodePayroll'},
+        {'title':'public.account' | translate,'dataKey':'account'},
+        {'title':'payroll.salary' | translate,'dataKey':'salary'}
+        ]"></table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #employeePageTable
+                   class="material sme-table sme-table--responsive table" [rows]="employeePage.data"
+                   [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+                   [count]="employeePage.page.totalElements" [offset]="employeePage.page.pageNumber-1"
+                   [limit]="employeePage.page.pageSize" [selectionType]="defaultSelectionType"
+                   [rowIdentity]="getIdFunction()"
+                   [selected]="tableSelectedRows" (page)="setPage($event)" (sort)="setSort($event)"
+                   (select)='onSelect($event)'>
+
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'payroll.employeeNumber' | translate }}</label>
+                                <div>
+                                    <span>{{row.employeeReference}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'payroll.employeeName' | translate }}</label>
+                                <div>
+                                    <span>{{row.name}}</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'payroll.civilianID' | translate }}</label>
+                                <div>
+                                    <span>{{row.civilianId}}</span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'public.bank' | translate }}</label>
+                                <div>
+                                    <span [innerHTML]="'payrollBankCode' | modelPipe:row.bankCodePayroll"></span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'public.account' | translate }}</label>
+                                <div>
+                                    <span>{{row.account}}</span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'payroll.salary' | translate }}</label>
+                                <div>
+                                    <span>{{row.salary | amountCurrency}}</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!--                <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"-->
+        <!--                                      [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">-->
+        <!--                </ngx-datatable-column>-->
+
+        <!--                custom checkbox- defaul select all resete preview item selected with extern pagination-->
+        <ngx-datatable-column
+                [width]="50"
+                [sortable]="false"
+                [canAutoResize]="false"
+                [draggable]="false"
+                [resizeable]="false"
+        >
+            <ng-template ngx-datatable-header-template let-value="value">
+                <label class="datatable-checkbox">
+                    <input type="checkbox" [checked]="selectAllOnPage[employeePage.page.pageNumber]"
+                           (change)="selectAll($event)"/>
+                </label>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template
+                         let-value="value" let-isSelected="isSelected"
+                         let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <label class="datatable-checkbox">
+                    <input
+                            type="checkbox"
+                            [checked]="isSelected"
+                            (change)="onCheckboxChangeFn($event)"
+                    />
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+        <!--end custom checkbox-->
+
+        <ngx-datatable-column prop="employeeReference">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'payroll.employeeNumber' | translate }}
+                                        </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="name">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'payroll.employeeName' | translate }}
+                                        </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="civilianId">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'payroll.civilianID' | translate }}
+                                        </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="bankCodePayroll">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'public.bank' | translate }}
+                                        </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span [innerHTML]="'payrollBankCode' | modelPipe:value"></span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="account">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'public.account' | translate }}
+                                        </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="salary">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                            {{'payroll.salary' | translate }}
+                                        </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value | amountCurrency }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [visiblePagesCount]="visiblePagesCount"
+                            (change)="employeePageTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                                    {{ (employeePage.data.length > pageSize ? pageSize : employeePage.data.length)}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                    <div class="sme-select form-control">
+                                                        <select class="form-control"
+                                                                [(ngModel)]="this.employeePage.page.pageSize"
+                                                                (change)="setPage(null);">
+                                                            <option [value]=10>10</option>
+                                                            <option [value]=20>20</option>
+                                                            <option [value]=50>50</option>
+                                                            <option [value]=100>100</option>
+                                                        </select>
+                                                    </div>
+                                                </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+
+<arb-panel-buttons>
+    <button class="btn btn-default"
+            [routerLink]="['/payroll/payroll-management/manage-employees/deleteEmployee']"
+            [disabled]="tableSelectedRows.length == 0">{{
+        'public.delete' | translate }}</button>
+    <button class="btn btn-primary"
+            [routerLink]="['/payroll/payroll-management/manage-employees/modifyEmployee']"
+            [disabled]="tableSelectedRows.length == 0">
+        <span class="icon -edit"></span>
+        <span class="text">{{'public.edit' | translate }}</span>
+    </button>
+</arb-panel-buttons>

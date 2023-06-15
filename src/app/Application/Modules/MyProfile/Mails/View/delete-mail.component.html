@@ -1,0 +1,78 @@
+<arb-table-panel [title]="'myProfile.mails.mailDelete'">
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #toDeleteTable [rows]="mailsToDelete"
+                   [columnMode]="defaultColumnMode" class="material sme-table sme-table--responsive table" [rowHeight]="defaultHeight"
+                   [headerHeight]="30" >
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label>{{ 'myProfile.mails.subject' | translate}}</label>
+                                <div>
+                                    <span>{{row.subject}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'myProfile.mails.date' | translate }}</label>
+                                <div>
+                                    <span>{{row.date | date:'dd/MM/yyyy'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{ 'myProfile.mails.status' | translate}}</label>
+                                <div>
+                                    <span>{{row.status}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="date">
+            <ng-template let-value="name" ngx-datatable-header-template>
+							<span class="datatable-header-cell-wrapper">
+									{{'myProfile.mails.date' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value | date:'dd/MM/yyyy'}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="subject">
+            <ng-template let-value="name" ngx-datatable-header-template>
+							<span class="datatable-header-cell-wrapper">
+									{{'myProfile.mails.subject' | translate }}
+                            </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="status">
+            <ng-template let-value="name" ngx-datatable-header-template>
+							   <span class="datatable-header-cell-wrapper">
+									{{'myProfile.mails.status' | translate }}
+								</span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span *ngIf="value=='N'" class="icon -email"></span>
+                <span *ngIf="value !=='N'" class="icon -message"></span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer></ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+<arb-buttons>
+    <button  type="button" class="btn btn-default btn-wide" (click)="cancelDeletion()">{{'public.cancel' | translate }}</button>
+    <button  type="button" class="btn btn-primary btn-wide" (click)="confirmDeletion()">{{'public.confirm' | translate }}</button>
+</arb-buttons>

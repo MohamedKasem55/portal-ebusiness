@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+                            <div class="sme-wizard__success">
+                                <span class=" icon -check"></span>
+                                <div></div>
+                                <div>
+                                    <p class="success">{{'newProduct.wps-new.success' | translate }} </p>
+                                    <p>{{'newProduct.wps-new.agreementDetails' | translate }} </p>
+                                    <p class="terms checkbox-inline">
+                                        <span class="checkSpan">{{ 'newProduct.wps-new.view' | translate }}
+                                            <span (click)="showTC()" class="focus">{{ 'newProduct.wps-new.terms' | translate }}</span>
+                                        </span>
+                                    </p>
+                                    <p class="marginTop">{{'newProduct.wps-new.define' | translate }}
+                                        <a href="#" [routerLink]="['/companyadmin/workflow']" class="underLine">{{'newProduct.wps-new.workflow' | translate }} </a>
+                                        <span>{{'newProduct.wps-new.and' | translate }} </span>
+                                        <a href="#" [routerLink]="['/companyadmin/manage/user']" class="underLine">{{'newProduct.wps-new.giveAcces' | translate }} </a>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

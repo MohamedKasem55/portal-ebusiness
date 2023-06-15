@@ -1,0 +1,96 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.payments' | translate }}</li>
+        <li class="active"><a href="#" [routerLink]="['/aramcoPayments']">{{ 'dashboard.aramcoPayments' | translate }}</a></li>
+         <li class="active"><a href="#" [routerLink]="['/aramcoPayments/beneficiaries']">{{ 'aramcoPayments.beneficiaryList'| translate }}</a></li>
+        <li class="active">{{ 'aramcoPayments.delete'| translate }}</li>
+    </ol>
+</div>
+<div class="sme-content-container container-fluid">
+
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current': !confirm, 'completed' : confirm}"><span>
+                    <span class="num">1</span>
+                <span class="text">{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current': confirm }"><span>
+                <span class="icon -check"></span>
+                <span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div *ngIf="!confirm">
+<div class="container-fluid" *ngFor="let detail of this.sharedData.deleted; let i = index"  >
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__head">{{ 'beneficiaries.beneficiaryLabel' | translate }} {{i+1}}
+                            <a class="sme-form__close btn" (click)="removeBeneficiary(i)"><span class="icon -close"></span></a>
+                    </div>
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                    <span type="text" class="form-control">{{ detail.customerId }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'aramcoPayments.beneficiaryName' | translate }}</label>
+                                    <span type="text" class="form-control">{{ detail.customerName }}</span>
+                                </div>
+                            </div>
+                            <!-- <div class="col-xs-12 col-sm-3">
+                                sme-form-group
+                                <div class="form-group">
+                                    <label class="required">{{ 'aramcoPayments.createDate' | translate }}</label>
+                                    <span type="text" class="form-control">{{ detail.createDate |  date:"dd/MM/yyyy" }}</span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<div class="sme-page-block sme-wizard__navigation sme-form__actions" *ngIf="!confirm">
+    <button class="btn btn-default btn-wide" type="button" [routerLink]="['/aramcoPayments/beneficiaries']">{{ 'public.back' | translate}}</button>
+    <button class="btn btn-primary btn-wide" type="button" (click)="proceed()" >{{ 'public.next' | translate}}</button>
+</div>
+
+<div class="container-fluid" *ngIf="confirm">
+<div class="sme-page-block">
+    <div class="sme-form">
+
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+             <div class="sme-form__body">
+                <div>
+                    <div class="sme-wizard__success" >
+                          <span class="icon -check"></span>
+                            {{'public.requestOk' | translate}}
+                          <small>{{'public.thanks' | translate }}</small>       
+                    </div>
+
+                </div>
+            </div>  
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions" *ngIf="confirm">
+    <button class="btn btn-default btn-wide" type="button" (click)="finish()">{{ 'public.finish' | translate}}</button>
+</div>
+

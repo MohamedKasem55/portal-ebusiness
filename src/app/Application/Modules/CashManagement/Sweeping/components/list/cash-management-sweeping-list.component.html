@@ -1,0 +1,191 @@
+<arb-breadcrumb
+  [routes]="[
+    ['dashboard.accounts'],
+    ['dashboard.cashManagement.cashManagement'],
+    ['dashboard.cashManagement.sweeping.menu']
+  ]"
+>
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="true">
+  <a class="btn btn-primary btn-wide" (click)="onCreateStructure()">{{
+    'dashboard.cashManagement.sweeping.createStructure' | translate
+  }}</a>
+</arb-panel-buttons>
+
+<arb-table-panel [title]="'dashboard.cashManagement.sweeping.menu'">
+  <table-export
+    [dataTable]="elementsTable"
+    [header]="'dashboard.cashManagement.sweeping.menu' | translate"
+    [columns]="[
+      {
+        title: 'dashboard.cashManagement.sweeping.structureAlias' | translate,
+        dataKey: 'alias'
+      },
+      {
+        title: 'dashboard.cashManagement.sweeping.structureId' | translate,
+        dataKey: 'structureId'
+      }
+    ]"
+  >
+  </table-export>
+
+  <ngx-datatable
+    [messages]="{ emptyMessage: 'public.noData' | translate }"
+    #elementsTable
+    class="material sme-table sme-table--responsive table"
+    [rows]="elementsPage.data"
+    [columnMode]="defaultColumnMode"
+    [headerHeight]="30"
+    [footerHeight]="footerHeight"
+    [rowHeight]="defaultHeight"
+    [externalPaging]="true"
+    [externalSorting]="false"
+    [count]="elementsPage.page.totalElements"
+    [offset]="elementsPage.page.pageNumber - 1"
+    [limit]="elementsPage.page.pageSize"
+    (page)="setPage($event)"
+    (sort)="setSort($event)"
+    [rowIdentity]="getIdFunction()"
+    (select)="onSelect($event)"
+  >
+    <ngx-datatable-row-detail
+      [rowHeight]="defaultHeight"
+      #myDetailRow
+      (toggle)="onDetailToggle($event)"
+    >
+      <ng-template
+        let-row="row"
+        let-expanded="expanded"
+        ngx-datatable-row-detail-template
+      >
+        <div class="row">
+          <fieldset>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{
+                  'dashboard.cashManagement.sweeping.structureAlias' | translate
+                }}</label>
+                <div>
+                  <span>{{ row.alias }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label>{{
+                  'dashboard.cashManagement.sweeping.structureId' | translate
+                }}</label>
+                <div>
+                  <span>{{ row.structureId }}</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </ng-template>
+    </ngx-datatable-row-detail>
+
+    <!--
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                              [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+        -->
+
+    <ngx-datatable-column prop="alias">
+      <ng-template
+        let-value="name"
+        let-sort="sortFn"
+        ngx-datatable-header-template
+      >
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'dashboard.cashManagement.sweeping.structureAlias' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <a class="human-selectable" (click)="goDetails(row)">{{ row.alias }}</a>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="structureId">
+      <ng-template
+        let-value="name"
+        let-sort="sortFn"
+        ngx-datatable-header-template
+      >
+        <span (click)="sort()" class="datatable-header-cell-wrapper">
+          {{ 'dashboard.cashManagement.sweeping.structureId' | translate }}
+        </span>
+      </ng-template>
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <span>{{ row.structureId }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-footer>
+      <ng-template
+        ngx-datatable-footer-template
+        let-rowCount="rowCount"
+        let-pageSize="pageSize"
+        let-selectedCount="selectedCount"
+        let-curPage="curPage"
+        let-offset="offset"
+      >
+        <div class="sme-data-table__footer">
+          <app-datatable-pager
+            [pagerLeftArrowIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-left'
+                : 'datatable-icon-right'
+            "
+            [pagerRightArrowIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-right'
+                : 'datatable-icon-left'
+            "
+            [pagerPreviousIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-prev'
+                : 'datatable-icon-skip'
+            "
+            [pagerNextIcon]="
+              translate.currentLang === 'en'
+                ? 'datatable-icon-skip'
+                : 'datatable-icon-prev'
+            "
+            [page]="curPage"
+            [size]="pageSize"
+            [count]="rowCount"
+            [hidden]="!(rowCount / pageSize > 1)"
+            [visiblePagesCount]="visiblePagesCount"
+            (change)="elementsTable.onFooterPage($event)"
+          >
+          </app-datatable-pager>
+          <div class="sme-data-table__actions form-inline">
+            <span class="sme-data-table__action-group"
+              >{{ 'public.showingLabel' | translate }}
+              {{ elementsPage.page.size }} {{ 'public.ofLabel' | translate }}
+              {{ rowCount }}</span
+            >
+            <span class="hidden-xs"> | </span>
+            <span class="sme-data-table__action-group">
+              <span>{{ 'public.showRowsLabel' | translate }}</span>
+              <div class="sme-select form-control">
+                <select
+                  class="form-control"
+                  [(ngModel)]="this.elementsPage.page.pageSize"
+                  (change)="this.setPage(null)"
+                >
+                  <option [value]="10">10</option>
+                  <option [value]="20">20</option>
+                  <option [value]="50">50</option>
+                  <option [value]="100">100</option>
+                </select>
+              </div>
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-datatable-footer>
+  </ngx-datatable>
+</arb-table-panel>

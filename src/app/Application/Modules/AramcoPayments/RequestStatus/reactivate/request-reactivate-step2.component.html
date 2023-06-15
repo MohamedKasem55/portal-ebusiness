@@ -1,0 +1,125 @@
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__head">{{'aramcoPayments.paymentDetails' | translate}}
+
+                    </div>
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset [disabled]="true">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="aramcoPayments-account"
+                                                   class="required">{{ 'aramcoPayments.account' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div class="sme-select form-control">
+                                                <select id="aramcoPayments-account" class="form-control"
+                                                        formControlName="account">
+                                                    <option value disabled>--{{ 'public.selectAccount' | translate }}
+                                                        --
+                                                    </option>
+                                                    <option *ngFor="let account of accounts"
+                                                            [value]="account.key">{{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}
+                                                        - {{ account.value.availableBalance | amountCurrency:account.value.currency}} {{ 'currencyIso' | modelPipe:account.value.currency}}</option>
+                                                </select>
+
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="aramcoPayments-amount"
+                                                   class="required">{{ 'aramcoPayments.amount' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="aramcoPayments-amount" class="form-control"
+                                                       formControlName="amount"
+                                                       inputPattern="onlyPositiveDecimalNumbers"/>
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'myProfile.pending_actions.rejectedReason' |
+                                                translate }}</label>
+                                            <span class="form-control"
+                                                 >{{batch.rejectedReason}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset [disabled]="true">
+                                <div class="legend">{{'aramcoPayments.beneficiarySummary' | translate}}</div>
+                                <div class="row">
+                                    <!--
+                                    <div class="col-xs-12 col-sm-4">
+                                       <div class="form-group">
+                                           <label for="aramcoPayments-name">{{ 'aramcoPayments.name' | translate }}</label>
+                                           <div>
+                                               <input id="aramcoPayments-name" class="form-control" formControlName="customerName" />
+                                           </div>
+                                       </div>
+                                    </div>
+                                    -->
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="aramcoPayments-passNumber">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="aramcoPayments-passNumber" class="form-control"
+                                                       formControlName="customerId"/>
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch"
+                  [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                                                [requestValidate]="requestValidate"
+                                                                #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

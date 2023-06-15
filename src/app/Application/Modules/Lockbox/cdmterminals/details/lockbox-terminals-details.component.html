@@ -1,0 +1,26 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-panel-title [title]="'lockbox.cdmTerminals.details.menu'">
+
+</arb-panel-title>
+
+<arb-panel>
+    <fieldset [formGroup]="formModel">
+        <app-dynamic-simple-extras-form-fields *ngIf="selectedItem && entityProperties"
+                                               [title]="'lockbox.cdmTerminals.details.menu'"
+                                               [translate_prefix]="'lockbox.cdmTerminals'"
+                                               [combosData]="combosData"
+                                               [formModel]="formModel"
+                                               [fieldsConfigs]="entityProperties"
+                                               (onAllFieldsCreated)="formConfigured($event)">
+        </app-dynamic-simple-extras-form-fields>
+    </fieldset>
+</arb-panel>
+
+<arb-panel-buttons *ngIf="detailsData">
+    <a class="btn btn-default btn-wide"
+       [routerLink]="[getBackUrl()]">{{
+        'public.back' | translate }}
+    </a>
+</arb-panel-buttons>

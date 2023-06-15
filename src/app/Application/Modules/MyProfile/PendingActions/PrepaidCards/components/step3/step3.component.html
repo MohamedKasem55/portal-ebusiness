@@ -1,0 +1,236 @@
+<div class="container-fluid docs-component">
+
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body" *ngIf="!showErrorIcon()">
+                    <div class="icon-step-3-wrapper">
+                        <span class="icon -check icon-success"></span>
+                    </div>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                </div>
+                <div class="modal-body" *ngIf="showErrorIcon()">
+                    <div class="icon-step-3-wrapper">
+                        <span class="icon -close icon-failure"></span>
+                    </div>
+                    <p>{{ 'payments.failedRequest' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button" class="btn btn-primary btn-wide">
+                        {{ 'public.finish' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container-fluid" *ngIf="sharedData?.confirm?.resultList">
+
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'myProfile.pending_actions.resultList' | translate }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="sme-content-container container-fluid" *ngIf="sharedData?.confirm?.resultList">
+
+    <arb-table-panel [title]="'prePaidCard.name'">
+        <table-export [dataTable]="table" [header]="'prePaidCard.name' | translate" [columns]="[
+                {'title': 'prePaidCard.initiationDate' | translate, 'dataKey':'initiationDate'},
+                {'title': 'prePaidCard.cardNumber' | translate, 'dataKey':'cardNumber'},
+                {'title': 'prePaidCard.operationType' | translate, 'dataKey':'typeOperation'},
+                {'title': 'prePaidCard.accountNumber' | translate, 'dataKey':'accountNumber'},
+                {'title': 'prePaidCard.amount' | translate, 'dataKey':'amount'}
+            ]">
+        </table-export>
+        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+            class="material sme-table sme-table--responsive table" [rows]="sharedData.confirm.resultList"
+            [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+            [rowHeight]="defaultHeight" [count]="sharedData.confirm.resultList.length" [limit]="tableDisplaySize"
+            [externalPaging]="false" [externalSorting]="false">
+
+            <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'prePaidCard.initiationDate' | translate }}</label>
+                                    <div>
+                                        <span>{{row.initiationDate}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'prePaidCard.cardNumber' | translate }}</label>
+                                    <div>
+                                        <span>{{row.cardNumber | hiddenCardNumber:'7to12'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'prePaidCard.operationType' | translate }}</label>
+                                    <div>
+                                        <span>{{row.typeOperation | prepaidCardOperationType}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'prePaidCard.amount' | translate }}</label>
+                                    <div>
+                                        <span>{{row.amount}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'prePaidCard.accountNumber' | translate }}</label>
+                                    <div>
+                                        <span>{{row.accountNumber}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'pendingActions.general.operationStatus' | translate }}</label>
+                                    <div>
+                                        <span>{{ 'errors' | modelPipe: 'errorTable.'+row.returnCode }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </ng-template>
+            </ngx-datatable-row-detail>
+            <ngx-datatable-column *ngIf="selectable" [width]="50" [sortable]="false" [canAutoResize]="false"
+                [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="initiationDate">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'prePaidCard.initiationDate' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                    <span>{{ value | date:'dd/MM/yyyy HH:mm' }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="cardNumber">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'prePaidCard.cardNumber' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                    <span>{{ value | hiddenCardNumber:'7to12' }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column prop="typeOperation">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'prePaidCard.operationType' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                    <span>{{ value | prepaidCardOperationType }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="accountNumber">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'prePaidCard.accountNumber' | translate }}
+                    </span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="amount">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'prePaidCard.amount' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                    <span>{{ value | amountCurrency }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="returnCode">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                        {{'pendingActions.general.operationStatus' | translate}}
+                    </span>
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                    <span class="mobile-hidden">{{'errors' | modelPipe: 'errorTable.'+value}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                    let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                    <div class="sme-data-table__footer">
+                        <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [visiblePagesCount]="visiblePagesCount" (change)="table.onFooterPage($event)">
+                        </app-datatable-pager>
+                        <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                            <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                {{(sharedData.confirm.resultList.length > pageSize ? pageSize :
+                                sharedData.confirm.resultList.length)}}
+                                {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                            <span class="hidden-xs"> | </span>
+                            <span class="sme-data-table__action-group">
+                                <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                <div class="sme-select form-control">
+                                    <select class="form-control" [ngModel]="tableDisplaySize"
+                                        (ngModelChange)="onChangeSize($event)">
+                                        <option [value]=10>10</option>
+                                        <option [value]=20>20</option>
+                                        <option [value]=50>50</option>
+                                        <option [value]="100">100</option>
+                                    </select>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-footer>
+        </ngx-datatable>
+    </arb-table-panel>
+
+</div>

@@ -1,0 +1,143 @@
+<arb-table-panel [title]="'beneficiaries.beneficiaryTypes.LocalBeneficiaries'">
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #beneficiaryTable
+                   class="material sme-table sme-table--responsive table" [rows]="beneficiaryPage.data"
+                   [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="true" [count]="beneficiaryPage.page.totalElements"
+                   [offset]="beneficiaryPage.page.pageNumber-1" [limit]="beneficiaryPage.page.pageSize"
+                   [selectionType]="defaultSelectionTypeSingle" [rowIdentity]="getIdFunction()"
+                   (page)='setPage($event)'
+                   (select)='onSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                                </label>
+                                <div>
+                                    <span>{{ row.beneficiaryFullName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}</label>
+                                <div>
+                                    <span>{{row.beneficiaryAccountCode}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate}}</label>
+                                <div>
+                                    <span>{{'bankCode' | modelPipe:row.bankCode}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!--                <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"-->
+        <!--                                      [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">-->
+        <!--                </ngx-datatable-column>-->
+        <ngx-datatable-column
+                [width]="15"
+                [sortable]="false"
+                [canAutoResize]="false"
+                [draggable]="false"
+                [resizeable]="false"
+        >
+            <ng-template ngx-datatable-header-template let-value="value">
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row"
+                         let-value="value" let-isSelected="isSelected"
+                         let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <label class="datatable-checkbox">
+                    <!--  <input
+                              type="checkbox"
+                              [checked]="isSelected"
+                              (change)="onCheckboxChangeFn($event)"
+                      />-->
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="beneficiaryFullName" class="mobile-hidden">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden ">
+                     <a class="human-selectable">
+                        <p innerHTML="{{ value | translate}}"></p>
+                     </a>
+                  </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="beneficiaryAccountCode" class="mobile-hidden">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden"> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="bankCode" class="mobile-hidden">
+            <ng-template let-value="value" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{ 'beneficiaries.beneficiaryListFields.bankName' | translate}}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{'bankCode' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                            (change)="beneficiaryTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{beneficiaryPage.page.size}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control"
+                                                [value]="this.beneficiaryPage.page.pageSize"
+                                                (change)="setPageSize($event)">
+                                            <option [value]="10">10</option>
+                                        </select>
+                                    </div>
+                                </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

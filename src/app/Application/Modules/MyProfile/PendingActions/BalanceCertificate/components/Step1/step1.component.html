@@ -1,0 +1,15 @@
+<app-balance-table
+        [items]="pageResult.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="pageResult.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (onSelect)="onSelect($event)"
+        (changeDisplaySize)="changeDisplaySize($event)"
+        [selected]="sharedData.tableSelected">
+</app-balance-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

@@ -1,0 +1,95 @@
+<!-- BREADCRUMB -->
+<arb-steps
+        [steps]="['public.completeDetails', 'public.confirm', 'public.summary']"
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<div *ngIf="wizardStep == 1 || wizardStep == 2">
+    <arb-panel>
+        <h3>{{ 'accounts.debitCards.posStep1Title' | translate }}</h3>
+        <hr>
+        <ng-container [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label for="search-cardNumberDisplay">{{ 'accounts.debitCards.cardNumberDisplay' | translate }}</label>
+                        <span id="search-cardNumberDisplay" class="form-control" name="cardNumberDisplay">
+                        {{ _selectedCard?.cardNum }}
+                    </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label for="search-posDomesticLimit">{{ 'accounts.debitCards.posDomesticLimit' | translate }}</label>
+                        <select id="search-posDomesticLimit" class="form-control" name="posDomesticLimit"
+                                formControlName="posDomesticLimit">
+                            <option value="" disabled="disabled" selected="selected">
+                                -- {{ 'public.selectOption' | translate }} --
+                            </option>
+                            <option *ngFor="let item of staticLimits;" [value]="item['amount']"
+                                    [innerHTML]="item['amount']+' SAR'">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label for="search-posInternationalLimit">{{ 'accounts.debitCards.posInternationalLimit' | translate }}</label>
+                        <select id="search-posInternationalLimit" class="form-control" name="posInternationalLimit"
+                                formControlName="posInternationalLimit">
+                            <option value="" disabled="disabled" selected="selected">
+                                -- {{ 'public.selectOption' | translate }} --
+                            </option>
+                            <option *ngFor="let item of staticLimits;" [value]="item['amount']"
+                                    [innerHTML]="item['amount']+' SAR'">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </arb-panel>
+
+    <arb-panel>
+        <div>
+            <div>
+                <label><span class="icon -help"></span> {{ 'accounts.debitCards.helpTitle' | translate }}
+                </label>
+            </div>
+            <div *ngIf="wizardStep == 1">
+                {{ 'accounts.debitCards.posStep1HelpText0' | translate }}<br/>
+                <ul>
+                    <li>{{ 'accounts.debitCards.posStep1HelpText1' | translate }}</li>
+                    <li>{{ 'accounts.debitCards.posStep1HelpText3' | translate }}</li>
+                    <li>{{ 'accounts.debitCards.posStep1HelpText4' | translate }}</li>
+                </ul>
+                <br/>
+            </div>
+            <div *ngIf="wizardStep == 2">
+                {{ 'accounts.debitCards.posStep2HelpText' | translate }}
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 3">
+    <arb-confirm-panel
+            [pending]="false"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+</div>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed() && wizardStep!=1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()"
+            (click)="previous()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

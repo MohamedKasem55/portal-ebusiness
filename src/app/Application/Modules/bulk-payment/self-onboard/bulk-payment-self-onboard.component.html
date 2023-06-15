@@ -1,0 +1,156 @@
+<arb-breadcrumb [routes]="[
+            ['dashboard.bulkPayments'],
+            ['bulk_payment_onboarding.e_registration_bulk_payment']]">
+</arb-breadcrumb>
+
+<ng-container>
+
+    <ng-container *ngIf="isEligible; else notEligibleBlock">
+
+        <arb-steps
+                [currentStep]="wizardStep"
+                [steps]="['public.completeDetails', 'public.summary', 'public.finish']">
+        </arb-steps>
+
+        <ng-container *ngIf="wizardStep < 3" [formGroup]="formModel">
+
+            <div style="margin: 2% 1.4% 2% 1.4%">
+                <h3>{{wizardStep == 1 ? ('bulk_payment_onboarding.e_registration_bulk_payment' | translate) : ('public.summary' | translate)}}</h3>
+            </div>
+
+            <br>
+
+            <arb-panel>
+                <div class="legend title-legend">
+                    {{ ('bulk_payment_onboarding.sub_info' | translate)}}
+                </div>
+                <hr class="hr-title" style="margin-bottom: 30px">
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'bulk_payment_onboarding.mon_fees' |translate }}</label>
+                                <input type="text" formControlName="monthlyFees" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'bulk_payment_onboarding.tran_fees' |translate }}</label>
+                                <input type="text" formControlName="transferFess" class="form-control"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <app-select-account [accounts]="accounts"
+                                            (onAccountChange)="selectAccount($event)"
+                                            [isDisabled]="formModel.disabled"
+                                            [clearable]="false"
+                        ></app-select-account>
+                    </div>
+                </div>
+            </arb-panel>
+
+            <arb-panel *ngIf="validationResponse != null && wizardStep == 2">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <app-secured-authentication [requestValidate]="requestValidate" [generateChallengeAndOTP]="validationResponse.generateChallengeAndOTP">
+                            </app-secured-authentication>
+                        </div>
+                    </div>
+                </div>
+            </arb-panel>
+        </ng-container>
+
+        <br>
+
+        <ng-container *ngIf="wizardStep == 3">
+            <!--  Success  -->
+            <arb-panel>
+                <div class="final-step-message-container">
+                    <div class="final-step-message">
+                        <div class="icon -check -success ticks-success"></div>
+                        <h2>{{'bulk_payment_onboarding.success' | translate}}</h2>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </arb-panel>
+        </ng-container>
+
+        <div class="container-fluid">
+            <div style="display: flex; flex-flow: row; justify-content: space-between">
+                <button *ngIf="wizardStep >= 1 && wizardStep < 3" style="align-self: self-start" class="btn btn-default btn-wide" [disabled]="wizardStep != 2" (click)="back()">
+                    {{ 'public.back' | translate }}
+                </button>
+
+                <div style="display: flex; flex-flow: row; justify-content: space-between">
+                    <button *ngIf="wizardStep < 3" style="align-self: self-start; margin-right: 15px; margin-left: 15px" class="btn btn-default btn-wide" (click)="goToDashboard()">
+                        {{ 'public.cancel' | translate }}
+                    </button>
+                    <br>
+                    <button *ngIf="wizardStep < 3" style="align-self: self-end" class="btn btn-primary btn-wide" (click)="next()" [disabled]="isDisabled()">
+                        {{'public.proceed' | translate}}
+                    </button>
+
+                    <button *ngIf="wizardStep == 3" style="align-self: self-end" class="btn btn-primary btn-wide" (click)="goToDashboard()">
+                        {{'customer-documents.goToDashboard' | translate}}
+                    </button>
+                </div>
+            </div>
+            <br>
+        </div>
+
+    </ng-container>
+
+    <ng-template #notEligibleBlock>
+        <arb-panel *ngIf="notEligibleReason == 'NO_TRANSFERS_PRIVILEGE'">
+            <div class="final-step-message-container">
+                <div class="final-step-message">
+                    <div class="icon -close icon-failure ticks-failure"></div>
+                    <h2>{{'bulk_payment_onboarding.no_transfer_privilege' | translate}}</h2>
+                    <br>
+                    <p>{{'bulk_payment_onboarding.no_transfer_privilege2' | translate}}</p>
+                </div>
+            </div>
+        </arb-panel>
+
+        <arb-panel *ngIf="notEligibleReason == 'COMPANY_HAS_NO_SEGMENT'">
+            <div class="final-step-message-container">
+                <div class="final-step-message">
+                    <div class="icon -close icon-failure ticks-failure"></div>
+                    <h2>{{'bulk_payment_onboarding.missingSegment' | translate}}</h2>
+                    <br>
+                    <p>{{'menu.company_admin.rmInformation.reason' | translate}}</p>
+                </div>
+            </div>
+        </arb-panel>
+
+        <arb-panel *ngIf="notEligibleReason == 'NO_SEGMENT_ACTIVE_AGREEMENT'">
+            <div class="final-step-message-container">
+                <div class="final-step-message">
+                    <div class="icon -close icon-failure ticks-failure"></div>
+                    <h2>{{'bulk_payment_onboarding.missingSegmentAgreement' | translate}}</h2>
+                    <br>
+                    <p>{{'menu.company_admin.rmInformation.reason' | translate}}</p>
+                </div>
+            </div>
+        </arb-panel>
+
+        <arb-panel *ngIf="notEligibleReason == 'ALREADY_REGISTERED'">
+            <div class="final-step-message-container">
+                <div class="final-step-message">
+                    <div class="ticks-warning">!</div>
+                    <h2>{{'bulk_payment_onboarding.already_registered' | translate}}</h2>
+                    <br>
+                </div>
+            </div>
+        </arb-panel>
+    </ng-template>
+
+</ng-container>
+

@@ -1,0 +1,22 @@
+<div class="collapse-card-container">
+    <div class="row collapse-card-head">
+        <div class="col-xs-12 col-sm-9 collapse-card-head-cell">
+            <a (click)="toggleCollapse()" class="no-decoration">
+                <span style="color: #4c5674">{{title | translate }}</span>
+                <span *ngIf="showCollapseArrow && containActions && actions.length > 0" class="collapse-btn"
+                      [ngClass]="{'collapse-btn-collapse': isCollapsed}"></span>
+            </a>
+        </div>
+        <div class="col-xs-12 col-sm-3 collapse-card-cell-align">
+            <app-custom-dropdown-menu [useNewStyle]="true" *ngIf="containActions && actions.length > 0"
+                                      [menuTitles]="extractTitles()" (onSelectAction)="selectAction($event)" [selectedIndex]="selectedIndex">
+            </app-custom-dropdown-menu>
+            <a *ngIf="!containActions" (click)="isCollapsed = !isCollapsed" class="no-decoration">
+                <span class="collapse-btn" [ngClass]="{'collapse-btn-collapse': isCollapsed}"></span>
+            </a>
+        </div>
+    </div>
+    <div class="collapse-card-body" [hidden]="isCollapsed">
+        <ng-content></ng-content>
+    </div>
+</div>

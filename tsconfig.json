@@ -1,0 +1,40 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "baseUrl": "./src",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "module": "esnext",
+    "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
+    "plugins": [
+      { "name": "@angular/language-service" },
+      { "name": "tslint-language-service" }
+    ],
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "removeComments": true
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": false,
+    "strictContextGenerics": true, //no issue
+    "strictDomEventTypes": true,
+    "strictOutputEventTypes": true, // no issue
+    "strictDomLocalRefTypes": true, // no issue
+    "strictSafeNavigationTypes": true, // no issue
+    "strictAttributeTypes": true, // no issue
+    "strictNullInputTypes": true, // no issue
+    "strictInputTypes": true,
+    "strictTemplates": false,
+    "strictInjectionParameters": true,
+    "enableIvy": true
+  }
+}

@@ -1,0 +1,178 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'posRequest.addRequest' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form" >
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.account' | translate }}</label>
+                                    <span class="form-control">{{datos.accountNumber}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.typeOfRequest' | translate }}</label>
+                                    <span class="form-control">{{'posRequestType'|modelPipe:datos.typeRequest}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.city' | translate }}</label>
+                                   <span class="form-control">{{'cityType'|modelPipe:form.controls.city.value}}</span>
+                                    <!--<span class="form-control">{{'cityType'|modelPipe:datos.city}}</span>-->
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset>
+                        </div>
+                        <div class="row" *ngIf="!isFirstForm()">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'posRequest.contactName' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{datos.contactName}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.mobileNumber' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{datos.mobile}}</span>
+                                    
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset> 
+                        </div>
+                        <div class="row" *ngIf="isFirstForm()">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.mobileNumber' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{datos.mobile}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.mobileNumber' |
+                                        translate }} 2</label> 
+                                        <span class="form-control">{{datos.mobile2}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.feesAmount' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{datos.feesAmount}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.numberTerminals' |
+                                        translate }}</label> 
+                                   <span class="form-control">{{datos.numberTerminals}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset>
+                        </div>
+                        <div class="row" *ngIf="isFirstForm()">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.address' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{datos.address}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.fullAddress' |
+                                        translate }} 2</label> 
+                                    <span class="form-control">{{datos.fullAddress}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.phoneNumber' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{datos.phoneNumber}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-1">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.pobox' |
+                                        translate }}</label> 
+                                     <span class="form-control">{{datos.pobox}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.postalCode' |
+                                        translate }}</label> 
+                                     <span class="form-control">{{datos.postalCode}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset>
+                        </div>
+                         <div class="row" *ngIf="isFirstForm()">
+                        <fieldset>
+                               <div class="col-xs-12 col-sm-2">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.posBranchNumber' |
+                                        translate }}</label> 
+                                     <span class="form-control">{{datos.posBranchNumber}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset>
+                        </div>
+                    </div>          
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>

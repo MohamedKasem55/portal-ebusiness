@@ -1,0 +1,76 @@
+<arb-panel [title]="'accounts.balanceCertificateRequest.name'">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-5">
+            <!-- sme-form-group -->
+            <div class="form-group">
+                <label>{{ 'public.account' | translate }} *</label>
+
+                <!-- Accounts dropdown -->
+                <div>
+                    <ng-select id="account" class="form-control" [(ngModel)]="model.account" #account="ngModel"
+                            name="account" disabled>
+                        <ng-option selected value disabled>--{{ 'public.selectAccount' | translate }}--</ng-option>
+                        <ng-option *ngFor="let account of accounts" [ngValue]="account">
+                            {{ account }}
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+            </div>
+            <!-- ./sme-form-group -->
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <!-- CITIES -->
+            <div class="form-group">
+                <label>{{ 'public.city' | translate }} *</label>
+                <div>
+                    <ng-select class="form-control" name="city" [(ngModel)]="model.city" #city="ngModel" disabled>
+                        <ng-option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</ng-option>
+                        <ng-option *ngFor="let city of cities" [value]="city['key']">
+                            {{city['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <!--
+                <div *ngIf="citySelecc" class="alert alert-danger">
+                    <span>{{'accounts.selectComboCity' | translate}}</span>
+                </div>
+                -->
+            </div>
+            <!-- /CITIES -->
+        </div>
+
+        <div class="col-xs-12 col-sm-2">
+
+            <!-- COMPANY -->
+            <div class="form-group">
+                <label>{{ 'public.company' | translate }} *</label>
+                <div>
+                    <input type="text" [(ngModel)]="model.company" name="company" #company="ngModel"
+                           minlength="1" maxlength="30" id="company" class="form-control"
+                           disabled/>
+                </div>
+            </div>
+            <!-- /COMPANY -->
+
+        </div>
+
+        <div class="col-xs-12 col-sm-2">
+
+            <!-- POSTAL CODE -->
+            <div class="form-group">
+                <label>{{ 'public.postal_code' | translate }} *</label>
+
+                <div>
+                    <input type="text" [(ngModel)]="model.postalCode" name="postalCode" #postalCode="ngModel"
+                           class="form-control" maxlength="5" number disabled inputPattern="onlyDigits"/>
+                </div>
+            </div>
+            <!-- /POSTAL CODE -->
+
+        </div>
+    </div>
+
+</arb-panel>

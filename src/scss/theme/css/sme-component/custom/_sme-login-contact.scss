@@ -1,0 +1,114 @@
+.sme-login-contact {
+  &__aside {
+    @include clearfix;
+    position: relative;
+    padding: 40px;
+
+    text-align: $left;
+    background: url('../assets/img/background.png') no-repeat center
+      $brand-primary;
+    background-size: cover;
+
+    > div {
+      max-width: 200px;
+      float: $right;
+    }
+
+    dl {
+      color: #fff;
+      opacity: 0.8;
+
+      @include font(12px);
+      line-height: 18px;
+
+      margin: 0;
+
+      & + dl {
+        margin-top: 10px;
+      }
+    }
+
+    dt {
+      font-weight: 500;
+      margin: 0;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  &__main {
+    padding: 40px;
+  }
+
+  &__title {
+    @include heading1;
+    margin-bottom: 40px;
+    text-align: center;
+    color: $brand-black;
+  }
+
+  &__form {
+    .sme-form__actions {
+      text-align: center;
+      margin-top: 40px;
+      padding: 0;
+    }
+  }
+
+  @media #{$sm-up} {
+    &__content {
+      display: table;
+      width: 100%;
+    }
+
+    &__aside,
+    &__main {
+      padding: 40px;
+      display: table-cell;
+    }
+
+    &__aside {
+      width: 42%;
+
+      > div {
+        max-width: 200px;
+        float: none;
+        position: absolute;
+        bottom: 50px;
+        #{$left}: 40px;
+        width: 200px;
+      }
+    }
+
+    &__main {
+      padding: 60px;
+    }
+  }
+}
+
+.iconLinkAlignAR {
+  transform: translateY(80%) translateX(16%);
+}
+.iconInstaTwitAlingAR {
+  transform: translateY(63%) translateX(24%);
+}
+.iconYouAlingAR {
+  transform: translateY(62%) translateX(31%);
+}
+.iconFacebAlingAR {
+  transform: translateY(64%) translateX(-5%);
+}
+.iconLinkAlignEN {
+  transform: translateY(80%) translateX(-19%);
+}
+.iconInstaTwitAlingEN {
+  transform: translateY(65%) translateX(-22%);
+}
+.iconYouAlingEN {
+  transform: translateY(62%) translateX(-29%);
+}
+.iconFacebAlingEN {
+  transform: translateY(63%) translateX(-5%);
+}

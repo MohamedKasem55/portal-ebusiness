@@ -1,0 +1,42 @@
+<ng-container *ngIf="this.currentAction === 'DELETE'">
+    <local-transfer-data
+            [batches]="this.batches"
+            [accounts]="this.accounts"
+            [beneficiaries]="this.beneficiaries"
+            [forms]="forms"
+            [formsFieldsConfigs]="formsFieldsConfigs"
+            [disabled]="true">
+    </local-transfer-data>
+</ng-container>
+
+<ng-container *ngIf="this.currentAction !== 'DELETE'">
+
+    <ng-container *ngIf="this.validateResponse['checkAndSeparateInitiatitionPermission']['notAllowed'].length > 0">
+        <local-transfer-data
+                [batches]="this.validateResponse['checkAndSeparateInitiatitionPermission']['notAllowed']"
+                [beneficiaries]="this.beneficiaries"
+                [accounts]="this.accounts"
+                [disabled]="true">
+        </local-transfer-data>
+    </ng-container>
+
+    <ng-container *ngIf="this.validateResponse['checkAndSeparateInitiatitionPermission']['toAuthorize'].length > 0">
+        <local-transfer-data
+                [batches]="this.validateResponse['checkAndSeparateInitiatitionPermission']['toAuthorize']"
+                [beneficiaries]="this.beneficiaries"
+                [accounts]="this.accounts"
+                [disabled]="true">
+        </local-transfer-data>
+    </ng-container>
+
+    <ng-container *ngIf="this.validateResponse['checkAndSeparateInitiatitionPermission']['toProcess'].length > 0">
+        <local-transfer-data
+                [batches]="this.validateResponse['checkAndSeparateInitiatitionPermission']['toProcess']"
+                [beneficiaries]="this.beneficiaries"
+                [accounts]="this.accounts"
+                [disabled]="true">
+        </local-transfer-data>
+    </ng-container>
+
+</ng-container>
+

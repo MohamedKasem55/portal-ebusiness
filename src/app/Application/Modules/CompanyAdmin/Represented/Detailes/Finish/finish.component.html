@@ -1,0 +1,52 @@
+<div class='container-fluid'>
+  <div class='sme-page-block'>
+    <div class='sme-form'>
+
+      <div class='sme-form__content'>
+        <div class='sme-form__form'>
+          <div class='sme-form__body'>
+            <div>
+              <div class='sme-wizard__success'>
+                <span class=' icon -check'></span>
+                <div></div>
+                <div *ngIf='!isSaudi && pageType==PageType.ADD'>
+                  <p>{{'represented.success-msg1' | translate }} </p>
+                  <p>{{'represented.success-msg2' | translate }}</p>
+                </div>
+                <div *ngIf='isSaudi && pageType==PageType.ADD'>
+                  <p>{{'represented.success-msg3' | translate }} </p>
+                </div>
+                <div *ngIf='pageType==PageType.EDIT'>
+                  <p>{{'represented.success-msg4' | translate }} </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<arb-panel *ngIf='pageType==PageType.ADD'>
+
+  <div class='legend marginBottom'>{{ 'represented.attach' | translate }}</div>
+  <div class='row'>
+    <div class='col-xs-12 col-sm-3 uploadItem'>
+      <div class='form-group'>
+        <label class='label'>{{ 'represented.uploadTxt' | translate }}</label>
+        <div class='input-group'>
+          <label class='item'>{{formModel.controls.signatureFile.value.name}} </label>
+          <span class='input-group-btn'>
+                        <div class='fileUpload btn'>
+                            <span class=' icon -check greenCheck'></span>
+                        </div>
+                    </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</arb-panel>

@@ -1,0 +1,159 @@
+<!-- <div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li>{{ 'myProfile.myProfile' | translate }}</li>
+		<li><a class="human-selectable" href="#" [routerLink]="['/myprofile/pending/requeststatus']">{{ 'myProfile.pending_actions.pending_actions' | translate }}</a></li>
+		<li>{{ 'dashboard.bulkPayments' | translate }}</li>
+	</ol>
+</div>
+
+<div class="sme-content-container container-fluid">
+
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+					<span class="num">1</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.select' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+					<span class="num">2</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3}"><span>
+					<span class="num">3</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+
+	<div>
+		<router-outlet (activate)="componentAdded($event)"></router-outlet>
+	</div>
+	<div class="sme-content-container container-fluid">
+    	<div *ngIf="wizardStep==2 && !sharedData.aproveFlow" class="sme-page-block">
+        	<div class="sme-form__content">
+            	<div class="sme-form__form">
+                	<div class="sme-form__body" style="padding: 15px;">
+                    	<div class="sme-form__box sme-form__box--form">
+                        	<div class="row">
+                            	<div class="col-xs-12 col-sm-3">
+                            		<div class="form-group">
+                                        <label class="required">{{ 'Reject reason' | translate }}</label>
+										<div>
+											<input type="text" class="form-control" [(ngModel)]="sharedData.rejectReason" name="rejectReason"/>
+										</div>
+									</div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+		<button *ngIf="wizardStep==2" (click)="backButton()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+		<button *ngIf="wizardStep==2 && !sharedData.aproveFlow" (click)="confirmReject()" class=" btn btn-primary btn-wide" [disabled]="!sharedData.rejectReason">{{ 'myProfile.pending_actions.reject' | translate }}</button>
+		<button *ngIf="wizardStep==2 && sharedData.aproveFlow" (click)="confirmAprove()" class=" btn btn-primary btn-wide" [disabled]="isValid()">{{ 'public.confirm' | translate }}</button>
+
+		<button [disabled]="sharedData.tableSelected.length==0" *ngIf="wizardStep==1" (click)="rejectFirstStep()" class=" btn btn-default btn-wide" style="margin-right:5px">{{ 'myProfile.pending_actions.reject' | translate }}</button>
+		<button [disabled]="sharedData.tableSelected.length==0" *ngIf="wizardStep==1" (click)="aproveFirstStep()" class=" btn btn-primary btn-wide">{{ 'myProfile.pending_actions.approve' | translate }}</button>
+	</div>
+
+</div>
+ -->
+
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'myProfile.myProfile' | translate }}</li>
+        <li><a class="human-selectable" href="#"
+                [routerLink]="['/myprofile/pending/requeststatus']">{{ 'myProfile.pending_actions.pending_actions' | translate }}</a>
+        </li>
+        <li>{{ 'dashboard.hajjumrahcards' | translate }}</li>
+    </ol>
+</div>
+
+<div *ngIf="wizardStep == 1">
+    <div class="sme-form__actions">
+        <a class="btn btn-primary btn-wide" routerlinkactive="active"
+            (click)="displayWorkflowDetails(workflowDetailsPopup)">
+            {{ "myProfile.pending_actions.actions.workflowDetails" | translate }}
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid sme-content-container">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : wizardStep === 1, 'completed' : wizardStep > 1}">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'public.select' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : wizardStep === 2, 'completed' : wizardStep > 2}">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : wizardStep === 3, 'completed' : wizardStep > 3}">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div>
+    <router-outlet (activate)="componentAdded($event)"></router-outlet>
+</div>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="wizardStep==2 && !sharedData.aproveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                    <textarea class="form-control" rows="3" maxlength="150"
+                                        [(ngModel)]="sharedData.rejectReason" name="rejectReason"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-workflow-details-popup #workflowDetailsPopup></app-workflow-details-popup>
+
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button *ngIf="wizardStep==2" (click)="backButton()" class=" btn btn-default btn-wide">
+            {{ 'public.back' | translate }}
+        </button>
+        <button *ngIf="wizardStep==2 && !sharedData.aproveFlow" (click)="confirmReject()"
+            class=" btn btn-primary btn-wide" [disabled]="!sharedData.rejectReason">
+            {{ 'myProfile.pending_actions.reject' | translate }}
+        </button>
+        <button *ngIf="wizardStep==2 && sharedData.aproveFlow" (click)="confirmAprove()" [disabled]="isValid()"
+            class=" btn btn-primary btn-wide">
+            {{ 'public.confirm' | translate }}
+        </button>
+        <button *ngIf="wizardStep===1" (click)="rejectFirstStep()" class=" btn btn-default btn-wide"
+            style="margin-right:5px">{{ 'myProfile.pending_actions.reject' | translate }}
+        </button>
+        <button *ngIf="wizardStep===1" (click)="aproveFirstStep()" class=" btn btn-primary btn-wide">
+            {{ 'myProfile.pending_actions.approve' | translate }}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,118 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active">{{ 'prePaidCard.name' | translate }}</li>
+		<li *ngIf="prePaidCardResetPINService.getResetOperationType() === resetOpType" class="active">
+			{{ 'prePaidCard.resetPin'| translate }}</li>
+		<li *ngIf="prePaidCardResetPINService.getResetOperationType() === setOpType" class="active">
+			{{ 'prePaidCard.resetPin'| translate }}</li>
+	</ol>
+</div>
+
+<h1 *ngIf="prePaidCardResetPINService.getResetOperationType() === resetOpType" class="padding-title">
+	{{ 'prePaidCard.resetPin'| translate }}</h1>
+<h1 *ngIf="prePaidCardResetPINService.getResetOperationType() === setOpType" class="padding-title">
+	{{ 'prePaidCard.resetPin'| translate }}</h1>
+
+<div class="container-fluid sme-content-container">
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+				<span>
+				<span class="num" [style.margin-left]="translate.currentLang!=='en'? '4px': '0px'">1</span>
+					<span class="text">{{ 'prePaidCard.stepper.stepNewPin' | translate | uppercase }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+				<span>
+					<span class="num" [style.margin-left]="translate.currentLang!=='en'? '4px': '0px'">2</span>
+					<span class="text">{{ 'prePaidCard.stepper.stepOtp' | translate | uppercase}}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+				<span>
+					<span class="icon -check iconCheckalign"></span>
+					<span class="text">{{ 'prePaidCard.stepper.stepSummary' | translate | uppercase }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+<app-step1 *ngIf="step === 1" [form]="this.form" (onInit)="onInitStep1($event)">
+
+
+</app-step1>
+
+<app-step2 *ngIf="step === 2" [form]="this.form" [generateChallengeAndOTP]="generateChallengeAndOTP"
+	[requestValidate]="requestValidate" (onInit)="onInitStep2($event)">
+
+</app-step2>
+
+<app-step3 *ngIf="step === 3" [generateChallengeAndOTP]="generateChallengeAndOTP">
+</app-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	<button type="button" class=" btn btn-default btn-wide pull-left" (click)="cancel()" *ngIf="step === 1">{{'public.back' |
+			translate }}</button>
+
+	<button type="button" class=" btn btn-default btn-wide pull-left" (click)="previous()" *ngIf="step === 2">{{'public.back' |
+			translate }}</button>
+
+	<button type="submit" class=" btn btn-default btn-wide" (click)="cancel()" *ngIf="step <3">
+		{{'public.cancel' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step===1"
+		[disabled]="isDisabled()">{{'commercialCards.setResetPin' | translate}}</button>
+
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step=== 2"
+		[disabled]="isDisabled()">{{'public.confirm' | translate}}</button>
+
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="finish()" *ngIf="step == 3">{{'public.finish' |
+		translate}}</button>
+</div>
+
+
+
+<div class="modal fade" bsModal #modalErrorAccount="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalErrorhide()" type="button" class="close">&times;</button>
+			</div>
+			<div class="modal-body modal-error">
+				<span class="icon -close icon-failure"></span>
+				<div class="display-div-column">
+					<p>{{'commercialCards.inputErrorNumberAccount' | translate}}</p>
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer flex">
+				<button (click)="modalErrorhide()" type="button" class="tryAgain btn btn-primary btn-wide">{{
+					'commercialCards.again' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" bsModal #modalErrorCodeOTP="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalErrorhide()" type="button" class="close">&times;</button>
+			</div>
+			<div class="modal-body">
+				<span class="icon -close icon-failure"></span>
+				<div class="display-div-column">
+					<p>{{'commercialCards.inputErrorCodeOTP' | translate}}</p>
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer flex">
+				<button (click)="tryAgain()" type="button" class="tryAgain btn btn-primary btn-wide">{{
+					'commercialCards.again' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>

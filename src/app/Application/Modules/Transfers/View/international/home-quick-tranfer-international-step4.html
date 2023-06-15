@@ -1,0 +1,361 @@
+<form autocomplete="off" autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+    <div formArrayName="beneficiaries">
+        <div *ngFor="let item of form.controls.beneficiaries['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="sme-form">
+                    <div class="sme-form__form" style="background-color: #EEF0F7">
+                        <div class="sme-form__title">{{'transfer.transferTo' | translate}}:
+                            {{beneficiaries[i].beneficiaryFullName}} - {{'transfer.accountTo' | translate}}:
+                            {{beneficiaries[i].beneficiaryAccountCode}} - {{'transfer.bankName' | translate}}:
+                            {{beneficiaries[i].bankName}} - {{'public.country' | translate}}:
+                            {{'sadadOLPCountryCode' | modelPipe: beneficiaries[i].countryCode}}
+                        </div>
+
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+
+                                    <div class="row">
+
+                                        <!-- ACCOUNT FROM -->
+                                        <div class="col-xs-12 col-sm-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.accountFrom' | translate }}</label>
+                                                <!-- sme-select -->
+
+                                                <ng-select [notFoundText]="'public.noData' | translate" class="form-control" formControlName="accountFrom">
+                                                    <ng-option selected="selected" value="" disabled="disabled">
+                                                        --{{ 'public.selectAccount' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option *ngFor="let account of accountsFrom"
+                                                               [value]="account.key">
+                                                        {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}
+                                                        {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}}
+                                                        {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                                                    </ng-option>
+                                                </ng-select>
+                                                <div *ngIf="item.controls.accountFrom.hasError('required') && item.controls.amount.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'transfer.accountFrom' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <!-- ACCOUNT FROM -->
+
+                                        <!-- REMARKS -->
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label>{{ 'transfer.remarks' | translate }}</label>
+                                                <div>
+                                                    <input class="form-control" formControlName="remarks"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- REMARKS -->
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <!-- AMOUNT -->
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.amount' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input class="form-control" disabled
+                                                           inputPattern="onlyPositiveDecimalNumbers"
+                                                           decimal-precision="{{getCurrencyDecimalDigitsCount(item.controls.currency.value)}}"
+                                                           [value]="item.controls.amount.value | amountCurrency: getCurrencyCode(item.controls.currency.value)"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- AMOUNT -->
+
+                                        <!-- CURRENCY -->
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ 'transfer.currency' | translate }}
+                                                </label>
+                                                <div class=" form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="currency" required="required">
+                                                        <ng-option selected="selected" value="" disabled="disabled">
+                                                            --{{ 'public.selectDropdown' | translate }}--
+                                                        </ng-option>
+                                                        <ng-option
+                                                                *ngFor="let op of totalCurrenciesDesc[i]; let j = index;"
+                                                                [value]="totalCurrenciesID[i][j]">
+                                                            {{op}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /CURRENCY -->
+
+                                        <!-- EMAIL -->
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{'public.email' | translate}}</label>
+                                                <div>
+                                                    <span class="form-control disabled">{{beneficiaries[i].email}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- EMAIL -->
+
+                                        <!-- CATEGORY -->
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{'beneficiaries.beneficiaryListFields.category' | translate}}</label>
+                                                <div>
+                                                    <span class="form-control disabled">
+                                                        {{'beneficiaryCategory' | modelPipe: beneficiaries[i].beneficiaryCategory}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- CATEGORY -->
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.amountInCurrency' | translate:{value: totalCurrenciesDesc[i][totalCurrenciesID[i].indexOf(item.controls.currency.value)]} }}</label>
+                                                <div>
+                                                    <input class="form-control" disabled
+                                                           inputPattern="onlyPositiveDecimalNumbers"
+                                                           decimal-precision="{{getCurrencyDecimalDigitsCount(item.controls.currency.value)}}"
+                                                           [value]="item.controls.amount.value | amountCurrency: getCurrencyCode(item.controls.currency.value)"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{'transfer.amountInSar4' | translate }}</label>
+                                                <div>
+                                                    <input disabled class="form-control"
+                                                           inputPattern="onlyPositiveDecimalNumbers" decimal-precision
+                                                           [value]="item.controls.sarAmount.value | amountCurrency"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'transfer.rate4' | translate }}</label>
+                                                <div>
+                                                    <input disabled class="form-control"
+                                                           inputPattern="onlyPositiveDecimalNumbers" decimal-precision
+                                                           [value]="item.controls.rate.value | number:'1.6'"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{'transfer.feesInSar' | translate }}</label>
+                                                <div>
+                                                    <input disabled class="form-control"
+                                                           [value]="item.controls.fees.value | amountCurrency"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <!-- PROPOSE -->
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ 'transfer.purpose' | translate }}
+                                                </label>
+                                                <div class=" form-control">
+
+                                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="propose" required="required">
+                                                        <ng-option selected="selected" value="" disabled="disabled">
+                                                            --{{ 'public.selectDropdown' | translate }}--
+                                                        </ng-option>
+                                                        <ng-option *ngFor="let row of reasons[i]"
+                                                                   [value]="this.translate.currentLang =='ar' ?  row.transferReasonsAr : row.transferReasonsEn"
+                                                                   [innerHTML]=" this.translate.currentLang =='ar' ? row.purposeDescriptionAr : row.purposeDescriptionEn">
+                                                        </ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="item.controls.propose.hasError('required') && item.controls.propose.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{ 'error.purposeRequired' | translate }} </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- PROPOSE -->
+
+                                        <!-- ADDITIONAL -->
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="isAdditionalInfo(item.controls.propose.value)">
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ getLabelAdditionalInfo1(item.controls.propose.value) }}
+                                                </label>
+                                                <div>
+                                                    <input class="form-control"
+                                                           formControlName="additional1"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="isAdditionalInfo(item.controls.propose.value)">
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ getLabelAdditionalInfo2(item.controls.propose.value) }}
+                                                </label>
+                                                <div>
+                                                    <input class="form-control"
+                                                           formControlName="additional2"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ADDITIONAL -->
+                                    </div>
+
+                                </fieldset>
+
+                                <!--<fieldset>-->
+                                <!--    <div class="legend">{{'transfer.beneficiarySummary' | translate}}</div>-->
+
+                                <!--    <div class="row">-->
+                                <!--        <div class="col-xs-12 col-sm-3">-->
+                                <!--            <dl class="sme-summary-group">-->
+                                <!--                <dt class="sme-summary-group__label"> {{'companyAdmin.user.name' | translate}}</dt>-->
+                                <!--                <dd class="sme-summary-group__value"> {{beneficiaries[i].beneficiaryFullName}}</dd>-->
+                                <!--            </dl>-->
+                                <!--        </div>-->
+
+                                <!--        <div class="col-xs-12 col-sm-3">-->
+                                <!--            <dl class="sme-summary-group">-->
+                                <!--                <dt class="sme-summary-group__label"> {{'transfer.accountTo' | translate}}</dt>-->
+                                <!--                <dd class="sme-summary-group__value"> {{beneficiaries[i].beneficiaryAccountCode}}</dd>-->
+                                <!--            </dl>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--</fieldset>-->
+
+                                <fieldset>
+                                    <div class="row">
+                                        <app-levels-table
+                                                *ngIf="getLevelMapKey(accounts[item.controls.accountFrom.value].fullAccountNumber+'-'+beneficiaries[i].beneficiaryAccountCode)"
+                                                [futureSecurityLevels]="getLevelMapKey(accounts[item.controls.accountFrom.value].fullAccountNumber+'-'+beneficiaries[i].beneficiaryAccountCode)">
+                                        </app-levels-table>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sme-form">
+        <div class="sme-form__form">
+            <div class="sme-form__title">{{'transfer.summary' | translate}}</div>
+
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <fieldset>
+                        <div class="row">
+
+                            <div class="col-xs-12 col-sm-4" *ngIf="confirmSave.totalAmountProcess>0">
+                                <dl class="sme-summary-group">
+                                    <dt class="sme-summary-group__label">{{'transfer.international.toprocess.amount' | translate}} </dt>
+                                    <dd class="sme-summary-group__value">
+                                        {{(confirmSave.totalAmountProcess) | amountCurrency:'608'}} {{'currencyIso' | modelPipe: '608'}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4" *ngIf="confirmSave.totalAmountProcess>0">
+                                <dl class="sme-summary-group">
+                                    <dt class="sme-summary-group__label">{{'transfer.international.toprocess.fee' | translate}}</dt>
+                                    <dd class="sme-summary-group__value">
+                                        {{confirmSave.totalFeeProcess | amountCurrency:'608'}} {{'currencyIso' | modelPipe: '608'}}
+                                    </dd>
+                                    <app-vat-calculator [fee]="confirmSave.totalFeeProcess">
+                                    </app-vat-calculator>
+
+                                </dl>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4" *ngIf="confirmSave.totalAmountAuthorize>0">
+                                <dl class="sme-summary-group">
+                                    <dt class="sme-summary-group__label">{{'transfer.international.toauthorize.amount' | translate}}</dt>
+                                    <dd class="sme-summary-group__value">
+                                        {{(confirmSave.totalAmountAuthorize) | amountCurrency:'608'}} {{'currencyIso' | modelPipe: '608'}}
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4" *ngIf="confirmSave.totalAmountAuthorize>0">
+                                <dl class="sme-summary-group">
+                                    <dt class="sme-summary-group__label">{{'transfer.toauthorize.fee' | translate}}</dt>
+                                    <dd class="sme-summary-group__value">
+                                        {{confirmSave.totalFeeAuthorize | amountCurrency}}
+                                    </dd>
+                                    <app-vat-calculator [fee]="confirmSave.totalFeeAuthorize">
+                                    </app-vat-calculator>
+
+                                </dl>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <app-levels-table *ngIf="confirmSave.futureSecurityLevelsDTOList"
+                                      [futureSecurityLevels]="confirmSave.futureSecurityLevelsDTOList">
+                    </app-levels-table>
+                    <fieldset *ngIf="confirmSave.generateChallengeAndOTP">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="confirmSave.generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate"
+                                            [timer]="180"
+                                            #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="sme-data-table__advisory">
+                                    {{ 'transfer.rateAdvise'| translate }}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide"
+                (click)="cancel()">{{'public.back' | translate }}</button>
+
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!valid()">{{buttonLabel}}</button>
+
+    </div>
+</form>

@@ -1,0 +1,24 @@
+<company-admin-user-management-edit-form [formModel]="formModel"
+                                         [userData]="userData"
+                                         [formAction]="'edit'"
+                                         [combosData]="combosData"
+                                         [messageError]="messageError"
+                                         [allowEditToken]="true"
+                                         [allowChangeUserId]="false"
+                                         [enabled]="true">
+</company-admin-user-management-edit-form>
+
+<arb-panel>
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{ 'myProfile.pending_actions.rejectedReason' |
+                        translate }}</label>
+                    <span class="form-control">{{userData.companyUserDetails.rejectedReason}}</span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</arb-panel>

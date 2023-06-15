@@ -1,0 +1,97 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="legend" class="title-legend">
+                                {{'commercialCards.paymentOptionDetails' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="accountFrom">{{
+                                            'commercialCards.selectedAccount' | translate }}</label>
+                                        <div>
+                                            <input id="accountFrom" class="form-control " formControlName="accountFrom"
+                                                [readonly]="true">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="paymentType">{{
+                                                'commercialCards.paymentType' | translate }}</label>
+                                        <div class="div-disabled">
+                                            <span class="span-disabled">
+                                                {{form.get('paymentType').value | cardPaymentType}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="form.controls.amount.value" class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="amount">{{
+                                                'commercialCards.amount' | translate }}</label>
+                                        <div>
+                                            <span style='opacity: .7;padding-top: 10px;'
+                                                class="form-control disabled">{{form.controls.amount.value | amountCurrency}}
+                                                SAR</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batchListsContainer?.toAuthorize?.length > 0"
+    [futureSecurityLevels]="batchListsContainer.toAuthorize[0].futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<app-levels-table *ngIf="batchListsContainer?.toProcess?.length > 0"
+    [futureSecurityLevels]="batchListsContainer.toProcess[0].futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div *ngIf="generateChallengeAndOTP" class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div style="margin-left: 15px;margin-bottom: 10px">
+                                    {{'commercialCards.titleOnePass' | translate}}
+                                </div>
+                                <hr class="hr-title">
+                            </fieldset>
+                            <div>
+                                <div style="margin-bottom: 20px"><span style="margin-left: 15px"
+                                        class="card-message-margin">{{'commercialCards.inputTokenCode' | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 15px;"></div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="tour-step-wrapper" *ngIf="steps$ | async as step" [ngClass]="class">
+  <ng-tour-step-back-arb *ngIf="step.options.backdrop && target" [themeColor]="step.options.themeColor"
+    [stepBackSize]="target" [position]="step.options.fixed ? 'fixed' : 'absolute'" [targetBackground]="targetBackground"
+    [opacity]="step.options.opacity">
+  </ng-tour-step-back-arb>
+  <div *ngIf="currentStep" class="tour-step-modal" [style.max-width]="step.options.maxWidth"
+    [style.max-height]="step.options.maxHeight" [style.top.px]="stepModalPosition.top"
+    [style.left.px]="stepModalPosition.left" [style.bottom.px]="stepModalPosition.bottom"
+    [style.right.px]="stepModalPosition.right" [style.min-width]="step.options.minWidth"
+    [style.min-height]="step.options.minHeight" [style.position]="step.options.fixed ? 'fixed' : 'absolute'"
+    [style.color]="step.options.themeColor" [style.zindex]="30000">
+    <div *ngIf="!step.options.customTemplate" class="tour-step-modal__content">
+      <div class="tour-step-modal__header">
+        <h3 class="tour-step-modal__title">
+          {{step.title | translate }}
+        </h3>
+        <button class="tour-btn-close" type="button" (click)="onClose($event)">
+          &times;
+        </button>
+      </div>
+      <div class="tour-step-modal__body">
+        <p class="tour-step-modal__description">
+          {{step.description | translate }}
+        </p>
+      </div>
+      <div class="tour-step-modal__footer">
+        <div *ngIf="!step.options.withoutCounter" class="tour-step-modal__counter">
+          {{step.index + 1}} {{'dashboard.tour.'+step.ctrlBtns.of}} {{step.total}}
+        </div>
+        <button *ngIf="!step.withoutPrev && step.index" type="button" class="tour-btn tour-btn-prev"
+          (click)="onPrev($event)">
+          {{'dashboard.tour.'+step.ctrlBtns.prev | translate }}
+        </button>
+        <button *ngIf="step.index + 1 !== step.total" type="button" class="tour-btn tour-btn-next"
+          (click)="onNext($event)">
+          {{'dashboard.tour.'+step.ctrlBtns.next | translate }}
+        </button>
+        <button *ngIf="step.index + 1 === step.total" type="button" class="tour-btn tour-btn-done"
+          (click)="onClose($event)">
+          {{'dashboard.tour.'+step.ctrlBtns.done | translate }}
+        </button>
+      </div>
+    </div>
+    <div *ngIf="step.options.customTemplate">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

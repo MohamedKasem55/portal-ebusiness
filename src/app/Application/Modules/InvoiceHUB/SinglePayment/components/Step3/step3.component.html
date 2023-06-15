@@ -1,0 +1,127 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label class="required">{{ 'public.account' |
+                                            translate }}</label> 
+                                <span class="form-control">{{sharedData.account.fullAccountNumber}}{{(sharedData.account.alias != null && sharedData.account.alias != '' ? ' - '+ sharedData.account.alias : '')}} - {{ sharedData.account.availableBalance | amountCurrency:sharedData.account.currency}} {{ 'currencyIso' | modelPipe:sharedData.account.currency}} </span>           
+                                
+                            </div>
+                        </div>
+                    </div>      
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                    <div class="row">
+                        <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.invoiceId' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoiceId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierName' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoice.billerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierId' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoice.billerId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.amountDue' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoice.amountDue | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                        </fieldset>        
+                        
+                    </div>
+                     <div class="row">
+                        <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.dateDue' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoice.dateDue | date:"dd/MM/yyyy"  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.additionalDetails' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoice.additionalDetails }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.buyerName' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ sharedData.invoice.buyerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'invoiceHUB.amountToPay' |
+                                            translate }}</label> 
+                                       <span class="form-control">{{sharedData.invoice.amountPayment | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                        </fieldset>        
+                        
+                    </div>            
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<app-levels-table 
+    [futureSecurityLevels]="sharedData.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid" *ngIf="sharedData.generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP" [requestValidate]="sharedData.requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

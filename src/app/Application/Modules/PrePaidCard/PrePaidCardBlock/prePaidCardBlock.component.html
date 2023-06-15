@@ -1,0 +1,137 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active">{{ 'prePaidCard.name' | translate }}</li>
+		<li class="active"><a href="#" [routerLink]="['/prepaid-card/prepaidcardlist']">{{ 'prePaidCard.prePaidCardList'
+				| translate }}</a>
+		</li>
+		<li class="active">{{ 'prePaidCard.prepaidCardID' | translate:{id: id} }}</li>
+		<li *ngIf="prePaidCardBlockService.getBlockOperationType() === stolenOpType" class="active">
+			{{ 'prePaidCard.cardLostStolen'| translate }}</li>
+		<li *ngIf="prePaidCardBlockService.getBlockOperationType() === replaceOpType" class="active">
+			{{ 'prePaidCard.cardReplacement'| translate }}</li>
+		<li *ngIf="prePaidCardBlockService.getBlockOperationType() === closureOpType" class="active">
+			{{ 'prePaidCard.cardClosureRequest'| translate }}</li>
+
+	</ol>
+</div>
+
+<!-- <arb-breadcrumb [routes]="getRoutes()"></arb-breadcrumb> -->
+
+<h1 *ngIf="prePaidCardBlockService.getBlockOperationType() === stolenOpType" class="padding-title">
+	{{ 'prePaidCard.cardLostStolen'| translate }}</h1>
+<h1 *ngIf="prePaidCardBlockService.getBlockOperationType() === replaceOpType" class="padding-title">
+	{{ 'prePaidCard.cardReplacement'| translate }}</h1>
+<h1 *ngIf="prePaidCardBlockService.getBlockOperationType() === closureOpType" class="padding-title">
+	{{ 'prePaidCard.cardClosureRequest'| translate }}</h1>
+
+<div class="container-fluid sme-content-container">
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+				<span>
+					<span class="num" [style.margin-left]="translate.currentLang!=='en'? '4px': '0px'">1</span>
+					<span class="text">{{ 'prePaidCard.stepper.stepReason' | translate | uppercase}}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+				<span>
+				<span class="num" [style.margin-left]="translate.currentLang!=='en'? '4px': '0px'">2</span>
+					<span class="text">{{ 'prePaidCard.stepper.stepPreview' | translate | uppercase}}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 4, 'completed' : step > 4}">
+				<span>
+					<span class="icon -check iconCheckalign"></span>
+					<span class="text">{{ 'prePaidCard.stepper.stepSummary' | translate | uppercase }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+
+
+<app-step1 *ngIf="step === 1" [form]="this.form" (onInit)="onInitStep1($event)">
+</app-step1>
+
+<app-step2 *ngIf="step === 2" [form]="this.form" [generateChallengeAndOTP]="generateChallengeAndOTP"
+	[requestValidate]="requestValidate" (onInit)="onInitStep2($event)">
+
+</app-step2>
+
+<app-step3 *ngIf="step === 3" [generateChallengeAndOTP]="generateChallengeAndOTP">
+</app-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	<button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step == 2">{{'public.back' |
+		translate }}</button>
+	<button type="submit" class=" btn btn-default btn-wide" (click)="cancel()" *ngIf="step < 3">
+		{{'public.cancel' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3"
+		[disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="finish()" *ngIf="step == 3">{{'public.finish' |
+		translate}}</button>
+</div>
+
+<div class="modal fade" bsModal #modalErrorAccount="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalErrorhide()" type="button" class="close">&times;</button>
+			</div>
+			<div class="modal-body modal-error">
+				<span class="icon -close icon-failure"></span>
+				<div class="display-div-column">
+					<p>{{'commercialCards.inputErrorNumberAccount' | translate}}</p>
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer flex">
+				<button (click)="modalErrorhide()" type="button" class="tryAgain btn btn-primary btn-wide">{{
+					'commercialCards.again' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" bsModal #modalConfirmBlock="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalConfirmBlock.hide();blockCancel()" type="button" class="close">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="display-div-column" style="margin-bottom: 30px">
+					<div *ngIf="typeOperation !== closureOpType; else closure">
+						<p style="font-weight: bold;font-size:18px;">
+							{{'commercialCards.blockCardModal' | translate}}
+							<!-- {{ 'prepaidCards.LostStolen' | modelPipe: selectedReason | titlecase }}? -->
+						</p>
+						<div class="display-div-column">
+							<p>{{'commercialCards.blockReplCardQuestion' | translate}}</p>
+						</div>
+					</div>
+					<ng-template #closure>
+						<p style="font-weight: bold;font-size:18px;">
+							{{'prePaidCard.cancelTitle' | translate}}
+						</p>
+						<div class="display-div-column">
+							<p>{{'prePaidCard.closureCardQuestion' | translate}}</p>
+						</div>
+					</ng-template>
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" (click)="modalConfirmBlock.hide();blockCancel()" class="btn btn-default btn-wide"
+					data-dismiss="modal" aria-label="Close">{{ 'public.no' | translate }}</button>
+				<button type="button" class="btn btn-primary btn-wide" data-dismiss="modal" aria-label="Close"
+					(click)="modalConfirmBlock.hide();blockConfirm()">{{ 'public.yes' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>

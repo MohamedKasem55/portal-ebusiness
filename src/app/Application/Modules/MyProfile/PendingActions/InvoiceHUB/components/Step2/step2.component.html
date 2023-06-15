@@ -1,0 +1,102 @@
+<!--    This table shows data selected when the actions is to refuse actions -->
+
+<app-invoiceHUB-table *ngIf="sharedData.tableSelected.length > 0
+    && !sharedData.approveFlow" [items]="sharedData.tableSelected" [modal]="modalAuth" [futureLevels]="false"
+                      [externalPagination]="false" [selectable]="false">
+</app-invoiceHUB-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.approveFlow
+    && sharedData.tableSelected.length > 0
+    && this.sharedData['batchList']
+    && this.sharedData['batchList'].toAuthorize.length > 0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-invoiceHUB-table *ngIf="sharedData.approveFlow
+    && sharedData.tableSelected.length > 0
+    && this.sharedData['batchList']
+    && this.sharedData['batchList'].toAuthorize.length > 0"
+                      [items]="this.sharedData['batchList'].toAuthorize"
+                      [modal]="modalAuth" [futureLevels]="true" [externalPagination]="false" [selectable]="false">
+</app-invoiceHUB-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.approveFlow
+    && sharedData.tableSelected.length > 0
+    && this.sharedData['batchList']
+    && this.sharedData['batchList'].toProcess.length > 0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-invoiceHUB-table *ngIf="sharedData.approveFlow
+    && sharedData.tableSelected.length > 0
+    && this.sharedData['batchList']
+    && this.sharedData['batchList'].toProcess.length > 0"
+                      [items]="this.sharedData['batchList'].toProcess"
+                      [modal]="modalAuth" [futureLevels]="true" [externalPagination]="false" [selectable]="false">
+</app-invoiceHUB-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<!--    This shows the authorization component -->
+
+<div class="sme-content-container container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'myProfile.pending_actions.totalAmountToProcess' | translate }}</label>
+                                    <p>{{ amountToProcess | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-content-container container-fluid" *ngIf="sharedData.approveFlow">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group" *ngIf="generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate"
+                                            #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

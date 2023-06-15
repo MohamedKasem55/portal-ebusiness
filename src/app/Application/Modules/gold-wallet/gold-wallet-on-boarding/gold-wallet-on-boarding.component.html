@@ -1,0 +1,90 @@
+<div class='sme-breadcrumb' xmlns="http://www.w3.org/1999/html">
+    <ol class='breadcrumb'>
+        <li>{{ 'gold-wallet.wallet' | translate }}</li>
+        <li class='active'>{{ 'gold-wallet.on-boarding' | translate }}</li>
+    </ol>
+</div>
+
+<div class='container-fluid' *ngIf="pageName !== 'STEPPER'">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="contentCenter">
+                        <img src="img/Gold.png"/>
+                    </div>
+                    <br>
+                    <div class="contentCenter">
+                        <h2>
+                            <strong>
+                                {{ 'gold-wallet.open-gold-wallet-header' | translate }}
+                            </strong>
+                        </h2>
+                    </div>
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+
+<arb-steps *ngIf="pageName !== 'OTP' && pageName !== 'LANDING'"
+           [currentStep]='step' [steps]="steps">
+</arb-steps>
+<div class='container-fluid' *ngIf="pageName ==='STEPPER'">
+    <arb-gold-wallet-terms-and-conditions [goldWalletOnBoardingRequest]="goldWalletOnBoardingRequest"
+                                          (changeGoldWalletOnBoardingRequest)="validateChanges($event)"
+                                          *ngIf="step === 1"></arb-gold-wallet-terms-and-conditions>
+    <arb-gold-wallet-select-account [goldWalletOnBoardingRequest]="goldWalletOnBoardingRequest"
+                                    (changeGoldWalletOnBoardingRequest)="validateChanges($event)"
+                                    *ngIf="step === 2"></arb-gold-wallet-select-account>
+    <arb-gold-wallet-summary [goldWalletOnBoardingRequest]="goldWalletOnBoardingRequest"
+                             (changeGoldWalletOnBoardingRequest)="validateChanges($event)"
+                             *ngIf="step === 3"></arb-gold-wallet-summary>
+    <arb-panel *ngIf="step === 3">
+        <arb-panel-title [title]="'gold-wallet.otp' | translate">
+        </arb-panel-title>
+        <fieldset style="font-size: 18px;margin-left: 2%;margin-bottom: 1%;">
+            <div class="col-xs-6 col-sm-3 ">
+                <div class="form-group-information">
+                    <app-secured-authentication [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                                [requestValidate]='requestValidate'
+                                                (onChangeEvent)="otpChange($event)">
+                    </app-secured-authentication>
+                </div>
+            </div>
+        </fieldset>
+    </arb-panel>
+    <arb-gold-wallet-finish
+                            [walletOnBoardingConfirmRes]="walletOnBoardingConfirmRes"
+                            [success]="isSuccessOnBoarding"
+                            *ngIf="step === 4">
+    </arb-gold-wallet-finish>
+</div>
+
+<arb-buttons *ngIf="pageName === 'LANDING'">
+    <button class='btn btn-primary btn-wide' (click)="startOnBoarding()" type='button'>
+        {{'gold-wallet.open-gold-wallet' | translate}}
+    </button>
+</arb-buttons>
+
+<arb-buttons *ngIf="step > 0 && step!=4 ">
+    <button class='btn btn-default btn-wide' (click)="cancel()" [ngStyle]="{'float': language === 'en' ?'left':'right'}"
+            type='button'>{{ 'gold-wallet.cancel' |translate}}</button>
+
+    <button class='btn btn-default btn-wide' type='button' (click)='back()'
+            *ngIf='step!=1 && step<4'>{{ 'public.back' | translate}}</button>
+    <button class='btn btn-primary btn-wide' [disabled]="isDisabledButton" (click)="nextStep()"
+            type='button'>{{'gold-wallet.next' |translate}}</button>
+
+</arb-buttons>
+
+<arb-buttons *ngIf="step === 4 ">
+    <button class='btn btn-default btn-wide' (click)="cancel()" [ngStyle]="{'float': language === 'en' ?'left':'right'}"
+            type='button'>{{ 'gold-wallet.cancel' |translate}}</button>
+
+
+    <button class='btn btn-primary btn-wide'  (click)="navigateToGoldWallet()"
+            type='button'>{{'gold-wallet.go-to-dashboard' |translate}}</button>
+
+</arb-buttons>

@@ -1,0 +1,159 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'myProfile.myProfile' | translate}}</li>
+        <li>{{ 'myProfile.pending_actions.pending_actions'| translate }}</li>
+    </ol>
+</div>
+
+<div class="sme-content-container container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-data-table__title">{{ 'myProfile.pending_actions.request_status'| translate }}</div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="table" [header]="'payments.bill-payments' | translate" [columns]="[
+                        {'title':'myProfile.pending_actions.request_type' | translate,'dataKey':'nameExport'},
+                        {'title':'myProfile.pending_actions.pending' | translate ,'dataKey':'value'}]"></table-export>
+            </div>
+        </div>
+        <div>
+            <div class="sme-table table headerDataTable">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                               class="material  sme-table sme-table--responsive table" [rows]="rows"
+                               [columnMode]="defaultColumnMode"
+                               [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                               [count]="rows.length"
+                               [limit]="displaySize" [externalPaging]="false" [externalSorting]="false">
+
+                    <!-- Row Detail Template -->
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'myProfile.pending_actions.request_type' | translate }}
+                                            </label>
+                                            <div>
+                                                <span (click)="goToPending(row.route)">{{ row.name | translate}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'myProfile.pending_actions.pending' | translate }}</label>
+                                            <div>
+                                                <span>{{row.value}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+                    <!-- Row Detail Template -->
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <!-- <div style="padding-left:60px; font-size:14px">
+                              <div>{{row.date}}, {{row.time}}</div>
+                            </div> -->
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'myProfile.pending_actions.request_type' | translate }} </label>
+                                            <div>
+                                                <span (click)="goToPending(row.route)"
+                                                      class="human-selectable">{{ row.name | translate}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'myProfile.pending_actions.pending' | translate }}</label>
+                                            <div>
+                                                <span class="human-selectable">{{row.value}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+                    <ngx-datatable-column prop="name">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'myProfile.pending_actions.request_type' | translate }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <a routerLinkActive="active" [routerLink]="[row.route]">
+                                <span class="human-selectable">{{value | translate}}</span>
+                            </a>
+                            <!--
+                            <span (click)="goToPending(row.route)" class="human-selectable">{{value}}</span>
+                            -->
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="value">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'myProfile.pending_actions.pending' | translate }} </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span (click)="goToPending(row.route)" class="human-selectable">{{value}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [visiblePagesCount]="visiblePagesCount" (change)="table.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div class="sme-data-table__actions form-inline">
+									<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{(rows.length > pageSize ? pageSize : rows.length)}}
+                                        {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+										<span>{{ 'public.showRowsLabel' | translate}}</span>
+										<div class="sme-select form-control">
+											<select class="form-control" [(ngModel)]="displaySize"
+                                                    (change)="this.setPage(null)">
+												<option [value]=10>10</option>
+												<option [value]=20>20</option>
+												<option [value]=50>50</option>
+												<option [value]="100">100</option>
+											</select>
+										</div>
+									</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>

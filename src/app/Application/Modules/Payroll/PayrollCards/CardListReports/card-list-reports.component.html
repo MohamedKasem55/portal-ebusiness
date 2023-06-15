@@ -1,0 +1,60 @@
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li class="active">{{ 'payroll.cardListReports'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">{{ 'payroll.cardListReports'| translate }}</div>
+		</div>
+	</div>
+	 <div class="sme-page-block sme-wizard-choices">
+                    <div>
+                        {{'payroll.selectOption' | translate }}
+
+                        <br/>
+
+                        <ul class="sme-radio-buttons">
+                            <li>
+                                <div class="sme-radio radio">
+                                    <label>
+                                    <span class="glyphicon mouseoverblue">&#xe166; <a (click)="cardList()"> {{'payroll.downloadCardList' | translate }}</a></span> 
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="sme-radio radio">
+                                    <label>
+                                    <span class="glyphicon mouseoverblue">&#xe166; <a (click)="KYCList()">  {{'payroll.downloadKYCList' | translate }}</a></span>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="sme-radio radio">
+                                    <label>
+                                    <span class="glyphicon mouseoverblue">&#xe166; <a (click)="cardExpiryList()">  {{'payroll.cardExpiryList' | translate }}</a></span>
+                                    </label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="sme-radio radio">
+                                    <label>
+                                    <span class="glyphicon mouseoverblue">&#xe166; <a (click)="idExpiryList()"> {{'payroll.idExpiryList' | translate }}</a></span>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+</div>		
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions" >
+    <button type="button" class=" btn btn-default btn-wide" [routerLink]="['/payroll/payroll-cards']">{{'public.back' | translate }}</button>
+    
+</div>
+

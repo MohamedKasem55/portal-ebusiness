@@ -1,0 +1,401 @@
+.sme-table {
+  background: #fff;
+
+  .sme-radio,
+  .sme-checkbox {
+    margin: 0;
+  }
+
+  .text-align-center > div {
+    text-align: center;
+  }
+
+  .text-align-right > div {
+    text-align: right;
+  }
+
+  &__check,
+  &__actions {
+    width: 1%;
+    text-align: center;
+  }
+
+  &__check {
+    padding: 0 5px 0 15px !important;
+    vertical-align: middle !important;
+
+    .sme-checkbox {
+    }
+  }
+
+  &__action {
+    /*width: 1%;*/
+    text-align: center;
+    a {
+      @include anchor {
+        color: $brand-grey-dark;
+      }
+    }
+  }
+
+  & > thead &__check {
+    .sme-checkbox {
+      i {
+        border-color: #fff !important;
+      }
+
+      > span {
+        display: none;
+      }
+    }
+  }
+
+  &__actions {
+    padding: 0 !important;
+    vertical-align: middle !important;
+
+    > .btn {
+      position: relative;
+      background: none;
+      padding: 0;
+
+      color: $brand-grey-dark;
+
+      .icon {
+        margin-top: -1px;
+        @include center;
+        @include icon-size(10px);
+      }
+    }
+  }
+
+  &__cell--right {
+    text-align: $right;
+  }
+
+  &__rows-head {
+  }
+
+  > thead {
+    background: $brand-primary;
+
+    > tr {
+      > th {
+        position: relative;
+        color: #fff;
+        vertical-align: bottom;
+        @include font($font-size-12);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-12 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-12 * $factor2);
+        }
+        padding: 17px;
+        border: 0;
+        font-weight: 500;
+        background: $brand-primary;
+
+        + th {
+          @include before {
+            @include center-y;
+            #{$left}: 0;
+            width: 1px;
+            height: 22px;
+            background: rgba(#000, 0.1);
+          }
+        }
+
+        a {
+          padding: 17px;
+          margin: -17px;
+          display: block;
+          /*height: 20px;*/
+          @include anchor {
+            color: #fff;
+            text-decoration: none;
+          }
+        }
+
+        .icon {
+          @include icon-size(7px);
+          @include center-y;
+          #{$right}: 15px;
+        }
+      }
+    }
+  }
+
+  > tbody {
+    > tr {
+      &:nth-child(2n) {
+        &,
+        td,
+        th {
+          background-color: $table-bg-accent;
+        }
+      }
+
+      > td {
+        font-size: $font-size-14;
+        @media screen and (max-width: $max-width) {
+          font-size: $font-size-14 * $factor;
+        }
+        @media screen and (max-width: $max-width2) {
+          font-size: $font-size-14 * $factor2;
+        }
+        line-height: 16px;
+        padding: 18px 14px;
+        color: $brand-grey-dark;
+
+        border-top: 1px solid $table-border-color;
+      }
+
+      &.sme-table__rows-head {
+        > th,
+        > td {
+          height: 51px;
+          font-size: $font-size-14;
+          @media screen and (max-width: $max-width) {
+            font-size: $font-size-14 * $factor;
+          }
+          @media screen and (max-width: $max-width2) {
+            font-size: $font-size-14 * $factor2;
+          }
+          font-weight: bold;
+          vertical-align: middle;
+          color: $brand-grey-dark;
+        }
+      }
+    }
+
+    & + tbody {
+      border: 0;
+    }
+  }
+
+  &__row-popover {
+    width: 460px;
+
+    .sme-summary-group__value {
+      @if $dir != ltr {
+        font-size: $font-size-13;
+        @media screen and (max-width: $max-width) {
+          font-size: $font-size-13 * $factor;
+        }
+        @media screen and (max-width: $max-width2) {
+          font-size: $font-size-13 * $factor2;
+        }
+      }
+    }
+  }
+
+  @media #{$sm-only} {
+    > thead {
+      > tr {
+        > th,
+        > td {
+          height: 45px;
+          padding: 5px;
+          padding-#{$right}: 15px;
+          vertical-align: middle;
+
+          > a {
+            padding: 5px;
+            margin: -5px;
+          }
+          /*white-space: nowrap;*/
+          /*text-overflow: ellipsis;*/
+
+          .icon {
+            #{$right}: 0px;
+          }
+        }
+      }
+    }
+
+    > tbody {
+      > tr {
+        > th,
+        > td {
+          padding-#{$left}: 5px;
+          padding-#{$right}: 5px;
+        }
+      }
+    }
+  }
+}
+
+@media #{$xs-only} {
+  .sme-table--responsive {
+    $actions-height: 50px;
+
+    .sme-table__cell--right {
+      text-align: $left;
+    }
+
+    > thead {
+      display: none;
+    }
+
+    > tbody {
+      > tr {
+        display: block;
+        @include clearfix;
+        position: relative;
+        border-bottom: 1px solid $table-border-color;
+
+        padding-top: 20px;
+
+        > td,
+        > td {
+          display: block;
+          float: $left;
+          width: 50%;
+
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          padding-bottom: 20px;
+
+          border-top: 0;
+
+          &[data-head]:before {
+            @include font($font-size-11);
+            @media screen and (max-width: $max-width) {
+              @include font($font-size-11 * $factor);
+            }
+            @media screen and (max-width: $max-width2) {
+              @include font($font-size-11 * $factor2);
+            }
+            content: attr(data-head);
+            display: block;
+            color: #999;
+            margin-bottom: 5px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          &.sme-table__check,
+          &.sme-table__actions {
+            position: absolute;
+            height: $actions-height;
+            top: 0;
+            border: 0;
+            /*border-bottom: 1px solid $table-border-color;*/
+            overflow: visible;
+          }
+          &.sme-table__check {
+            #{$left}: 0;
+            padding-top: (($actions-height - 22px) * 0.5) !important;
+            text-align: $left;
+          }
+          &.sme-table__actions {
+            #{$right}: 0;
+            padding-top: (($actions-height - 35px) * 0.5) !important;
+            text-align: $right;
+          }
+        }
+
+        &.sme-table__rows-head {
+          padding: 0;
+
+          > td,
+          > th {
+            float: none;
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    //        > tbody {
+    //            > tr {
+    //                display: flex;
+    //                width: 100%;
+    //                flex-wrap: wrap;
+    //                flex-direction: column;
+    //
+    //                > td, > td {
+    //                    order: 2;
+    //
+    //                    &.sme-table__xs-head {
+    //                        order: 1;
+    //                    }
+    //                }
+    //            }
+    //        }
+
+    &.sme-table--actions,
+    .sme-table--checks {
+      > tbody {
+        > tr {
+          padding-top: $actions-height;
+        }
+      }
+    }
+
+    &.sme-table--checks {
+      & > thead {
+        display: block;
+
+        > tr {
+          display: block;
+
+          > th {
+            display: none;
+
+            &.sme-table__check {
+              display: block;
+              width: 100%;
+              text-align: $left;
+              vertical-align: middle;
+              padding: 17px !important;
+
+              .sme-checkbox {
+                color: #fff;
+
+                > span {
+                  display: block;
+                  padding-top: 4px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .sme-table {
+      }
+    }
+
+    &.sme-table--check-list {
+      > tbody {
+        > tr {
+          padding: 0;
+
+          > td,
+          > td {
+            float: none;
+            width: 100%;
+
+            .sme-checkbox {
+              /*display: block;*/
+
+              > span {
+                display: block;
+                padding-top: 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sme-table__row-popover {
+    width: auto;
+  }
+}

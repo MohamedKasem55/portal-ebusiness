@@ -1,0 +1,22 @@
+<arb-panel>
+    <h3>{{ 'accounts.creditCards.pidStep2Title' | translate }}</h3>
+    <hr>
+    <app-credit-cards-details-payments-in-advance-form
+            [formModel]="formModel"
+            [card]="card"
+            [paymentData]="paymentData"
+            [accountList]="accountList">
+    </app-credit-cards-details-payments-in-advance-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.creditCards.pidStep2HelpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.creditCards.pidStep2HelpText' | translate }}
+        </div>
+    </div>
+</arb-panel>

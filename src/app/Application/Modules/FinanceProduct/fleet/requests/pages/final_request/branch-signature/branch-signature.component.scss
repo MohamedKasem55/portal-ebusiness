@@ -1,0 +1,49 @@
+.search-container {
+    position: relative;
+
+    &::before {
+        content: '';
+        background-image: url('/assets/icons/search.svg');
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-size: cover;
+        background-position: left;
+        background-repeat: no-repeat;
+        margin: 18px;
+
+    }
+
+    .search-input {
+        height: 54px;
+        width: 100%;
+        border: 0;
+        outline: none;
+        padding-left: 60px;
+        &::placeholder{
+            font-family: "noto-sans-en-light";
+            font-style: normal;
+            font-weight: 100;
+            font-size: 21px;
+            color: #99A5BE;
+        }
+    }
+}
+
+.sme-data-table__head {
+    background-color: white;
+}
+
+.sme-data-table__title {
+    font-style: normal;
+    font-size: 21px;
+    color: #1D2232;
+    font-family: "noto-sans-en-light";
+    font-weight: 100;
+}
+
+::ng-deep{
+    .datatable-header-cell:first-child , .datatable-body-cell:first-child{
+        width: 40px !important;
+    }
+}

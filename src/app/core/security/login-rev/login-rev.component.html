@@ -1,0 +1,1231 @@
+<div class='login'>
+
+
+  <div [ngClass]="translate.currentLang === 'en' ? 'container-banner-en' : 'container-banner-ar'">
+    <ng-container *ngIf='messages && messages.length > 0'>
+      <div class='login-message message-top' style='display:flex' *ngIf='messageActive'>
+        <!-- <div *ngFor="let message of messages; let i=index" class="login-message message-top" style="display:flex"> -->
+
+        <div class='col-md-1 icon-message'>
+          <span class='glyphicon glyphicon-info-sign' style='top: 50%;'></span>
+        </div>
+
+        <div class='messages'>
+          <div *ngFor='let message of messages; let i=index'>
+            <div class='msg-color' *ngIf="translate.currentLang === 'en' && message.externalInfo"
+                 [innerHTML]="getSanitizedUnescapedStr(message['englishMessage'])"></div>
+            <div class='msg-color' *ngIf="translate.currentLang === 'ar'&& message.externalInfo"
+                 [innerHTML]="getSanitizedUnescapedStr(message['arabicMessage'])"></div>
+          </div>
+        </div>
+        <div class='close-message'
+             [ngClass]="translate.currentLang ==='en' ? 'close-message-en' : 'close-message-ar'">
+          <a class='close-message-top' href='#' (click)='closeMessageLogin()'>&times;</a>
+        </div>
+      </div>
+    </ng-container>
+    <div class='first-banner'>
+      <app-campaign-banner [banner]='banner' [error]='errorBanner'>
+      </app-campaign-banner>
+    </div>
+    <div style='padding-top: 5px'></div>
+    <div class='third-banner'>
+      <app-security-tips  ></app-security-tips>
+    </div>
+    <div style='padding-top: 10px'></div>
+    <div class='second-banner'>
+      <app-user-resources></app-user-resources>
+    </div>
+
+    <div style='padding-top: 10px'></div>
+    <div class='third-banner'>
+      <arb-cash-management-card>
+      </arb-cash-management-card>
+    </div>
+    <div style="height: 100px"></div>
+  </div>
+
+  <div class='container-login sme-login-form' style='display: inline-table;'
+       [ngClass]="{'container-login-ar': translate.currentLang === 'ar'}">
+
+    <div class='icon-container'>
+      <div *ngIf='loginStep == 2' [ngClass]="translate.currentLang === 'en' ?
+                'back-arrow__logo-en' : 'back-arrow__logo-ar'" (click)='backStep1()'>
+        <!-- <img src="img/assets/img/arrow-back.svg" alt="" /> -->
+        <span class='back-arrow-logo-icon icon -chevron-left'></span>
+      </div>
+      <div class='container-login__logo'>
+        <img src='img/logo-white.svg' alt='' />
+      </div>
+      <div [ngClass]='languageLocationClass()'>
+        <!-- <span>{{ 'public.language' | translate }}:&nbsp;</span> -->
+        <strong *ngIf="translate.currentLang!=='en'" (click)="translate.use('en')"
+                class='login-language-en pointer'>
+          {{ 'public.english' | translate }}
+        </strong>
+        <!-- <strong> / </strong> -->
+        <strong *ngIf="translate.currentLang==='en'" (click)="translate.use('ar')"
+                class='login-language-ar pointer'>
+          {{ 'public.arabic' | translate }}
+        </strong>
+      </div>
+
+
+    </div>
+
+
+    <div class='container-login__form'>
+
+      <div class='container-login__title'>
+        <h2 class='login-title'>{{ 'public.login' | translate }} </h2>
+        <!-- <p class="subtitle">{{ 'login.resources.Al Mubasher eCorporate' | translate }}</p> -->
+        <p *ngIf="typeUrl != 'publicsector'">{{ 'login.resources.Al Mubasher eCorporate' | translate }}</p>
+        <p *ngIf="typeUrl == 'publicsector'">{{ 'login.resources.Al Mubasher eCorporateGov' | translate }}</p>
+      </div>
+
+      <ul class='nav nav-pills'>
+        <li [class.active]='isActiveTab(1)' [ngClass]='isActiveTab(1)? "selectedTab":""'>
+          <a data-toggle='tab' class='human-selectable' (click)='setActiveTab(1)'>
+            {{'public.login'| translate}}
+          </a>
+        </li>
+        <li [class.active]='isActiveTab(2)' [ngClass]='isActiveTab(2)? "selectedTab":""'>
+          <a data-toggle='tab' class='human-selectable' (click)='setActiveTab(2)'>
+            {{'public.loginWithId'| translate}}
+          </a>
+        </li>
+      </ul>
+
+      <div class='wizard-login__container'>
+
+        <div class='hexagon-active-container'>
+          <span class='hexagon-active step1'></span>
+          <span class='hexagon-number-active'
+                [ngClass]="{'hexagon-number-ar': translate.currentLang === 'ar'}">1</span>
+          <div class='hexagon-title'>{{ 'login.step1' | translate }}</div>
+        </div>
+
+        <span class='divider' [ngClass]="{'divider-ar': translate.currentLang === 'ar'}"></span>
+
+        <div class='step2' [ngClass]="{
+                        'hexagon-active-container': loginStep > 1,
+                        'hexagon-container': loginStep != 2,
+                        'step2-ar': translate.currentLang === 'ar'
+                     }">
+                    <span [ngClass]="{
+                            'hexagon-active': loginStep > 1,
+                            'hexagon': loginStep != 2
+                        }"></span>
+          <span [ngClass]="{
+                            'hexagon-number-active': loginStep > 1,
+                            'hexagon-number': true,
+                            'hexagon-number-ar': translate.currentLang === 'ar'
+                         }">
+                        2
+                    </span>
+          <div class='hexagon-title'>{{ 'login.step2' | translate }}</div>
+        </div>
+
+        <ng-container *ngIf='isActiveTab(2)'>
+          <span class='divider divider2' [ngClass]="{'divider-ar divider-ar2': translate.currentLang === 'ar'}"></span>
+
+          <div class='step2 step3' [ngClass]="{
+                        'hexagon-active-container': loginStep == 3,
+                        'hexagon-container': loginStep != 3,
+                        'step3-ar': translate.currentLang === 'ar'
+                     }">
+                    <span [ngClass]="{
+                            'hexagon-active': loginStep == 3,
+                            'hexagon': loginStep !=3
+                        }"></span>
+            <span [ngClass]="{
+                            'hexagon-number-active': loginStep == 3,
+                            'hexagon-number': true,
+                            'hexagon-number-ar': translate.currentLang === 'ar'
+                         }">
+                        3
+                    </span>
+            <div class='hexagon-title'>{{ 'login.step3' | translate }}</div>
+          </div>
+        </ng-container>
+
+      </div>
+      <form autocomplete='off' class='sme-login-form__form sme-form' [formGroup]='loginForm'
+            (ngSubmit)='proceed()' novalidate>
+
+        <div style='display:none'>
+          <input type='password' tabindex='-1' autocomplete='false' />
+        </div>
+
+        <div class='sme-login-form__form-body'>
+
+
+          <div class='tab-content'>
+
+            <ng-container>
+
+
+              <!-- Civilian ID -->
+
+              <div class='form-group' *ngIf='loginStep == 1 && isActiveTab(2)'>
+                <label [ngClass]='showTitleLang()' for='rev-login-form-input-organization'>
+                  {{ 'login.civilianId' | translate }}
+                </label>
+                <input type='text' name='civilianId' #civilianId formControlName='civilianId'
+                       id='rev-login-form-input-civilianId'
+                       placeholder="{{ 'login.introduce-civilianId' | translate }}"
+                       class='form-control login-input-form' inputPattern='onlyDigits' autocomplete='off'
+                       maxlength='10'
+                       oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+              </div>
+              <div
+                *ngIf="loginForm.controls.civilianId.hasError('required') && loginForm.controls.civilianId.touched"
+                class='alert alert-danger'>
+                <small> {{ 'login.messageErrors.civilianId' | translate }}
+                </small>
+              </div>
+
+              <!-- company -->
+              <div class='form-group' *ngIf='loginStep  > 1 && isActiveTab(2)'>
+                <label>{{ 'login.organization-profile' | translate }}</label>
+                <div class='form-control'>
+                  <ng-select bindLabel='value' class='custom' [notFoundText]="'public.noData' | translate"
+                             formControlName='companyId' (ngModelChange)='companyChanged($event)'>
+                    <ng-option selected='selected' value='' disabled='disabled'>
+                      --{{ 'public.selectOption' | translate }}--
+                    </ng-option>
+                    <ng-option *ngFor='let item of companyIds' [value]='item'>
+                      {{mask(item)}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+              <div
+                *ngIf="loginForm.controls.companyId.hasError('required') && loginForm.controls.companyId.touched"
+                class='alert alert-danger'>
+                <small> {{ 'login.messageErrors.companyId' | translate }}
+                </small>
+              </div>
+
+              <!-- user id -->
+              <div class='form-group' *ngIf='loginStep > 1 && isActiveTab(2)'>
+                <label>{{ 'login.user-id' | translate }}</label>
+                <div class='form-control'>
+                  <ng-select bindLabel='value' class='custom' [notFoundText]="'public.noData' | translate"
+                             formControlName='userId'>
+                    <ng-option selected='selected' value='' disabled='disabled'>
+                      --{{ 'public.selectOption' | translate }}--
+                    </ng-option>
+                    <ng-option *ngFor='let item of userIds' [value]='item'>
+                      {{mask(item)}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+              <div
+                *ngIf="loginForm.controls.userId.hasError('required') && loginForm.controls.userId.touched"
+                class='alert alert-danger'>
+                <small> {{ 'login.messageErrors.userId' | translate }}
+                </small>
+              </div>
+
+
+              <!-- company -->
+
+              <div class='form-group' *ngIf='isActiveTab(1)'>
+                <label [ngClass]='showTitleLang()' for='rev-login-form-input-organization'>
+                  {{ 'login.organization-profile' | translate }}
+                </label>
+                <input type='text' name='companyId' #organizationName formControlName='companyId'
+                       id='rev-login-form-input-organization' placeholder="{{ 'login.introduce-op' | translate }}"
+                       class='form-control login-input-form' inputPattern='onlyDigits' autocomplete='off'
+                       maxlength='10'
+                       oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+              </div>
+
+              <!-- user id -->
+
+              <div class='form-group' *ngIf='isActiveTab(1)'>
+                <label [ngClass]='showTitleLang()'>
+                  {{ 'login.user-id' | translate }}
+                </label>
+                <input type='text' name='userId' formControlName='userId'
+                       placeholder="{{ 'login.introduce-id' | translate }}" class='form-control login-input-form'
+                       autocomplete='off' maxlength='30'>
+              </div>
+
+              <ng-container *ngIf='!this.resetPasswordIsActivated'>
+
+                <!-- password -->
+
+                <div class='form-group' *ngIf='loginStep == 1'>
+                  <label [ngClass]='showTitleLang()'>
+                    {{ 'login.password' | translate }}
+                  </label>
+                  <input type='password' name='password' formControlName='password'
+                         placeholder="{{ (isActiveTab(1)) ? ('login.introduce-password' | translate):
+                          ('login.introduce-your-password' | translate)}}"
+                         class='form-control login-input-form' autocomplete='off' maxlength='30'
+                         minlength='4'>
+                </div>
+                <div
+                  *ngIf="loginForm.controls.password.hasError('required') && loginForm.controls.password.touched"
+                  class='alert alert-danger'>
+                  <small> {{ 'login.messageErrors.password' | translate }}
+                  </small>
+                </div>
+
+                <!-- otp -->
+
+                <div class='form-group' *ngIf='loginStep == 2 && isChallengeUser === false && isActiveTab(1)
+                       || loginStep == 3 && isChallengeUser === false && isActiveTab(2)'>
+                  <label [ngClass]='showTitleLang()'>
+                    {{ 'login.otp' | translate }}
+                  </label>
+                  <input type='text' name='otp' #otp formControlName='otp' inputPattern='onlyDigits'
+                         placeholder="{{ 'login.introduce-otp' | translate }}"
+                         class='form-control login-input-form' autocomplete='off'
+                         maxlength='6'
+                         minlength='4'
+                         oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+                </div>
+
+                <!-- token -->
+
+                <ng-container *ngIf='loginStep == 2 && isChallengeUser === true && isActiveTab(1)
+                       || loginStep == 3 && isChallengeUser === true && isActiveTab(2)'>
+                  <div class='form-group' *ngIf='!this.resetTokenShowLinkToReset'>
+                    <label [ngClass]='showTitleLang()'>
+                      {{ 'login.serial' | translate }}
+                    </label>
+                    <input class='form-control' autocomplete='off' type='text' name='serial' disabled style='opacity: 1;'
+                           value='{{serial}}'>
+                  </div>
+                  <div class='form-group' *ngIf='!this.resetTokenShowLinkToReset'>
+                    <label [ngClass]='showTitleLang()'>
+                      {{ 'login.challenge' | translate }}
+                    </label>
+                    <input class='form-control' type='text' autocomplete='off' name='challenge' disabled style='opacity: 1;'
+                           value='{{challengeCode}}'>
+                  </div>
+                  <div class='form-group qr-marco' *ngIf='!this.resetTokenShowLinkToReset'>
+                    <qrcode [qrdata]='challengeCode' [width]='150' [errorCorrectionLevel]="'M'"
+                            *ngIf='isQr'>
+                    </qrcode>
+                  </div>
+                  <div class='form-group' *ngIf='!this.resetTokenShowLinkToReset'>
+                    <label>{{ 'login.response' | translate }}</label>
+                    <input placeholder="{{ 'login.introduce-response' | translate }}" class='form-control'
+                           type='text' name='response' autocomplete='off' formControlName='response'
+                           maxlength='6' minlength='4' inputPattern='onlyNumbers'
+                           oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'
+                           #challengeInput>
+                  </div>
+                </ng-container>
+
+              </ng-container>
+            </ng-container>
+
+          </div>
+          <ng-container *ngIf='this.resetPasswordIsActivated'>
+            <div class='form-group'>
+              <label>
+                &nbsp;
+              </label>
+              <span class='form-control'> &nbsp;</span>
+            </div>
+          </ng-container>
+
+        </div>
+
+        <!-- buttons -->
+
+        <ng-container *ngIf='!this.resetPasswordIsActivated'>
+
+          <div *ngIf='loginStep == 1' class='forgotPassword-container'>
+            <p (click)='resetPasswordBeginProcess()' [ngClass]="translate.currentLang === 'en'
+                            ? 'human-selectable forgot-en' : 'human-selectable forgot-ar'">
+              {{ 'public.forgotPassword' | translate }}
+            </p>
+          </div>
+          <div *ngIf='loginStep == 2  && isChallengeUser === true && this.activeTab==1' class='blockedToken-container'>
+            <p (click)='resetTokenBeginProcess()' [ngClass]="translate.currentLang === 'en'
+                        ? 'human-selectable forgot-en' : 'human-selectable forgot-ar'">
+              {{ 'public.blockedToken' | translate }}</p>
+          </div>
+
+          <div class='submit-container display-flex' *ngIf='loginStep == 1'>
+            <button type='submit' class='btn btn-primary login-button proceed-button'
+                    [disabled]='!loginForm.valid'>
+              {{ 'public.login' | translate }}
+            </button>
+            <button type='button' (click)='goToAgreementsLink()'
+                    class='btn btn-reverse register-button btn-wide proceed-button'>
+              {{ 'public.register' | translate }}
+            </button>
+            <button type='button' (click)='showOpenAccount()'
+                    class='btn btn-reverse  btn-wide proceed-button'>
+              {{ 'public.OpenAcc' | translate }}
+            </button>
+            <button type='button' (click)='modifyDetails()'
+                    class='btn btn-reverse  btn-wide proceed-button'>
+              {{ 'public.modifyCompanyDetails' | translate }}
+            </button>
+          </div>
+
+          <div class='submit-container display-flex' *ngIf='loginStep > 1'>
+
+            <button type='button' *ngIf="translate.currentLang==='en'"
+                    class='btn btn-wide btn-reverse proceed- back-button'
+                    style='font-size: unset; height: unset;' (click)='backStep1()'>
+              {{ 'public.back' | translate }}
+            </button>
+
+            <button type='submit' *ngIf='!resetTokenShowLinkToReset'
+                    class='btn btn-primary btn-wide proceed-button' style='font-size: unset; height: unset;'
+                    [disabled]='!loginForm.valid'>
+              {{ 'public.login' | translate }}
+            </button>
+
+            <!--
+            <p class="reset-link-properties"
+               *ngIf="(resetTokenShowLinkToReset) || (loginStep == 2 && isChallengeUser === true)"
+               (click)="resetTokenInitProcess()">
+                {{ 'login.answerChallenge.token-link-text' | translate }}
+            </p>
+            -->
+
+            <button type='button' *ngIf="translate.currentLang!=='en'"
+                    class='btn btn-wide btn-reverse proceed- back-button'
+                    style='font-size: unset; height: unset;' (click)='backStep1()'>
+              {{ 'public.back' | translate }}
+            </button>
+
+          </div>
+
+          <div class='login-errors' *ngIf='loginError'>
+            {{ loginError }}
+          </div>
+
+        </ng-container>
+
+        <ng-container *ngIf='this.resetPasswordIsActivated'>
+
+          <div class='submit-container display-flex'>
+
+            <button type='submit' class='btn btn-primary btn-wide proceed-button' [disabled]='true'>
+              {{ 'login.proceed' | translate }}
+            </button>
+
+            <p class='reset-link-properties' (click)='resetPasswordBeginProcess()'>
+              {{ 'login.reset-password' | translate }}</p>
+          </div>
+
+        </ng-container>
+
+      </form>
+
+      <div class='sme-login-form__footer footer-login'>
+        <div class='sme-login-form__prefooter-links'>
+          <a class='human-selectable' (click)='contactUs()'>
+            {{ 'login.contact-us' | translate }}
+          </a> |
+          <a href='#' [routerLink]="['/terms-conditions']" routerLinkActive='router-link-active'>
+            {{ 'login.terms-conditions' | translate }}
+          </a>
+        </div>
+        <div class='sme-login-form__footer-links'>
+          <a href='#' (click)='openHelpLink()'>
+            {{ 'login.faqs' | translate }}
+          </a> |
+          <a href='#' (click)="openFooterLink($event,'/Online_Security_Overview-')">
+            {{ 'login.online-security-overview' | translate }}
+          </a> |
+          <a href='#' (click)="openFooterLink($event,'/Privacy_statement-SME-')">
+            {{ 'login.privacy-policy' | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='modal fade resetPasswordModal' bsModal #resetPasswordModal='bs-modal' role='dialog'
+       [style]="{ 'z-index': resetPasswordModalZIndex }">
+    <div class='modal-dialog-reset-link loading-position'>
+      <div class='modal-content'>
+        <div>
+          <!-- <div class="modal-header pop-up-back-color">
+
+          </div> -->
+          <div class='modal-header pop-up-back-color'>
+            <button (click)='resetPasswordCloseModal()' type='button'
+                    class='close color-button-close'>&times;
+            </button>
+            <div class='sme-pop-up-title'>
+              {{ 'login.reset-password' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class='modal-body-pop-up' style='padding-top: 10px;padding-bottom: 0px;' [style]="{
+                            'text-align': translate.currentLang==='en'? 'left': 'right'
+                          }">
+
+          <arb-steps [currentStep]='resetPasswordStep' [steps]='resetPasswordSteps'></arb-steps>
+
+          <!-- <hr /> -->
+
+          <ng-container *ngIf='resetPasswordStep==1'>
+
+            <form autocomplete='off' class='sme-form__form resetPasswordForm' [formGroup]='loginForm'
+                  novalidate>
+
+              <div style='display:none'>
+                <input type='password' tabindex='-1' autocomplete='false' />
+              </div>
+
+              <div class='row'>
+                <div class='col-xs-12 col-sm-4'>
+
+                  <div class='form-group'>
+                    <label>
+                      {{ 'login.organization-profile' | translate }}
+                    </label>
+                    <input type='text' name='companyId' formControlName='companyId'
+                           placeholder="{{ 'login.introduce-op' | translate }}" class='form-control'
+                           inputPattern='onlyDigits' autocomplete='off' maxlength='10'
+                           oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+                  </div>
+                </div>
+
+                <!-- <div class="col-xs-12 col-sm-12"></div> -->
+
+                <div class='col-xs-12 col-sm-4'>
+
+
+                  <div class='form-group'>
+                    <label>
+                      {{ 'login.user-id' | translate }}
+                    </label>
+                    <input type='text' name='userId' formControlName='userId'
+                           placeholder="{{ 'login.introduce-id' | translate }}" class='form-control'
+                           autocomplete='off' maxlength='30'>
+                  </div>
+                </div>
+
+                <!-- <div class="col-xs-12 col-sm-12"></div> -->
+
+                <!-- <ng-container *ngIf="loginStep == 1">
+
+                    <div class="col-xs-12 col-sm-4">
+
+
+                        <div class="form-group">
+                            <label>
+                                &nbsp;
+                            </label>
+                            <span class="form-control"> &nbsp;</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12"></div>
+
+                </ng-container> -->
+
+                <ng-container *ngIf='loginStep == 2 && isChallengeUser === false'>
+
+                  <div class='col-xs-12 col-sm-4'>
+
+
+                    <div class='form-group'>
+                      <label>
+                        {{ 'login.otp' | translate }}
+                      </label>
+                      <input type='text' name='otp' #otp formControlName='otp'
+                             inputPattern='onlyDigits'
+                             placeholder="{{ 'login.introduce-otp' | translate }}"
+                             class='form-control' autocomplete='false' maxlength='6'
+                             minlength='4'
+                             oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+                    </div>
+                  </div>
+
+                  <div class='col-xs-12 col-sm-12'></div>
+                </ng-container>
+
+                <ng-container *ngIf='loginStep == 2 && isChallengeUser === true'>
+
+                  <div class='col-xs-12 col-sm-6'>
+
+                    <div class='form-group'>
+                      <label>
+                        {{ 'login.serial' | translate }}
+                      </label>
+                      <input class='form-control' type='text' name='serial' disabled
+                             style='opacity: 1;' value='{{serial}}'>
+                    </div>
+                    <div class='form-group'>
+                      <label>
+                        {{ 'login.challenge' | translate }}
+                      </label>
+                      <input class='form-control' type='text' name='challenge' disabled
+                             style='opacity: 1;' value='{{challengeCode}}'>
+                    </div>
+
+                  </div>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='form-group qr-marco' *ngIf='isQr'>
+                      <qrcode [qrdata]='challengeCode' [width]='150' [errorCorrectionLevel]="'M'">
+                      </qrcode>
+                    </div>
+                  </div>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='form-group'>
+                      <label>{{ 'login.response' | translate }}</label>
+                      <input placeholder="{{ 'login.introduce-response' | translate }}"
+                             class='form-control' type='text' name='response'
+                             autocomplete='new-password' formControlName='response' maxlength='6'
+                             minlength='4' inputPattern='onlyNumbers'
+                             oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'
+                             #challengeInput>
+                    </div>
+                  </div>
+                </ng-container>
+
+              </div>
+
+            </form>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetPasswordStep==2'>
+
+            <form *ngIf='!isIVR' autocomplete='off' class='sme-form__form resetPasswordForm'
+                  [formGroup]='resetPasswordForm' novalidate>
+
+              <div class='row'>
+                <div
+                  *ngIf='challengeQuestionsSelectedOptions[0]==1 || challengeQuestionsSelectedOptions[1]==1'>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='col-xs-12 col-sm-12 form-group'>
+                      <label class='required text-required-big-size display-flex'>{{
+                        'login.answerChallenge.placeholder-firstquestion' | translate }}</label>
+                      <input class='form-control input-margin-top' type='text'
+                             formControlName='question1' maxlength='50' required
+                             [placeholder]="'login.answerChallenge.placeholder-firstquestion' | translate">
+                      <p
+                        *ngIf="resetPasswordForm.get('question1').errors && resetPasswordForm.get('question1').errors.pattern  && (resetPasswordForm.get('question1').dirty || resetPasswordForm.get('question1').touched)"
+                        class='alert alert-danger' style='margin:10px;'>
+                        {{'login.answerChallenge.error.favorite-food' | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf='challengeQuestionsSelectedOptions[0]==2 || challengeQuestionsSelectedOptions[1]==2'>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='col-xs-12 col-sm-12 form-group'>
+                      <label class='required text-required-big-size display-flex'>{{
+                        'login.answerChallenge.placeholder-secondquestion' | translate
+                        }}</label>
+                      <input class='form-control input-margin-top' type='text'
+                             formControlName='question2' maxlength='50' required
+                             [placeholder]="'login.answerChallenge.placeholder-secondquestion' | translate">
+                      <p
+                        *ngIf="resetPasswordForm.get('question2').errors && resetPasswordForm.get('question2').errors.pattern  && (resetPasswordForm.get('question2').dirty || resetPasswordForm.get('question2').touched)"
+                        class='alert alert-danger' style='margin:10px;'>
+                        {{'login.answerChallenge.error.favorite-book' | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf='challengeQuestionsSelectedOptions[0]==3 || challengeQuestionsSelectedOptions[1]==3'>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='col-xs-12 col-sm-12 form-group'>
+                      <label class='required required text-required-big-size display-flex'>{{
+                        'login.answerChallenge.placeholder-thirdquestion' | translate }}</label>
+                      <input class='form-control input-margin-top' type='text'
+                             formControlName='question3' maxlength='25' required
+                             [placeholder]="'login.answerChallenge.placeholder-thirdquestion' | translate">
+                      <p
+                        *ngIf="resetPasswordForm.get('question3').errors && resetPasswordForm.get('question3').errors.pattern  && (resetPasswordForm.get('question3').dirty || resetPasswordForm.get('question3').touched)"
+                        class='alert alert-danger' style='margin:10px;'>
+                        {{'login.answerChallenge.error.mother-maiden-name' | translate }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf='challengeQuestionsSelectedOptions[0]==4 || challengeQuestionsSelectedOptions[1]==4'>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='col-xs-12 col-sm-12 form-group'>
+                      <label class='required required text-required-big-size display-flex'>{{
+                        'login.answerChallenge.placeholder-fourthquestion' | translate
+                        }}</label>
+                      <input pattern='^(\+|0)[0-9]{6,15}$' class='form-control input-margin-top'
+                             type='text' formControlName='question4' autocomplete='off'
+                             maxlength='15' inputPattern='onlyMobileNumbers' required
+                             [placeholder]="'login.answerChallenge.placeholder-fourthquestion' | translate">
+                      <p
+                        *ngIf="resetPasswordForm.get('question4').errors && resetPasswordForm.get('question4').errors.pattern"
+                        class='alert alert-danger' style='margin:10px;'>
+                        {{'login.answerChallenge.error.movilNumber' | translate }}{{
+                        'error.format'
+                          |
+                          translate:{ format: '(xxxxxxxxxxxxx/0xxxxxxxxxxxxx)' } }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetPasswordStep==3'>
+
+            <div class='ivrDiv' *ngIf='isIVR'>
+              <app-secured-authentication
+                [generateChallengeAndOTP]='generateChallengeAndOTP'
+                [ivrCustomMessage]="translate.instant('public.forgotQuestionsIVRMessage')"
+                [requestValidate]='requestValidate'
+                (onTimerFinish)='onIVR_TimerFinish()'>
+              </app-secured-authentication>
+            </div>
+
+            <div *ngIf='!isIVR'>
+              <form autocomplete='off' class='sme-form__form resetPasswordForm'
+                    [formGroup]='resetPasswordForm' novalidate>
+
+                <div class='row'>
+
+                  <div class='col-xs-12 col-sm-6'>
+                    <label class='required display-flex text-required-big-size'>{{ 'login.new-pass'
+                      | translate }}</label>
+                    <input pattern='{{authService.getPasswordInputPattern()}}'
+                           class='form-control input-margin-top' type='password'
+                           formControlName='newPassword' inputPattern='notArabic' required
+                           autocomplete='new-password' maxlength='14'>
+                    <p
+                      *ngIf="resetPasswordForm.get('newPassword').invalid && resetPasswordForm.get('newPassword').touched"
+                      class='alert alert-danger' style='margin:10px;'>
+                      {{ 'error.passwordRule' | translate }}
+                    </p>
+                  </div>
+
+                  <div class='col-xs-12 col-sm-6'>
+                    <label class='required display-flex text-required-big-size'>{{
+                      'login.confirm-pass' | translate }}</label>
+                    <input pattern='{{authService.getPasswordInputPattern()}}'
+                           class='form-control input-margin-top' type='password'
+                           formControlName='newPasswordConfirm' inputPattern='notArabic' autocomplete='off'
+                           maxlength='14' required>
+                    <p
+                      *ngIf="resetPasswordForm.get('newPasswordConfirm').invalid && resetPasswordForm.get('newPasswordConfirm').touched || resetPasswordForm.get('newPasswordConfirm').valid && resetPasswordForm.get('newPassword').valid && !resetPasswordCheckIsEqualPass()"
+                      class='alert alert-danger' style='margin:10px;'>
+                      {{ 'error.passwordMatch' | translate }}
+                    </p>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+
+
+          </ng-container>
+
+        </div>
+
+        <div class='modal-footer pop-up-back-color sme-form__actions'>
+
+          <button type='button' *ngIf="translate.currentLang==='en' && !(isIVR && resetPasswordStep === 3)"
+                  class='btn btn-default'
+                  style='font-size: unset; height: unset; width: 130px;'
+                  (click)='resetPasswordStep==1?resetPasswordEndProcess():resetPasswordBackStep()'>
+            {{ 'public.back' | translate }}
+          </button>
+
+          <ng-container *ngIf='resetPasswordStep==1'>
+
+            <button type='button' class='btn btn-primary btn-wide' style='font-size: unset; height: unset;'
+                    *ngIf='loginStep == 1'
+                    [disabled]="!loginForm.get('companyId').valid || !loginForm.get('userId').valid"
+                    (click)='resetPasswordStep1IdentifyUser()'>
+              {{ 'public.next' | translate }}
+            </button>
+
+            <button type='button' class='btn btn-primary btn-wide' style='font-size: unset; height: unset;'
+                    *ngIf='loginStep == 2'
+                    [disabled]="(!isChallengeUser && loginForm.controls['otp'].invalid) || ((isChallengeUser && loginForm.controls['response'].invalid))"
+                    (click)='resetPasswordStep1AuthenticateUser()'>
+              {{ 'public.next' | translate }}
+            </button>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetPasswordStep===2 && !isIVR'>
+
+            <button *ngIf="translate.currentLang !== 'ar'" type='button' (click)='forgetQuestions()'
+                    class='btn btn-wide btn-default' style='font-size: unset; height: unset;'>
+              {{ 'public.forgetQuestions' | translate }}
+            </button>
+
+            <button type='button' (click)='resetPasswordStep2ValidateUserChallengeResponses()'
+                    class='btn btn-wide btn-primary' style='font-size: unset; height: unset;' [disabled]="!( resetPasswordForm.get('question'+ challengeQuestionsSelectedOptions[0]).valid &&
+                            resetPasswordForm.get('question'+ challengeQuestionsSelectedOptions[1]).valid)">
+              {{ 'public.next' | translate }}
+            </button>
+
+            <button *ngIf="translate.currentLang === 'ar'" type='button' (click)='forgetQuestions()'
+                    class='btn btn-wide btn-default' style='font-size: unset; height: unset;'>
+              {{ 'public.forgetQuestions' | translate }}
+            </button>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetPasswordStep==3 && isIVR'>
+            <button type='button' (click)='callRecived()' class='btn btn-wide btn-primary'
+                    style='font-size: unset; height: unset;'>
+              {{ 'public.receivedPassword' | translate }}
+            </button>
+            <button type='button' (click)='reCall()' [disabled]='!showRecall' class='btn btn-wide btn-primary'
+                    style='font-size: unset; height: unset;'>
+              {{ 'public.recall' | translate }}
+            </button>
+          </ng-container>
+
+          <ng-container *ngIf='resetPasswordStep==3 && !isIVR'>
+
+            <button type='button' (click)='resetPasswordStep3ConfirmResetPassword()'
+                    class='btn btn-wide btn-primary' style='font-size: unset; height: unset;' [disabled]="!( resetPasswordForm.get('question'+ challengeQuestionsSelectedOptions[0]).valid &&
+                            resetPasswordForm.get('question'+ challengeQuestionsSelectedOptions[1]).valid
+                            && resetPasswordForm.get('newPasswordConfirm').valid
+                            && resetPasswordForm.get('newPassword').valid)
+                             || !resetPasswordCheckIsEqualPass()">{{ 'public.next' | translate }}</button>
+
+          </ng-container>
+
+          <button type='button' *ngIf="translate.currentLang!=='en' && !(isIVR && resetPasswordStep === 3)"
+                  class='btn btn-default'
+                  style='font-size: unset; height: unset; width: 130px;'
+                  (click)='resetPasswordStep==1?resetPasswordEndProcess():resetPasswordBackStep()'>
+            {{ 'public.back' | translate }}
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class='modal fade resetTokenModal' bsModal #resetTokenModal='bs-modal' role='dialog'
+       [style]="{ 'z-index': resetTokenModalZIndex }">
+    <div class='modal-dialog-reset-link loading-position'>
+      <div class='modal-content'>
+
+        <div>
+          <div class='modal-header pop-up-back-color'>
+            <button (click)='resetTokenCloseModal()' type='button' class='close color-button-close'>&times;
+            </button>
+          </div>
+          <!--
+          <div class="container-login__logo pop-up-back-color">
+              <img src="img/logo-white.svg" alt=""/>
+          </div>
+          -->
+          <div class='modal-header pop-up-back-color'>
+            <div class='sme-pop-up-title'>
+              {{ 'login.answerChallenge.token-link-text' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class='modal-body-pop-up' style='padding-top: 10px;padding-bottom: 0px;' [style]="{
+                        'text-align': translate.currentLang==='en'? 'left': 'right'
+                        }">
+
+          <arb-steps [currentStep]='resetPasswordStep' [steps]='resetPasswordSteps'></arb-steps>
+
+
+          <!-- <hr /> -->
+
+          <ng-container *ngIf='resetTokenStep==1'>
+
+            <form autocomplete='off' class='sme-form__form resetTokenForm' [formGroup]='resetTokenForm'
+                  novalidate>
+
+              <div *ngIf='challengeQuestionsSelectedOptions[0]==1 || challengeQuestionsSelectedOptions[1]==1'
+                   class='row'>
+                <div class='col-xs-12 col-sm-8'>
+                  <div class='col-xs-12 col-sm-12 form-group'>
+                    <label class='required text-required-big-size display-flex'>{{
+                      'login.answerChallenge.placeholder-firstquestion' | translate }}</label>
+                    <input class='form-control input-margin-top' type='text'
+                           formControlName='question1' pattern='^[ a-zA-Z0-9_-]{4,50}$'
+                           inputPattern='onlyAlphabetics' maxlength='50' required>
+                  </div>
+                </div>
+                <div class='col-xs-12 col-sm-12'>
+                  <p
+                    *ngIf="resetTokenForm.get('question1').errors && resetTokenForm.get('question1').errors.pattern  && (resetTokenForm.get('question1').dirty || resetTokenForm.get('question1').touched)"
+                    class='alert alert-danger' style='margin:10px;'>
+                    {{'login.answerChallenge.error.favorite-food' | translate }}
+                  </p>
+                </div>
+              </div>
+
+              <div *ngIf='challengeQuestionsSelectedOptions[0]==2 || challengeQuestionsSelectedOptions[1]==2'
+                   class='row'>
+                <div class='col-xs-12 col-sm-8'>
+                  <div class='col-xs-12 col-sm-12 form-group'>
+                    <label class='required text-required-big-size display-flex'>{{
+                      'login.answerChallenge.placeholder-secondquestion' | translate }}</label>
+                    <input class='form-control input-margin-top' type='text'
+                           formControlName='question2' pattern='^[ a-zA-Z0-9_-]{4,50}$'
+                           inputPattern='noSpecialsAndSpaces' maxlength='50' required>
+                  </div>
+                </div>
+                <div class='col-xs-12 col-sm-12'>
+                  <p
+                    *ngIf="resetTokenForm.get('question2').errors && resetTokenForm.get('question2').errors.pattern  && (resetTokenForm.get('question2').dirty || resetTokenForm.get('question2').touched)"
+                    class='alert alert-danger' style='margin:10px;'>
+                    {{'login.answerChallenge.error.favorite-book' | translate }}
+                  </p>
+                </div>
+              </div>
+
+              <div *ngIf='challengeQuestionsSelectedOptions[0]==3 || challengeQuestionsSelectedOptions[1]==3'
+                   class='row'>
+                <div class='col-xs-12 col-sm-8'>
+                  <div class='col-xs-12 col-sm-12 form-group'>
+                    <label class='required required text-required-big-size display-flex'>{{
+                      'login.answerChallenge.placeholder-thirdquestion' | translate }}</label>
+                    <input class='form-control input-margin-top' type='text'
+                           formControlName='question3' pattern='^[ a-zA-Z0-9_-]{3,18}$' maxlength='25'
+                           inputPattern='onlyAlphabetics' required>
+
+                  </div>
+                </div>
+                <div class='col-xs-12 col-sm-12'>
+                  <p
+                    *ngIf="resetTokenForm.get('question3').errors && resetTokenForm.get('question3').errors.pattern  && (resetTokenForm.get('question3').dirty || resetTokenForm.get('question3').touched)"
+                    class='alert alert-danger' style='margin:10px;'>
+                    {{'login.answerChallenge.error.mother-maiden-name' | translate }}
+                  </p>
+
+                </div>
+              </div>
+
+              <div *ngIf='challengeQuestionsSelectedOptions[0]==4 || challengeQuestionsSelectedOptions[1]==4'
+                   class='row'>
+                <div class='col-xs-12 col-sm-8'>
+                  <div class='col-xs-12 col-sm-12 form-group'>
+                    <label class='required required text-required-big-size display-flex'>{{
+                      'login.answerChallenge.placeholder-fourthquestion' | translate }}</label>
+                    <input pattern='^(\+|0)[0-9]{6,15}$' class='form-control input-margin-top'
+                           type='text' formControlName='question4' autocomplete='off' maxlength='15'
+                           inputPattern='onlyMobileNumbers' required>
+                  </div>
+                </div>
+                <div class='col-xs-12 col-sm-12'>
+                  <p *ngIf="resetTokenForm.get('question4').errors && resetTokenForm.get('question4').errors.pattern"
+                     class='alert alert-danger' style='margin:10px;'>
+                    {{'login.answerChallenge.error.movilNumber' | translate }}{{ 'error.format' |
+                    translate:{ format: '(xxxxxxxxxxxxx/0xxxxxxxxxxxxx)' } }}
+                  </p>
+                </div>
+              </div>
+
+            </form>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetTokenStep==2'>
+
+            <form autocomplete='off' class='sme-form__form resetTokenForm' [formGroup]='loginForm'
+                  novalidate>
+
+              <div style='display:none'>
+                <input type='password' tabindex='-1' autocomplete='false' />
+              </div>
+
+              <div class='row'>
+                <div class='col-xs-12 col-sm-4'>
+                  <!-- company -->
+
+                  <div class='form-group'>
+                    <label>
+                      {{ 'login.organization-profile' | translate }}
+                    </label>
+                    <input type='text' name='companyId' formControlName='companyId'
+                           placeholder="{{ 'login.introduce-op' | translate }}" class='form-control'
+                           inputPattern='onlyDigits' autocomplete='off' maxlength='10'
+                           oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+                  </div>
+                </div>
+
+                <div class='col-xs-12 col-sm-12'></div>
+
+                <div class='col-xs-12 col-sm-4'>
+
+                  <!-- user id -->
+
+                  <div class='form-group'>
+                    <label>
+                      {{ 'login.user-id' | translate }}
+                    </label>
+                    <input type='text' name='userId' formControlName='userId'
+                           placeholder="{{ 'login.introduce-id' | translate }}" class='form-control'
+                           autocomplete='off' maxlength='30'>
+                  </div>
+                </div>
+
+                <div class='col-xs-12 col-sm-12'></div>
+
+                <ng-container *ngIf='loginStep == 1'>
+
+                  <div class='col-xs-12 col-sm-4'>
+
+                    <!-- password -->
+
+                    <div class='form-group'>
+                      <label>
+                        &nbsp;
+                      </label>
+                      <span class='form-control'> &nbsp;</span>
+                    </div>
+                  </div>
+
+                  <div class='col-xs-12 col-sm-12'></div>
+
+                </ng-container>
+
+                <ng-container *ngIf='loginStep == 2 && isChallengeUser === false'>
+
+                  <div class='col-xs-12 col-sm-4'>
+
+                    <!-- otp -->
+
+                    <div class='form-group'>
+                      <label>
+                        {{ 'login.otp' | translate }}
+                      </label>
+                      <input type='text' name='otp' #otp formControlName='otp'
+                             inputPattern='onlyDigits'
+                             placeholder="{{ 'login.introduce-otp' | translate }}"
+                             class='form-control' autocomplete='false' maxlength='6'
+                             minlength='4'
+                             oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'>
+                    </div>
+                  </div>
+
+                  <div class='col-xs-12 col-sm-12'></div>
+                </ng-container>
+
+                <ng-container *ngIf='loginStep == 2 && isChallengeUser === true'>
+
+                  <!-- token -->
+
+                  <div class='col-xs-12 col-sm-6'>
+
+                    <div class='form-group'>
+                      <label>
+                        {{ 'login.serial' | translate }}
+                      </label>
+                      <input class='form-control' type='text' name='serial' disabled
+                             style='opacity: 1;' value='{{serial}}'>
+                    </div>
+                    <div class='form-group'>
+                      <label>
+                        {{ 'login.challenge' | translate }}
+                      </label>
+                      <input class='form-control' type='text' name='challenge' disabled
+                             style='opacity: 1;' value='{{challengeCode}}'>
+                    </div>
+
+                  </div>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='form-group qr-marco'>
+                      <qrcode [qrdata]='challengeCode' [width]='150' [errorCorrectionLevel]="'M'"
+                              *ngIf='isQr'>
+                      </qrcode>
+                    </div>
+                  </div>
+                  <div class='col-xs-12 col-sm-6'>
+                    <div class='form-group'>
+                      <label>{{ 'login.response' | translate }}</label>
+                      <input placeholder="{{ 'login.introduce-response' | translate }}"
+                             class='form-control' type='text' name='response'
+                             autocomplete='new-password' formControlName='response' maxlength='6'
+                             minlength='4' inputPattern='onlyNumbers'
+                             oninput='javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);'
+                             #challengeInput>
+                    </div>
+                  </div>
+                </ng-container>
+
+              </div>
+
+            </form>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetTokenStep==3'>
+
+            <div class='disclaimer-text' [innerHTML]="'login.reset-token.disclaimer-text' | translate">
+            </div>
+
+            <form autocomplete='off' class='sme-form__form resetTokenForm' [formGroup]='resetTokenForm'
+                  novalidate>
+
+              <div class='row'>
+                <div class='col-xs-12 col-sm-8' *ngIf='!resetTokenIsSoftToken'>
+                  <div class='col-xs-12 col-sm-12 form-group'>
+                    <label>{{ 'login.answerChallenge.challengeNumber' | translate }}</label>
+                    <input placeholder="{{ 'login.answerChallenge.challengeNumber' | translate }}"
+                           class='form-control' type='text' formControlName='challengeNumber'
+                           maxlength='8' minlength='4' inputPattern='onlyNumbers'>
+                  </div>
+                </div>
+                <div class='col-xs-12 col-sm-4'>
+                  <div class='col-xs-12 col-sm-12 form-group'>
+                    <label></label>
+                    <span></span>
+                  </div>
+                </div>
+                <div class='col-xs-12 col-sm-12' *ngIf='!resetTokenIsSoftToken'>
+                  <p
+                    *ngIf="resetTokenForm.get('challengeNumber').invalid && resetTokenForm.get('challengeNumber').touched"
+                    class='alert alert-danger' style='margin:10px;'>
+                    {{ 'error.challengeNumber' | translate }}
+                  </p>
+                </div>
+              </div>
+
+            </form>
+
+          </ng-container>
+        </div>
+
+        <div class='modal-footer pop-up-back-color sme-form__actions'>
+
+          <button type='button' *ngIf="translate.currentLang==='en' && resetPasswordStep < 3"
+                  class='btn btn-default btn-wide'
+                  style='font-size: unset; height: unset;'
+                  (click)='resetTokenStep==1?resetTokenEndProcess():resetTokenBackStep()'>
+            {{ 'public.back' | translate }}
+          </button>
+
+          <ng-container *ngIf='resetTokenStep==1'>
+
+            <button type='button' (click)='resetTokenStep1ValidateUserChallengeResponses()'
+                    class='btn btn-wide btn-primary' style=' font-size: unset; height: unset;' [disabled]="!( resetTokenForm.get('question'+ challengeQuestionsSelectedOptions[0]).valid &&
+                        resetTokenForm.get('question'+ challengeQuestionsSelectedOptions[1]).valid)">
+              {{ 'public.proceed' | translate }}
+            </button>
+
+          </ng-container>
+
+          <ng-container *ngIf='resetTokenStep==2'>
+
+            <button type='button' class='btn btn-wide btn-primary' style='font-size: unset; height: unset;'
+                    *ngIf='loginStep == 1'
+                    [disabled]="!loginForm.get('companyId').valid || !loginForm.get('userId').valid"
+                    (click)='resetTokenStep2IdentifyUser()'>
+              {{ 'public.proceed' | translate }}
+            </button>
+
+            <button type='button' class='btn btn-wide btn-primary' style='font-size: unset; height: unset;'
+                    *ngIf='loginStep == 2'
+                    [disabled]="(!isChallengeUser && loginForm.controls['otp'].invalid) || ((isChallengeUser && loginForm.controls['response'].invalid))"
+                    (click)='resetTokenStep2AuthenticateUser()'>
+              {{ 'public.proceed' | translate }}
+            </button>
+
+
+          </ng-container>
+
+          <ng-container *ngIf='resetTokenStep==3'>
+
+            <button type='button' (click)='resetTokenStep3ConfirmResetToken()'
+                    class='btn btn-wide btn-primary' style='font-size: unset; height: unset;' [disabled]="!( resetTokenForm.get('question'+ challengeQuestionsSelectedOptions[0]).valid &&
+                        resetTokenForm.get('question'+ challengeQuestionsSelectedOptions[1]).valid)
+                        || !(resetTokenIsSoftToken || resetTokenForm.get('challengeNumber').valid)">
+              {{ 'public.proceed' | translate }}
+            </button>
+
+          </ng-container>
+
+          <button type='button' *ngIf="translate.currentLang!=='en' && resetPasswordStep < 3"
+                  class='btn btn-default btn-wide'
+                  style='font-size: unset; height: unset;'
+                  (click)='resetTokenStep==1?resetTokenEndProcess():resetTokenBackStep()'>
+            {{ 'public.back' | translate }}
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class='modal fade openAccountModal' bsModal #openAccountModal='bs-modal' role='dialog'>
+    <div class='modal-dialog-open-account loading-position'>
+      <div class='modal-content'>
+        <div>
+          <div class='modal-header openAcc pop-up-back-color'>
+            <button (click)='openAccountCloseModal()' type='button' class='close color-button-close'>&times;
+            </button>
+          </div>
+        </div>
+        <div class='modal-header openAcc pop-up-back-color'>
+          <div class='sme-pop-up-title'>
+            {{ 'public.OpenAcc' | translate }}
+          </div>
+        </div>
+        <div class='selectTypeSpan'>
+          <span> {{'public.selectCompanyType' | translate }}</span>
+        </div>
+        <div class='radioDiv'>
+          <div class='row'>
+            <div class='col-xs-12 col-sm-12'>
+              <label class='radio-inline'>
+                <input type='radio' [(ngModel)]='isSolo' name='soloRadio' [value]='4'>
+                {{ 'public.freelancer' | translate }}
+              </label>
+            </div>
+            <div class='col-xs-12 col-sm-12'>
+              <label class='radio-inline'>
+                <input type='radio' [(ngModel)]='isSolo' name='soloRadio' [value]='1'>
+                {{ 'public.soleTxt' | translate }}
+              </label>
+            </div>
+            <div class='col-xs-12 col-sm-12'>
+              <label class='radio-inline'>
+                <input type='radio' [(ngModel)]='isSolo' name='soloRadio' [value]='2'>
+                {{ 'public.singleTxt' | translate }}
+              </label>
+            </div>
+            <div class='col-xs-12 col-sm-12'>
+              <label class='radio-inline'>
+                <input type='radio' [(ngModel)]='isSolo' name='multiRadio' [value]='3'>
+                {{ 'public.multiTxt' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class='center'>
+          <button type='button' class='openAccBtn btn btn-primary login-button proceed-button' (click)='goToOpenAccount()'>
+            {{ 'public.confirm' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

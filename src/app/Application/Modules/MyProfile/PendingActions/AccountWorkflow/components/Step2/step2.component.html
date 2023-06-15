@@ -1,0 +1,122 @@
+<app-account-table *ngIf="sharedData.tableAccountSelected.length > 0
+    && !sharedData.aproveFlow"
+                   [items]="sharedData.tableAccountSelected"
+                   [selected]="sharedData.tableAccountSelected"
+                   [modal]="modalAuth"
+                   [futureLevels]="false"
+                   [externalPagination]="false"
+                   [selectable]="false">
+</app-account-table>
+
+<app-nonFinancial-table *ngIf="sharedData.tableNonfinancialSelected.length > 0
+    && !sharedData.aproveFlow"
+                        [items]="sharedData.tableNonfinancialSelected"
+                        [selected]="sharedData.tableNonfinancialSelected"
+                        [modal]="modalAuth"
+                        [futureLevels]="false"
+                        [externalPagination]="false"
+                        [selectable]="false">
+</app-nonFinancial-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.tableAccountSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0)
+||
+(sharedData.aproveFlow
+    && sharedData.tableNonfinancialSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-account-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableAccountSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0"
+                   [items]="sharedData.validate.toAuthorize"
+                   [selected]="sharedData.tableAccountSelected"
+                   [modal]="modalAuth"
+                   [futureLevels]="true"
+                   [externalPagination]="false"
+                   [selectable]="false">
+</app-account-table>
+
+<app-nonFinancial-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableNonfinancialSelected.length > 0  
+    && sharedData.validate 
+    && sharedData.validate.toAuthorize.length>0"
+                        [items]="sharedData.validate.toAuthorize"
+                        [selected]="sharedData.tableNonfinancialSelected"
+                        [modal]="modalAuth"
+                        [futureLevels]="true"
+                        [externalPagination]="false"
+                        [selectable]="false">
+</app-nonFinancial-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.tableAccountSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0)
+||
+(sharedData.aproveFlow
+    && sharedData.tableNonfinancialSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-account-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableAccountSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0"
+                   [items]="sharedData.validate.toProcess"
+                   [selected]="sharedData.tableAccountSelected"
+                   [modal]="modalAuth"
+                   [futureLevels]="true"
+                   [externalPagination]="false"
+                   [selectable]="false">
+</app-account-table>
+
+<app-nonFinancial-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableNonfinancialSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0"
+                        [items]="sharedData.validate.toProcess"
+                        [selected]="sharedData.tableNonfinancialSelected"
+                        [modal]="modalAuth"
+                        [futureLevels]="true"
+                        [externalPagination]="false"
+                        [selectable]="false">
+</app-nonFinancial-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<arb-panel *ngIf="sharedData.aproveFlow">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group" *ngIf="sharedData.generateChallengeAndOTP">
+                <app-secured-authentication
+                        [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                        [requestValidate]="sharedData.requestValidate" #authorization>
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>

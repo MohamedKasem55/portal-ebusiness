@@ -1,0 +1,101 @@
+<arb-panel>
+    <form autocomplete="off" autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.accountFrom' | translate }}</label>
+                        <div>
+                            <select class="form-control" formControlName="accountFrom">
+                                <option *ngFor="let account of accountsFrom" [value]="account.key">
+                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}} {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.accountTo' | translate }}</label>
+                        <div>
+                            <select class="form-control" formControlName="accountTo">
+                                <option *ngFor="let account of accountsTo" [value]="account.key">
+                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}} {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-1">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.amount' | translate }}</label>
+                        <div>
+                            <input class="form-control" formControlName="amount"
+                                   inputPattern="onlyPositiveDecimalNumbers" amount-format>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.currency' | translate }}</label>
+                        <select class="form-control" *ngIf="selectedCurrency?.currency" formControlName="currency">
+                            <option [attr.selected]="'selected'" [ngValue]="selectedCurrency.currency">
+                                {{'currencyType'|modelPipe : selectedCurrency.currency}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.remarks' | translate }}</label>
+                        <div>
+                            <input class="form-control" formControlName="additional1"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4"
+                     *ngIf="selectedAccountFrom.value.currency!==selectedAccountTo.value.currency">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.amountIn' | translate }}</label>
+                        <div>
+                            <input class="form-control" [(ngModel)]="amountIn" formControlName="amountIn"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4"
+                     *ngIf="selectedAccountFrom.value.currency!==selectedAccountTo.value.currency">
+                    <div class="form-group">
+                        <label>{{
+                            'transfer.indicativeExchangeRate' | translate }}</label>
+                        <div>
+                            <input class="form-control" [(ngModel)]="exchangeRateInquired"
+                                   formControlName="exchangeRate"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="step3Object.validate?.generateChallengeAndOTP" class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <app-secured-authentication #authorization
+                                                    [generateChallengeAndOTP]="step3Object.validate?.generateChallengeAndOTP"
+                                                    [requestValidate]="requestValidate">
+                        </app-secured-authentication>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+            <button type="button" class=" btn btn-default btn-wide"
+                    (click)="cancel()">{{'public.back' | translate }}</button>
+
+            <button type="submit" class=" btn btn-primary btn-wide">{{buttonLabel}}</button>
+        </div>
+    </form>
+</arb-panel>

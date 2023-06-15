@@ -1,0 +1,110 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'payroll.newCardDetail' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div *ngFor="let employeeDetails of sharedData.responseInitiateNewCard.payrollCardBatch.details" class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+	        <div class="sme-form__content">
+	            <div class="sme-form__form">
+	                <div class="sme-form__body">
+	                	<div class="row">
+	                		<div class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label for="employee-id-input-type">{{'payroll.employeeId' | translate }}</label>
+	                                <p [innerHTML]="employeeDetails.employeeId"></p>
+	                            </div>
+	                        </div>
+	                        <div class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label for="employee-name-input-type">{{'payroll.employeeName' | translate }}</label>
+	                                <p [innerHTML]="employeeDetails.employeeName"></p>
+	                            </div>
+	                        </div>
+	                        <div class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label for="national-id-input-type">{{'payroll.nationalId' | translate}}</label>
+	                                <p [innerHTML]="employeeDetails.nationalId"></p>
+	                            </div>
+	                        </div>
+	                        <div class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label>{{'payroll.movilNumber' | translate}}</label>
+	                                <p [innerHTML]="employeeDetails.mobileNumber"></p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="row">
+	                        <div *ngIf="'group'===sharedData.institutionDTO.layout || ('group'===sharedData.institutionDTO.institutionType && 'wps'===sharedData.institutionDTO.layout)" class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label>{{'payroll.departmentId' | translate}}</label>
+	                                <p [innerHTML]="employeeDetails.departmentId | keyValuePipe:sharedData.departments"></p>
+	                            </div>
+	                        </div>
+	                        <div *ngIf="'group'=== sharedData.institutionDTO.layout" class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label>{{'payroll.userReference' | translate}}</label>
+	                                <p [innerHTML]="employeeDetails.userReference"></p>
+	                            </div>
+	                        </div>
+	                	</div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+	        <div class="sme-form__content">
+	            <div class="sme-form__form">
+	                <div class="sme-form__body">
+	                	<div class="row">
+	                		<div class="col-xs-12 col-sm-3">
+	                            <div class="form-group">
+	                                <label for="employee-id-input-type">{{'payroll.expectedFees' | translate }}</label>
+	                                <p> {{sharedData.responseInitiateNewCard.cardsFeesInquiryDTO.fileFees |amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+										 <app-vat-calculator [fee]="sharedData.responseInitiateNewCard.cardsFeesInquiryDTO.fileFees"></app-vat-calculator>
+									</p>
+	                            </div>
+	                        </div>
+	                	</div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<app-levels-table
+		[futureSecurityLevels]="sharedData.responseInitiateNewCard.payrollCardBatch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div class="container-fluid" *ngIf="sharedData.responseInitiateNewCard.generateChallengeAndOTP">
+	<div class="sme-page-block">
+		<div class="sme-form__content">
+			<div class="sme-form__form">
+				<div class="sme-form__body" style="padding: 15px;">
+					<div class="sme-form__box sme-form__box--form">
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+				                <div class="form-group">
+									<app-secured-authentication [generateChallengeAndOTP]="sharedData.responseInitiateNewCard.generateChallengeAndOTP" [requestValidate]="sharedData.requestValidate" #authorization></app-secured-authentication>
+				                </div>
+				            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

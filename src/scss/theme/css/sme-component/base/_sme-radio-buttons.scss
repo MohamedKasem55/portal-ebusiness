@@ -1,0 +1,73 @@
+.sme-radio-buttons {
+  @include list-unstyled;
+
+  li + li {
+    margin-top: $grid-gutter-width * 0.5;
+  }
+
+  .sme-radio {
+    label {
+      height: 80px;
+      width: 100%;
+      display: block;
+
+      display: table;
+      padding: 0;
+    }
+
+    span {
+      display: table-cell;
+      vertical-align: middle;
+      padding-#{$left}: 15px + 22px + 15px;
+      @include font($font-size-14);
+      @media screen and (max-width: $max-width) {
+        @include font($font-size-14 * $factor);
+      }
+      @media screen and (max-width: $max-width2) {
+        @include font($font-size-14 * $factor2);
+      }
+      line-height: 17px;
+      color: $brand-grey-light;
+      border: 1px solid $input-border;
+      font-weight: 400;
+    }
+
+    i {
+      @include center-y;
+      #{$left}: 15px;
+      border-color: $brand-primary;
+    }
+
+    input:checked + i {
+      border-color: #fff;
+      color: #fff;
+
+      border: 1px solid #fff;
+
+      &:before {
+        background: #fff;
+        @include square(8px);
+        border-radius: 50%;
+      }
+    }
+
+    input:checked + i + span {
+      border-color: $brand-blue-light;
+      background: $brand-primary;
+      color: #fff;
+    }
+  }
+
+  @media #{$sm-up} {
+    @include list-table;
+
+    li {
+      width: 25%;
+      padding: 0 8px;
+
+      & + li {
+        margin-top: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active"><a href="#"
+				[routerLink]="['/businessCards/menu']">{{ 'commercialCards.name' | translate }}</a>
+		</li>
+		<li class="active"><a href="#"
+				[routerLink]="['/businessCards/creditcardlist']">{{ 'commercialCards.creditCardListName' | translate }}</a>
+		</li>
+		<li class="active">{{ 'commercialCards.commercialCardsID' | translate:{id: businessCardItem.cardSeqNumber} }}
+		</li>
+		<li class="active">{{ 'commercialCards.paymentsOptions'| translate }}</li>
+	</ol>
+</div>
+
+<h1 class="padding-title">{{ 'commercialCards.cardPayments'| translate }}</h1>
+
+<div class="container-fluid sme-content-container">
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+				<span>
+					<span class="num">1</span>
+					<span
+						class="text step-payment">{{ 'commercialCards.breadcrumb.stepPayment' | translate | uppercase }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+				<span>
+					<span class="num">2</span>
+					<span class="text">{{ 'commercialCards.breadcrumb.stepPreview' | translate | uppercase}}</span>
+				</span>
+			</li>
+
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+				<span>
+					<span class="icon -check"></span>
+					<span class="text">{{ 'commercialCards.breadcrumb.stepSummary' | translate | uppercase }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+
+<app-CardPayment-step1 *ngIf="step === 1" [form]="this.form" (onInit)="onInitStep1($event)">
+</app-CardPayment-step1>
+
+<app-CardPayment-step2 *ngIf="step === 2" [form]="this.form" (onInit)="onInitStep2($event)"
+	[generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate"
+	[batchListsContainer]="batchListsContainer">
+</app-CardPayment-step2>
+
+<app-CardPayment-step3 *ngIf="step === 3" [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate">
+</app-CardPayment-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	<!-- <button type="button" class=" btn btn-default btn-wide" (click)="previous()"
+		*ngIf="step >= 1 && step < 3">{{'public.back' | translate }}</button> -->
+	<button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step <3">
+		{{'public.cancel' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step === 1"
+		[disabled]="!form.valid">{{'commercialCards.cardPayment' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step === 2"
+		[disabled]="!form.valid">{{'commercialCards.pay' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="finish()"
+		*ngIf="step == 3">{{'public.finish' | translate}}</button>
+</div>
+
+
+<div class="modal fade" bsModal #modalErrorCodeOTP="bs-modal" role="dialog">
+	<div class="modal-dialog loading-position">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button (click)="modalErrorCodeOTP.hide()" type="button" class="close"
+					[routerLink]="['/businessCards/menu']">&times;</button>
+			</div>
+			<div class="modal-body">
+				<span class="icon -close icon-failure"></span>
+				<div class="display-div-column">
+					<p>{{'commercialCards.inputErrorCodeOTP' | translate}}</p>
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer flex">
+				<button (click)="tryAgain()" type="button"
+					class="tryAgain btn btn-primary btn-wide">{{ 'commercialCards.again' | translate }}</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,89 @@
+<app-standing-order-table *ngIf="sharedData.tableSelected.length > 0 
+        && !sharedData.aproveFlow"
+                          [items]="sharedData.tableSelected"
+                          [modal]="modalAuth"
+                          [futureLevels]="false"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [step]="2">
+</app-standing-order-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+        && sharedData.authorizeValidate
+        && sharedData.authorizeValidate.authorizationPermission
+        && sharedData.authorizeValidate.authorizationPermission.toAuthorize.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-standing-order-table *ngIf="sharedData.aproveFlow
+        && sharedData.authorizeValidate
+        && sharedData.authorizeValidate.authorizationPermission
+        && sharedData.authorizeValidate.authorizationPermission.toAuthorize.length>0"
+                          [items]="sharedData.authorizeValidate.authorizationPermission.toAuthorize"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [step]="2">
+</app-standing-order-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+        && sharedData.authorizeValidate
+        && sharedData.authorizeValidate.authorizationPermission
+        && sharedData.authorizeValidate.authorizationPermission.toProcess.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-standing-order-table *ngIf="sharedData.aproveFlow 
+        && sharedData.authorizeValidate
+        && sharedData.authorizeValidate.authorizationPermission 
+        && sharedData.authorizeValidate.authorizationPermission.toProcess.length>0"
+                          [items]="sharedData.authorizeValidate.authorizationPermission.toProcess"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [step]="2">
+</app-standing-order-table>
+
+
+<app-levels-popup #modalAuth></app-levels-popup>
+<div class="sme-content-container container-fluid" *ngIf="sharedData.aproveFlow && sharedData.showOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group"
+                                     *ngIf="sharedData.authorizeValidate && sharedData.authorizeValidate.generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.authorizeValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

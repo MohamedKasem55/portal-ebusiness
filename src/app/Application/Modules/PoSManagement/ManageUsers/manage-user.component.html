@@ -1,0 +1,260 @@
+<!-- sme-breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'companyAdmin.companyAdmin'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/companyadmin/pos']">{{ 'posManagement.name'| translate }}</a></li>
+        <li class="active">{{ 'posManagement.posUserList'| translate }}</li>
+    </ol>
+</div>
+
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+
+                <div class="col-xs-12 col-sm-6">
+                    {{ 'posManagement.name' | translate}}
+                </div>
+                <div class="col-xs-12 col-sm-6 sme-form__actions" style="padding: 0px 0px">
+
+                    <a class="btn btn-primary btn-wide" (click)="goAddUser()">{{
+					'posManagement.addUser' | translate }}</a>
+                </div>
+
+            </div>
+
+            <form autocomplete="off" class="sme-form__form" [formGroup]="searchForm" (ngSubmit)="search()">
+                <div class="sme-form__content">
+                    <a class="sme-form__head collapsed" role="button"
+                        (click)="isCollapsedContent = !isCollapsedContent"> <span>{{
+						'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="user-id-input">{{ 'posManagement.userId' |
+											translate }}</label>
+                                        <input type="text" class="form-control" id="user-id-input"
+                                            formControlName="userId" maxlength="20">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'posManagement.userName'
+											| translate }}</label>
+                                        <input type="text" class="form-control"
+                                            formControlName="userName" maxlength="50">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{
+											'posManagement.mobile' | translate }}</label>
+                                        <input type="text" class="form-control" id="mobile-input"
+                                            formControlName="mobile" maxlength="12" inputPattern="onlyPositiveNumbers">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+								'public.reset' | translate }}</button>
+                            <button type="submit" class="btn btn-primary btn-wide">{{
+								'public.search' | translate }}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'posManagement.posUserList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="userPageTable" [header]="'posManagement.userList' | translate" [columns]="[
+        {'title':'posManagement.userId' | translate,'dataKey':'userId'},
+        {'title':'posManagement.userName' |translate ,'dataKey':'userName'},
+        {'title':'posManagement.mobile' | translate,'dataKey':'mobile'},
+        {'title':'posManagement.numberTerminal' | translate,'dataKey':'numberTerminal'}
+        ]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #userPageTable
+                        class="material sme-table sme-table--responsive table" [rows]="userPage.data"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+                        [count]="userPage.page.totalElements" [offset]="userPage.page.pageNumber-1"
+                        [limit]="userPage.page.pageSize" [selectionType]="defaultSelectionType" [selected]="tableSelectedRows"
+                        (page)="setPage($event)" (sort)="setSort($event)" (select)='onSelect($event)'>
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'posManagement.userId' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.userId}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'posManagement.userName' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.userName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'posManagement.mobile' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mobile }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'posManagement.numberTerminal' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.numberTerminal }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"
+                            [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="userId" [width]="160">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posManagement.userId' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="userName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posManagement.userName' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span class="human-selectable">
+                                    <a (click)="goModifyUser(row)"> {{value}}</a>
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+
+                        <ngx-datatable-column prop="mobile" [width]="160">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posManagement.mobile' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="numberTerminal">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posManagement.numberTerminal' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footerr">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="userPageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{this.userPage.page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="this.userPage.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                    <div class="sme-form__actions">
+                        <a href="#" class="btn btn-default btn-wide" [routerLink]="['/companyAdmin/pos']">
+                            {{'public.back' | translate }}</a>
+                        <button class="btn btn-default btn-wide" (click)="goDeleteUser()"
+                            [disabled]="tableSelectedRows.length == 0">{{'public.delete' | translate }}</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

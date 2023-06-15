@@ -1,0 +1,86 @@
+<form autocomplete="off">
+    <div class="container-fluid" *ngIf="batch">
+        <div class="sme-head">
+            <div class="sme-head__title">{{'chequebook.bookTypeDetails' | translate}}</div>
+        </div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset [disabled]="true">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="account">{{ 'chequebook.account' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <span id="account" class="form-control">{{batch.accountNumber}}</span>
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="bookType"
+                                                class="required">{{ 'chequebook.bookType' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <span *ngIf="batch.typeCheck == 2">
+                                                    {{ 'accounts.chequeBook.25Pages' | translate }}
+                                                </span>
+                                                <span *ngIf="batch.typeCheck == 3">
+                                                    {{ 'accounts.chequeBook.50Pages' | translate }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="status">{{ 'chequebook.status' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <span id="status" class="form-control">{{batch.rejectedReason}}</span>
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

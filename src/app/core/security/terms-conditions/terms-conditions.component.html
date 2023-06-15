@@ -1,0 +1,256 @@
+<!-- sme-header -->
+<div class="sme-header navbar navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="sme-header__brand" routerLinkActive="active" [routerLink]="['/dashboard']"> <img
+                    src="img/logo.svg" alt="{{ 'public.al-rajhi' | translate }}">
+            </a>
+        </div>
+        <p class="sme-header__switch navbar-text navbar-right">
+            <a *ngIf="translate.currentLang!=='en'" class="human-selectable"
+                (click)="changeEnglish()">{{ 'public.english' | translate }}</a>
+            <a *ngIf="translate.currentLang!=='ar'" class="human-selectable"
+                (click)="changeArabic()">{{ 'public.arabic' | translate }}</a>
+        </p>
+    </div>
+</div>
+<div class="sme-navigation">
+
+</div>
+
+<div id="sme-main">
+    <div class="sme-dashboard">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <div *ngIf='error' class="alert alert-danger">{{ error }}</div>
+
+                    <div *ngIf='loading' class="sk-fading-circle">
+                        <div class="sk-circle1 sk-circle"></div>
+                        <div class="sk-circle2 sk-circle"></div>
+                        <div class="sk-circle3 sk-circle"></div>
+                        <div class="sk-circle4 sk-circle"></div>
+                        <div class="sk-circle5 sk-circle"></div>
+                        <div class="sk-circle6 sk-circle"></div>
+                        <div class="sk-circle7 sk-circle"></div>
+                        <div class="sk-circle8 sk-circle"></div>
+                        <div class="sk-circle9 sk-circle"></div>
+                        <div class="sk-circle10 sk-circle"></div>
+                        <div class="sk-circle11 sk-circle"></div>
+                        <div class="sk-circle12 sk-circle"></div>
+                    </div>
+
+                    <div *ngIf='!loading&&!showChangePassword' class="sme-panel sme-form__body">
+
+                        <div [innerHTML]="'termsConditions.longText1' | translate "></div>
+                        <div [innerHTML]="'termsConditions.longText2' | translate "></div>
+                        <div [innerHTML]="'termsConditions.longText3' | translate "></div>
+                        <div [innerHTML]="'termsConditions.longText4' | translate "></div>
+
+                        <div *ngIf='!userLogged'>
+                            <button type="button" class="btn btn-primary btn-wide" routerLinkActive="active"
+                                [routerLink]="['/dashboard']"> {{'public.back' | translate }}</button>
+                        </div>
+                    </div>
+
+                    <div class="sme-panel" *ngIf="userLogged">
+                        <div class="sme-panel__head">
+                            <div *ngIf="!hasChallengeQuestions && !firstLogin && !passwordExpired; else title"
+                                class="sme-panel__title">
+                                {{ 'login.answerChallenge.changeChallengeQuestions' | translate }}
+                            </div>
+                            <ng-template #title class="sme-panel__title">
+                                <div class="sme-panel__title">
+                                    {{ 'login.changePassword' | translate }}
+                                </div>
+                            </ng-template>
+                        </div>
+
+                        <div class="sme-panel__body">
+                            <!-- sme-wizard -->
+                            <form autocomplete="off" class="sme-wizard" (ngSubmit)="doChangePassword(cp, np)">
+                                <!-- <div *ngIf="firstLogin" class="sme-wizard__content"> -->
+                                <div class="sme-wizard__content" *ngIf="firstLogin || passwordExpired">
+                                    <div id="changePasswordMenu">
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-old-password"
+                                                            class="required">{{ 'login.old-pass' | translate }}</label>
+                                                        <input [(ngModel)]="formData.oldPassword"
+                                                            id="sme-login-form-input-old-password"
+                                                            placeholder="{{ 'login.introduce-your-old' | translate }} "
+                                                            class="form-control" type="password" name="oldPassword"
+                                                            inputPattern="notArabic" #op="ngModel" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-new-password"
+                                                            class="required">{{ 'login.new-pass' | translate }}</label>
+                                                        <input
+                                                            pattern="{{authenticationService.getPasswordInputPattern()}}"
+                                                            #np="ngModel" [(ngModel)]="formData.newPassword"
+                                                            id="sme-login-form-input-new-password"
+                                                            placeholder="{{ 'login.introduce-your-new' | translate }} "
+                                                            class="form-control" type="password" name="newPassword"
+                                                            inputPattern="notArabic" maxlength="14" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <p *ngIf="np.invalid && np.touched" class="alert alert-danger"
+                                                        style="margin:10px;">
+                                                        {{ 'error.passwordRule' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-new-password-confirm"
+                                                            class="required">{{ 'login.confirm-pass' | translate }}</label>
+                                                        <input
+                                                            pattern="{{authenticationService.getPasswordInputPattern()}}"
+                                                            #cp="ngModel" [(ngModel)]="formData.newPasswordConfirm"
+                                                            id="sme-login-form-input-new-password-confirm"
+                                                            placeholder="{{ 'login.introduce-your-repeat' | translate }}"
+                                                            class="form-control" type="password"
+                                                            name="newPasswordConfirm" inputPattern="notArabic"
+                                                            maxlength="14" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <p *ngIf="cp.invalid && cp.touched || (cp.valid && np.valid && !isEqualPass())"
+                                                        class="alert alert-danger" style="margin:10px;">
+                                                        {{ 'error.passwordMatch' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="sme-wizard__content" *ngIf="!hasChallengeQuestions">
+                                    <div id="answerChallengueQuestions">
+                                        <div class="sme-form__title" style="margin-bottom: 30px">
+                                            {{ 'login.answerChallenge.title' | translate }}
+                                        </div>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-first-question"
+                                                            class="required text-required-big-size">{{ 'login.answerChallenge.first-question' | translate }}</label>
+                                                        <input [(ngModel)]="formData.firstQuestion"
+                                                            id="sme-login-form-input-first-question"
+                                                            class="form-control" type="text" name="firstQuestion"
+                                                            maxlength="50" #firstQuestion="ngModel" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <p *ngIf="firstQuestion.errors && firstQuestion.errors.pattern  && (firstQuestion.dirty || firstQuestion.touched) || !isValidLongPattern(firstQuestion.value)"
+                                                        class="alert alert-danger" style="margin:10px;">
+                                                        {{'login.answerChallenge.error.favorite-food' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-second-question"
+                                                            class="required text-required-big-size">{{ 'login.answerChallenge.second-question' | translate }}</label>
+                                                        <input #secondQuestion="ngModel"
+                                                            [(ngModel)]="formData.secondQuestion"
+                                                            id="sme-login-form-input-second-question"
+                                                            class="form-control" type="text" name="secondQuestion"
+                                                            maxlength="50" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <p *ngIf="secondQuestion.errors && secondQuestion.errors.pattern  && (secondQuestion.dirty || secondQuestion.touched) || !isValidLongPattern(secondQuestion.value)"
+                                                        class="alert alert-danger" style="margin:10px;">
+                                                        {{'login.answerChallenge.error.favorite-book' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-third-question"
+                                                            class="required required text-required-big-size">{{ 'login.answerChallenge.third-question' | translate }}</label>
+                                                        <input #thirdQuestion="ngModel"
+                                                            [(ngModel)]="formData.thirdQuestion"
+                                                            id="sme-login-form-input-third-question"
+                                                            class="form-control" type="text" name="thirdQuestion" maxlength="25" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <p *ngIf="thirdQuestion.errors && thirdQuestion.errors.pattern  && (thirdQuestion.dirty || thirdQuestion.touched) || !isValidShortPattern(thirdQuestion.value)"
+                                                        class="alert alert-danger" style="margin:10px;">
+                                                        {{'login.answerChallenge.error.mother-maiden-name' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="sme-login-form-input-fourth-question"
+                                                            class="required required text-required-big-size">{{ 'login.answerChallenge.fourth-question' | translate }}</label>
+                                                        <input #fourthQuestion="ngModel"
+                                                            [(ngModel)]="formData.fourthQuestion"
+                                                            id="sme-login-form-input-fourth-question"
+                                                            pattern="{{getMobileNumberValidatorPattern()}}"
+                                                            class="form-control" type="text" name="fourthQuestion"
+                                                            maxlength="15" inputPattern="onlyMobileNumbers" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4">
+                                                    <p *ngIf="fourthQuestion.errors && fourthQuestion.errors.pattern"
+                                                        class="alert alert-danger" style="margin:10px;">
+                                                        {{'login.answerChallenge.error.movilNumber' | translate }}{{ 'error.format' | translate:{format: getMobileNumberFormatPattern()} }}
+                                                    </p>
+                                                    <p *ngIf="isDuplicateAnswers()"
+                                                       class="alert alert-danger" style="margin:10px;">
+                                                        {{'login.answerChallenge.error.existing-answer' | translate }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="sme-wizard__navigation">
+                                    <button type="button" class="btn btn-default btn-wide"
+                                        (click)=logout()>{{ 'public.cancel' | translate }}</button>
+                                    <button
+                                        *ngIf="!hasChallengeQuestions && passwordExpired || !hasChallengeQuestions && firstLogin"
+                                        (click)=doCompleteChange(op,cp,np,firstQuestion,secondQuestion,thirdQuestion,fourthQuestion)
+                                        class="sme-wizard__navigation-next btn btn-primary btn-wide"
+                                        [disabled]="disabledButton()"
+                                        type="button">{{ 'login.proceed' | translate }}</button>
+                                    <button
+                                        *ngIf="passwordExpired && hasChallengeQuestions || firstLogin && hasChallengeQuestions"
+                                        type="submit" class="sme-wizard__navigation-next btn btn-primary btn-wide"
+                                        [disabled]="disabledButtonQuestion()">{{ 'login.proceed' | translate }}
+                                    </button>
+                                    <button *ngIf="!hasChallengeQuestions && !firstLogin && !passwordExpired"
+                                        (click)=doRegisterChallengeQuestions(firstQuestion,secondQuestion,thirdQuestion,fourthQuestion)
+                                        class="sme-wizard__navigation-next btn btn-primary btn-wide"
+                                        [disabled]="valid()" type="button">{{ 'login.proceed' | translate }}</button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

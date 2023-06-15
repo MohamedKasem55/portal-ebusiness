@@ -1,0 +1,187 @@
+<arb-panel>
+    <fieldset style="margin-top: 15px;">
+        <div class="legend">{{ 'workflow.accountRules' | translate }}
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <!-- ACCOUNTS -->
+                <div class="form-group">
+                    <label>{{ 'public.account' | translate }}</label>
+                    <div [formGroup]="form" class="form-control">
+                        <ng-select name="account" [clearable]="false" (change)="accountChange($event)" required>
+                            <ng-option selected value disabled>--{{ 'public.selectAccount' | translate }}--
+                            </ng-option>
+                            <ng-option *ngFor="let account of accounts" [value]="account.fullAccountNumber">
+                                {{ account.fullAccountNumber }}{{(account.alias != '' ? ' - ' + account.alias : '')}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <!-- /ACCOUNTS -->
+            </div>
+
+        </div>
+    </fieldset>
+</arb-panel>
+
+<arb-panel *ngIf="form.controls?.accountRules['controls'] && form.controls?.accountRules['controls'].length>0">
+    <form autocomplete="off" [formGroup]="form">
+        <div class="row" formArrayName="accountRules">
+            <fieldset class="col-xs-12 col-sm-12"
+                *ngFor="let privilege of form.controls?.accountRules['controls']; let j=index">
+                <div class="sme-form__title">
+                    <div class="col-xs-12 col-sm-6 text-left">
+                        {{ getBatchTypeKey(form.controls?.accountRules['controls'][j].controls.label.value) | modelPipe:
+                        getAccountLabelKey(form.controls?.accountRules['controls'][j].controls.label.value) }}
+                    </div>
+                </div>
+                <div [formGroupName]="j">
+                    <table formArrayName="rules" class="sme-table sme-table--responsive sme-table--check-list table">
+                        <thead>
+                            <tr>
+                                <th>{{'workflow.minAmount' | translate}}</th>
+                                <th>{{'workflow.maxAmount' | translate}}</th>
+                                <th>{{'public.l1' | translate}}</th>
+                                <th>{{'public.l2' | translate}}</th>
+                                <th>{{'public.l3' | translate}}</th>
+                                <th>{{'public.l4' | translate}}</th>
+                                <th>{{'public.l5' | translate}}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let privilege of getRules(privilege); let i=index">
+                                <td style="width: 25%;">
+                                    <div [formGroupName]="i" class="form-group" style="width: 80%;">
+                                        <input class="form-control" formControlName="amountMin" type="text">
+                                        <span class="visible-xs">{{'workflow.minAmount' | translate}}</span>
+                                    </div>
+                                </td>
+                                <td style="width: 25%;">
+                                    <div [formGroupName]="i" class="form-group" style="width: 80%;">
+                                        <input class="form-control" formControlName="amountMax" 
+                                            type="text" inputPattern="accountRulesOnlyDecimalNumbers"
+                                            (ngModelChange)="adjustMinMaxControls(j, i)">
+                                        <span class="visible-xs">{{'workflow.maxAmount' | translate}}</span>
+                                        <div *ngIf="this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMax.value !== '' &&
+                                                                this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMax.value !== null &&
+                                                                this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMax.value !== undefined &&
+                                                                _parseFloat(this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMin.value)
+                                                                >=
+                                                                _parseFloat(this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMax.value)"
+                                            class="alert alert-danger">
+                                            <small>{{'error.minValue' | translate:{value:
+                                                this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMin.value}
+                                                }}</small>
+                                        </div>
+                                        <div *ngIf="_parseFloat(this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.amountMax.value)
+                                                                > _parseFloat(this.companyLimit)"
+                                            class="alert alert-danger">
+                                            <small>{{'error.maxValue' | translate:{value: this.companyLimit} }}</small>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l1" (change)="containsLevels(j,i)">
+                                            <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l1' | translate}}</span>
+                                        </label>
+                                        <div *ngIf=" this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.valid.value !== true
+                                                        && !this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.l1.value
+                                                        && !this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.l2.value
+                                                        && !this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.l3.value
+                                                        && !this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.l4.value
+                                                        && !this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.l5.value"
+                                            class="alert alert-danger">
+                                            <small>{{'error.selectLevel' | translate }}</small>
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l2" (change)="containsLevels(j,i)">
+                                            <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l3" (change)="containsLevels(j,i)">
+                                            <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l4" (change)="containsLevels(j,i)">
+                                            <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l5" (change)="containsLevels(j,i)">
+                                            <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <label
+                                            *ngIf="this.form.controls.accountRules['controls'][j].controls.rules.controls[i].controls.valid.value !== true">
+                                            <span class="glyphicon glyphicon-warning-sign" style="color: #ac2925;">
+                                            </span>
+                                            &nbsp;&nbsp;
+                                        </label>
+                                        <label
+                                            *ngIf="i != 0 && i+1 == this.form.controls.accountRules['controls'][j].controls.rules.controls.length">
+                                            <span class="human-selectable glyphicon glyphicon-trash"
+                                                (click)="removeRule(j,i)">
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                    <button class="btn btn-primary btn-wide" (click)="addRule(j)" [disabled]="isAmountSet(j)">{{
+                        'public.add' | translate }}</button>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</arb-panel>
+
+<div class="modal fade" bsModal #changeValuesModal="bs-modal" tabindex="-1" role="dialog"
+    aria-labelledby="changeValuesModal" aria-hidden="true" [config]="{ignoreBackdropClick:true}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <span class="icon -check icon-success"></span>
+                <p>{{ 'workflow.changeValue' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-wide" (click)="cancelUpdateValues()">
+                    {{ 'public.cancel' | translate }}
+                </button>
+                <button type="button" class="btn btn-primary btn-wide" (click)="updateValues()">
+                    {{ 'public.ok' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

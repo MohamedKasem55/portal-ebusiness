@@ -1,0 +1,25 @@
+<div class="container-fluid">
+<div class="sme-page-block">
+    <div class="sme-form">
+
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+             <div class="sme-form__body">
+				<div>
+
+    				<div class="sme-wizard__success" *ngIf="!isPending()">
+            <span class="icon -check"></span> {{ 'payments.successRequest' | translate }}
+            <br/>
+            {{'posRequest.requestId' | translate}} {{getTickets()}}
+        </div>
+        <div class="sme-wizard__success" *ngIf="isPending()">
+            <span class="icon -check"></span> {{ 'payments.sucessPendingRequest' | translate }}
+        </div>
+
+				</div>
+			</div>	
+			</div>
+		</div>
+	</div>
+</div>
+</div>

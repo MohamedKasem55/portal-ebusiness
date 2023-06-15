@@ -1,0 +1,55 @@
+<arb-breadcrumb [routes]="[
+	['dashboard.payments'],
+	['payments.moiPayments.menu', ['/payments/moi']],
+    ['payments.moiPayments.refunds.name']
+]">
+</arb-breadcrumb>
+
+<!-- BREADCRUMB -->
+<arb-steps
+        [currentStep]="wizardStep">
+</arb-steps>
+
+<app-moi-refund-step1 *ngIf="wizardStep == 1"
+                      [combosData]="combosData"
+                      [formModel]="formModel"
+                      [fieldsConfigs]="fieldsConfigs"
+                      [preparedData]="preparedData"
+                      (addRefund)="onAddRefundToPrepareData($event)">
+</app-moi-refund-step1>
+
+<app-moi-refund-step2 *ngIf="wizardStep == 2"
+                      [combosData]="combosData"
+                      [formModel]="formModel"
+                      [fieldsConfigs]="fieldsConfigs"
+                      [preparedData]="preparedData"
+                      [batchList]="batchList">
+</app-moi-refund-step2>
+
+<app-moi-refund-step3 *ngIf="wizardStep == 3">
+</app-moi-refund-step3>
+
+<arb-panel *ngIf="this.wizardStep === 2 && this.generateChallengeAndOTP !== null">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <app-secured-authentication #authorization
+                                            [generateChallengeAndOTP]="this.generateChallengeAndOTP"
+                                            [requestValidate]="this.requestValidate">
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed()" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()"
+            (click)="previous()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

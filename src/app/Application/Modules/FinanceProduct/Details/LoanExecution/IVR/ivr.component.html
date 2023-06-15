@@ -1,0 +1,25 @@
+<div class='container-fluid'>
+  <div class='sme-head'>
+    <div class='sme-head__title'>
+      <P>{{ 'financeProduct.details.ivrCall' | translate }}</P>
+    </div>
+  </div>
+</div>
+<arb-panel>
+
+  <form autocomplete='off' #ivrForm='ngForm' class='sme-form__form' novalidate>
+    <fieldset>
+      <div class='row'>
+        <div class='col-xs-12 col-sm-12'>
+          <P class='title'>{{ 'financeProduct.details.ivrTitle' | translate }}</P>
+          <P class='note'>{{ 'financeProduct.details.ivrNote' | translate }}</P>
+<!--          <P class='counter'>{{ ivrTime | date:'mm:ss' }}</P>-->
+<!--          <P (click)='reCall()' class='reCall'-->
+<!--             [ngClass]='ivrTime>0?"notAllowed":""'>{{ 'financeProduct.details.reCall' | translate }}</P>-->
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>
+
+

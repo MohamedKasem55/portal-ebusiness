@@ -1,0 +1,285 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a href="#"
+                [routerLink]="['/wmspayroll/wmspayroll-management']">{{ 'dashboard.wmspayrollManagment'| translate }}</a>
+        </li>
+        <li class="active">{{ 'wmspayroll.requestStatus'| translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">{{'wmspayroll.requestStatus' | translate }}</div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="table" [header]="'wmspayroll.requestStatus' | translate" [columns]="[
+{'title':'wmspayroll.management.debitAccountNumber' | translate,'dataKey':'accountNumber'},
+{'title':'wmspayroll.management.batchName' | translate,'dataKey':'batchName'},
+{'title':'wmspayroll.management.paymentDateTo' | translate,'dataKey':'paymentDate'},
+{'title':'wmspayroll.management.totalAmount' | translate,'dataKey':'totalAmount'},
+{'title':'public.curstatus' | translate,'dataKey':'curStatusExport'},
+{'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusExport'},
+{'title':'public.status' | translate,'dataKey':'status'}
+]"></table-export>
+                </div>
+            </div>
+            <div>
+
+
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                        [rows]="requestStatus.items" class="material sme-table sme-table--responsive table"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [rowHeight]="defaultHeight" [count]="requestStatus.total" [limit]="tableDisplaySize"
+                        [externalPaging]="true" (page)='setPage($event)' [externalSorting]="false"
+                        [selected]="sharedData.tableSelected" [selectionType]="defaultSelectionType">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'wmspayroll.management.debitAccountNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.accountNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'wmspayroll.management.batchName' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.batchName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'wmspayroll.management.paymentDateTo' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.paymentDate | date}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'wmspayroll.management.totalAmount' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.totalAmount | amountCurrency }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="row">
+                                    <fieldset>
+                                      
+                                        <div class="col-xs-6" *ngIf="!futureLevels">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label *ngIf="!futureLevels"
+                                                   >{{ 'public.status' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.securityLevelsDTOList | levels:'status' }}</span>
+                                                    <span class=" human-selectable icon -info"
+                                                        (click)="openModal(row.securityLevelsDTOList,modalaramcoAuth)"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" *ngIf="futureLevels">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'public.statusIf' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.futureSecurityLevelsDTOList | levels:'status' }}</span>
+                                                    <span class=" human-selectable icon -info"
+                                                        (click)="openModal(row.futureSecurityLevelsDTOList,modalaramcoAuth)"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6" *ngIf="!futureLevels">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label *ngIf="!futureLevels"
+                                                   >{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" *ngIf="futureLevels">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'wmspayroll.management.status' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.status | statusPipe}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="accountNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                    class="datatable-header-cell-wrapper">{{ 'wmspayroll.management.debitAccountNumber' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="batchName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                    class="datatable-header-cell-wrapper">{{ 'wmspayroll.management.batchName' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="paymentDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                    class="datatable-header-cell-wrapper">{{ 'wmspayroll.management.paymentDateTo' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | date}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="totalAmount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                    class="datatable-header-cell-wrapper">{{ 'wmspayroll.management.totalAmount' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="80" class="mobile-hidden"
+                        *ngIf="futureLevels">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span>{{ value | levels:'status' }}</span>
+                            <span class="human-selectable icon -info" (click)="openModal(value,modalaramcoAuth)"></span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                        *ngIf="!futureLevels">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                class="datatable-header-cell-wrapper">{{ 'public.curstatus' | translate }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span>{{ value | levels:'status' }}</span>
+                            <span class="human-selectable icon -info" (click)="openModal(value,modalaramcoAuth)"></span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                          <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                        class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{ value | levels:'nextStatus' }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                          <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                        class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>{{ value | levels:'nextStatus' }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                        <ngx-datatable-column prop="status">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'wmspayroll.management.status' | translate }}</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span *ngIf="value=='R'"><a (click)="goActivateFile(row)">{{value | statusPipe}}</a></span>
+                                <span *ngIf="value!='R'">{{value | statusPipe}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [visiblePagesCount]="visiblePagesCount" (change)="table.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{tableDisplaySize}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="tableDisplaySize">
+                                                    <option [value]=10>10</option>
+                                                    <option [value]=20>20</option>
+                                                    <option [value]=50>50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-levels-popup #modalaramcoAuth></app-levels-popup>

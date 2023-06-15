@@ -1,0 +1,19 @@
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <b>{{'payments.processedFile.fileReference' | translate}}</b> {{this.service.resultReferenceFile}}
+                    <br/>
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button" class="btn btn-primary btn-wide">{{ 'public.finish' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

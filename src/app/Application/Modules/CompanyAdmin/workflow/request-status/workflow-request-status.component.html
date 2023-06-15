@@ -1,0 +1,45 @@
+<arb-breadcrumb [routes]="[
+    ['companyAdmin.companyAdmin'],
+    ['workflow.workflow', ['/companyadmin/workflow']],
+    ['workflow.requestStatus.requestStatus']
+]">
+</arb-breadcrumb>
+
+<app-workflow-accounts-request-status-table
+    #AccountsRequestStatusTable
+    (onSelectItems)="onSelectAccounts($event)"
+>
+</app-workflow-accounts-request-status-table>
+
+<app-workflow-non-finantial-request-status-table
+    #NonFinancialRequestStatusTable
+    (onSelectItems)="onSelectNonFinancial($event)"
+    (actionDetail)="onActionDetail($event)">
+</app-workflow-non-finantial-request-status-table>
+
+<!-- <arb-panel-buttons>
+
+    <button class="btn btn-default btn-wide"
+            *ngIf="isAllowedAction('back')"
+            [disabled]="isDisabledAction('back')"
+            (click)="executeAction('back')"
+    >
+        {{ 'public.back' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="isAllowedAction('delete')"
+            [disabled]="isDisabledAction('delete')"
+            (click)="executeAction('delete')"
+    >
+        {{ 'public.delete' | translate }}
+    </button>
+
+    <button class="btn btn-default btn-wide"
+            *ngIf="isAllowedAction('reInitiate')"
+            [disabled]="isDisabledAction('reInitiate')"
+            (click)="executeAction('reInitiate')"
+    >
+        {{ 'public.reInitiate' | translate }}
+    </button>
+</arb-panel-buttons> -->

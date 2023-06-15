@@ -1,0 +1,142 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary',['/beneficiaries/AddBeneficiaries']],
+                        ['beneficiaries.beneficiaryTypes.addLocalBeneficiary']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]"
+           [currentStep]="3">
+</arb-steps>
+
+<arb-panel>
+    <form autocomplete="off" #detailAlrajhiBeneficiary="ngForm"
+          class="sme-form__form" novalidate>
+        <fieldset style="margin-top: 15px;">
+            <div class="legend">{{ 'beneficiaries.beneficiaryBankDetails' | translate }}</div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- ACCOUNT -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.ibanAccount' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="account"
+                                   [(ngModel)]="formData.account" disabled/>
+                        </div>
+                    </div>
+                    <!-- /ACCOUNT -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- BANKS -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="bankName"
+                                   [(ngModel)]="formData.bankName" disabled/>
+                        </div>
+                    </div>
+                    <!-- /BANKS -->
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="legend">{{ 'beneficiaries.beneficiaryAddress' | translate }}</div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- BENEFICIRY NAME -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="beneficiaryName"
+                                   [(ngModel)]="formData.beneficiaryName" disabled/>
+                        </div>
+                    </div>
+                    <!-- /BENEFICIRY NAME -->
+
+                </div>
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- PHONE NUMBER -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.phoneNumber' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="phoneNumber"
+                                   [(ngModel)]="formData.phoneNumber" disabled/>
+                        </div>
+                    </div>
+                    <!-- /PHONE NUMBER -->
+
+                </div>
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+                        <label>{{ 'public.email' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="email"
+                                   [(ngModel)]="formData.email" disabled/>
+                        </div>
+                    </div>
+                    <!-- /EMAIL -->
+
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <app-levels-table
+                        [futureSecurityLevels]="sharedData['beneficiary'].futureSecurityLevelsDTOList">
+                </app-levels-table>
+            </div>
+        </fieldset>
+        <fieldset *ngIf="sharedData.generateChallengeAndOTP && sharedData.generateChallengeAndOTP.typeAuthentication !=='IVR'">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <app-secured-authentication [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                                                    [requestValidate]="sharedData.requestValidate"
+                                                    #authorization></app-secured-authentication>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset *ngIf="sharedData.generateChallengeAndOTP && sharedData.generateChallengeAndOTP.typeAuthentication==='IVR'">
+            <div class="row">
+                <div style="text-align: justify;padding: 20px;">
+                    <div class="form-group">
+                        <app-secured-authentication [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                                                    [requestValidate]="sharedData.requestValidate"
+                                                    #authorization>
+                        </app-secured-authentication>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+<arb-panel-buttons *ngIf="!sharedData.generateChallengeAndOTP || sharedData.generateChallengeAndOTP.typeAuthentication !=='IVR'">
+    <button type="button" (click)="goBack()"
+            class=" btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+    <button 
+    class="btn btn-primary btn-wide" (click)="sendDetailLocalBeneficiary()" 
+            [disabled]="!valid()">
+        {{ 'public.next' | translate }}
+    </button>
+   
+</arb-panel-buttons>
+<arb-panel-buttons *ngIf="sharedData.generateChallengeAndOTP && sharedData.generateChallengeAndOTP.typeAuthentication ==='IVR'">
+    <button  class=" btn btn-primary btn-wide" (click)="finish()">
+        {{ 'public.next' | translate }}
+    </button>
+</arb-panel-buttons>

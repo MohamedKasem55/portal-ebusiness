@@ -1,0 +1,10 @@
+<div  class="failContainer">
+    <img class='failImage' src='img/infoIcon.svg' alt='error image' />
+    <div class="retryContainer">
+        <h2>{{'commonCharts.chartLoadingFail' | translate}}
+            <a [ngClass]="{'retryable': canRetry,'notRetryable': !canRetry}" (click)="retry($event)">
+                {{'public.again' | translate}}
+            </a>
+        </h2>
+    </div>
+</div>

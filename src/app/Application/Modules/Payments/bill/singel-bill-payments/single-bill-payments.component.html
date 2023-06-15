@@ -1,0 +1,139 @@
+<arb-breadcrumb [routes]="[
+                        ['dashboard.payments'],['menu.payments.oneTimePayment.single']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps *ngIf="wizardStep" [currentStep]="wizardStep"
+           [steps]="['oneTimePayment.biller', 'oneTimePayment.billDetails', 'public.confirm','public.summary']">
+</arb-steps>
+
+<div class="title">
+    <h2>{{'oneTimePayment.typeName' | translate}}</h2>
+</div>
+
+<form *ngIf="wizardStep==1" autocomplete='off' #billForm='ngForm' class='sme-form__form billForm' novalidate>
+    <fieldset [formGroup]='formModel'>
+
+        <div>
+            <div class="legend">{{ 'oneTimePayment.amountDetails' | translate }}</div>
+            <div class='row topPadding'>
+                <div class='col-xs-12 col-sm-4'>
+
+                    <div class='form-group'>
+                        <label>{{ 'oneTimePayment.serviceProvider' | translate }}</label>
+                        <div class='form-control'>
+
+                            <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                                       #providerSelect
+                                       formControlName='serviceProvider'>
+                                <ng-option selected='selected' value='' disabled='disabled'>
+                                    --{{ 'public.selectOption' | translate }}--
+                                </ng-option>
+                                <ng-option *ngFor="let item of providers" [value]='item'>
+                                    {{translate.currentLang == 'en' ? item.addDescriptionEn : item.addDescriptionAr}}
+                                </ng-option>
+                            </ng-select>
+                            <div *ngIf="formModel.controls.serviceProvider.hasError('required') && formModel.controls.serviceProvider.touched"
+                                 class='alert alert-danger'>
+                                <small>{{ 'oneTimePayment.serviceProvider' | translate }} {{ 'oneTimePayment.required' | translate }} </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-xs-12 col-sm-4'>
+
+                    <div class='form-group'>
+                        <label>{{ 'oneTimePayment.subscriptionNumber' | translate }}</label>
+                        <div class='input-group'>
+                            <input class='form-control' formControlName='billNumber' maxlength="30"
+                                   inputPattern='onlyPositiveDecimalNumbers'/>
+                        </div>
+                        <div *ngIf="formModel.controls.billNumber.hasError('required') && formModel.controls.billNumber.touched"
+                             class='alert alert-danger'>
+                            <small>{{ 'oneTimePayment.subscriptionNumber' | translate }} {{ 'oneTimePayment.required' | translate }} </small>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-xs-12 col-sm-4'>
+                    <app-select-account [accounts]="accounts" [useOldDesign]="true"
+                                        (onAccountChange)="onAccountChange($event)">
+                    </app-select-account>
+                    <!-- <div *ngIf="formModel.controls.account.hasError('required') "
+                          class='alert alert-danger'>
+                         <small>{{ 'oneTimePayment.account' | translate }} {{ 'oneTimePayment.required' | translate }} </small>
+                     </div>-->
+                </div>
+            </div>
+
+
+        </div>
+
+        <div *ngIf="wizardStep==4 ">
+            <arb-panel>
+                <div class='sme-form__body'>
+                    <div>
+                        <div class='sme-wizard__success'>
+                            <span class=' icon -check'></span>
+                            <div></div>
+                            <div>
+                                <p>{{'oneTimePayment.success' | translate }} </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </arb-panel>
+        </div>
+
+    </fieldset>
+</form>
+
+<div *ngIf="wizardStep==4 ">
+    <arb-panel>
+        <div class='sme-form__body'>
+            <div>
+                <div class='sme-wizard__success'>
+                    <span class=' icon -check'></span>
+                    <div></div>
+                    <div>
+                        <p *ngIf="isAuthorized">{{'oneTimePayment.success' | translate }} </p>
+                        <p *ngIf="!isAuthorized">{{'oneTimePayment.pending-authorization' | translate }} </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+
+
+<div *ngIf="wizardStep==2 ||  wizardStep== 3 || (wizardStep ==4 &&  batchListsContainer.toProcess.length>0 )  ">
+
+    <arb-bill-detail-payments [step]="wizardStep" [bills]="[bill]" [totalAmount]="totalAmount" [isOneTimePayment]="true"
+                              [selectedAccount]="formModel.controls.account.value"
+                              [showDelete]="false" [generateChallengeAndOTP]="generateChallengeAndOTP"
+                              [requestValidate]="requestValidate">
+    </arb-bill-detail-payments>
+
+
+</div>
+
+<arb-buttons class="start">
+    <button *ngIf="wizardStep==3" class="btn btn-default btn-wide" (click)="cancel()">
+        {{ 'public.cancel' | translate}}</button>
+
+    <button *ngIf="wizardStep<3" class="btn btn-default btn-wide" (click)="back()">
+        {{ 'public.back' | translate}}</button>
+
+    <button *ngIf="wizardStep<4" class="btn btn-primary btn-wide" [disabled]="!isValid()"
+            (click)="next()">{{ 'public.next' | translate}}</button>
+
+    <button *ngIf="wizardStep==4" class="btn btn-primary btn-wide"
+            (click)="finish()">{{ 'oneTimePayment.goToDashboard' | translate}}</button>
+
+    <button *ngIf="wizardStep==4" class="btn btn-primary btn-wide"
+            (click)="goToPay()">{{ 'oneTimePayment.payAnotherBills' | translate}}</button>
+
+</arb-buttons>
+

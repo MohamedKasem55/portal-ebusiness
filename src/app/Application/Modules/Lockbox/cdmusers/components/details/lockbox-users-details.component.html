@@ -1,0 +1,108 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-panel-title [title]="'lockbox.cdmUsers.details.menu'">
+
+</arb-panel-title>
+
+<arb-panel>
+    <fieldset [formGroup]="formModel">
+        <app-dynamic-simple-extras-form-fields *ngIf="selectedItem && entityProperties"
+                                               [title]="'lockbox.cdmUsers.details.menu'"
+                                               [translate_prefix]="'lockbox.cdmUsers'"
+                                               [combosData]="combosData"
+                                               [formModel]="formModel"
+                                               [fieldsConfigs]="entityProperties"
+                                               (onAllFieldsCreated)="formConfigured($event)"
+                                               [custom_fields_templates]="{
+                                                    terminalAccountsList: terminalAccountsList
+                                                }">
+        </app-dynamic-simple-extras-form-fields>
+    </fieldset>
+</arb-panel>
+
+<ng-template #terminalAccountsList>
+    <app-dynamic-searchable-table
+            *ngIf="detailsData && detailsData.lockBoxUserTerminalAccountListDTO"
+            [showSearchForm]="false"
+            [searchForm_checkValid]="false"
+            [fieldsConfigForSearchForm]="[]"
+            [fieldsConfigForList]="terminalAccountsFieldsConfigForList"
+            [combosData]="combosData"
+            [search_form_combosData]="combosData"
+            [search_form_translate_prefix]="'lockbox.cdmUsers.details.terminalAccounts'"
+            [table_title]="'lockbox.cdmUsers.details.terminalAccounts.list'"
+            [table_translate_prefix]="''"
+            [table_export_pdf_size]="{width: 1200, height: 800}"
+
+            [table_export_show_buttons]="true"
+            [table_export_header]="'lockbox.cdmUsers.details.terminalAccounts.list' | translate"
+            [table_export_columns]="terminalAccountsFieldsConfigForExport"
+
+            [search_form_custom_fields_templates]="{}"
+
+            [table_export_selected_rows]="[]"
+            [table_externalPaging]="false"
+            [table_externalSorting]="false"
+
+            [table_elements_rows]="detailsData.lockBoxUserTerminalAccountListDTO"
+            [table_headerHeight]="60"
+            [table_elements_count]="detailsData.lockBoxUserTerminalAccountListDTO.length"
+            [table_elements_offset]="0"
+            [table_elements_limit]="detailsData.lockBoxUserTerminalAccountListDTO.length"
+
+            [table_footer_show_buttons]="true"
+            [table_footer_visiblePagesCount]="1"
+            [table_footer_pageSize]="50">
+
+    </app-dynamic-searchable-table>
+</ng-template>
+
+<arb-panel-buttons *ngIf="detailsData">
+    <a class="btn btn-default btn-wide"
+       [routerLink]="[getBackUrl()]">{{
+        'public.back' | translate }}
+    </a>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="canExecuteAction('edit')"
+            [disabled]="isDisabledAction('edit')"
+            (click)="executeAction('edit')">
+        {{'lockbox.cdmUsers.editBtn' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="canExecuteAction('delete')"
+            [disabled]="isDisabledAction('delete')"
+            (click)="executeAction('delete')">
+        {{'lockbox.cdmUsers.deleteBtn' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="canExecuteAction('suspend')"
+            [disabled]="isDisabledAction('suspend')"
+            (click)="executeAction('suspend')">
+        {{'lockbox.cdmUsers.suspendBtn' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="canExecuteAction('unsuspend')"
+            [disabled]="isDisabledAction('unsuspend')"
+            (click)="executeAction('unsuspend')">
+        {{'lockbox.cdmUsers.unsuspendBtn' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="canExecuteAction('reactivate')"
+            [disabled]="isDisabledAction('reactivate')"
+            (click)="executeAction('reactivate')">
+        {{'lockbox.cdmUsers.reactivateBtn' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide"
+            *ngIf="canExecuteAction('accounts')"
+            [disabled]="isDisabledAction('accounts')"
+            (click)="executeAction('accounts')">
+        {{'lockbox.cdmUsers.accountsBtn' | translate }}
+    </button>
+</arb-panel-buttons>

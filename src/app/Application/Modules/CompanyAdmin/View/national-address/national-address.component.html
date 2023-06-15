@@ -1,0 +1,66 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+        <li class="active">{{ 'public.nationalAddress' | translate }}</li>
+    </ol>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="sme-panel">
+            <div class="sme-panel_head">
+
+                <!-- <div class="sme-panel__title">
+                    National Address
+                </div> -->
+
+                <div class="sme-panel__body">
+
+                    <div class="container-fluid sme-content-container">
+                        <div class="sme-page-block">
+                            <ul class="sme-box sme-wizard__steps">
+                                <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+                                    <span>
+                                        <span class="num">1</span>
+                                        <span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+                                    </span>
+                                </li>
+                                <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                                    <span>
+                                        <span class="num">2</span>
+                                        <span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+                                    </span>
+                                </li>
+                                <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                                    <span>
+                                        <span class="icon -check"></span>
+                                        <span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-national-address-step1 *ngIf="step === 1"
+    [formNational]="formNational"
+    (onInit)="onInitStep1($event)"></app-national-address-step1>
+
+<app-national-address-step2 *ngIf="step === 2"
+    [formNational]="formNational"
+    [regions]="step1NationalAddress.regions"
+    [cities]="step1NationalAddress.cities"
+    (onInit)="onInitStep2($event)"></app-national-address-step2>
+
+<app-national-address-step3 *ngIf="step === 3"></app-national-address-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step == 2">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3" >{{'public.next' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 3" >{{'public.finish' | translate}}</button>
+</div>

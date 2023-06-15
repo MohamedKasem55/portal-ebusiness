@@ -1,0 +1,190 @@
+<arb-breadcrumb [routes]="[
+	['menu.account_management.mada_business_cards.menu'],
+	['menu.account_management.mada_business_cards.list_of_cards']
+]">
+</arb-breadcrumb>
+
+<arb-table-panel [title]="'accounts.debitCards.cardList'">
+</arb-table-panel>
+
+<arb-panel-buttons class="desktop-hidden">
+
+    <div class="container-fluid" *ngIf="carouselItems?.length > 1">
+        <div class="row desktop-hidden">
+            <div class="col-xs-4 text-left">
+                <a class="btn btn-default btn-carousel-step" (click)="previous()">
+                    {{'accounts.debitCards.previousCardColumn' | translate }}
+                </a>
+            </div>
+            <div class="col-xs-4 text-right col-xs-offset-4">
+                <a class="btn btn-default btn-carousel-step" (click)="next()">
+                    {{'accounts.debitCards.nextCardColumn' | translate }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+</arb-panel-buttons>
+
+<arb-panel>
+    <div *ngIf="noCardsExists">
+        <div class="noTargetsData">
+            <span class="text-legend">{{'commercialCards.noTargetsData' | translate }}</span>
+        </div>
+    </div>
+    <div *ngIf="carouselItems?.length > 0" class="row " style="position: relative; min-height: 300px;">
+        <div class="col-xs-12 col-sm-12">
+
+            <div class="row" *ngIf="carouselItems?.length > 0">
+                <div class="col-xs-12 col-sm-6" style="padding-top: 1.5%">
+                    <div class="sme-debit-card-slider__item item active head-list">
+                        <img class="debit-image-target" />
+                        <!--<img src="assets/img/{{selectedItem.cardNumber.substring(0,6)}}.jpg">-->
+                    </div>
+                    <div class="head-list">
+                        <div *ngIf="isSole && viewCredentialGroupIsActive">
+                            <span class="form-control link-target border-none"
+                                style="margin-top: 20px; padding-left: 0px; color: #2b4499"
+                                (click)="sendMessageAndRequestOTPToValidate()">{{'viewCardsCredential.linkDisplayCards'
+                                | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-1 debit_cards_separator_vertical_line"></div>
+                <div class="col-xs-12 col-sm-5">
+
+                    <div class="sme-page-block">
+                        <div class="sme-form">
+                            <div class="sme-form__form">
+                                <div class="sme-form__content">
+                                    <div class="sme-form__body">
+                                        <div class="row">
+                                            <fieldset>
+
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="required">{{ 'accounts.debitCards.cardNumber' |
+                                                            translate }}</label>
+                                                        <span
+                                                            class="form-control">{{carouselDisplayingCard?.cardNum}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="required">{{ 'accounts.debitCards.cardStatus' |
+                                                            translate }}</label>
+                                                        <span class="form-control">{{carouselDisplayingCard?.cardStatus
+                                                            | cardStatusConverter | translate}}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="required">{{ 'accounts.debitCards.acctNumber' |
+                                                            translate }}</label>
+                                                        <span
+                                                            class="form-control">{{carouselDisplayingCard?.acctNum}}</span>
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="hidden-xs mobile-hidden debit_cards_pagination_button_container debit_cards_pagination_button_container_previous"
+            *ngIf="carouselItems?.length > 1">
+            <div class="col-xs-2 text-left ">
+                <a class="btn btn-default btn-carousel-step" (click)="previous()">
+                    {{'accounts.debitCards.previousCardColumn' | translate }}
+                </a>
+            </div>
+        </div>
+        <div class="hidden-xs mobile-hidden debit_cards_pagination_button_container debit_cards_pagination_button_container_next"
+            *ngIf="carouselItems?.length > 1">
+            <div class="col-xs-2 text-right ">
+                <a class="btn btn-default btn-carousel-step" (click)="next()">
+                    {{'accounts.debitCards.nextCardColumn' | translate }}
+                </a>
+            </div>
+        </div>
+
+    </div>
+</arb-panel>
+<app-debit-card-actions [carouselDisplayingCard]="carouselDisplayingCard" *ngIf="carouselItems?.length > 0">
+</app-debit-card-actions>
+
+
+ <!-- Modal -->
+ <div class="modal fade" bsModal #displayCardCredential="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header title-Popup">
+                <h4 class="modal-title"
+                [ngClass]="{ 'justifyLeft': translate.currentLang === 'en','justifyRight':translate.currentLang === 'ar'}">{{ 'viewCardsCredential.popUpTitle' | translate }}</h4>
+                <div class="modal-header" [ngClass]="{ 'justifyLeft': translate.currentLang === 'en','justifyRight':translate.currentLang === 'ar'}">
+                    <button (click)="closePopUp()" type="button" class="close">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'viewCardsCredential.popUpMessage' | translate }}</p>
+            </div>
+
+            <form [formGroup]="form" *ngIf="form">
+                <div class="container-fluid">
+                    <div class="sme-page-block">
+                        <div class="sme-form">
+                            <div class="sme-form__form">
+                                <div class="sme-form__content">
+                                    <div class="sme-form__body">
+                                        <fieldset>
+
+                                            <ng-container formGroupName="newPin">
+                                                <div class="inputPin" style="justify-content: center;">
+                                                    <input type="password" #pin1 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin1"
+                                                        inputPattern="onlyDigits" (keyup)="focus(1)">
+                                                    <input type="password" #pin2 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin2"
+                                                        inputPattern="onlyDigits" (keyup)="focus(2)">
+                                                    <input type="password" #pin3 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin3"
+                                                        inputPattern="onlyDigits" (keyup)="focus(3)">
+                                                    <input type="password" #pin4 class="input-digit-otp space"
+                                                        maxlength="1" formControlName="newPin4"
+                                                        inputPattern="onlyDigits" (keyup)="focus(4)">
+                                                </div>
+                                            </ng-container>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <span *ngIf="countDown" class="title-Popup">{{display}}</span>
+
+            <div>
+                <span class="form-control link-target border-none title-Popup"
+                    style="margin-top: 20px; padding-left: 0px; color: #2b4499"
+                    (click)="sendMessageAndRequestOTPToValidate()">{{'viewCardsCredential.linkResendOTP'
+                    | translate }}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div [ngClass]="{'chart-container-for-legend': !this.useDefaultLegend,
+                 'chart-container': !this.useDefaultLegend}" *ngIf="chartData.data"
+                 style="display: flex; flex-direction: column;"
+                [ngStyle]="{'height': height ? height : '100%'}">
+
+    <div style="flex-basis: 70%">
+        <canvas baseChart
+                [datasets]="chartData.data"
+                [options]="chartOptions"
+                [labels]="chartData.labels"
+                [chartType]="chartType"
+                [plugins]="plugin">
+        </canvas>
+    </div>
+
+    <br [hidden]="this.useDefaultLegend">
+
+    <div #legendDev [hidden]="this.useDefaultLegend" id="{{'legend-div' + chartId}}" style="margin-top: auto;">
+        <ul id="{{'legend-ul-' + chartId }}" class="legend-ul">
+
+            <li *ngFor="let item of legendList; index as i" (click)="updateSetVisibility(chartId, i, item)">
+                <div class="legend-inner-div">
+                    <span id="{{'legend-' + chartId + '-label-' + i}}" [ngClass]="{'selected-legend': isHidden(i)}" style="text-align: center; color: #595e72; font-size: 100%">{{item.label}}</span>
+                    <span class="legend-inner-span" [style]="{'color': item.color }">
+                        <label style="font-size: 100%">
+                            {{(item.value < 0)?'-'+((-1*item.value) | digitsLetterFormatterPipe) :item.value| digitsLetterFormatterPipe}}
+                        </label>
+                    </span>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<app-retry-action *ngIf="!chartData.data" (onRetry)="onRefresh.emit($event)">
+</app-retry-action>
+

@@ -1,0 +1,182 @@
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.gold-price-now'| translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <arb-count-down-progress *ngIf="timeToLive"
+                                                 [TIME_LIMIT]="timeToLive"
+                                                 (onTimeUp)="redirectToWalletDashboard()">
+                        </arb-count-down-progress>
+                        <br>
+                        <b>
+                            {{'gold-wallet.price-at-moment'|translate}}
+                        </b>
+                        <br>
+                        <span class="One-Time-Pin">
+                            {{sellRequestDTO.sellGoldValidateRes.rate}}
+                            <span class="text-style-1">
+                                {{'gold-wallet.sar' |translate}}
+                                / {{sellRequestDTO.sellGoldValidateRes.measureUnit}}</span>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.sell-gold'| translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row" style="margin-left: 1%;">
+                            <div class="col-xs-12 col-sm-4"
+                                 [ngStyle]="{'margin-right':(sellRequestDTO.language === 'ar')? '1%':''}">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'gold-wallet.selected-sell-qty' |
+                                        translate }}</label>
+                                    <input type="text" class="form-control cursor-view"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [ngModel]="sellRequestDTO.sellGoldValidateRes.qty"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group"
+                                     [ngStyle]="{'margin-right':(sellRequestDTO.language === 'ar')? '1%':''}">
+                                    <label>{{ 'gold-wallet.total-amount-cost' |
+                                        translate }}</label>
+                                    <input type="text" class="form-control cursor-view"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [ngModel]="sellRequestDTO.sellGoldValidateRes.totalCost"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group"
+                                     [ngStyle]="{'margin-right':(sellRequestDTO.language === 'ar')? '1%':''}">
+                                    <label>{{ 'gold-wallet.selling-acc' |
+                                        translate }}</label>
+                                    <input type="text" class="form-control cursor-view"
+                                           [ngModelOptions]="{standalone: true}"
+                                           [ngModel]="sellRequestDTO.dashboardObject.linkedAccountNumber"
+                                           disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.selling-details'| translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+
+                        <div class="sme-data-table" *ngIf="rows?.data?.length>0">
+                            <div class="sme-table table headerDataTable" *ngIf="this.rows?.data!=null">
+                                <ngx-datatable #pickupTable
+                                               class="material sme-table sme-table--responsive table"
+                                               [messages]="{emptyMessage: 'public.noData' | translate}"
+                                               [rows]="rows.data"
+                                               [columnMode]="defaultColumnMode"
+                                               [headerHeight]="30"
+                                               [footerHeight]="footerHeight"
+                                               [rowHeight]="defaultHeight"
+                                               [externalPaging]="false"
+                                               [count]="rows.data.length"
+                                               [offset]="rows.page.pageNumber"
+                                               [limit]="tableDisplaySize"
+                                               [selectionType]="defaultSelectionTypeSingle"
+                                               [rowIdentity]="getIdFunction()"
+                                               (page)='setPage($event)'>
+
+                                    <ngx-datatable-column prop="selectedValue" class="mobile-hidden addPadding">
+                                        <ng-template let-value="selectedValue" let-sort="sortFn" ngx-datatable-header-template>
+                                                                        <span class="datatable-header-cell-wrapper">
+                                                                            {{'gold-wallet.amount' | translate }}
+                                                                        </span>
+                                        </ng-template>
+                                        <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                            <span class="mobile-hidden"> {{value}}</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column prop="serialNumber" class="mobile-hidden">
+                                        <ng-template ngx-datatable-header-template>
+                                                                    <span class="datatable-header-cell-wrapper">
+                                                                        {{'gold-wallet.serial-number'  | translate}}
+                                                                    </span>
+                                        </ng-template>
+                                        <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                            <span class="mobile-hidden">{{value}}</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-footer>
+                                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                                     let-pageSize="pageSize"
+                                                     let-selectedCount="selectedCount" let-curPage="curPage"
+                                                     let-offset="offset">
+                                            <div class="sme-data-table__footer">
+                                                <app-datatable-pager
+                                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                        [hidden]="!((rowCount / pageSize) > 1)"
+                                                        [visiblePagesCount]="visiblePagesCount"
+                                                        (change)="pickupTable.onFooterPage($event)">
+                                                </app-datatable-pager>
+                                                <div class="sme-data-table__actions form-inline">
+                                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                                    <span class="hidden-xs"> | </span>
+                                                    <span class="sme-data-table__action-group">
+                                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                        <div class="sme-select form-control">
+                                                            <select class="form-control">
+                                                                <option [value]="rows.data.length">{{rows.data.length}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-footer>
+                                </ngx-datatable>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,689 @@
+<ng-container [formGroup]="formModel">
+
+    <ng-container *ngFor="let field of _internalFieldsConfigs; index as fi" class="dynamic-form-field-container">
+
+        <ng-container *ngIf="field['type']=='custom-code'">
+            <div *ngIf="!field['widget_template'] && !field['widget_template_name']"
+                [innerHTML]="field['translate_rendered_text'] === true ? (field['widget'] | translate) : field['widget']">
+            </div>
+            <div *ngIf="field['widget_template'] || field['widget_template_name']">
+                <ng-container [ngTemplateOutlet]="getCustomFieldTemplateContent(field)" [ngTemplateOutletContext]="{
+                              id: field['key'],
+                              field: field,
+                              formModel: formModel,
+                              combosData: combosData,
+                              fieldsConfigs: fieldsConfigs,
+                              translate_prefix: translate_prefix,
+                              bsConfig: translate.currentLang=='ar'? bsConfigAR:bsConfigEN,
+                              df: this
+                           }">
+                </ng-container>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="field['type'] !='custom-code'">
+
+            <ng-container *ngIf="field['widget_container_init_row']">
+                <div class="col-xs-12"></div>
+            </ng-container>
+
+            <div *ngIf="_fieldsVisibleStatus[field['key']] && field['type']!=='hidden'"
+                [class]="(field['widget_container_class'] && field['widget_container_class']!=='')? field['widget_container_class'] : 'col-xs-12 col-sm-3'">
+
+                <div class="form-group"
+                    [class.input_readonly]="field['readonly'] || formModel.get(field['key']).disabled"
+                    [class.input_with_errors]="formModel.get(field['key']).touched && !formModel.get(field['key']).valid">
+
+                    <label [htmlFor]="field['key']" class="dynamic-form-field-label"
+                        [class.required]="field['required']"
+                        [style]="(field['readonly'] || formModel.get(field['key']).disabled)?{}:{color: '#595e72'}"
+                        [title]="field['translate'] === false ? '' :  ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['translate'] | translate)"
+                        [innerHTML]="field['translate'] === false ? '' :  ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['translate'] | translate)"></label>
+
+                    <ng-container *ngIf="formModel.get(field['key'])" class="dynamic-form-field-input-container">
+
+                        <ng-container [ngSwitch]="field['type']">
+
+                            <!-- text field -->
+                            <ng-container *ngSwitchDefault>
+                                <input class="form-control dynamic-form-field-input" type="text"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                    autocomplete="off" inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                    [minlength]="field['minlength']?field['minlength']:''"
+                                    [maxlength]="field['maxlength']?field['maxlength']:''" [id]="field['key']"
+                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}" />
+                            </ng-container>
+
+                            <!-- hidden field -->
+                            <ng-container *ngSwitchCase="'hidden'">
+                                <input class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                    type="hidden" autocomplete="off" [id]="field['key']"
+                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}" />
+                            </ng-container>
+
+                            <!-- span - no editable - field -->
+                            <ng-container *ngSwitchCase="'span'">
+                                <ng-container *ngIf="field['translate_rendered_text'] === true">
+                                    <div class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{'min-height':'46px', height:'auto'}"
+                                        [innerHTML]="formModel.get(field['key']).value | translate">
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="field['translate_rendered_text'] !== true">
+                                    <div *ngIf="field['model_key_to_rendered_text']"
+                                        class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{'min-height':'46px', height:'auto'}"
+                                        [innerHTML]="field['model_key_to_rendered_text'] | modelPipe: formModel.get(field['key']).value">
+                                    </div>
+                                    <div *ngIf="!field['model_key_to_rendered_text']"
+                                        class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{'min-height':'46px', height:'auto'}"
+                                        [innerHTML]="formModel.get(field['key']).value">
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+
+                            <!-- password field -->
+                            <ng-container *ngSwitchCase="'password'">
+                                <input class="form-control dynamic-form-field-input" type="password"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                    autocomplete="off" inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                    [minlength]="field['minlength']?field['minlength']:''"
+                                    [maxlength]="field['maxlength']?field['maxlength']:''" [id]="field['key']"
+                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}" />
+                            </ng-container>
+
+                            <!-- textarea field -->
+                            <ng-container *ngSwitchCase="'textarea'">
+
+                                <div *ngIf="field['widget']=='ckeditor'" class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{'height':'auto'}">
+
+                                    <ckeditor [config]="getTextareaFieldCkEditorOptions(field)"
+                                        [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                        autocomplete="off" editorUrl="./ckeditor/ckeditor.js" [id]="field['key']"
+                                        (change)="onChangeInput($event,field)" formControlName="{{field['key']}}">
+                                    </ckeditor>
+                                </div>
+
+                                <textarea *ngIf="field['widget']!='ckeditor'"
+                                    class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                    autocomplete="off" inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                    [minlength]="field['minlength']?field['minlength']:''"
+                                    [maxlength]="field['maxlength']?field['maxlength']:''" [id]="field['key']"
+                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}">
+                                </textarea>
+                            </ng-container>
+
+                            <!-- file field -->
+                            <ng-container *ngSwitchCase="'file'">
+                                <div class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                    <span *ngIf="!isDisabled(field)" class="fileUpload"
+                                        style="margin: 0px;padding: 0px;">
+                                        <span *ngIf="isEmpty(field)" class="btn human-selectable"
+                                            style="margin-top: -5px;">
+                                            {{'public.upload' | translate | uppercase}}
+                                        </span>
+                                        <span *ngIf="!isEmpty(field) && !isDisabled(field)" class="human-selectable"
+                                            [innerHTML]="getFileWidgetCustomRender(field)">
+                                        </span>
+                                        <input type="file" class="upload"
+                                            [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                            autocomplete="off" [id]="field['key']"
+                                            [accept]="field['widget_file_accept']?field['widget_file_accept']:'*.*'"
+                                            [name]="field['widget_name']?field['widget_name']:field['key']"
+                                            (change)="onChangeInputFile($event,field)" />
+                                    </span>
+                                    <span *ngIf="!isEmpty(field) && isDisabled(field)"
+                                        [innerHTML]="getFileWidgetCustomRender(field)">
+                                    </span>
+                                    <span *ngIf="!isEmpty(field) && !isDisabled(field)"
+                                        style="position: absolute; top: 10px;"
+                                        [style]="translate.currentLang!='ar'?{right: '5px'}:{left: '5px'}">
+                                        <span class="icon -close human-selectable"
+                                            (click)="onChangeInputFile(null, field)"
+                                            [title]="('public.remove' | translate | uppercase)">
+                                        </span>
+                                    </span>
+                                </div>
+                            </ng-container>
+
+                            <!-- number field -->
+                            <ng-container *ngSwitchCase="'number'">
+                                <input class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                    type="number"
+                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                    autocomplete="off" inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                    [minlength]="field['minlength']?field['minlength']:''"
+                                    [maxlength]="field['maxlength']?field['maxlength']:''" [id]="field['key']"
+                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}" />
+                            </ng-container>
+
+                            <!-- checkbox field -->
+                            <ng-container *ngSwitchCase="'radio'">
+                                <span class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                    <ng-container *ngIf="field['translate_inline']">
+                                        <label [htmlFor]="field['key']">
+                                            <input type="radio"
+                                                [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                autocomplete="off" [id]="field['key']"
+                                                [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                (change)="onChangeInput($event,field)"
+                                                formControlName="{{field['key']}}" />&nbsp;&nbsp;
+                                            <span
+                                                [innerHTML]="(translate_prefix + '.' + field['translate_inline']) | translate">
+                                            </span>
+                                        </label>
+                                    </ng-container>
+                                    <ng-container *ngIf="!field['translate_inline']">
+                                        <input type="radio"
+                                            [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                            autocomplete="off" [id]="field['key']"
+                                            [name]="field['widget_name']?field['widget_name']:field['key']"
+                                            (change)="onChangeInput($event,field)" formControlName="{{field['key']}}" />
+                                    </ng-container>
+                                </span>
+                            </ng-container>
+
+                            <!-- checkbox field -->
+                            <ng-container *ngSwitchCase="'checkbox'">
+                                <span class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                    <ng-container *ngIf="field['translate_inline']">
+                                        <label [htmlFor]="field['key']" class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox"
+                                                [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                autocomplete="off" [id]="field['key']"
+                                                [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                (change)="onChangeInput($event,field)"
+                                                formControlName="{{field['key']}}" /><i aria-hidden="true"></i>
+                                                &nbsp;&nbsp;
+                                            <span
+                                                [innerHTML]="(translate_prefix + '.' + field['translate_inline']) | translate">
+                                            </span>
+                                        </label>
+                                    </ng-container>
+                                    <ng-container *ngIf="!field['translate_inline']">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox"
+                                                [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                autocomplete="off" [id]="field['key']"
+                                                [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                (change)="onChangeInput($event,field)" 
+                                                formControlName="{{field['key']}}" /><i aria-hidden="true"></i>
+                                        </label>
+                                    </ng-container>
+
+                                </span>
+                            </ng-container>
+
+                            <!-- select field -->
+                            <ng-container *ngSwitchCase="'select'">
+                                <ng-select [notFoundText]="'public.noData' | translate"
+                                    class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                    autocomplete="off" [id]="field['key']"
+                                    [multiple]="field['multiple'] === true?true:false"
+                                    [clearable]="field['clearable']===false || isDisabled(field)?false:true"
+                                    [placeholder]="canShowSelectPlaceHolder(field) ? ('-- '+('public.selectOption' | translate )+' --'):''"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}">
+                                    <ng-container
+                                        *ngFor="let subitem of _internalSelectCombosDataByField[field['key']]; index as si">
+                                        <ng-option [value]="subitem.key"
+                                            [innerHTML]="(field['translate_rendered_text'] === true ? (subitem['value'] | translate) : subitem['value'])+(field['multiple'] === true ? '&nbsp;&nbsp;' : '')">
+                                        </ng-option>
+                                    </ng-container>
+                                </ng-select>
+                            </ng-container>
+
+                            <!-- radioGroup field -->
+                            <ng-container *ngSwitchCase="'radioGroup'">
+
+                                <ng-container *ngIf="field['widget_options_in_separated_lines']">
+                                    <span class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                        <ng-container
+                                            *ngFor="let subitem of  _internalSelectCombosDataByField[field['key']]; index as si">
+                                            <p class="">
+                                                <label [htmlFor]="field['key']+'_'+si">
+                                                    <input type="radio"
+                                                        [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                        autocomplete="off" [id]="field['key']+'_'+si"
+                                                        [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                        [value]="subitem['key']"
+                                                        [checked]="subitem['key']==formModel.get(field['key']).value"
+                                                        (change)="onChangeInput($event,field)"
+                                                        formControlName="{{field['key']}}" />
+                                                    <span style="font-size: 1.2em;"
+                                                        [style.font-weight]="subitem['key']==formModel.get(field['key']).value?'bold':''"
+                                                        [innerHTML]="'&nbsp;' + (field['translate_rendered_text'] === true ? (subitem['value'] | translate) : subitem['value']) + '&nbsp;&nbsp;'">
+                                                    </span>
+                                                </label>
+                                            </p>
+                                        </ng-container>
+                                    </span>
+                                </ng-container>
+
+                                <ng-container *ngIf="!field['widget_options_in_separated_lines']">
+                                    <span class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                        <ng-container
+                                            *ngFor="let subitem of _internalSelectCombosDataByField[field['key']]; index as si">
+                                            <label [htmlFor]="field['key']+'_'+si">
+                                                <input type="radio"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off" style="pointer-events: none !important;"
+                                                    [id]="field['key']+'_'+si"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [value]="subitem['key']"
+                                                    [checked]="subitem['key']==formModel.get(field['key']).value"
+                                                    (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                                <span style="font-size: 1.2em;"
+                                                    [style.font-weight]="subitem['key']==formModel.get(field['key']).value?'bold':''"
+                                                    [innerHTML]="'&nbsp;' + (field['translate_rendered_text'] === true ? (subitem['value'] | translate) : subitem['value']) + '&nbsp;&nbsp;'">
+                                                </span>
+                                            </label>
+                                        </ng-container>
+                                    </span>
+                                </ng-container>
+
+                            </ng-container>
+
+                            <!-- checkboxGroup field -->
+                            <ng-container *ngSwitchCase="'checkboxGroup'">
+
+                                <ng-container *ngIf="field['widget_options_in_separated_lines']">
+                                    <span class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                        <ng-container
+                                            *ngFor="let subitem of  _internalSelectCombosDataByField[field['key']]; index as si">
+                                            <p class="">
+                                                <label [htmlFor]="field['key']+'_'+si" class="sme-checkbox checkbox-inline">
+                                                    <input type="checkbox"
+                                                        [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                        autocomplete="off" [id]="field['key']+'_'+si"
+                                                        [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                        [disabled]="isDisabled(field)"
+                                                        [checked]="isValueInCheckBoxGroup(subitem['key'], field)"
+                                                        (change)="onChangeInputCheckBoxGroup($event,field, si)" /><i aria-hidden="true"></i>
+                                                    <span style="font-size: 1.2em;"
+                                                        [style.font-weight]="isValueInCheckBoxGroup(subitem['key'], field)?'bold':''"
+                                                        [innerHTML]="'&nbsp;'+ (field['translate_rendered_text'] === true ? (subitem['value'] | translate) : subitem['value']) + '&nbsp;&nbsp;'">
+                                                    </span>
+                                                </label>
+                                            </p>
+                                        </ng-container>
+                                    </span>
+                                </ng-container>
+
+                                <ng-container *ngIf="!field['widget_options_in_separated_lines']">
+                                    <span class="form-control dynamic-form-field-input"
+                                        [style]="field['widget_control_style']?field['widget_control_style']:{}">
+                                        <ng-container
+                                            *ngFor="let subitem of _internalSelectCombosDataByField[field['key']]; index as si">
+                                            <label [htmlFor]="field['key']+'_'+si" class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off" [id]="field['key']+'_'+si"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [disabled]="isDisabled(field)"
+                                                    [checked]="isValueInCheckBoxGroup(subitem['key'], field)"
+                                                    (change)="onChangeInputCheckBoxGroup($event,field, si)" /><i aria-hidden="true"></i>
+                                                <span style="font-size: 1.2em;"
+                                                    [style.font-weight]="isValueInCheckBoxGroup(subitem['key'], field)?'bold':''"
+                                                    [innerHTML]="'&nbsp;' + (field['translate_rendered_text'] === true ? (subitem['value'] | translate) : subitem['value']) + '&nbsp;&nbsp;'">
+                                                </span>
+                                            </label>
+                                        </ng-container>
+                                    </span>
+                                </ng-container>
+
+                            </ng-container>
+
+                            <!-- date field -->
+                            <ng-container *ngSwitchCase="'date'">
+
+                                <ng-container [ngSwitch]="field['widget']">
+
+                                    <!-- date widget -->
+                                    <ng-container *ngSwitchDefault>
+                                        <div style="display: flex;">
+                                            <input type="date" class="form-control dynamic-form-field-input"
+                                                [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                autocomplete="off"
+                                                [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                [minlength]="field['minlength']?field['minlength']:''"
+                                                [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                [id]="field['key']"
+                                                [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                (change)="onChangeInput($event,field)"
+                                                formControlName="{{field['key']}}" />
+                                            <label [attr.for]="field['key']" class="human-selectable icon -calendar"
+                                                style="font-size: initial;margin-top: 20px;position: absolute;right: 20px;">
+                                            </label>
+                                        </div>
+
+                                    </ng-container>
+
+                                    <!-- datepicker widget -->
+                                    <ng-container *ngSwitchCase="'datepicker'">
+
+                                        <div style="display: flex;">
+
+                                            <ng-container
+                                                *ngIf="!field['widget_datepicker_max_date'] && !field['widget_datepicker_min_date']">
+                                                <input type="text" class="form-control dynamic-form-field-input"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    bsDatepicker placement="bottom" autocomplete="off"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <ng-container
+                                                *ngIf="field['widget_datepicker_max_date'] && field['widget_datepicker_min_date']">
+                                                <input type="text" class="form-control dynamic-form-field-input"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    [maxDate]="getDateValue(field['widget_datepicker_max_date'])"
+                                                    [minDate]="getDateValue(field['widget_datepicker_min_date'])"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <ng-container
+                                                *ngIf="field['widget_datepicker_max_date'] && !field['widget_datepicker_min_date']">
+                                                <input type="text" class="form-control dynamic-form-field-input"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    [maxDate]="getDateValue(field['widget_datepicker_max_date'])"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <ng-container
+                                                *ngIf="!field['widget_datepicker_max_date'] && field['widget_datepicker_min_date']">
+                                                <input type="text" class="form-control dynamic-form-field-input"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    [minDate]="getDateValue(field['widget_datepicker_min_date'])"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <label [attr.for]="field['key']" class="human-selectable icon -calendar"
+                                                [style]="translate.currentLang=='ar'?{left: '20px'}:{right: '20px'}"
+                                                style="font-size: initial;margin-top: 20px;position: absolute;">
+                                            </label>
+                                        </div>
+
+                                    </ng-container>
+
+                                    <!-- datepicker-gr-to-ar widget -->
+                                    <ng-container *ngSwitchCase="'datepicker-gr'">
+                                        <span style="display: flex;" class="form-control dynamic-form-field-input">
+
+                                            <ng-container
+                                                *ngIf="!field['widget_datepicker_max_date'] && !field['widget_datepicker_min_date']">
+                                                <input type="text"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    style="width: 120px; border: 0px; background: transparent;"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <ng-container
+                                                *ngIf="field['widget_datepicker_max_date'] && field['widget_datepicker_min_date']">
+                                                <input type="text"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    style="width: 120px; border: 0px; background: transparent;"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    [maxDate]="getDateValue(field['widget_datepicker_max_date'])"
+                                                    [minDate]="getDateValue(field['widget_datepicker_min_date'])"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <ng-container
+                                                *ngIf="field['widget_datepicker_max_date'] && !field['widget_datepicker_min_date']">
+                                                <input type="text"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    style="width: 120px; border: 0px; background: transparent;"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    [maxDate]="getDateValue(field['widget_datepicker_max_date'])"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <ng-container
+                                                *ngIf="!field['widget_datepicker_max_date'] && field['widget_datepicker_min_date']">
+                                                <input type="text"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    style="width: 120px; border: 0px; background: transparent;"
+                                                    bsDatepicker placement="bottom"
+                                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                                    autocomplete="off"
+                                                    [minDate]="getDateValue(field['widget_datepicker_min_date'])"
+                                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                                    [minlength]="field['minlength']?field['minlength']:''"
+                                                    [maxlength]="field['maxlength']?field['maxlength']:''"
+                                                    [id]="field['key']"
+                                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                                    [bsConfig]="translate.currentLang=='ar'?bsConfigAR:bsConfigEN"
+                                                    [outsideClick]="true" (change)="onChangeInput($event,field)"
+                                                    formControlName="{{field['key']}}" />
+                                            </ng-container>
+
+                                            <label [attr.for]="field['key']"
+                                                *ngIf="!(field['readonly'] || formModel.get(field['key']).disabled)"
+                                                [style]="translate.currentLang == 'ar'? {}: {}"
+                                                class="human-selectable icon -calendar"
+                                                style="font-size: initial; color: #555555; position: relative; top: 8px;">
+                                            </label>
+
+                                            <span class="human-selectable"
+                                                (mouseover)="openCloseHijraDatepickerTooltip(field, true)"
+                                                (mouseleave)="openCloseHijraDatepickerTooltip(field, false)"
+                                                style="padding-left: 0px; padding-right: 0px; color: #999; display: flex; pointer-events: initial !important; cursor: pointer !important;">
+                                                <span
+                                                    [style]="translate.currentLang == 'ar'?{left: '25px'}: {right: '25px'}"
+                                                    style="position: absolute; top: 13px; pointer-events: initial !important; cursor: pointer !important;">
+                                                    {{ 'public.hijraDate' | translate }}
+                                                </span>
+                                                <span
+                                                    [style]="translate.currentLang == 'ar'?{left: '5px'}: {right: '5px'}"
+                                                    class="human-selectable icon -calendar"
+                                                    style="font-size: initial; position: absolute; top: 15px; pointer-events: initial !important; cursor: pointer !important;">
+                                                </span>
+                                            </span>
+
+                                        </span>
+                                        <span class="col-sm-12 col-xs-12" *ngIf="field['_tooltip-visible']"
+                                            style="padding-top:15px;padding-bottom: 15px; border:solid 1px;background-color:white;position:absolute;z-index:1000;width:300px;overflow-x:auto">
+                                            <span>{{ 'public.gregorianDate' | translate }}: </span>
+                                            <span
+                                                [innerHTML]="(formModel.get(field['key']).value) | dateFormat:'dd/MM/yyyy'"></span>
+                                            <br />
+                                            <span>{{ 'public.hijraDate' | translate }}: </span>
+                                            <span
+                                                [innerHTML]="(formModel.get(field['key']).value) | dateFormat:'yyyy-MM-dd' | hijraDateFormat:'dd/MM/yyyy'"></span>
+                                        </span>
+                                    </ng-container>
+
+                                    <!-- datepicker-ar-to-gr widget -->
+                                    <ng-container *ngSwitchCase="'datepicker-ar'">
+                                        <span style="display: flex;" class="form-control dynamic-form-field-input ">
+
+                                            <!-- <ngbd-datepicker-calendars
+                                                    style="padding-left: 0px;"
+                                                    autocomplete="off"
+                                                    [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                    style="width: 160px; border: 0px; background: transparent;"
+                                                    [id]="field['key']"
+                                                    [mindate]="getDateValueAR(field['widget_datepicker_min_date'])"
+                                                    [maxdate]="!getDateValueAR(field['widget_datepicker_min_date']) && !getDateValueAR(field['widget_datepicker_max_date'])?getDateValue(true):getDateValueAR(field['widget_datepicker_max_date'])"
+
+                                                    >
+                                            </ngbd-datepicker-calendars> -->
+                                            <ng-container>
+                                                <div class="input-group" style="width:70%">
+                                                    <input #calendarWidget="ngbDatepicker" style="padding-left: 0px;"
+                                                        (click)="calendarWidget.toggle()"
+                                                        [style]="field['widget_control_style']?field['widget_control_style']:{}"
+                                                        [minDate]="getDateValueAR(field['widget_datepicker_min_date'])"
+                                                        [maxDate]="getDateValueAR(field['widget_datepicker_max_date'])"
+                                                        formControlName="{{field['key']}}" ngbDatepicker
+                                                        placement="bottom" style="border:0px; width:90%" name="{{id}}"
+                                                        (navigate)="date = $event.next" [firstDayOfWeek]="7"
+                                                        (change)="onChangeInput($event,field)"
+                                                        (ngModelChange)="onChangeInput($event,field)">
+                                                    <span class="human-selectable icon -calendar" [attr.disabled]="null"
+                                                        (click)="calendarWidget.toggle()"></span>
+                                                </div>
+                                            </ng-container>
+
+                                            <span class="human-selectable"
+                                                (mouseover)="openCloseHijraDatepickerTooltip(field, true)"
+                                                (mouseleave)="openCloseHijraDatepickerTooltip(field, false)"
+                                                style="padding-left: 0px; padding-right: 0px; text-align: right; display: flex; pointer-events: initial !important; cursor: pointer !important;">
+                                                <span
+                                                    [style]="translate.currentLang == 'ar'?{left: '25px'}: {right: '25px'}"
+                                                    style="position: absolute; pointer-events: initial !important; cursor: pointer !important;">
+                                                    {{ 'public.gregorian' | translate }}
+                                                </span>
+                                                <span
+                                                    [style]="translate.currentLang == 'ar'?{left: '5px', top: '10px'}: {right: '5px'}"
+                                                    class="human-selectable icon -calendar"
+                                                    style="font-size: initial; position: absolute; pointer-events: initial !important; cursor: pointer !important;">
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span class="col-sm-12 col-xs-12" *ngIf="field['_tooltip-visible']"
+                                            style="padding-top:15px;padding-bottom: 15px; border:solid 1px;background-color:white;position:absolute;z-index:1000;width:300px;overflow-x:auto">
+                                            <span>{{ 'public.hijraDate' | translate }}: </span>
+                                            <span
+                                                [innerHTML]="getHijraDateObjectToHijraDate(formModel.get(field['key']).value)"></span>
+                                            <br />
+                                            <span>{{ 'public.gregorianDate' | translate }}: </span>
+                                            <span
+                                                [innerHTML]="getHijraDateToGregorianDate(formModel.get(field['key']).value)"></span>
+                                        </span>
+                                    </ng-container>
+
+                                </ng-container>
+                            </ng-container>
+
+                            <!-- vat-calculator field -->
+                            <ng-container *ngSwitchCase="'vat-calculator'">
+                                <input class="form-control dynamic-form-field-input"
+                                    [style]="field['widget_control_style']?field['widget_control_style']:{}" type="text"
+                                    autocomplete="off"
+                                    [title]="field['translate'] === false ? '' : ((field['translate_use_prefix']===false?'':(translate_prefix + '.')) + field['title'] | translate)"
+                                    inputPattern="{{field['inputPattern']?field['inputPattern']:''}}"
+                                    [minlength]="field['minlength']?field['minlength']:''"
+                                    [maxlength]="field['maxlength']?field['maxlength']:''" [id]="field['key']"
+                                    [name]="field['widget_name']?field['widget_name']:field['key']"
+                                    (change)="onChangeInput($event,field)" formControlName="{{field['key']}}" />
+                                <span>{{ 'public.feeWithoutVat' | translate }} {{formModel.get(field['key']).value |
+                                    baseAmount}}</span>
+                                <span>{{ 'public.vatFeeAmount' | translate }} {{formModel.get(field['key']).value |
+                                    vatAmount}}</span>
+                            </ng-container>
+
+                        </ng-container>
+
+                    </ng-container>
+
+                    <!-- errors messages -->
+
+                    <div
+                        *ngIf="formModel.get(field['key']).errors && (formModel.get(field['key']).touched || formModel.get(field['key']).dirty)">
+                        <p *ngFor="let error of getFieldErrorsAsArray(field['key'])" class="alert alert-danger">
+                            {{ 'error.' + error.code | translate:error.params }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <ng-container *ngIf="field['widget_container_end_row']">
+                <div class="col-xs-12"></div>
+            </ng-container>
+
+        </ng-container>
+
+    </ng-container>
+
+</ng-container>

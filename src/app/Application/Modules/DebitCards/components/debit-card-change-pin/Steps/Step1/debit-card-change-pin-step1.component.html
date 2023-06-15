@@ -1,0 +1,26 @@
+<arb-panel>
+    <h3>{{ 'accounts.debitCards.pinStep1Title' | translate }}</h3>
+    <hr>
+    <app-debit-card-change-pin-form
+            [formModel]="formModel"
+            [card]="card">
+    </app-debit-card-change-pin-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.debitCards.helpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.debitCards.pinStep1HelpText0' | translate }}<br/>
+            <ul>
+                <li>{{ 'accounts.debitCards.pinStep1HelpText1' | translate }}</li>
+                <li>{{ 'accounts.debitCards.pinStep1HelpText2' | translate }}</li>
+                <li>{{ 'accounts.debitCards.pinStep1HelpText3' | translate }}</li>
+            </ul>
+            <br/>
+        </div>
+    </div>
+</arb-panel>

@@ -1,0 +1,223 @@
+<div *ngIf='loading' id="overlay">
+	<div class="loading-position">
+		<div class="sk-fading-circle">
+			<div class="sk-circle1 sk-circle"></div>
+			<div class="sk-circle2 sk-circle"></div>
+			<div class="sk-circle3 sk-circle"></div>
+			<div class="sk-circle4 sk-circle"></div>
+			<div class="sk-circle5 sk-circle"></div>
+			<div class="sk-circle6 sk-circle"></div>
+			<div class="sk-circle7 sk-circle"></div>
+			<div class="sk-circle8 sk-circle"></div>
+			<div class="sk-circle9 sk-circle"></div>
+			<div class="sk-circle10 sk-circle"></div>
+			<div class="sk-circle11 sk-circle"></div>
+			<div class="sk-circle12 sk-circle"></div>
+		</div>
+	</div>
+</div>
+
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li><a href="#" routerLinkActive="active" [routerLink]="['billPayments']">{{ 'dashboard.payments'| translate }}</a>
+		</li>
+		<li class="active">{{ 'payments.bill-payments'| translate }}</li>
+	</ol>
+</div>
+
+
+
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<!-- sme-data-table -->
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+				<div class="sme-data-table__title">
+					{{ 'payments.feedbackfiles'| translate }}
+				</div>
+
+			</div>
+			<div>
+				<div class="sme-table table headerDataTable">
+					<table-export [dataTable]="FeedbacktablePageTable" [header]="'accounts.balanceCertificate.name' | translate">
+					</table-export>
+
+					<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #FeedbacktablePageTable
+						class="material sme-table sme-table--responsive table" [rows]="FeedbacktablePage.data"
+						[columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+						[externalPaging]="true" [count]="FeedbacktablePage.page.totalElements"
+						[offset]="FeedbacktablePage.page.pageNumber" [limit]="FeedbacktablePage.page.pageSize"
+						(page)='setPage($event)' (sort)="setSort($event)">
+
+						<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+							<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.accountFrom' | translate }}</label>
+												<div>
+													<span>{{row.accountFrom}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.biller-name' | translate }}</label>
+												<div>
+													<span>{{row.billername}}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.bill-ref' | translate }}</label>
+												<div>
+													<span>{{ row.billref }}</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.enteredAmount' | translate }}</label>
+												<div>
+													<span> {{ row.enteredAmount | amountCurrency }}{{'currencyIso' | modelPipe: '608'}}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.billProcess' | translate }}</label>
+												<div>
+													<span>{{ row.billProcess }}</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.status' | translate }}</label>
+												<div>
+													<span>{{row.status | statusPipe}}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</ng-template>
+						</ngx-datatable-row-detail>
+
+						<ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+							[resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="accountFrom">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'payments.accountFrom' | translate }}
+								</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="billername">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'payments.biller-name' | translate }}
+								</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="billref">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'payments.bill-ref' | translate }}
+								</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="enteredAmount">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'payments.enteredAmount' | translate }}
+								</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="process">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'payments.billProcess' | translate }}
+								</span>
+							</ng-template>
+							<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+									<span>  {{'billProcess' | modelPipe:value}}</span>
+	
+								</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="status">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'payments.status' | translate }}
+								</span>
+							</ng-template>
+
+							
+						</ngx-datatable-column>
+
+						<ngx-datatable-footer>
+							<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+								let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+								<div class="sme-data-table__footer">
+									<app-datatable-pager
+										[pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+										[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+										[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+										[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+										[page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+										[visiblePagesCount]="visiblePagesCount" (change)="FeedbacktablePageTable.onFooterPage($event)">
+									</app-datatable-pager>
+
+									<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+											{{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+										<span class="hidden-xs"> | </span>
+										<span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="this.FeedbacktablePage.page.pageSize"
+													(change)="this.setPage(null)">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+													<option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+												</select>
+											</div>
+										</span>
+									</div>
+								</div>
+							</ng-template>
+						</ngx-datatable-footer>
+
+					</ngx-datatable>
+				</div>
+			</div>
+			<div>
+				<!-- ./sme-data-table -->
+			</div>
+		</div>

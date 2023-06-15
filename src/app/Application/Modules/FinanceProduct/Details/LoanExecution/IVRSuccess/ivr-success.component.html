@@ -1,0 +1,46 @@
+<div class='container-fluid'>
+    <div class='sme-page-block'>
+        <div class='sme-form'>
+
+            <div class='sme-form__content'>
+                <div class='sme-form__form'>
+                    <div class='sme-form__body'>
+                        <div>
+                            <div class='sme-wizard__success'>
+                                <span class=' icon -check'></span>
+                                <div></div>
+                                <div>
+                                    <p>{{'financeProduct.details.congrats' | translate }}</p>
+                                    <p>{{'financeProduct.details.IVRSuccess' | translate }}</p>
+
+                                    <form autocomplete='off' #posStep3='ngForm' class='sme-form__form' novalidate>
+                                        <fieldset [formGroup]='formModel' class='alignCenter'>
+                                            <p class='title'> {{'financeProduct.details.lastStep' | translate }}</p>
+                                            <p class='body'> {{'financeProduct.details.lastStepMsg'| translate:{date: dateStr} }} </p>
+                                            <p class='title2'> {{'financeProduct.details.HowToAcceept' | translate }}</p>
+                                            <div class='steps' [ngClass]='(isAR)?"stepsAr":"stepsEn"'>
+                                                <p class='step'><img src='./assets/img/oval.png' /> <span class='num'
+                                                                                                          [ngClass]='(isAR)?"numAr":"numEn"'>1</span>
+                                                    {{'financeProduct.details.requestPromissory' |
+                                                        translate }}
+                                                </p>
+                                                <p class='step'><img src='./assets/img/oval.png' /><span class='num' [ngClass]='(isAR)?"numAr":"numEn"'>2</span>
+                                                    {{'financeProduct.details.visitSMS' | translate }}</p>
+                                                <p class='step'><img src='./assets/img/oval.png' /><span class='num' [ngClass]='(isAR)?"numAr":"numEn"'>3</span>
+                                                    {{'financeProduct.details.absher' | translate }}</p>
+                                                <p class='step'><img src='./assets/img/oval.png' /><span class='num' [ngClass]='(isAR)?"numAr":"numEn"'>4</span>
+                                                    {{'financeProduct.details.acceptPromissory' | translate }}
+                                                </p>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

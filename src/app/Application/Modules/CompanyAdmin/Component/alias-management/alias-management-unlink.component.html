@@ -1,0 +1,92 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+                            <div class="unlinkAccount">
+                                {{ 'menu.company_admin.alias-management.unlinkAccount' | translate }}
+                                <br>
+                                <br>
+                            </div>
+                            <div class="unlinkNote">
+                                {{
+                                'menu.company_admin.alias-management.note' |
+                                translate }}
+                            </div>
+                            <br>
+                            <div class="selectReson">
+                                {{
+                                'menu.company_admin.alias-management.selectReson' |
+                                translate }}
+                            </div>
+
+                            <div class="radioDiv" [ngClass]="selectedValue==1? 'selectedRadio' :''"
+                                (click)="selectReason(1)">
+                                <div class="radioBox">
+                                    <input type="radio" (change)="selectReason(1)" [checked]="selectedValue==1">
+                                    <span> {{
+                                        'menu.company_admin.alias-management.satisfied' |
+                                        translate }}</span>
+                                </div>
+                            </div>
+                            <div class="radioDiv" [ngClass]="selectedValue==2? 'selectedRadio' :''"
+                                (click)="selectReason(2)">
+                                <div class="radioBox">
+                                    <input type="radio" (change)="selectReason(2)" [checked]="selectedValue==2">
+                                    <span> {{
+                                        'menu.company_admin.alias-management.privacy' |
+                                        translate }}</span>
+                                </div>
+                            </div>
+                            <div class="radioDiv" [ngClass]="selectedValue==3? 'selectedRadio' :''"
+                                (click)="selectReason(3)">
+                                <div class="radioBox">
+                                    <input type="radio" (change)="selectReason(3)" [checked]="selectedValue==3">
+                                    <span> {{
+                                        'menu.company_admin.alias-management.friendly' |
+                                        translate }}</span>
+                                </div>
+                            </div>
+                            <div class="radioDiv" [ngClass]="selectedValue==4? 'selectedRadio' :''"
+                                (click)="selectReason(4)">
+                                <div class="radioBox">
+                                    <input type="radio" (change)="selectReason(4)" [checked]="selectedValue==4">
+                                    <span> {{
+                                        'menu.company_admin.alias-management.other' |
+                                        translate }}</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedValue==4" class="form-group" style="padding: 0px 20px;">
+                        <label class="required">{{ 'menu.company_admin.alias-management.other' | translate }}</label>
+                        <div>
+                            <textarea type="text" [(ngModel)]="otherReason" rows="3" maxlength="160"                               
+                                style="border-style: solid;border-width: 1px;width: 300px;">
+                            </textarea>
+                        </div>
+                    </div>
+                    <br>
+
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="sme-form__actions">
+                    <a class="btn btn-default btn-wide" routerlinkactive="active" (click)="cancel()">{{
+                        'menu.company_admin.alias-management.cancel' |
+                        translate }}</a>
+                    <button class="btn btn-primary btn-wide" [disabled]="!selectedValue" routerlinkactive="active"
+                        (click)="unLink()">{{
+                        'menu.company_admin.alias-management.yes-unLink' |
+                        translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

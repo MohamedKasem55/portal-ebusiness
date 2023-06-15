@@ -1,0 +1,340 @@
+<form autocomplete="off" [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="legend">{{'chequebook.createChequebook' | translate}}</div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="account" class="required">{{'chequebook.account' | translate }}</label>
+                                            <div class="form-control  sme-select">
+                                                <select id="account" class="form-control" name="account" formControlName="account">
+                                                    <option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                    <option *ngFor="let account of accounts" [value]="account.key">{{ account.value }}</option>
+                                                </select>
+                                                <div *ngIf="form.controls.account.hasError('required') && form.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.error.accountRequired' | translate
+                                                        }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="companyName" class="required">{{'chequebook.companyName' | translate }}</label>
+                                            <div class="form-control">
+                                                <input type="text" class="form-control" id="companyName" formControlName="companyName">
+                                                <div *ngIf="form.controls.companyName.hasError('required') && form.controls.companyName.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.companyName' | translate }}{{ 'error.required' | translate
+                                                        }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="bookType" class="required">{{'chequebook.bookType' | translate }}</label>
+                                            <div class="form-control  sme-select">
+                                                <select id="bookType" class="form-control" name="bookType" formControlName="bookType">
+                                                    <option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                    <option *ngFor="let booktype of bookTypes" [value]="bookType.key">{{ bookType.value }}</option>
+                                                </select>
+                                                <div *ngIf="form.controls.bookType.hasError('required') && form.controls.bookType.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.bookType' | translate }}{{ 'error.required' | translate
+                                                        }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="quantity" class="required">{{'chequebook.quantity' | translate }}</label>
+                                            <div class="form-control  sme-select">
+                                                <select id="quantity" class="form-control" name="region" formControlName="quantity">
+                                                    <option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                    <option *ngFor="let quantity of quantities" [value]="quantity.key">{{ quantity.value }}</option>
+                                                </select>
+                                                <div *ngIf="form.controls.quantity.hasError('required') && form.controls.quantity.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.quantity' | translate }}{{ 'error.required' | translate
+                                                        }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="deliveryMethod" class="required">{{'chequebook.deliveryMethod' | translate }}</label>
+                                            <div class="form-control  sme-select">
+                                                <select id="deliveryMethod" class="form-control" name="region" formControlName="deliveryMethod">
+                                                    <option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                    <option *ngFor="let deliveryMethod of deliveryMethods" [value]="deliveryMethod.key">{{ deliveryMethod.value }}</option>
+                                                </select>
+                                                <div *ngIf="form.controls.deliveryMethod.hasError('required') && form.controls.deliveryMethod.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.deliveryMethod' | translate }}{{ 'error.required' | translate
+                                                        }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="form.controls['deliveryMethod'].value === '3'">
+                                    <div class="legend"></div>
+                                    <div class="legend">{{ 'companyAdmin.nationalAddress.name' | translate }}</div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+
+
+                                            <!-- <div class="form-group">
+											<label for="country">{{'companyAdmin.nationalAddress.country' | translate }}</label>
+
+                                            <input type="text" class="form-control" id="country" formControlName="country" placeholder="Kingdom of Saudi Arabia">
+
+                                        </div> -->
+
+                                            <div class="form-group">
+                                                <label for="region" class="required">{{'companyAdmin.nationalAddress.region' | translate }}</label>
+                                                <div class="form-control  sme-select">
+                                                    <select id="region" class="form-control" name="region" formControlName="region">
+                                                        <option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                        <option *ngFor="let region of regions" [value]="region.key">{{ region.value }}</option>
+                                                    </select>
+                                                    <div *ngIf="form.controls.region.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                        <small>{{'chequebook.region' | translate }}{{ 'error.required' | translate
+                                                            }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="postal-code" class="required">{{'companyAdmin.nationalAddress.postalCode' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="postal-code" maxlength="5" formControlName="postalCode" inputPattern="onlyDigits">
+                                                <div *ngIf="form.controls.postalCode.hasError('required') && form.controls.postalCode.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.postalCode' | translate }}{{ 'error.required' | translate
+                                                        }}
+                                                    </small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="phone" class="required">{{'chequebook.phone' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="district" maxlength="32" formControlName="phone">
+                                                <div *ngIf="form.controls.phone.hasError('required') && form.controls.phone.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.phone' | translate }}{{ 'error.required' | translate }}</small>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label for="city">{{'companyAdmin.nationalAddress.city' | translate }}</label>
+                                                <div class="form-control  sme-select">
+                                                    <select id="city" class="form-control" name="city" formControlName="city">
+                                                        <option value [selected]="!this.form.controls.city.value || this.form.controls.city.value===''" disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                        <option *ngFor="let city of cities" [value]="city.key">{{ city.value }}</option>
+                                                    </select>
+                                                    <div *ngIf="form.controls.city.hasError('required') && form.controls.city.touched" class="alert alert-danger">
+                                                        <small>{{'chequebook.city' | translate }}{{ 'error.required' | translate
+                                                            }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="additional-code" class="required">{{'companyAdmin.nationalAddress.additionalCode' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="additional-code" maxlength="4" formControlName="additionalCode" inputPattern="onlyDigits">
+                                                <div *ngIf="form.controls.additionalCode.hasError('required') && form.controls.additionalCode.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.additionalCode' | translate }}{{ 'error.required' | translate
+                                                        }}
+                                                    </small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="feePerChequeBook" class="required">{{'chequebook.feePerChequeBook' | translate }}</label>
+                                                <div class="form-control">
+                                                    <input type="text" class="form-control" id="feePerChequeBook" formControlName="feePerChequeBook">
+                                                    <!-- <div *ngIf="form.controls.region.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                                <small>{{'chequebook.feePerChequeBook' | translate }}{{ 'error.required'
+                                                                    | translate }}</small>
+                                                            </div> -->
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="district" class="required">{{'companyAdmin.nationalAddress.district' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="district" maxlength="32" formControlName="district">
+                                                <div *ngIf="form.controls.district.hasError('required') && form.controls.district.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.district' | translate }}{{ 'error.required' | translate
+                                                        }}
+                                                    </small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="building-no" class="required">{{'companyAdmin.nationalAddress.buildingNo' | translate }}</label>
+
+                                                <input type="yrxt" class="form-control" id="building-no" maxlength="4" formControlName="buildingNo" inputPattern="onlyDigits">
+                                                <div *ngIf="form.controls.buildingNo.hasError('required') && formNational.controls.buildingNo.touched" class="alert alert-danger">
+                                                    <small>{{'companyAdmin.nationalAddress.buildingNo' | translate }}{{ 'error.required'
+                                                        | translate }}</small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="deliveryFees" class="required">{{'chequebook.deliveryFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <input type="text" class="form-control" id="deliveryFees" formControlName="deliveryFees">
+                                                    <!-- <div *ngIf="form.controls.deliveryFees.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                                <small>{{'chequebook.deliveryFees' | translate }}{{ 'error.required'
+                                                                    | translate }}</small>
+                                                            </div> -->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label for="streetName" class="required">{{'companyAdmin.nationalAddress.streetName' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="streetName" maxlength="64" formControlName="streetName">
+                                                <div *ngIf="form.controls.streetName.hasError('required') && form.controls.streetName.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.streetName' | translate }}{{ 'error.required' | translate
+                                                        }}
+                                                    </small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="unitNo" class="required">{{'companyAdmin.nationalAddress.unitNo' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="unitNo" maxlength="4" formControlName="unitNo" inputPattern="onlyDigits">
+                                                <div *ngIf="form.controls.unitNo.hasError('required') && form.controls.unitNo.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.unitNo' | translate }}{{ 'error.required' | translate }}</small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="totalFees" class="required">{{'chequebook.totalFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <input type="text" class="form-control" id="totalFees" formControlName="totalFees">
+                                                    <!-- <div *ngIf="form.controls.totalFees.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                                        <small>{{'chequebook.totalFees' | translate }}{{ 'error.required'
+                                                                            | translate }}</small>
+                                                                    </div> -->
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="form.controls['deliveryMethod'].value === '1'">
+                                    <div class="legend"></div>
+                                    <div class="legend">{{ 'chequebook.collectFromBranch' | translate }}</div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="branchName" class="required">{{'chequebook.branchName' | translate }}</label>
+                                                <div class="form-control  sme-select">
+                                                    <select id="branchName" class="form-control" name="branchName" formControlName="branchName">
+                                                        <option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+                                                        <option *ngFor="let branchName of branchNames" [value]="branchName.key">{{ branchName.value }}</option>
+                                                    </select>
+                                                    <!-- <div *ngIf="form.controls.region.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                        <small>{{'chequebook.account' | translate }}{{ 'error.required'
+                                                            | translate }}</small>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="totalFees" class="required">{{'chequebook.totalFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <input type="text" class="form-control" id="totalFees" formControlName="totalFees">
+                                                    <!-- <div *ngIf="form.controls.totalFees.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                                <small>{{'chequebook.totalFees' | translate }}{{ 'error.required'
+                                                                    | translate }}</small>
+                                                            </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="phone" class="required">{{'chequebook.phone' | translate }}</label>
+
+                                                <input type="text" class="form-control" id="district" maxlength="32" formControlName="phone">
+                                                <div *ngIf="form.controls.phone.hasError('required') && form.controls.phone.touched" class="alert alert-danger">
+                                                    <small>{{'chequebook.phone' | translate }}{{ 'error.required' | translate }}</small>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label for="feePerChequeBook" class="required">{{'chequebook.feePerChequeBook' | translate }}</label>
+                                                <div class="form-control">
+                                                    <input type="text" class="form-control" id="feePerChequeBook" formControlName="feePerChequeBook">
+                                                    <!-- <div *ngIf="form.controls.region.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                                    <small>{{'chequebook.feePerChequeBook' | translate }}{{ 'error.required'
+                                                                        | translate }}</small>
+                                                                </div> -->
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="deliveryFees" class="required">{{'chequebook.deliveryFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <input type="text" class="form-control" id="deliveryFees" formControlName="deliveryFees">
+                                                    <!-- <div *ngIf="form.controls.deliveryFees.hasError('required') && form.controls.region.touched" class="alert alert-danger">
+                                                                    <small>{{'chequebook.deliveryFees' | translate }}{{ 'error.required'
+                                                                        | translate }}</small>
+                                                                </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

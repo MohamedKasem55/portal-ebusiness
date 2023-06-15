@@ -1,0 +1,324 @@
+<!-- <div class="sme-data-table__title">
+    {{'beneficiaries.beneficiaries'| translate}}
+</div> -->
+
+<div class="container-fluid" *ngIf="types==='01'">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'beneficiaries.fullAccountNumber' | translate }}</label>
+                                    <span type="text" class="form-control">{{ account  }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'beneficiaries.customerName' | translate }}</label>
+                                    <span type="text" class="form-control">{{ name }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.beneficiariestype' | translate }}</label>
+                                    <span type="text"
+                                          class="form-control">{{'beneficiaryType' | modelPipe:types}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.email' | translate }}</label>
+                                    <span type="text" class="form-control">{{email}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" *ngIf="types==='02'">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.fullAccountNumber' | translate }}</label>
+                                    <span type="text" class="form-control">{{ account  }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.customerName' | translate }}</label>
+                                    <span type="text" class="form-control">{{ name }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.beneficiariestype' | translate }}</label>
+                                    <span type="text"
+                                          class="form-control">{{'beneficiaryType' | modelPipe:types}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.bankName' | translate }}</label>
+                                    <span type="text" class="form-control">{{bankName}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.email' | translate }}</label>
+                                    <span type="text" class="form-control">{{email}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" *ngIf="types==='03'">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.fullAccountNumber' | translate }}</label>
+                                    <span type="text" class="form-control">{{ account  }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.customerName' | translate }}</label>
+                                    <span type="text" class="form-control">{{ name }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.beneficiariestype' | translate }}</label>
+                                    <span type="text"
+                                          class="form-control">{{'beneficiaryType' | modelPipe:types}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.bankName' | translate }}</label>
+                                    <span type="text" class="form-control">{{bankName}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.country' | translate }}</label>
+                                    <span type="text" class="form-control">{{'countryName' | modelPipe: country}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.category' | translate }}</label>
+                                    <span type="text" class="form-control">{{category}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.nationality' | translate }}</label>
+                                    <span type="text"
+                                          class="form-control">{{'nationalityCode' | modelPipe: nationality}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.mobileNo' | translate }}</label>
+                                    <span type="text" class="form-control">{{mobileno}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label
+                                            class="required">{{ 'beneficiaries.email' | translate }}</label>
+                                    <span type="text" class="form-control">{{email}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'beneficiaries.details'| translate}}
+                </div>
+                <!--
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="table" [header]="'beneficiaries.details'| translate"
+                        [columns]="[{'title': 'beneficiaries.fullAccountNumber' | translate, 'dataKey':'numberAccount'},
+                    {'title': 'beneficiaries.amount' | translate, 'dataKey':'amount'},
+                    {'title': 'beneficiaries.date' | translate, 'dataKey':'date'},
+                    {'title': 'beneficiaries.detail' | translate, 'dataKey':'detail'}]"></table-export>
+
+                </div> -->
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #beneficiaryListTable
+                                   class="material  sme-table sme-table--responsive table"
+                                   [rows]="beneficiariesDetail" [count]="beneficiariesDetail.length"
+                                   [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30"
+                                   [footerHeight]="defaultHeight"
+                                   [rowHeight]="defaultHeight"
+                                   [externalPaging]="true"
+                                   [externalPaging]="true"
+                                   [externalSorting]="true"
+                    >
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                                  (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                                  <div>{{row.date}}, {{row.time}}</div>
+                                </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'beneficiaries.amount' | translate }} </label>
+                                                <div>
+                                                    <span class="human-selectable"><a
+                                                            (click)="modifyBeneficiary()">{{ row.amount | amountCurrency}}</a></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'beneficiaries.date' | translate }}</label>
+                                                <div>
+                                                    <span>{{'row.date' | date:'dd/MM/yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'beneficiaries.detail' | translate }}</label>
+                                                <div>
+                                                    <span> {{ row.detail }} </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper text-right">
+                                    {{'beneficiaries.amount' |translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span class=" text-right">{{value  | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="date">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                    <span class="datatable-header-cell-wrapper">
+                                        {{'beneficiaries.date' |translate }}
+                                    </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value| date:'dd/MM/yyyy'}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="detail">
+                            <ng-template let-value="name" ngx-datatable-header-template>
+                                        <span class="datatable-header-cell-wrapper">
+                                            {{'beneficiaries.detail' |translate }}
+                                        </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template
+                                    ngx-datatable-footer-template
+                                    let-rowCount="rowCount"
+                                    let-pageSize="pageSize"
+                                    let-selectedCount="selectedCount"
+                                    let-curPage="curPage"
+                                    let-offset="offset">
+
+                            </ng-template>
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

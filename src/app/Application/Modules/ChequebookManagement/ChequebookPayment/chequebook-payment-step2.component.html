@@ -1,0 +1,123 @@
+<form autocomplete="off" [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="legend">{{'chequebook.chequebookPayment' | translate}}</div>
+
+                                <div *ngFor="let chequebook of this.chequebooks; let i = index" class="sme-form">
+
+                                    <div class="sme-form__content">
+
+                                        <div class="sme-form__head" style="padding: 15px;padding-right:15px;">
+                                            <span>{{ 'chequebook.chequebookPayment' | translate }} {{i+1}}</span>
+                                            <span (click)="removeChequebook(i)" class="pull-right human-selectable">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </span>
+                                        </div>
+
+                                        <div class="sme-form__collapse">
+                                            <div class="sme-form__form">
+                                                <div class="sme-form__body">
+                                                    <legend>{{ 'chequebook.chequebookDetails' | translate }}</legend>
+
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <label>{{ 'chequebook.account' | translate }}</label>
+                                                            <p>{{ chequebook.account }}</p>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label>{{ 'chequebook.chequeNumber' | translate }}</label>
+                                                            <p>{{ chequebook.chequeNumber }}</p>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label>{{ 'chequebook.beneficiaryName' | translate }}</label>
+                                                            <p>{{chequebook.beneficiaryName}}</p>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <label>{{ 'chequebook.postedDate' | translate }}</label>
+                                                            <p>{{chequebook.postedDate | date:'dd/MM/yyyy'}}</p>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label>{{ 'chequebook.amount' | translate }}</label>
+                                                            <p>{{chequebook.amount | amountCurrency }}</p>
+                                                        </div>
+
+                                                        <div class="col-sm-1">
+                                                            <label>{{ 'chequebook.status' | translate }}</label>
+                                                            <p>{{chequebook.status}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="height: 15px;"></div>
+
+
+                                </div>
+                                <div class="sme-form" *ngIf="chequeBookView">
+
+                                    <div class="sme-form__content">
+
+
+
+                                        <div class="sme-form__collapse">
+                                            <div class="sme-form__form">
+                                                <div class="sme-form__body">
+
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <div class="form-group">
+                                                                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="height: 15px;"></div>
+
+
+                                </div>
+
+                                <div class="row">
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="sme-form">
+
+    <div class="sme-form__content">
+
+
+
+        <div class="sme-form__collapse">
+            <div class="sme-form__form">
+                <div class="sme-form__body">
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 15px;"></div>
+
+
+</div>

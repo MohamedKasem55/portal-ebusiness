@@ -1,0 +1,51 @@
+<div class='modal fade' bsModal #VATCompanyModal='bs-modal' [config]="{backdrop: 'static',  keyboard: false}"
+     role='dialog'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header-img'>
+        <span *ngIf='showSuccess' class='successIcon icon -check'></span>
+        <img *ngIf='!showSuccess' class='vatImg' src='img/infoIcon.svg' alt='' />
+      </div>
+      <div class='modal-title' *ngIf='!showSuccess'>  {{'vat-company.title'  | translate}}  </div>
+      <div class='modal-msg' *ngIf='!showSuccess'>  {{'vat-company.msg'  | translate}}  </div>
+
+      <div class='modal-title' *ngIf='showSuccess'>  {{'vat-company.suc-title'  | translate}}  </div>
+      <div class='modal-msg' *ngIf='showSuccess'>  {{'vat-company.suc-msg'  | translate}}  </div>
+
+      <form autocomplete='off' *ngIf='!showSuccess' [formGroup]='vatCompanyForm' class='sme-form__form' novalidate>
+        <div class='sme-form'>
+          <div class='sme-form__content'>
+            <div class='sme-form__body'>
+              <fieldset>
+                <div class='row'>
+                  <div class='col-xs-12 col-sm-12'>
+                    <div class='form-group'>
+                      <label>{{ 'vat-company.registrationNumber' | translate }}</label>
+                      <div>
+                        <input type='text' class='form-control' name='registrationNumber'
+                               placeholder='{{ "vat-company.enter" | translate }}' inputPattern='onlyNumbers'
+                               maxlength='15' formControlName='registrationNumber' />
+                      </div>
+                    </div>
+                  </div>
+                  <p class='hint'> {{'vat-company.hint'  | translate}}</p>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class='modal-footer'>
+        <button type='button' (click)='notEligible()'
+                class='btn btn-default btn-wide'>{{'vat-company.notEligible'  | translate}}</button>
+        <button *ngIf='!showSuccess' type='button' [disabled]='!showLater' (click)='later()'
+                class='btn btn-default'>{{'vat-company.later'  | translate}}</button>
+        <button *ngIf='!showSuccess' type='button' (click)='agree()' class='btn btn-primary'
+                [disabled]='canProceed()'>{{'vat-company.confirm'  | translate}}</button>
+        <button *ngIf='showSuccess' type='button' (click)='hideModal()'
+                class='btn btn-primary'>{{'vat-company.finish'  | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>

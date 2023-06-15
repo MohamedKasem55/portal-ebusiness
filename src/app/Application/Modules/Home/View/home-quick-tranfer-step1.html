@@ -1,0 +1,50 @@
+<form autocomplete="off" class="sme-wizard" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="sme-wizard__content" style="height: auto;">
+        <div>
+            <ul class="sme-radio-buttons">
+                <li *ngIf="authenticationService.activateOption('TransferOwn',['TRANSFER_PRIVILEGE_OWNACCOUNTS'],['TfOwnGroup'])">
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="owerTransfer" formControlName="operationType">
+                            <i aria-hidden="true"></i>
+                            <span>{{'transfer.transferOwner' | translate}}</span>
+                        </label>
+                    </div>
+                </li>
+                <li *ngIf="authenticationService.activateOption('TransferAlRajhi',['TRANSFER_PRIVILEGE'],['TfGroup'])">
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="rajhiTransfer" formControlName="operationType">
+                            <i aria-hidden="true"></i>
+                            <span>{{'transfer.transferRahji' | translate}}</span>
+                        </label>
+                    </div>
+                </li>
+                <li *ngIf="authenticationService.activateOption('TransferLocal',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])">
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="localTransfer" formControlName="operationType">
+                            <i aria-hidden="true"></i>
+                            <span>{{'transfer.transferLocal' | translate}}</span>
+                        </label>
+                    </div>
+                </li>
+                <li *ngIf="authenticationService.activateOption('TransferInternational',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup'])">
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="internationalTransfer" formControlName="operationType">
+                            <i aria-hidden="true"></i>
+                            <span>{{'transfer.transferInternational' | translate}}</span>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!form.valid">{{buttonLabel}}</button>
+    </div>
+</form>
+
+                       
+

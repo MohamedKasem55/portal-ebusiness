@@ -1,0 +1,213 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{'public.newProduct' | translate}}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/newProduct/wps/requestStatus']">{{
+                'newProduct.requests' | translate }}</a></li>
+        <li class="active">{{ 'newProduct.requestStatus.requestNumber' | translate }}
+            {{(requestDetails)?requestDetails.agreementId:''}}
+        </li>
+    </ol>
+</div>
+
+
+<arb-panel>
+    <form autocomplete="off" #wpsRequest="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.requestStatus.requestDetails' | translate }}
+            </div>
+            <div class="row">
+                <!-- Request Number -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.requestNumber' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['requestNumber'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Request Number -->
+
+                <!-- Request User -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.requestUser' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['requestUser'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Request User -->
+
+                <!-- Request Status -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.requestStatus' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['requestStatus'].value == "ACTIVE" ? ('newProduct.requestStatus.active' | translate)
+                                : ('newProduct.requestStatus.notActive' | translate)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Request Status -->
+
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+
+<arb-panel>
+    <form autocomplete="off" #wpsPayrollAgreementFees="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.requestStatus.payrollAgreementFees' |
+                translate }}
+            </div>
+
+            <div class="row">
+                <!-- Monthly Fees -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.monthlyFees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['monthlyFees'].value | amountCurrency}} {{currency}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Monthly Fees -->
+
+                <!-- Employee Fees -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.employeeFees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['employeeFees'].value | amountCurrency}} {{currency}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Employee Fees -->
+            </div>
+            <div class="row">
+                <!-- MOL-ID -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.molID' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['molID'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /MOL-ID -->
+
+                <!-- Charge Account -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.chargeAccount' | translate }} </label>
+                        <div class="input-group">
+                            <span>
+                                <span>{{formModel.controls['chargeAccount'].value}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Charge Account -->
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+
+<arb-panel>
+    <form autocomplete="off" #wpsAccountDetails="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.requestStatus.accountDetails' | translate }}
+                <span class="cicLable">{{ 'newProduct.requestStatus.cic' | translate }}
+                    {{formModel.controls['profileNumber'].value}}</span>
+            </div>
+            <div class="row">
+                <!-- Start Date -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.startDate' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['startDate'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Start Date -->
+
+                <!-- Expiry Date -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.expiryDate' | translate }} </label>
+                        <div class="input-group">
+                            <span>
+                                {{formModel.controls['expiryDate'].value == null
+                                ? ('newProduct.requestStatus.unlimited' | translate)
+                                : formModel.controls['expiryDate'].value}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Expiry Date -->
+            </div>
+
+
+            <div class="row">
+                <!-- Chosen Account -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.chosenAccount' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['chargeAccount'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Chosen Account -->
+
+                <!-- Mobile -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.mobile' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['authorizerMobileNumber'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Mobile -->
+
+            </div>
+
+            <div class="row">
+                <!-- ownerID -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.ownerID' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['initiatorID'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ownerID -->
+
+                <!-- owner Name -->
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.requestStatus.ownerName' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['requestUser'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /owner Name -->
+
+            </div>
+
+        </fieldset>
+    </form>
+</arb-panel>
+
+
+<arb-buttons *ngIf="formModel.controls['requestStatus'].value === 'ACTIVE' && eligibleToUpdate">
+    <button class="btn btn-primary btn-wide" type="button" (click)="update()">{{
+        'public.update' |translate}}</button>
+</arb-buttons>

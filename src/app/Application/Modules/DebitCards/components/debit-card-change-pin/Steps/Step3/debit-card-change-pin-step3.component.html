@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="(generateChallengeAndOTP) ? generateChallengeAndOTP['generateChallengeAndOTP'] : ''"
+                                                                [requestValidate]="requestValidate"
+                                                                #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 15px;"></div>
+    </div>
+</div>

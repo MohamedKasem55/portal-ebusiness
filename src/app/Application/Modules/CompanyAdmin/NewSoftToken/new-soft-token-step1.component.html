@@ -1,0 +1,58 @@
+<arb-panel>
+    <h3>{{ 'companyAdmin.token.requestDetails' | translate }}</h3>
+    <hr>
+    <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label class="required">{{
+                            'companyAdmin.token.numSoftToken' | translate }}</label>
+                        <div>
+                            <input class="form-control" formControlName="numToken"
+                                   [maxlength]="5"
+                                   inputPattern="onlyPositiveNumbers" />
+
+                            <div *ngIf="form.controls.numToken.hasError('required') && form.controls.numToken.touched"
+                                 class="alert alert-danger">
+                                <small>{{ 'error.numberSoftTokenRequired' | translate }} </small>
+                            </div>
+                            <div *ngIf="form.controls.numToken.hasError('pattern') && form.controls.numToken.touched"
+                                 class="alert alert-danger">
+                                <small>{{'companyAdmin.token.numSoftToken' | translate }}{{ 'error.positiveNumeric' | translate }} </small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label class="required">{{
+                            'companyAdmin.token.account' | translate }}</label>
+                        <div class="form-control" style="padding-top: 9px">
+                            <ng-select formControlName="accountNumber">
+                                <ng-option selected="selected" value="" disabled="disabled">
+                                    --{{ 'public.selectAccount' | translate }}--
+                                </ng-option>
+                                <ng-option *ngFor="let account of accounts" [value]="account">
+                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}} {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                                </ng-option>
+                            </ng-select>
+                            <div *ngIf="form.controls.accountNumber.hasError('required') && form.controls.accountNumber.touched"
+                                 class="alert alert-danger">
+                                <small>{{'error.accountRequired' | translate }}</small>
+                            </div>
+                            <div *ngIf="form.hasError('balance0') && (form.controls.accountNumber.touched)"
+                                 class="alert alert-danger">
+                                <small>{{ 'error.balance0' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+

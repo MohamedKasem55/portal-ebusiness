@@ -1,0 +1,26 @@
+<div class="collapse-card-container">
+    <div class="row collapse-card-head">
+        <div class="col-xs-12 col-sm-9 collapse-card-head-cell">
+            <a class="no-decoration">
+                <span style="color: #4c5674">{{title | translate }}</span>
+            </a>
+        </div>
+        <div *ngIf="hasLinkedAction" style="cursor: pointer" (click)="clickEvent()"
+             class="col-xs-12 col-sm-3 collapse-card-cell-align">
+            <span class="colorHyperLink">
+                {{hasLinkedActionTitle|translate}}
+            </span>
+            <b class="arrow"></b>
+        </div>
+    </div>
+    <div class="collapse-card-body">
+        <div *ngIf="containsTabs" class="tab-view">
+            <div *ngFor="let tab of tabsList ;"
+                 (click)="switchTab(tab)" class="inactive-tab"
+                 [ngClass]="{'active-tab':isActiveTab(tab)}">
+                <h2 style="margin-top: 5%">{{tab.name|translate}}</h2>
+            </div>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>

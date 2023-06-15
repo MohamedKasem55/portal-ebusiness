@@ -1,0 +1,58 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { Step1Component } from "../../Modules/Registration/components/Step1/step1.component";
+import { Step2Component } from "../../Modules/Registration/components/Step2/step2.component";
+import { Step3Component } from "../../Modules/Registration/components/Step3/step3.component";
+import { Step4Component } from "../../Modules/Registration/components/Step4/step4.component";
+import { Step5Component } from "../../Modules/Registration/components/Step5/step5.component";
+import { Step6Component } from "../../Modules/Registration/components/Step6/step6.component";
+import { Step7Component } from "../../Modules/Registration/components/Step7/step7.component";
+import { RegistrationComponent } from "../../Modules/Registration/registration.component";
+
+const routes: Routes = [
+    {
+        path: '',
+        component: RegistrationComponent,
+        children: [
+            {
+                path: '',
+                redirectTo: 'step1',
+                pathMatch: 'full'
+            },
+            {
+                path: 'step1',
+                component: Step1Component
+            },
+            {
+                path: 'step2',
+                component: Step2Component
+            },
+            {
+                path: 'step3',
+                component: Step3Component
+            },
+            {
+                path: 'step4',
+                component: Step4Component
+            },
+            {
+                path: 'step5',
+                component: Step5Component
+            },
+            {
+                path: 'step6',
+                component: Step6Component
+            },
+            {
+                path: 'step7',
+                component: Step7Component
+            }
+        ]
+    }
+];
+
+@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
+})
+export class RegistrationRoutingModule { }

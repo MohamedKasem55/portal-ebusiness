@@ -1,0 +1,376 @@
+<arb-breadcrumb [routes]="getRoutes()">
+
+</arb-breadcrumb>
+
+<!-- company -->
+
+<arb-panel>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label>{{'payroll.management.fileCardName' | translate }}</label>
+                <span class="form-control">{{sharedData.selectedFile.fileName}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{'payroll.batchName' | translate }}</label>
+                <span class="form-control">{{sharedData.selectedFile.batchName}}</span>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<!-- DATATABLE -->
+<arb-table-panel [title]="'payroll.requestStatus'">
+    <table-export *ngIf="this.layout=='standard'" [dataTable]="table"
+                  [header]="'payroll.requestStatus' | translate"
+                  [columns]="[
+							{'title':'payroll.employeeName' | translate, 'dataKey': 'employeeName'},
+							{'title':'myProfile.pending_actions.cardNumber' | translate, 'dataKey': 'rajhiCard'},
+							{'title':'registration.nationalId' | translate, 'dataKey': 'nationalID'},
+							{'title':'payroll.employeeId' | translate, 'dataKey': 'employeeID'},
+							{'title':'public.amount' | translate, 'dataKey': 'amountFormated'},
+							{'title':'public.operation' | translate , 'dataKey': 'operationCode'},
+							{'title':'public.reasonCode' | translate , 'dataKey': 'reasonCode'}
+						]"></table-export>
+    <table-export *ngIf="this.layout!='standard'" [dataTable]="table"
+                  [header]="'payroll.requestStatus' | translate"
+                  [columns]="[
+							{'title':'payroll.employeeName' | translate, 'dataKey': 'employeeName'},
+							{'title':'myProfile.pending_actions.cardNumber' | translate, 'dataKey': 'rajhiCard'},
+							{'title':'registration.nationalId' | translate, 'dataKey': 'nationalID'},
+							{'title':'beneficiaries.beneficiaryListFields.mobileNumber' | translate, 'dataKey': 'mobileNumber'},
+							{'title':'payroll.employeeId' | translate, 'dataKey': 'employeeID'},
+							{'title':'public.amount' | translate, 'dataKey': 'amountFormated'},
+							{'title':'payroll.management.salaryBasic' | translate, 'dataKey': 'salaryBasicFormated'},
+							{'title':'payroll.housingAllowance' | translate, 'dataKey': 'housingAllowanceFormated'},
+							{'title':'payroll.management.deduction' | translate, 'dataKey': 'deductionFormated'},
+							{'title':'public.operation' | translate , 'dataKey': 'operationCode'},
+							{'title':'public.reasonCode' | translate , 'dataKey': 'reasonCode'}
+						]"></table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="detailsPage.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="60"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [count]="detailsPage.page.totalElements"
+                   [offset]="detailsPage.page.pageNumber-1"
+                   [limit]="detailsPage.page.pageSize"
+                   [externalPaging]="true"
+                   (page)='setPage($event)'
+                   [externalSorting]="false">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                  (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'payroll.employeeName' | translate }}</label>
+                                <div>
+                                    <span>{{ row.employeeName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'myProfile.pending_actions.cardNumber' | translate }}</label>
+                                <div>
+                                    <span>{{ row.rajhiCard }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'registration.nationalId' | translate }}</label>
+                                <div>
+                                    <span>{{ row.nationalID }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}</label>
+                                <div>
+                                    <span>{{ row.mobileNumber }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'payroll.employeeId' | translate }}</label>
+                                <div>
+                                    <span>{{ row.employeeID }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'public.amount' | translate }}</label>
+                                <div>
+                                    <span>{{row.amountFormated | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row" *ngIf="this.layout==='wps'">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'payroll.management.salaryBasic' | translate }}</label>
+                                <div>
+                                    <span>{{ row.salaryBasicFormated | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'payroll.housingAllowance' | translate }}</label>
+                                <div>
+                                    <span>{{ row.housingAllowanceFormated | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6" *ngIf="this.layout==='wps'">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'wpspayroll.otherAllowance' | translate }}</label>
+                                <div>
+                                    <span>{{ row.otherAllowanceFormated | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" *ngIf="this.layout==='wps'">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'payroll.management.deduction' | translate }}</label>
+                                <div>
+                                    <span>{{ row.deductionFormated | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'public.operation' | translate }}</label>
+                                <div>
+                                    <span>{{ 'payrolCardsOperationCodes'   | modelPipe:row.operationCode }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" *ngIf="this.layout == 'standard'">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'public.reasonCode' | translate }}</label>
+                                <div>
+                                    <span>{{ 'payrolCardsReasonCodes' | modelPipe:row.reasonCode }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row" *ngIf="this.layout =='standard'">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'public.reasonCode' | translate }}</label>
+                                <div>
+                                    <span>{{  'payrolCardsReasonCodes' | modelPipe:row.reasonCode  }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="employeeID" [width]="200">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <p>{{ 'payroll.employeeId' | translate }}</p>
+                    <p>{{ 'payroll.employeeName' | translate }}</p>
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <p>{{ row.employeeID }}</p>
+                <p>{{ row.employeeName}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="nationalID" [width]="150">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <p>{{ 'registration.nationalId' | translate }}</p>
+                    <p>{{ 'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}</p>
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <p>{{ row.nationalID }}</p>
+                <p>{{ row.mobileNumber}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="rajhiCard" [width]="150">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()"
+                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.cardNumber' | translate }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amountFormated" [width]="100">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <p>{{ 'public.amount' | translate }}</p>
+                    <p>{{'payroll.management.salaryBasic' | translate }}</p>
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <p>{{ row.amountFormated | amountCurrency }}</p>
+                <p>{{row.salaryBasicFormated | amountCurrency}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="housingAllowanceFormated" [width]="100" *ngIf="this.layout!='standard'">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <p>{{'payroll.housingAllowance' | translate }}</p>
+                    <p>{{'wpspayroll.otherAllowance' | translate }}</p>
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <p>{{ row.housingAllowanceFormated | amountCurrency }}</p>
+                <p>{{ row.otherAllowanceFormated  | amountCurrency }}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="deductionFormated" [width]="100" *ngIf="this.layout!='standard'">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <p>{{'payroll.management.deduction' | translate }}</p>
+                    <p></p>
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <p>{{ row.deductionFormated | amountCurrency }}</p>
+                <p></p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="operationCode" [width]="160">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <p>{{'public.operation' | translate }}</p>
+                    <p>{{ 'public.date' | translate }}</p>
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <p>{{ 'payrollcardsOperations' | modelPipe:row.operationCode }}</p>
+                <p>{{ row.date | date: 'dd/MM/yyyy' }}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="reasonCode">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()"
+                      class="datatable-header-cell-wrapper">{{ 'public.reasonCode' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span *ngIf="value">{{ 'payrollCardsReasonCodes' | modelPipe:value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage"
+                            [size]="pageSize"
+                            [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)"
+                            [visiblePagesCount]="1"
+                            (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{ getTableCurrentPageSize(table) }} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="detailsPage.page.pageSize"
+                                        (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+
+</arb-table-panel>
+
+<arb-panel>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{'payroll.numberOfEmployee' | translate }}</label>
+                <span class="form-control">{{numberOfEmployee}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{'transfer.totalAmount' | translate }}</label>
+                <span class="form-control">{{totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-panel-buttons>
+    <button (click)="back()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+</arb-panel-buttons>

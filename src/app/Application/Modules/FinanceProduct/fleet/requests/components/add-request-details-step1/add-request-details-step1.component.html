@@ -1,0 +1,446 @@
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">
+      {{ 'fleet.requests.vehicleDetails' | translate }}
+    </p>
+  </div>
+  <sme-card>
+    <div class="card-body">
+      <div class="sme-row">
+        <img src="assets/icons/info.svg" />
+        <p
+          *ngIf="
+            externalQuotationList.length == 0 &&
+            internalQuotationList.length == 0
+          "
+          class="sme-card-msg"
+        >
+          {{ 'fleet.requests.eligibleAmount' | translate
+          }}{{ financeEligibiltyLimit }} {{ 'financeProduct.sar' | translate }}
+        </p>
+        <p
+          *ngIf="
+            externalQuotationList.length > 0 || internalQuotationList.length > 0
+          "
+          class="sme-card-msg"
+        >
+          {{ 'fleet.requests.vehicleNote' | translate }}
+        </p>
+      </div>
+    </div>
+  </sme-card>
+</div>
+<!--Quotation-->
+<div
+  class="container-fluid"
+  [routerLink]="['/financeProduct/fleet/request/external-upload']"
+>
+  <div
+    [ngClass]="
+      externalQuotationList.length > 0 || internalQuotationList.length > 0
+        ? 'sme-row-2-col'
+        : 'sme-row-col'
+    "
+  >
+    <!--Upload External Quotation-->
+    <div
+      class="sme-col"
+      [ngClass]="
+        externalQuotationList.length > 0 || internalQuotationList.length > 0
+          ? ''
+          : 'margin-bottom-25'
+      "
+    >
+      <sme-card [addRowClass]="true">
+        <div class="card-body sme-col">
+          <sme-card-media [showEndArraw]="true">
+            <div class="media-start sme-media-start-icon">
+              <img src="assets/icons/upload.svg" />
+            </div>
+            <div class="media-content">
+              <h3 class="sme-media-content-title">
+                {{ 'fleet.requests.uploadExternalQuotation' | translate }}
+              </h3>
+              <p class="sme-media-content-desc">
+                {{ 'fleet.requests.externalQuotationDescription' | translate }}
+              </p>
+            </div>
+          </sme-card-media>
+        </div>
+      </sme-card>
+    </div>
+    <!--Upload External Quotation-->
+    <div class="sme-col">
+      <sme-card [addRowClass]="true">
+        <div class="card-body sme-col">
+          <sme-card-media
+            [showEndArraw]="true"
+            [routerLink]="[
+              '/financeProduct/fleet/request/internal-product-select'
+            ]"
+          >
+            <div class="media-start sme-media-start-icon">
+              <img src="assets/icons/fleet-finance.svg" />
+            </div>
+            <div class="media-content">
+              <h3 class="sme-media-content-title">
+                {{ 'fleet.requests.addInternalQuotation' | translate }}
+              </h3>
+              <p class="sme-media-content-desc">
+                {{
+                  'fleet.requests.addInternalQuotationDescription' | translate
+                }}
+              </p>
+            </div>
+          </sme-card-media>
+        </div>
+      </sme-card>
+    </div>
+  </div>
+</div>
+<!--Progress-->
+<div
+  *ngIf="externalQuotationList.length > 0 || internalQuotationList.length > 0"
+  class="container-fluid"
+>
+  <sme-card>
+    <div class="card-body">
+      <sme-progress
+        [topTitle]="'fleet.requests.financeEligibiltyLimit' | translate"
+        [downTitle]="
+        progressPercentage > 100
+        ? exceedTxt 
+        : remainingTxt "
+        [totalLimit]="financeEligibiltyLimit"
+        [remainingLimit]="remainingLimit | number: '1.2-2'"
+        [percentage]="progressPercentage"
+      ></sme-progress>
+      <div *ngIf="progressPercentage > 100" class="sme-row padding-top-17">
+        <img src="assets/icons/exclamation_mark.svg" />
+        <p class="sme-card-msg ">
+          {{'fleet.requests.exceedLimitNote' | translate}}
+        </p>
+      </div>
+    </div>
+  </sme-card>
+</div>
+
+<div *ngIf="externalQuotationList.length > 0" class="container-fluid">
+  <h2 class="sme-page-sub-title mb-3">
+    {{ 'fleet.requests.externalQuotation' | translate }}
+  </h2>
+  <div class="sme-table table headerDataTable">
+    <ngx-datatable
+      [messages]="{ emptyMessage: 'public.noData' | translate }"
+      #externalQuotationTable
+      class="material sme-table sme-table--responsive table"
+      [rows]="externalPage.data"
+      [columnMode]="defaultColumnMode"
+      [headerHeight]="30"
+      [rowHeight]="defaultHeight"
+      [externalPaging]="false"
+      [count]="externalPage.page.totalElements"
+      [reorderable]="false"
+    >
+      <ngx-datatable-row-detail
+        [rowHeight]="defaultHeight"
+        (toggle)="onDetailToggle($event)"
+      >
+        <ng-template
+          let-row="row"
+          let-expanded="expanded"
+          ngx-datatable-row-detail-template
+        >
+          <div class="row">
+            <fieldset>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{
+                    'fleet.requests.quotationName' | transalte
+                  }}</label>
+                  <div>
+                    <span class="human-selectable">{{
+                      row.quotationName
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.type' | transalte }}</label>
+                  <div>
+                    <span>{{ row.Type }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.valuepercar' | transalte }}</label>
+                  <div>
+                    <span>{{ row.quotationValue }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.carQuantity' | transalte }}</label>
+                  <div>
+                    <span>{{ row.carQuantity }}</span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </ng-template>
+      </ngx-datatable-row-detail>
+      <ngx-datatable-column prop="quotationName">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable"> {{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Type">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable"> {{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="quotationValue">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable">{{ value }} {{ 'financeProduct.sar' | translate }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="carQuantity">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable"> {{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          let-rowIndex="rowIndex"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable action-container"
+            ><a (click)="goDetails(row, 'ex', 'edit', rowIndex)"
+              ><img src="assets/icons/edit.svg" /></a
+          ></span>
+          <span class="human-selectable"
+            ><a (click)="goDetails(row, 'ex', 'delete', rowIndex)"
+              ><img
+                class="action-icon-width"
+                src="assets/icons/delete.svg" /></a
+          ></span>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>
+
+<!--InternalQuotation-->
+<div *ngIf="internalQuotationList.length > 0" class="container-fluid">
+  <h2 class="sme-page-sub-title mb-3">
+    {{ 'fleet.requests.internalQuotation' | translate }}
+  </h2>
+  <div class="sme-table table headerDataTable">
+    <ngx-datatable
+      [messages]="{ emptyMessage: 'public.noData' | translate }"
+      #internalQuotationTable
+      class="material sme-table sme-table--responsive table"
+      [rows]="internalPage.data"
+      [columnMode]="defaultColumnMode"
+      [headerHeight]="30"
+      [rowHeight]="defaultHeight"
+      [externalPaging]="false"
+      [count]="internalPage.page.totalElements"
+      [reorderable]="false"
+    >
+      <ngx-datatable-row-detail
+        [rowHeight]="defaultHeight"
+        (toggle)="onDetailToggle($event)"
+      >
+        <ng-template
+          let-row="row"
+          let-expanded="expanded"
+          ngx-datatable-row-detail-template
+        >
+          <div class="row">
+            <fieldset>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{
+                    'fleet.requests.quotationName' | transalte
+                  }}</label>
+                  <div>
+                    <span class="human-selectable">{{
+                      row.quotationName
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.type' | transalte }}</label>
+                  <div>
+                    <span>{{ row.Type }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.valuepercar' | transalte }}</label>
+                  <div>
+                    <span>{{ row.carValue }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.valuepercar' | transalte }}</label>
+                  <div>
+                    <span>{{ row.quotationValue }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                  <label>{{ 'fleet.requests.carQuantity' | transalte }}</label>
+                  <div>
+                    <span>{{ row.carQuantity }}</span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </ng-template>
+      </ngx-datatable-row-detail>
+      <ngx-datatable-column prop="quotationName">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable"> {{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="Type">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable"> {{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop="carValue">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable">{{ value }} {{ 'financeProduct.sar' | translate }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop="quotationValue">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable">{{ value }} {{ 'financeProduct.sar' | translate }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="carQuantity">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable"> {{ value }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop="">
+        <ng-template
+          let-value="value"
+          let-row="row"
+          let-rowIndex="rowIndex"
+          ngx-datatable-cell-template
+        >
+          <span class="human-selectable action-container"
+            ><a (click)="goDetails(row, 'in', 'edit', rowIndex)"
+              ><img src="assets/icons/edit.svg" /></a
+          ></span>
+          <span class="human-selectable"
+            ><a (click)="goDetails(row, 'in', 'delete', rowIndex)"
+              ><img
+                class="action-icon-width"
+                src="assets/icons/delete.svg" /></a
+          ></span>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>
+<!--Buttons-->
+<div
+  *ngIf="externalQuotationList.length > 0 || internalQuotationList.length > 0"
+  class="container-fluid"
+>
+  <div class="sme-page-block sme-form__actions">
+    <button
+      type="submit"
+      class="btn btn-default btn-wide sme-back-btn"
+      (click)="navigateTo(2)"
+    >
+      {{ 'fleet.btn.back' | translate }}
+    </button>
+    <button
+      class="btn btn-primary btn-wide"
+      (click)="submitQuotation(1)"
+      *ngIf="progressPercentage <= 100"
+      [disabled]="
+        externalQuotationList.length == 0 && internalQuotationList.length == 0
+      "
+    >
+      {{ 'fleet.btn.proceed' | translate }}
+    </button>
+    <button
+      class="btn btn-primary btn-wide"
+      (click)="submitQuotation(2)"
+      *ngIf="progressPercentage > 100"
+    >
+      {{ 'fleet.newRequest.exceededAmount' | translate }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+//
+// Pagination (multiple pages)
+// --------------------------------------------------
+.pagination {
+  vertical-align: middle;
+  display: inline-block;
+  padding-#{$left}: 0;
+  margin: $line-height-computed 0;
+
+  @include font($font-size-12);
+  @media screen and (max-width: $max-width) {
+    @include font($font-size-12 * $factor);
+  }
+  @media screen and (max-width: $max-width2) {
+    @include font($font-size-12 * $factor2);
+  }
+
+  > li {
+    display: inline; // Remove list-style and block-level defaults
+    > a,
+    > span {
+      position: relative;
+      float: $left; // Collapse white-space
+      padding: $padding-base-vertical 16px;
+      line-height: $line-height-base;
+      text-decoration: none;
+      color: #979caf;
+
+      .icon {
+        margin-top: 2px;
+      }
+    }
+    &:first-child {
+      > a,
+      > span {
+        margin-#{$left}: 0;
+      }
+    }
+    &:last-child {
+      > a,
+      > span {
+      }
+    }
+
+    &.pagination__prev,
+    &.pagination__next {
+      > a,
+      > span {
+        color: $brand-grey-dark;
+      }
+    }
+  }
+
+  > li > a,
+  > li > span {
+    &:hover,
+    &:focus {
+      z-index: 2;
+      color: darken(#979caf, 10%);
+    }
+  }
+
+  > .active > a,
+  > .active > span {
+    &,
+    &:hover,
+    &:focus {
+      z-index: 3;
+      color: $brand-primary;
+      background-color: #fff;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+      cursor: default;
+    }
+  }
+
+  > .disabled {
+    > span,
+    > span:hover,
+    > span:focus,
+    > a,
+    > a:hover,
+    > a:focus {
+      color: #979caf;
+      opacity: 0.5;
+      cursor: $cursor-disabled;
+    }
+  }
+}
+
+// Sizing
+// --------------------------------------------------
+
+// Large
+.pagination-lg {
+  @include pagination-size(
+    $padding-large-vertical,
+    $padding-large-horizontal,
+    $font-size-large,
+    $line-height-large,
+    $border-radius-large
+  );
+  @media screen and (max-width: $max-width) {
+    @include pagination-size(
+      $padding-large-vertical,
+      $padding-large-horizontal,
+      $font-size-large * $factor,
+      $line-height-large,
+      $border-radius-large
+    );
+  }
+  @media screen and (max-width: $max-width2) {
+    @include pagination-size(
+      $padding-large-vertical,
+      $padding-large-horizontal,
+      $font-size-large * $factor2,
+      $line-height-large,
+      $border-radius-large
+    );
+  }
+}
+
+// Small
+.pagination-sm {
+  @include pagination-size(
+    $padding-small-vertical,
+    $padding-small-horizontal,
+    $font-size-small,
+    $line-height-small,
+    $border-radius-small
+  );
+  @media screen and (max-width: $max-width) {
+    @include pagination-size(
+      $padding-small-vertical,
+      $padding-small-horizontal,
+      $font-size-small * $factor,
+      $line-height-small,
+      $border-radius-small
+    );
+  }
+  @media screen and (max-width: $max-width2) {
+    @include pagination-size(
+      $padding-small-vertical,
+      $padding-small-horizontal,
+      $font-size-small * $factor2,
+      $line-height-small,
+      $border-radius-small
+    );
+  }
+}

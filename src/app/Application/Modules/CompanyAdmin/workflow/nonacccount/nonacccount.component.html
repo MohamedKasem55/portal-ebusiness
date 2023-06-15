@@ -1,0 +1,43 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		 <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+         <li class="active"><a href="#" [routerLink]="['/companyadmin/workflow']">{{ 'workflow.workflow' | translate }}</a></li>
+		 <li>{{ 'workflow.nonaccount' | translate }}</li>
+	</ol>
+</div>
+
+<div class="sme-content-container container-fluid">
+
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+					<span class="num">1</span>
+				<span class="text">{{ 'menu.company_admin.workflow.selectOperation' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+					<span class="num">2</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3}"><span>
+					<span class="num">3</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+
+	<app-workflow-non-account-step1 *ngIf="wizardStep === 1" [sharedData]="sharedData" [dataWithoutModify]="dataWithoutModify"></app-workflow-non-account-step1>
+
+	<app-workflow-non-account-step2 *ngIf="wizardStep === 2" [sharedData]="sharedData" ></app-workflow-non-account-step2>
+
+	<app-workflow-non-account-step3 *ngIf="wizardStep === 3" [sharedData]="sharedData" ></app-workflow-non-account-step3>
+
+	<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+		<button class="btn btn-default btn-wide" [routerLink]="['/companyadmin/workflow']" *ngIf="wizardStep == 1 ">{{'public.cancel' | translate }}</button>
+		<button class="btn btn-default btn-wide" (click)="previous()" *ngIf="wizardStep > 1 && wizardStep < 3">{{'public.back' | translate }}</button>
+    	<button class="btn btn-primary btn-wide"  (click)="next()"  [disabled]="isDataModified()" *ngIf="wizardStep < 3"> {{'public.next' | translate}}</button>
+    </div>
+
+</div>

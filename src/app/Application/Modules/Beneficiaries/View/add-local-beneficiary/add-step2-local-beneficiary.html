@@ -1,0 +1,169 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary',['/beneficiaries/AddBeneficiaries']],
+                        ['beneficiaries.beneficiaryTypes.addLocalBeneficiary']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]"
+           [currentStep]="2">
+</arb-steps>
+
+<arb-panel>
+    <form autocomplete="off" #detailAlrajhiBeneficiary="ngForm"
+          class="sme-form__form"
+          novalidate>
+
+        <fieldset style="margin-top: 15px;">
+            <div class="legend">{{ 'beneficiaries.beneficiaryBankDetails' | translate }}</div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <!-- ACCOUNT -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.ibanAccount' | translate }} *</label>
+                        <div *ngIf="translate.currentLang != 'en'" class=" col-sm-11" style="padding: 0px;">
+
+                            <input type="text" class="form-control" name="account"
+                                   placeholder="{{ 'beneficiaries.beneficiaryListFields.enterAccountPlaceHolder' | translate }}"
+                                   [(ngModel)]="formData.account" #account="ngModel" minlength="24" id="account" #account
+                                   maxlength="24"
+                                   (focusout)="focusOutIbanAccountEvent($event.target)"
+                                   (focusin)="focusInIbanAccount($event.target)"
+                                   ngxIban required inputPattern="notArabic" dir="ltr"
+                                   style="text-align: right;"/>
+
+                            <p *ngIf="account.touched && account.errors" class="alert alert-danger">
+                                {{ 'beneficiaries.ibanFrontValidation' | translate }}
+                            </p>
+                            <!-- Account server validation -->
+                            <p *ngIf="errorAccountValidation" class="alert alert-danger">
+                                {{ 'beneficiaries.beneficiaryAccountServerValidationError' | translate }}
+                            </p>
+                            <div *ngIf="!account.errors && (account.dirty || account.touched)"
+                                 class="col-sm-1" style="padding-top: 23px; padding-left: 0px;">
+                                <span class="icon -check"></span>
+                            </div>
+                        </div>
+                        <div *ngIf="translate.currentLang == 'en'" class=" col-sm-11" style="padding: 0px;">
+
+                            <input type="text" class="form-control" name="account"
+                                   placeholder="{{ 'beneficiaries.beneficiaryListFields.enterAccountPlaceHolder' | translate }}"
+                                   [(ngModel)]="formData.account" #account="ngModel" minlength="24"
+                                   maxlength="24"
+                                   (focusout)="focusOutIbanAccountEvent($event.target)"
+                                   (focusin)="focusInIbanAccount($event.target)"
+                                   ngxIban required inputPattern="notArabic"/>
+
+                            <p *ngIf="account.touched && account.errors" class="alert alert-danger">
+                                {{ 'beneficiaries.ibanFrontValidation' | translate }}
+                            </p>
+                            <!-- Account server validation -->
+                            <p *ngIf="errorAccountValidation" class="alert alert-danger">
+                                {{ 'beneficiaries.beneficiaryAccountServerValidationError' | translate }}
+                            </p>
+                            <div *ngIf="!account.errors && (account.dirty || account.touched)"
+                                 class="col-sm-1" style="padding-top: 23px; padding-left: 0px;">
+                                <span class="icon -check"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /ACCOUNT -->
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <!-- BANKS -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate }} *</label>
+                        <div>
+                            <input type="text" class="form-control" name="bankName"
+                                   [(ngModel)]="formData.bankName" required disabled/>
+                        </div>
+                    </div>
+                    <!-- /BANKS -->
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="legend">{{ 'beneficiaries.beneficiaryDetails' | translate }}</div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- BENEFICIRY NAME -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                            *</label>
+                        <div>
+                            <input type="text" class="form-control" name="beneficiaryName"
+                                   placeholder="{{ 'beneficiaries.beneficiaryListFields.enterBeneficiaryPlaceHolder' | translate }}"
+                                   [(ngModel)]="formData.beneficiaryName" #beneficiaryName="ngModel"
+                                   required maxlength="35"/>
+                            <!-- Comprobamos si el campo está modificado y es válido para mostrar un mensaje -->
+                            <p *ngIf="!beneficiaryName.valid && beneficiaryName.touched"
+                               class="alert alert-danger">
+                                <span>{{ 'beneficiaries.beneficiaryListFields.nameVerification' | translate }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /BENEFICIRY NAME -->
+
+                </div>
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- PHONE NUMBER -->
+                    <div class="form-group">
+                        <label>{{ 'beneficiaries.beneficiaryListFields.phoneNumber' | translate }} </label>
+                        <div>
+                            <input type="text" class="form-control" name="phoneNumber"
+                                   placeholder="{{ 'beneficiaries.beneficiaryListFields.enterPhonePlaceHolder' | translate }}"
+                                   [(ngModel)]="formData.phoneNumber" #phoneNumber="ngModel"
+                                   pattern="^[0-9]{10}$" maxlength="10" inputPattern="onlyDigits"/>
+                            <p *ngIf="!phoneNumber.valid && phoneNumber.touched" class="alert alert-danger">
+                                {{ 'beneficiaries.beneficiaryListFields.phoneVerification' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /PHONE NUMBER -->
+
+                </div>
+                <div class="col-xs-12 col-sm-3">
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+                        <label>{{ 'public.email' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="email"
+                                   placeholder="{{ 'public.emailPlaceHolder' | translate }}"
+                                   [(ngModel)]="formData.email" #email="ngModel"
+                                   pattern="^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$"
+                                   inputPattern="notArabic"/>
+                            <p *ngIf="email.touched && email.invalid" class="alert alert-danger">
+                                {{ 'public.emailVerification' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /EMAIL -->
+
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+</arb-panel>
+
+<arb-panel-buttons>
+    <button type="button" (click)="goBack()"
+            class=" btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+
+    <button class=" btn btn-primary btn-wide" (click)="sendDetailLocalBeneficiary()"
+            [disabled]="!detailAlrajhiBeneficiary.form.valid">{{ 'public.next' | translate }}</button>
+</arb-panel-buttons>
+

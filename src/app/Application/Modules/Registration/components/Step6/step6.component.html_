@@ -1,0 +1,272 @@
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'public.summary' | translate }}</div>
+	<div class="sme-head__export-actions sme-export-actions print">
+		<a class="btn btn-export btn-export--print" (click)="printPdf($event)">
+			<span class="icon -print"></span>
+			<span class="text">{{ 'public.print' | translate }}</span>
+		</a>
+		<a class="btn btn-export btn-export--pdf" (click)="downloadPdf($event)">
+			<span class="icon -pdf"></span>
+			<span class="text" >{{ 'public.pdf' | translate }}</span>
+		</a>
+	</div>
+</div>
+
+<div class="sme-page-block">
+	<div class="sme-form">
+		<div class="sme-form__content">
+			<form class="sme-form__form" #stepForm="ngForm">
+				<div class="sme-form__body">
+					<div class="sme-form__group-title">{{ 'registration.confirmDetails' | translate }}</div>
+					<fieldset>
+						<legend>{{'registration.crandcic' | translate}}</legend>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.CR' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.cr}}</dd>
+								</dl>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.CIC' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.cic}}</dd>
+								</dl>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>{{ 'registration.accountsToRegister' | translate }}</legend>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3" *ngFor="let account of formData.lastStep.accountsTelephones; let i = index">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.account' | translate }} {{i+1}}</dt>
+									<dd class="sme-summary-group__value">{{account.account}}</dd>
+								</dl>
+							</div>
+							
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>{{ 'registration.mobileNumbers' | translate }}</legend>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3" *ngFor="let account of formData.lastStep.accountsTelephones; let i = index">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.mobileNumber' | translate }} {{i+1}}</dt>
+									<dd class="sme-summary-group__value" *ngFor="let phone of account.telephones" ><span dir="ltr">{{phone}}</span></dd>
+								</dl>
+							</div>
+							
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>{{ 'registration.companyAdministratorInformation' | translate }}</legend>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.nationalId' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.nationalid}}</dd>
+								</dl>
+							</div>
+
+					<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.expiryDate' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.expiryDate  | date:'dd/MM/yyyy'}}</dd>
+								</dl>
+							</div>
+
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.dateOfBirth' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.birdDate | date:'dd/MM/yyyy'}}</dd>
+								</dl>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.name' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.nameUser}}</dd>
+								</dl>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group" *ngIf="translate.currentLang == 'en'">
+									<dt class="sme-summary-group__label">{{ 'registration.mobileNumber' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.prefix}} {{formData.mobileNumber}}</dd>
+								</dl>
+								<dl class="sme-summary-group" *ngIf="translate.currentLang != 'en'" style="    text-align: right;">
+									<dt class="sme-summary-group__label">{{ 'registration.mobileNumber' | translate }}</dt>
+									<dd class="sme-summary-group__value" dir="ltr">{{formData.prefix}} {{formData.mobileNumber}}</dd>
+								</dl>
+							</div>
+
+
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.email' | translate }}</dt>
+									<dd class="sme-summary-group__value">{{formData.email}}</dd>
+								</dl>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>{{ 'registration.uploadedDocuments' | translate }}</legend>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{'registration.nationalId' | translate }}</dt>
+									<dd class="sme-summary-group__value"><a class="human-selectable" (click)="downloadFile(formData.fileNationalId)">{{formData.fileNationalId.name}}</a></dd>
+								</dl>
+							</div>
+
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.powerAttorney' | translate }}</dt>
+									<dd class="sme-summary-group__value"><a class="human-selectable" (click)="downloadFile(formData.filePowerAttorney)" >{{formData.filePowerAttorney?.name}}</a></dd>
+								</dl>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<dl class="sme-summary-group">
+									<dt class="sme-summary-group__label">{{ 'registration.otherDocuments' | translate }}</dt>
+									<dd class="sme-summary-group__value" *ngFor="let doc of formData.otherDocuments"><a class="human-selectable" (click)="downloadFile(doc)" >{{doc.name}}</a></dd>
+								</dl>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset disabled="" *ngIf="formData.options.length > 0">
+						<legend>{{ 'registration.selectProductsServices' | translate }}</legend>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<!--<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.inquiries' | translate }}</label>
+										<a class="form-group__help sme-help">
+											<span class="icon -info"></span>
+										</a>
+									</div>-->
+									<div class="sme-checkbox checkbox" *ngFor="let service of formData.options[0]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type" disabled
+										
+										  [checked]="service.agreement == 'Y'" 
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang==='ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang==='en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<!--<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.payments' | translate }}</label>
+										<a class="form-group__help sme-help">
+											<span class="icon -info"></span>
+										</a>
+									</div>-->
+									<div class="sme-checkbox checkbox" *ngFor="let service of formData.options[1]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										[checked]="service.agreement == 'Y'" disabled
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang === 'ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang === 'en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.transfersUser' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox" *ngFor="let service of formData.options[2]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										[checked]="service.agreement == 'Y'" disabled
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang === 'ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang === 'en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.transferUserLimit' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox" *ngFor="let service of formData.options[3]">
+										<label> <input type="checkbox" name="search-criteria--input-registration-type"
+										
+										 [checked]="service.agreement == 'Y'" disabled
+											
+											> <i aria-hidden="true"></i> 
+											<span *ngIf="translate.currentLang === 'ar'">{{service.descriptionAR}} <small *ngIf="service.textAR">{{service.textAR}}</small></span>
+											<span *ngIf="translate.currentLang === 'en'">{{service.descriptionEN}} <small *ngIf="service.textEN">{{service.textEN}}</small></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.user.dailyTransferLimit' | translate }}</label>
+										
+									</div>
+									<div class="sme-slide">
+										<div >
+										<!--	<span class="sme-slide__progress" style="width: 60%"></span>
+											<a class="sme-slide__handler"  style="left: 60%"></a> -->
+										<span>{{this.formData.limit}}  SAR</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'companyAdmin.token.token' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox">
+										<label> <input type="radio" name="token"
+											[(ngModel)]="formData.tokenType" value="S" disabled
+											> <i aria-hidden="true"></i> <span>{{ 'companyAdmin.user.softToken' | translate }}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group form-group--help">
+									<div class="form-group__label">
+										<label>{{ 'login.terms-conditions' | translate }}</label>
+										
+									</div>
+									<div class="sme-checkbox checkbox">
+										<label> <input type="checkbox" [(ngModel)]="formData.acceptConditions" value="true" name="acceptConditions" required> <i aria-hidden="true" ></i>  <a class="human-selectable" href="#" (click)="openFooterLink($event,'Terms_and_Conditions-')"><span style="text-decoration: none;color: #595e72;">{{ 'login.acceptConditions' | translate }}</span></a>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,224 @@
+<arb-breadcrumb [routes]="[
+['companyAdmin.companyAdmin'],
+['companyAdmin.beneficiaryOriginator.title']
+]">
+</arb-breadcrumb>
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()">
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="search_chapter">{{'companyAdmin.beneficiaryOriginator.chapter' | translate }}</label>
+                    <input type="text" id="search_chapter" formControlName="chapter" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="search_branch">{{'companyAdmin.beneficiaryOriginator.branch' | translate }}</label>
+                    <input type="text" id="search_branch" formControlName="branch" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="search_division">{{'companyAdmin.beneficiaryOriginator.division' | translate }}</label>
+                    <input type="text" id="search_division" formControlName="division" class="form-control" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <div class="sme-radio radio">
+                        <label> <input type="radio" value="true" formControlName="selected">
+                            <i aria-hidden="true"></i>
+                            <span>{{'companyAdmin.beneficiaryOriginator.selected' | translate }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-searchable-panel>
+
+
+
+<arb-table-panel [title]="'companyAdmin.beneficiaryOriginator.title'">
+    <table-export [dataTable]="table" [header]="'companyAdmin.beneficiaryOriginator.title' | translate" [columns]="[      {'title':'companyAdmin.beneficiaryOriginator.depositorOriginatorName' | translate,'dataKey':'depositorOriginatorName'},
+                                {'title':'companyAdmin.beneficiaryOriginator.chapter' | translate ,'dataKey':'chapter'},
+                                {'title':'companyAdmin.beneficiaryOriginator.branch' | translate ,'dataKey':'branch'},
+                                {'title':'companyAdmin.beneficiaryOriginator.division' | translate,'dataKey':'division'},
+                                {'title':'companyAdmin.beneficiaryOriginator.serial' | translate,'dataKey':'serial'},
+                                {'title':'companyAdmin.beneficiaryOriginator.headOffice' | translate,'dataKey':'headOffice'},
+                                {'title':'companyAdmin.beneficiaryOriginator.selected' | translate,'dataKey':'checked'}
+                                ]">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table [rows]="elementsPage.data"
+        class="material sme-table sme-table--responsive table" [columnMode]="defaultColumnMode" [headerHeight]="30"
+        [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [count]="elementsPage.page.totalElements"
+        [rowIdentity]="getIdFunction()" [limit]="elementsPage.page.pageSize" [externalPaging]="true"
+        (page)='setPage($event)' [selected]="tableSelectedRows" [externalSorting]="false"
+        [offset]="elementsPage.page.pageNumber" [selectionType]="defaultSelectionType" (select)="onSelect($event)">
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label
+                                    for="depositorOriginatorName">{{'companyAdmin.beneficiaryOriginator.depositorOriginatorName'
+                                    | translate }}</label>
+                                <div>
+                                    <span id="depositorOriginatorName">{{ row.depositorOriginatorName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="chapter">{{'companyAdmin.beneficiaryOriginator.chapter' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="chapter">{{ row.chapter }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="branch">{{'companyAdmin.beneficiaryOriginator.branch' | translate }}</label>
+                                <div>
+                                    <span id="branch">{{row.branch}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="division">{{'companyAdmin.beneficiaryOriginator.division' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="division">{{row.division}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="serial">{{'companyAdmin.beneficiaryOriginator.serial' | translate }}</label>
+                                <div>
+                                    <span id="serial">{{ row.serial }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="headOffice">{{'companyAdmin.beneficiaryOriginator.headOffice' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="headOffice">{{ row.headOffice }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+        <ngx-datatable-column prop="depositorOriginatorName" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span
+                    class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.depositorOriginatorName'
+                    | translate }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="chapter" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{'companyAdmin.beneficiaryOriginator.chapter' | translate }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="branch" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.branch' | translate
+                    }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="division" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.division' | translate
+                    }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="serial" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.serial' | translate
+                    }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="headOffice" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.headOffice' |
+                    translate }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="200" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value">
+                <span class="datatable-header-cell-wrapper">
+                    <label style="margin-left: 0px;" class="datatable-checkbox">
+                        <input type="checkbox" [checked]="selectAllOnPage[elementsPage?.page?.pageNumber]"
+                            (change)="selectAll($event)" />
+
+                    </label>
+                    {{'companyAdmin.beneficiaryOriginator.selected' | translate }}
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <label class="datatable-checkbox">
+                    <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [visiblePagesCount]="visiblePagesCount"
+                        (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{(rowCount >
+                            pageSize ? pageSize : rowCount)}}
+                            {{ 'public.ofLabel' | translate}} {{this.elementsPage.page.totalElements}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize">
+                                    <option [value]=10>10</option>
+                                    <option [value]=20>20</option>
+                                    <option [value]=50>50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+<arb-buttons>
+    <button class="btn btn-primary btn-wide" [disabled]="elementsChanged.length == 0" type="button"
+        (click)="confirmModify()">{{ 'companyAdmin.beneficiaryOriginator.modify' | translate}}</button>
+</arb-buttons>

@@ -1,0 +1,190 @@
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body" *ngIf="!errorList()">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'aramcoPayments.succesRequest' | translate }}</p>
+                </div>
+                <div class="modal-body" *ngIf="errorList()">
+                    <span class="icon -close icon-failure"></span>
+                    <p>{{ 'payments.failedRequest' | translate }}</p>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button"
+                        class="btn btn-primary btn-wide">{{ 'public.finish' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid" *ngIf="sharedData.validation.aramcoBatchList">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.detailResult' | translate }}</div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="reportErrorTable"
+                    [header]="'myProfile.pending_actions.detailResult' | translate" [columns]="[
+                        {'title':'aramcoPayments.passNumber' | translate,'dataKey':'passNumber'},
+                        {'title':'aramcoPayments.account' | translate ,'dataKey':'accountNumber'},
+                        {'title':'myProfile.pending_actions.status' | translate ,'dataKey':'returnCode'}]">
+                </table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #reportErrorTable
+                class="material sme-table sme-table--responsive table" [rows]="sharedData.validation.aramcoBatchList"
+                [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                [externalPaging]="false" [count]="sharedData.validation.aramcoBatchList.length"
+                [limit]="(sharedData.validation.aramcoBatchList.length < 5? sharedData.validation.aramcoBatchList.length : 5)">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'aramcoPayments.passNumber' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.passNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'aramcoPayments.account' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.accountNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                           >{{ 'myProfile.pending_actions.status' | translate }}</label>
+                                        <div>
+                                            <span>{{ 'errors' | modelPipe: 'errorTable.' + row.returnCode }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="col-xs-6" *ngIf="!futureLevels">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels"
+                                           >{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                        <div>
+                                            <span>{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6" *ngIf="futureLevels">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                           >{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                        <div>
+                                            <span>{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="passNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'aramcoPayments.passNumber' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="accountNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                            class="datatable-header-cell-wrapper">{{ 'aramcoPayments.account' | translate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="amount">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.amount' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span> {{ value | amountCurrency }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="returnCode">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                            class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.status' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{'errors' | modelPipe: 'errorTable.' +value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                    class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                      <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                    class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                (change)="reportErrorTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{pageSize}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

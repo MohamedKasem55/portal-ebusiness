@@ -1,0 +1,321 @@
+<arb-panel>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <!-- sme-form-group -->
+            <div class="form-group">
+                <label class="required">{{ 'invoiceHUB.payerId' | translate }}</label>
+                <span type="text" class="form-control">{{ sharedData.payerId }}</span>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-panel>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <!-- sme-form-group -->
+            <div class="form-group">
+                <label class="required">{{ 'public.account' |
+                    translate }}</label>
+                <span class="form-control"> {{sharedData.account.fullAccountNumber}}{{(sharedData.account.alias != null && sharedData.account.alias != '' ? ' - ' + sharedData.account.alias : '')}}{{(sharedData.account.inquiry ? ' - ' + (sharedData.account.availableBalance | amountCurrency:sharedData.account.currency) : '')}}{{(sharedData.account.inquiry ? ('currencyIso' | modelPipe:sharedData.account.currency) : '')}}</span>
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <!-- sme-form-group -->
+            <div class="form-group">
+                <label class="required">{{'invoiceHUB.totalSelected' | translate}}</label>
+                <span type="text" class="form-control">{{ sharedData.totalSelected }}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <!-- sme-form-group -->
+            <div class="form-group">
+                <label class="required">{{ 'payroll.totalAmount' | translate }}</label>
+                <span type="text" class="form-control">{{sharedData.totalAmount | amountCurrency}}</span>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-table-panel [title]="'dashboard.invoiceHUB'">
+    <table-export [dataTable]="invoiceTable"
+                  [header]="'dashboard.invoiceHUB' | translate"
+                  [columns]="[
+                            {'title': 'invoiceHUB.invoiceNumber' | translate, 'dataKey':'invoiceCode'},
+                            {'title': 'invoiceHUB.supplierName' | translate, 'dataKey':'billerName'},
+                            {'title': 'invoiceHUB.supplierId' | translate, 'dataKey':'billerId'},
+                            {'title': 'invoiceHUB.amountDue' | translate, 'dataKey':'amountDue'},
+                            {'title': 'invoiceHUB.dateDue' | translate, 'dataKey':'dateDue'},
+                            {'title': 'invoiceHUB.additionalDetails' | translate, 'dataKey':'note'},
+                            {'title': 'invoiceHUB.buyerName' | translate, 'dataKey':'buyerName'},
+                            {'title': 'invoiceHUB.amountToPay' | translate, 'dataKey':'amountPayment'},
+                            {'title': 'invoiceHUB.accountFrom' | translate, 'dataKey':'accountNumber'}
+                            ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #invoiceTable
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="sharedData.batch"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="30"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="false"
+                   [count]="sharedData.batch.length"
+                   [limit]="pageSize">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                         ngx-datatable-row-detail-template>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>
+                                    {{'invoiceHUB.invoiceNumber' | translate }}</label>
+                                <div>
+                                    <span>{{ row.invoiceId }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.supplierName' | translate }}</label>
+                                <div>
+                                    <span>{{ row.billerName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.supplierId' | translate }}</label>
+                                <div>
+                                    <span>{{ row.billerId }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.amountDue' | translate }}</label>
+                                <div>
+                                    <span>{{ row.amountDue | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.dateDue' | translate }}</label>
+                                <div>
+                                    <span>{{ row.dateDue | date:"dd/MM/yyyy" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.additionalDetails' | translate }}</label>
+                                <div>
+                                    <span>{{ row.note }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.buyerName' | translate }}</label>
+                                <div>
+                                    <span>{{ row.buyerName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.amountToPay' | translate }}</label>
+                                <div>
+                                    <span>{{ row.amountPayment | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'invoiceHUB.accountFrom' | translate }}</label>
+                                <div>
+                                    <span>{{ row.accountNumber }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'public.statusIf' | translate }}</label>
+                                <div>
+                                    <span>{{ row.futureSecurityLevelsDTOList | levels:'status' }}</span>
+                                    <span class="icon -info" (click)="openModal(row.futureSecurityLevelsDTOList,modalAuth)"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="invoiceId">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.invoiceNumber' | translate }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="billerName">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.supplierName' | translate }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="billerId">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.supplierId' | translate }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amountDue">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.amountDue' | translate }}
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value  | amountCurrency }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column prop="dateDue">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.dateDue' | translate }}
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value  | date:"dd/MM/yyyy" }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="note">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.additionalDetails' | translate }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="buyerName">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.buyerName' | translate }}
+                </span>
+            </ng-template>
+
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amountPayment">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.amountToPay' | translate }}
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value   | amountCurrency }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="accountNumber">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'invoiceHUB.accountFrom' | translate }}
+                </span>
+            </ng-template>
+
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="futureSecurityLevelsDTOList">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+            </ng-template>
+
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value | levels:'status' }}</span>
+                <span class="human-selectable icon -info" (click)="openModal(value,modalAuth)"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="futureSecurityLevelsDTOList">  
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{ value | levels:'nextStatus' }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template
+                    ngx-datatable-footer-template
+                    let-rowCount="rowCount"
+                    let-pageSize="pageSize"
+                    let-selectedCount="selectedCount"
+                    let-curPage="curPage"
+                    let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage"
+                            [size]="pageSize"
+                            [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)"
+                            (change)="invoiceTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{'transfer.totalAmount' | translate}} {{sharedData.totalAmount | amountCurrency}}</span>
+                    </div>
+                </div>
+
+            </ng-template>
+
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</arb-table-panel>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<arb-panel *ngIf="sharedData.generateChallengeAndOTP">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <app-secured-authentication
+                        [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                        [requestValidate]="sharedData.requestValidate"
+                        #authorization></app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>

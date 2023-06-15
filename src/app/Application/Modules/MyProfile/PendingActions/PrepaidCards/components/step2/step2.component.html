@@ -1,0 +1,119 @@
+<app-prepaid-cards-table *ngIf="sharedData.tableSelected.length > 0
+    && !sharedData.aproveFlow" [items]="sharedData.tableSelected" [modal]="modalAuth" [futureLevels]="false"
+    [externalPagination]="false" [selectable]="false" [title]="'prePaidCard.namePayment'" [paymentMode]="true">
+</app-prepaid-cards-table>
+
+<app-prepaid-cards-table *ngIf="sharedData.replaceTableSelected.length > 0
+    && !sharedData.aproveFlow" [items]="sharedData.replaceTableSelected" [modal]="modalAuth" [futureLevels]="false"
+    [externalPagination]="false" [selectable]="false" [title]="'prePaidCard.nameReplace'" [paymentMode]="false">
+</app-prepaid-cards-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.responseValidate?.batchList?.toAuthorize?.length>0)
+    ||
+    sharedData.aproveFlow &&
+    sharedData.responseValidateReplace?.batchList?.toAuthorize?.length>0">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-prepaid-cards-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.responseValidate.batchList['toAuthorize'].length>0"
+    [items]="sharedData.responseValidate.batchList.toAuthorize" [modal]="modalAuth" [futureLevels]="true"
+    [externalPagination]="false" [selectable]="false" [title]="'prePaidCard.namePayment'" [paymentMode]="true">
+</app-prepaid-cards-table>
+
+<app-prepaid-cards-table *ngIf="sharedData.aproveFlow
+    && sharedData.replaceTableSelected.length > 0
+    && sharedData.responseValidateReplace?.batchList?.toAuthorize?.length>0"
+    [items]="sharedData.responseValidateReplace.batchList.toAuthorize" [modal]="modalAuth" [futureLevels]="true"
+    [externalPagination]="false" [selectable]="false" [title]="'prePaidCard.nameReplace'" [paymentMode]="false">
+</app-prepaid-cards-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.responseValidate.batchList['toProcess'].length>0)
+    || 
+    sharedData.aproveFlow &&
+    sharedData.replaceTableSelected?.length > 0 &&
+    sharedData.responseValidateReplace?.batchList?.toProcess?.length>0">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-prepaid-cards-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.responseValidate.batchList['toProcess'].length>0"
+    [items]="sharedData.responseValidate.batchList.toProcess" [modal]="modalAuth" [futureLevels]="true"
+    [externalPagination]="false" [selectable]="false" [title]="'prePaidCard.namePayment'" [paymentMode]="true">
+</app-prepaid-cards-table>
+
+<app-prepaid-cards-table *ngIf="sharedData.aproveFlow
+    && sharedData.replaceTableSelected.length > 0
+    && sharedData.responseValidateReplace?.batchList?.toProcess?.length>0"
+    [items]="sharedData.responseValidateReplace?.batchList?.toProcess" [modal]="modalAuth" [futureLevels]="true"
+    [externalPagination]="false" [selectable]="false" [title]="'prePaidCard.nameReplace'" [paymentMode]="false">
+</app-prepaid-cards-table>
+
+<div class="sme-content-container container-fluid" *ngIf="sharedData.tableSelected.length > 0">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'myProfile.pending_actions.totalAmountToProcess' | translate }}</label>
+                                    <p> {{ amountToProcess | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div *ngIf="sharedData.aproveFlow && 
+    (sharedData.responseValidate?.generateChallengeAndOTP
+    || sharedData.responseValidateReplace?.generateChallengeAndOTP)" class="sme-content-container container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                        [generateChallengeAndOTP]="sharedData.responseValidate.generateChallengeAndOTP"
+                                        [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

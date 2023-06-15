@@ -1,0 +1,66 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'payments.processedFile.payments'| translate }}</li>
+        <li><a class="human-selectable" href="#"
+                [routerLink]="['/hajjandumrahcards/options']">{{ 'menu.payments.hajjumrahcards.menu'| translate }}</a>
+        </li>
+        <li class="active">{{ 'payments.hajjumrahcards.cardallocation'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'payments.hajjumrahcards.step1' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'payments.hajjumrahcards.step2' | translate | uppercase}}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                <span>
+                    <span class="num">3</span>
+                    <span class="text">{{ 'payments.hajjumrahcards.step3' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 4, 'completed' : step > 4}">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'payments.hajjumrahcards.step4' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<app-request-cards-step1 [form]="this.form" *ngIf="step === 1" (onInit)="onInitStep1($event)" [batch]="this.getDTOData">
+</app-request-cards-step1>
+<app-request-cards-step2 [form]="this.form" *ngIf="step === 2" (onInit)="onInitStep2($event)" [batch]="this.getDTOData">
+</app-request-cards-step2>
+<app-request-cards-step3 [form]="this.form" *ngIf="step === 3" (onInit)="onInitStep3($event)" [batch]="this.getDTOData"
+    [generateChallengeAndOTP]="this.generateChallengeAndOTP" [requestValidate]="this.requestValidate">
+</app-request-cards-step3>
+<app-request-cards-step4 *ngIf="step === 4" (onInit)="onInitStep4($event)"  [generateChallengeAndOTP]="this.generateChallengeAndOTP">
+</app-request-cards-step4>
+
+<arb-buttons>
+    <button *ngIf="step === 1" class="btn btn-primary btn-wide" (click)="clear()">
+        {{ 'public.clear' | translate }} </button>
+    <button *ngIf="step === 2 || step === 3" class="btn btn-primary btn-wide" (click)="previous()">
+        {{ 'public.back' | translate }} </button>
+    <button *ngIf="step === 1" class=" btn btn-primary btn-wide" (click)="next()">
+        {{'public.validate' | translate}}</button>
+    <button *ngIf="step === 2" class=" btn btn-primary btn-wide" (click)="next()"
+        [disabled]="isDisabled()">{{'public.initiate' | translate}}</button>
+    <button *ngIf="step === 3" class=" btn btn-primary btn-wide" (click)="next()"
+        [disabled]="isDisabled()">{{'public.confirm' | translate}}</button>
+    <button *ngIf="step === 4" class=" btn btn-primary btn-wide"
+        (click)="finish()">{{'public.finish' | translate}}</button>
+</arb-buttons>

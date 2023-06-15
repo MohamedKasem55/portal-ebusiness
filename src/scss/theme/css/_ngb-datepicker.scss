@@ -1,0 +1,198 @@
+.d-inline-block {
+  display: inline-block !important;
+}
+
+.rounded {
+  border-radius: 0.25rem !important;
+}
+
+.pt-1 {
+  padding-top: 0.25rem !important;
+}
+
+.rounded-right,
+.rounded-top {
+  border-top-right-radius: 0.25rem !important;
+}
+
+.bg-light {
+  background-color: #337ab7 !important;
+}
+
+.justify-content-between {
+  -ms-flex-pack: justify !important;
+  justify-content: space-between !important;
+}
+
+.d-flex {
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.pl-1,
+.px-1,
+.pb-1 {
+  @if $dir == ltr {
+    padding-left: 0.25rem !important;
+  }
+  @if $dir != ltr {
+    padding-rigth: 0.25rem !important;
+  }
+}
+
+.ngb-dp-day,
+.ngb-dp-weekday,
+.ngb-dp-week-number {
+  width: 4rem !important;
+  height: 4rem !important;
+}
+
+ngb-datepicker-navigation-select.d-block {
+  width: 14rem !important;
+}
+
+ngb-datepicker.dropdown-menu {
+  @if $dir != ltr {
+    font-size: $font-size-13;
+    @media screen and (max-width: $max-width) {
+      font-size: $font-size-13 * $factor;
+    }
+    @media screen and (max-width: $max-width2) {
+      font-size: $font-size-13 * $factor2;
+    }
+    float: left !important;
+    right: auto;
+  }
+}
+
+.ngb-dp-weekday {
+  color: #ffffff;
+  font-size: $font-size-11;
+}
+
+
+.ngb-dp-today {
+  color:  rgba(41, 65, 155, 0.37) !important;
+  font-weight: bold; 
+  //background-color: #0275d8 !important;
+  //border-color: #dae0e5 !important;
+  //box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5) !important;
+  //border-radius: 0.25rem 0.25rem 0.25rem 0.25rem !important; 
+}
+
+ngb-datepicker-month-view > :first-child {
+  margin-top: 5px;
+}
+
+.ngb-dp-header {
+  height: 6rem !important;
+  margin-bottom: -3rem !important;
+}
+
+
+//custom style for calendar in left Menu
+//.calendar-widget class is used by changes only be applied to widget calendar in calendar-component
+//if removed .calendar-component changes will be applied wherever is used ngb-datepicker
+.calendar-widget > ngb-datepicker-month-view > :first-child {
+  margin-top: 5px;
+}
+
+.calendar-widget > .ngb-dp-header {
+  height: 6rem !important;
+  //margin-bottom: -3rem !important;
+  background: #1c2232 !important;
+  color: #FFFFFF !important;
+}
+
+.calendar-widget > .ngb-dp-header > ngb-datepicker-navigation > .ngb-dp-navigation-select{
+  padding-top: 15px !important;
+}
+.calendar-widget > .ngb-dp-header >ngb-datepicker-navigation >.ngb-dp-navigation-select > .custom-select{
+  flex: 1 1 auto;
+  background: #1c2232 !important;
+  color: #FFFFFF !important;
+  border: 0 !important;
+  border-bottom: 1px !important;
+  border-bottom-style: solid !important;
+  border-bottom-color: #FFFFFF !important;
+  margin-left: 10px !important;
+  opacity: .5 !important;
+  //font-size: 13px !important;
+  z-index: 1;
+  font-size: 13px !important;;
+  height: unset !important;
+}
+
+.calendar-widget > .ngb-dp-content {
+  background: #1c2232 !important;
+  color: #FFFFFF !important;
+  border-radius: 0 0 0.25rem 0.25rem !important;
+}
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-day,
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-weekday,
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-week-number {
+  width: 4rem !important;
+  height: 4rem !important;
+}
+
+.calendar-widget > .ngb-dp-content .ngb-dp-month > :first-child {
+  padding-top: 1rem !important;
+}
+
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-weekdays > .ngb-dp-weekday {
+  color: #ffffff !important;
+}
+
+.ngb-dp-weekdays {
+  padding-top: 8px;
+}
+
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-week > .ngb-dp-day:hover {
+  color: #ffffff !important;
+  background-color: rgba(41, 65, 155, 0.37) !important; //rgb(2, 117, 216) !important;
+  border-color: #dae0e5 !important;
+  box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5) !important;
+  border-radius: 0.25rem 0.25rem 0.25rem 0.25rem !important;
+}
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-week >  .ngb-dp-day:focus {
+  color: #ffffff !important;
+  background-color: rgba(41, 65, 155, 0.37) !important; //rgb(2, 117, 216) !important;
+  border-color: #dae0e5 !important;
+  box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5) !important;
+  border-radius: 0.25rem 0.25rem 0.25rem 0.25rem !important;
+}
+
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-week > .ngb-dp-day {
+  color: #8599ac;
+  text-align: center !important;
+  padding-top: 0.5rem !important;
+}
+
+
+.calendar-widget > .ngb-dp-content > .ngb-dp-month > ngb-datepicker-month > .ngb-dp-week > .ngb-dp-day > [ngbDatepickerDayView] {
+  text-align: center;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  border-radius: 0.25rem;
+  background: transparent;
+  display: inline-block !important;
+
+  &.outside {
+    opacity: 0.5;
+  }
+}

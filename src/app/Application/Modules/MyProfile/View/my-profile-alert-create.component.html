@@ -1,0 +1,184 @@
+<!-- BREADCRUMB -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>
+            {{ 'myProfile.myProfile' | translate }}
+        </li>
+        <li><a class="human-selectable" href="#"
+               [routerLink]="['/myprofile/alerts']">{{ 'myProfile.alerts.manageAlerts' | translate }}</a></li>
+        <li class="active">{{ 'myProfile.alerts.create' | translate }}</li>
+    </ol>
+</div>
+<!-- BREADCRUMB -->
+<!-- BREADCRUMB -->
+<arb-steps
+        [currentStep]="wizardStep">
+</arb-steps>
+
+<div class="container-fluid" *ngIf="wizardStep != 3">
+    <div class="sme-page-block">
+        <!-- sme-form -->
+        <div class="sme-form">
+            <div *ngIf="mensajeError?.code" class="alert alert-danger">
+                <small>{{mensajeError['code']}} {{mensajeError['description']}}</small>
+            </div>
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6">{{ 'myProfile.alerts.create' |
+                    translate }}</div>
+            </div>
+            <div class="sme-form__content">
+                <div>
+                    <form autocomplete="off" class="sme-form__form" [formGroup]="formAlert">
+
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{
+                                            'companyAdmin.user.mobile' | translate }}</label>
+
+                                        <!-- sme-select -->
+
+                                        <input class="form-control" formControlName="mobile" [disabled]="true"/>
+
+
+                                        <!-- ./sme-select -->
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{
+                                            'public.account' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="sme-select form-control">
+                                            <select
+                                                    class="form-control" formControlName="accountNumber">
+                                                <option selected value disabled>
+                                                    --{{ 'public.selectAccount' | translate }}--
+                                                </option>
+                                                <option *ngFor="let account of accounts"
+                                                        [value]="account.key">{{account.value}}</option>
+                                            </select>
+                                        </div>
+                                        <!-- ./sme-select -->
+                                    </div>
+                                </div>
+                                <!-- ./sme-form-group -->
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{
+                                            'public.language' | translate }}</label>
+
+                                        <!-- sme-select -->
+                                        <div class="sme-select form-control">
+                                            <select
+                                                    class="form-control" formControlName="language">
+                                                <option selected value disabled>
+                                                    --{{ 'public.selectDropdown' | translate }}--
+                                                </option>
+                                                <option *ngFor="let lang of languages"
+                                                        [value]="lang.key">{{lang.value}}</option>
+                                            </select>
+                                        </div>
+                                        <!-- ./sme-select -->
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+
+                            </div>
+                            <div formArrayName="secretLairs">
+                                <div class="row" style="align-items: center;display:flex"
+                                     *ngFor="let notifications of formAlert.controls.secretLairs['controls']; let i=index"
+                                     [formGroupName]="i">
+                                    <div class="col-xs-1 col-sm-1">
+                                        <div class="form-group">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="notificationFlag"
+                                                       (change)="toggle(i)"/> <i
+                                                    aria-hidden="true"></i>
+
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-11 col-sm-5">
+                                        <div class="form-group">
+                                            <label>{{
+                                                'public.type' | translate }}</label>
+                                            <div *ngIf="translate.currentLang!=='ar'">
+                                                <span class="form-control">{{formAlert.controls.secretLairs['controls'][i].value.englishDescription}}</span>
+
+                                            </div>
+                                            <div *ngIf="translate.currentLang!=='en'">
+
+                                                <span class="form-control">{{formAlert.controls.secretLairs['controls'][i].value.arabicDescription}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+
+                                        <div class="form-group">
+                                            <label>{{
+                                                'public.amount' | translate }}</label>
+                                            <input type="text" [maxlength]="18"
+
+                                                   (blur)="transformAmount($event,i)"
+                                                   class="form-control" formControlName="notificationAmount"
+                                                   inputPattern="onlyPositiveDecimalNumbers" disabled/>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--<p>Form value: {{ formAlert.value | json }}</p>	-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid docs-component" *ngIf="wizardStep ==3">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'myProfile.alerts.modalCreateOK' | translate }}</p>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-form__actions">
+    <button class="btn btn-default btn-wide"
+            [routerLink]="['/myprofile/alerts']" *ngIf="wizardStep == 1">{{ 'public.cancel'
+        | translate }}</button>
+    <button class="btn btn-default btn-wide"
+            *ngIf="wizardStep == 2" (click)="back()">{{ 'public.back'
+        | translate }}</button>
+    <button class="btn btn-primary btn-wide" [disabled]="disabledForm()" *ngIf="wizardStep == 1"
+            (click)="next()">{{ 'public.next' | translate }}</button>
+    <button class="btn btn-primary btn-wide" *ngIf="wizardStep == 2"
+            (click)="create()">{{ 'public.create' | translate }}</button>
+    <button class="btn btn-primary btn-wide" *ngIf="wizardStep == 3"
+            [routerLink]="['/myprofile/alerts']">{{ 'public.finish' | translate }}</button>
+</div>

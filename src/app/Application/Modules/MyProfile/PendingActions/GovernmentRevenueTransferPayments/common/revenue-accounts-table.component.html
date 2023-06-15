@@ -1,0 +1,33 @@
+<ngx-datatable #table
+               [rows]="subAccountAmounts" [columnMode]="defaultColumnMode"
+               class="material sme-table sme-table--responsive table"
+               [rowHeight]="defaultHeight" [headerHeight]="30" [footerHeight]="defaultHeight">
+
+    <ngx-datatable-row-detail [rowHeight]="defaultHeight" (toggle)="onDetailToggle($event)">
+        <ng-template ngx-datatable-row-detail-template let-row="row" let-rowIndex="rowIndex"
+                     let-expanded="expanded">
+            <div class="row">
+            </div>
+        </ng-template>
+    </ngx-datatable-row-detail>
+    <ngx-datatable-column prop="revenueAccount.accountNumber" [sortable]="false">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'governmentRevenue.revenueSubAccount' | translate }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="revenueAccount.revenueAccountName" [sortable]="false">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'governmentRevenue.revenueDetail' | translate }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="amount" [sortable]="false">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'governmentRevenue.amount' | translate }}</span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                     let-row="row">
+            <span class="text">{{value }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+</ngx-datatable>
+

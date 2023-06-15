@@ -1,0 +1,131 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="legend" class="title-legend">
+                                {{'prePaidCard.prePaidCardDetails' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="cardHoldername">{{
+                                            'prePaidCard.cardHolderName' | translate }}</label>
+                                        <div class="titlePin message" style="margin-top: 10px">
+                                            <!-- TODO: Aclarar de donde sale el cardHolderName, dejar el nombre de usuario(?) -->
+                                            <span class="border-none">{{prepaidCardSelected?.embossingName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="cardNumber">{{
+                                            'prePaidCard.cardNumber' | translate }}</label>
+                                        <div class="titlePin message" style="margin-top: 10px">
+                                            <span class="border-none">{{prepaidCardSelected?.cardNumber |hiddenCardNumber:'7to12' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="relatedAccount">{{
+                                            'prePaidCard.relatedAccount' | translate }}</label>
+                                        <div class="titlePin message" style="margin-top: 10px">
+                                            <span class="border-none">{{prepaidCardSelected?.sibAccountNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset style="margin-bottom: 20px">
+
+                            <div *ngIf="this.prePaidCardService.getPaymentTypeFunds() === refundType;else LOAD"
+                                class="legend" class="title-legend">
+                                {{'prePaidCard.refundFunds' | translate}}
+                            </div>
+                            <ng-template #LOAD>
+                                <div class="legend" class="title-legend">
+                                    {{'prePaidCard.loadFunds' | translate}}
+                                </div>
+                            </ng-template>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-25">
+                                    <div class="form-group" style="margin-bottom: 50px">
+                                        <label for="search-criteria--input-account-from"
+                                            class="required">{{'prePaidCard.accountSelection' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="sme-select form-control select-flex-width">
+                                            <select id="payment-options-accountFrom" class="form-control"
+                                                formControlName="accountFrom">
+                                                <option selected value disabled>
+                                                    --{{ 'public.selectAccount' | translate }}--</option>
+                                                <option *ngFor="let account of comboAccounts"
+                                                    [value]="account.value.fullAccountNumber">
+                                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? '
+                                                    - '+ account.value.alias : '')}}
+                                                    {{(account.value.inquiry &&
+                                                    isLoadFunds() ? (' - '
+                                                    +(account.value.availableBalance |
+                                                    amountCurrency:account.value.currency)) : '')}}
+                                                    {{(account.value.inquiry &&
+                                                    isLoadFunds() ?
+                                                    ('currencyIso' |
+                                                    modelPipe:account.value.currency) :'')}}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="form.controls.accountFrom.hasError('required') && form.controls.accountFrom.touched"
+                                                class="alert alert-danger">
+                                                <small>{{'transfer.error.accountFromRequired' | translate }} </small>
+                                            </div>
+                                            <div *ngIf="form.controls.accountFrom.hasError('errorEmptyAccount')"
+                                                class="alert alert-danger">
+                                                <small>{{'prePaidCard.minAccount' | translate }} </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group" style="margin-left: 50px;">
+                                        <div>
+                                            <label for="relatedAccount">{{
+                                                'prePaidCard.amount' | translate }}</label>
+                                        </div>
+                                        <div>
+                                            <input id="reasons" class="form-control" formControlName="amount"
+                                                placeholder="{{'prePaidCard.amountInSar' | translate}}"
+                                                inputPattern="onlyPositiveNumbers">
+                                        </div>
+
+                                        <div *ngIf="form.hasError('exceedsCustomAmount') && form.get('amount').touched"
+                                            class="alert alert-danger">
+                                            <small>{{'prePaidCard.errorAmountNotEnough' | translate }}</small>
+                                        </div>
+
+                                        <div *ngIf="form.get('amount').touched && form.hasError('invalidAmount')"
+                                            class="alert alert-danger">
+                                            <small>{{'prePaidCard.minAmount' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

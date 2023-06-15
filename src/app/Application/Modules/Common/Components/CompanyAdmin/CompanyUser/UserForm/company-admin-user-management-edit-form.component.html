@@ -1,0 +1,1413 @@
+<ng-container *ngIf="this.formModel">
+
+    <!-- user details -->
+
+    <arb-panel *ngIf="showUserDetailPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.userNameArabic' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="userNameArabic" maxlength="30">
+                        <div *ngIf="enabled && formModel.controls.userNameArabic.hasError('required') && formModel.controls.userNameArabic.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.nameRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.userNameArabic.hasError('onlyArabic') && formModel.controls.userNameArabic.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.userNameArabic' | translate }} {{ 'error.onlyArabic' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.userName.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.userName' | translate }} {{ 'error.maxlength' | translate:{size: 30} }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.userName' | translate }}</label> <input type="text" class="form-control" formControlName="userName" maxlength=40 inputPattern="onlyAlphabetics">
+                        <div *ngIf="enabled && formModel.controls.userName.hasError('required') && formModel.controls.userName.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.nameRequired' | translate }}</small>
+                        </div>
+
+                        <div *ngIf="enabled && formModel.controls.userName.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.userName' | translate }} {{ 'error.maxlength' | translate:{size: 30} }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.nickname' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="nickname" inputPattern="notArabic">
+                        <div *ngIf="enabled && formModel.controls.nickname.hasError('required') && formModel.controls.nickname.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.nicknameRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.nickname.hasError('maxlength') && formModel.controls.nickname.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.nickname' | translate }} {{ 'error.maxlength' | translate:{size: 50} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.loginId' | translate }}</label>
+                        <span class="form-control" *ngIf="!allowChangeUserId">
+                            {{ formModel.controls.userId?.value}}
+                        </span>
+                        <input type="text" class="form-control" *ngIf="allowChangeUserId" formControlName="userId" pattern="[^\u0600-\u06ff\u0750-\u077f\ufb50-\ufc3f\ufe70-\ufefc]*" inputPattern="notArabicNotSpaces">
+                        <div *ngIf="enabled && formModel.controls.userId.hasError('pattern')" class="alert alert-danger">
+                            <small>{{ 'error.notArabic' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.userId.hasError('required') && formModel.controls.userId.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.userIdRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.userId.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.user-id' | translate }} {{ 'error.maxlength' | translate:{size: 30} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <!-- -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.employeeCompanyId' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="empRef" inputPattern="onlyNumbers" maxlength="15">
+                        <div *ngIf="enabled && formModel.controls.empRef.hasError('required') && formModel.controls.empRef.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.employeeReferenceRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.empRef.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.employRef' | translate }} {{ 'error.maxlength' | translate:{size: 15} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="showUserType">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.userType' | translate }}</label>
+                        <span class="form-control" *ngIf="!allowChangeUserType">
+                            {{ 'userType' | modelPipe: formModel.controls.type?.value}}
+                        </span>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            formControlName="type" *ngIf="allowChangeUserType">
+                            <ng-option disabled="disabled" value="">
+                                {{ enabled ? '-- ' + ('public.selectOption' | translate) + ' --' : ''}}
+                            </ng-option>
+                            <ng-option value="CA">{{ 'userType' | modelPipe: 'CA'}}</ng-option>
+                            <ng-option value="CU">{{ 'userType' | modelPipe: 'CU'}}</ng-option>
+                        </ng-select>
+                        <div *ngIf="enabled && formModel.controls.type.hasError('required') && formModel.controls.type.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.userTypeRequired' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.nationalId' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="idIqama" inputPattern="onlyNumbers" maxlength="10">
+
+                        <div *ngIf="enabled && formModel.controls.idIqama.hasError('required') && formModel.controls.idIqama.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.iquama' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.idIqama.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.iquama' | translate }} {{ 'error.maxlength' | translate:{size: 10} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.idIqama.hasError('pattern') && formModel.controls.idIqama.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.iquama' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.idIqama.hasError('incorrecId-Iqama') && formModel.controls.idIqama.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.iquama' | translate }} {{ 'error.formatNotValid' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.expiryDate' | translate }}</label>
+                        <input type="text" class="form-control" style="z-index: 1000;" formControlName="expiryDate" bsDatepicker [bsConfig]="bsConfig" />
+                        <div *ngIf="enabled && formModel.controls.expiryDate.hasError('required') && formModel.controls.expiryDate.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.expiryDate' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <!-- -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.department' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="department">
+                        <div *ngIf="enabled && formModel.controls.department.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.department' | translate }} {{ 'error.maxlength' | translate:{size: 20} }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.city' | translate }}</label> <input type="text" class="form-control" maxlength="10" formControlName="city" inputPattern="onlyAlphabetics">
+                        <div *ngIf="enabled && formModel.controls.city.hasError('required') && formModel.controls.city.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.city' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.city.hasError('maxlength') && formModel.controls.city.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.city' | translate }} {{ 'error.maxlength' | translate:{size: 15} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.city.hasError('pattern') && formModel.controls.city.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.city' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.city.hasError('incorrecId-Iqama') && formModel.controls.city.dirty" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.city' | translate }} {{ 'error.formatNotValid' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.region' | translate }}</label>
+                        <input type="text" class="form-control" maxlength="10" formControlName="region" inputPattern="onlyAlphabetics">
+                        <div *ngIf="enabled && formModel.controls.region.hasError('required') && formModel.controls.region.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.region' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.region.hasError('maxlength') && formModel.controls.region.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.region' | translate }} {{ 'error.maxlength' | translate:{size: 15} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.region.hasError('pattern') && formModel.controls.region.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.region' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.region.hasError('incorrecId-Iqama') && formModel.controls.region.dirty" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.region' | translate }} {{ 'error.formatNotValid' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.birthDate' | translate }}</label>
+                        <input type="text" class="form-control" style="z-index: 1000;" formControlName="birthDate" bsDatepicker [bsConfig]="bsConfig" [maxDate]="getTodayDate()" />
+                        <div *ngIf="enabled && formModel.controls.birthDate.hasError('required') && formModel.controls.birthDate.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.birthDate' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <!-- -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.nationality' | translate }}</label>
+                        <div class="form-control">
+                            <ng-select [notFoundText]="'public.noData' | translate" formControlName="nationality">
+                                <ng-option selected value="">
+                                    {{ enabled ? '-- ' + ('public.selectOption' | translate) + ' --' : ''}}
+                                </ng-option>
+                                <ng-option *ngFor="let item of combosData['nationalityCode']" [value]="item.key">
+                                    {{item.value}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+
+                        <div *ngIf="enabled && formModel.controls.nationality.hasError('required') && formModel.controls.nationality.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.nationality' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.passport' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="passport" maxlength="10">
+                    </div>
+                    <div *ngIf="enabled && formModel.controls.passport.hasError('required') && formModel.controls.passport.touched" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.passport' | translate }} {{ 'error.required' | translate }}</small>
+                    </div>
+                    <div *ngIf="enabled && formModel.controls.passport.hasError('maxlength')" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.passport' | translate }} {{ 'error.maxlength' | translate:{size: 10} }}</small>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.preferedLanguage' | translate }}</label>
+                        <div class="form-control">
+                            <ng-select [notFoundText]="'public.noData' | translate" formControlName="preferedLanguage">
+                                <ng-option selected value="">
+                                    {{ enabled ? '-- ' + ('public.selectOption' | translate) + ' --' : ''}}
+                                </ng-option>
+                                <ng-option *ngFor="let item of combosData['languages']" [value]="item.key">
+                                    {{item.value}}
+                                </ng-option>
+                            </ng-select>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.preferedLanguage.hasError('required') && formModel.controls.preferedLanguage.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.preferedLanguage' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>
+                            {{enabled && !formModel.controls['userImageUrl'].value ? ('companyAdmin.user.uploadPicture'
+                            | translate) : '' }}
+                        </label>
+                        <div class="form-control">
+                            <img *ngIf="!enabled || formModel.controls['userImageUrl'].value" [src]="formModel.controls['userImageUrl'].value?formModel.controls['userImageUrl'].value:'img/default-avatar.svg'" style="position: absolute;top: -15px;border-radius: 50%; width: 50px; height: 50px">
+                            <span *ngIf="enabled && formModel.controls['userImageUrl'].value" style="position: absolute; top: -13px; left: 52px;">
+                                <span class="icon -close human-selectable" (click)="onSelectPicture(null)"
+                                    [title]="('companyAdmin.user.removePhoto' | translate | uppercase)">
+                                </span>
+                            </span>
+                            <span style="margin-top: 10px" *ngIf="enabled">
+                                <span class="fileUpload btn" style="margin: 0px;padding: 0px;">
+                                    <span *ngIf="!formModel.controls['userImageUrl'].value">
+                                        {{'companyAdmin.user.uploadPhoto' | translate | uppercase}}
+                                    </span>
+                            <span *ngIf="formModel.controls['userImageUrl'].value" style="margin-left: 70px;">
+                                        {{'companyAdmin.user.changePhoto' | translate | uppercase}}
+                                    </span>
+                            <input type="file" class="upload" (change)="onSelectPicture($event)">
+                            </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <!-- -->
+                <div class="col-xs-12 col-sm-3" *ngIf="showUserStatus">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.userStatus' | translate }}</label>
+                        <span class="form-control" *ngIf="!allowChangeUserStatus">
+                            {{'userStatus' | modelPipe: formModel.controls.userStatus?.value}}
+                        </span>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            formControlName="userStatus" *ngIf="allowChangeUserStatus">
+                            <ng-option disabled="disabled" value="">
+                                {{ enabled ? '-- ' + ('public.selectOption' | translate) + ' --' : ''}}
+                            </ng-option>
+                            <ng-option *ngFor="let item of combosData['userStatus']" [value]="item.key"
+                                [innerHTML]="item.value">
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+            </div>
+        </fieldset>
+    </arb-panel>
+    <!-- user contact -->
+    <arb-panel *ngIf="showUserDetailPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <!-- -->
+
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.movilNumber' | translate }}</label>
+
+                        <input type="text" class="form-control" formControlName="mobile" maxlength="15" inputPattern="onlyMobileNumbers">
+                        <div *ngIf="enabled && formModel.controls.mobile.hasError('required') && formModel.controls.mobile.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.movilNumberRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.mobile.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.movilNumber' | translate }} {{ 'error.maxlength' | translate:{size: 15} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.mobile.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.movilNumber' | translate }} {{ 'error.format' | translate:{format: getMobileNumberFormatPattern()} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.secondMovilNumber' | translate }}</label>
+
+                        <input type="text" class="form-control" formControlName="secondMobile" maxlength="15" inputPattern="onlyMobileNumbers" placeholder="{{getMobileNumberTextPattern()}}">
+                        <div *ngIf="enabled && formModel.controls.secondMobile.hasError('maxlength') && formModel.controls.secondMobile.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.secondMovilNumber' | translate }} {{ 'error.maxlength' | translate:{size: 15} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.secondMobile.hasError('pattern') && formModel.controls.secondMobile.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.secondMovilNumber' | translate }} {{ 'error.format' | translate:{format: getMobileNumberFormatPattern()} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.email' | translate }}</label>
+                        <input type="email" class="form-control" formControlName="email">
+                        <div *ngIf="enabled && formModel.controls.email.hasError('required') && formModel.controls.email.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.emailRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.email.hasError('incorrectMailFormat')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.email' | translate }} {{ 'error.formatNotValid' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.email.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.email' | translate }} {{ 'error.maxlength' | translate:{size: 40} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.secondEmail' | translate }}</label>
+                        <input type="email" class="form-control" formControlName="secondEmail" inputPattern="notArabic">
+                        <div *ngIf="enabled && formModel.controls.secondEmail.hasError('required') && formModel.controls.secondEmail.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.emailRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.secondEmail.hasError('incorrectMailFormat') && formModel.controls.secondEmail.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.email' | translate }} {{ 'error.formatNotValid' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.secondEmail.hasError('maxlength') && formModel.controls.secondEmail.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.email' | translate }} {{ 'error.maxlength' | translate:{size: 40} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <!-- -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.facebook' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="socialFacebook" inputPattern="notArabic">
+                        <div *ngIf="enabled && formModel.controls.socialFacebook.hasError('maxlength') && formModel.controls.socialFacebook.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.facebook' | translate }} {{ 'error.maxlength' | translate:{size: 40} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.instagram' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="socialInstagram" inputPattern="notArabic">
+                        <div *ngIf="enabled && formModel.controls.socialInstagram.hasError('maxlength') && formModel.controls.socialInstagram.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.instagram' | translate }} {{ 'error.maxlength' | translate:{size: 40} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.twitter' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="socialTwitter" inputPattern="notArabic">
+                        <div *ngIf="enabled && formModel.controls.socialTwitter.hasError('maxlength') && formModel.controls.socialTwitter.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.twitter' | translate }} {{ 'error.maxlength' | translate:{size: 40} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{'companyAdmin.user.linkedin' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="socialLinkedin" inputPattern="notArabic">
+                        <div *ngIf="enabled && formModel.controls.socialLinkedin.hasError('maxlength') && formModel.controls.socialLinkedin.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.linkedin' | translate }} {{ 'error.maxlength' | translate:{size: 40} }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <!-- -->
+            </div>
+        </fieldset>
+    </arb-panel>
+    <!-- user access -->
+    <arb-panel *ngIf="showUserDetailPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.accessTime' | translate }}</label>
+
+                        <div class="sme-radio radio">
+                            <label> <input type="radio" formControlName="accessLimited" value="false">
+                                <i aria-hidden="true"></i> <span>{{'public.no' | translate }}</span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio">
+                            <label> <input type="radio" formControlName="accessLimited" value="true"> <i
+                                    aria-hidden="true"></i> <span>{{'public.yes' | translate }}</span>
+                            </label>
+                        </div>
+                        <div *ngIf="enabled && !formModel.controls.accessLimited.valid" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.accessTime' | translate }} {{ 'error.required' | translate
+                                }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs12 col-sm-12"></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12" [hidden]="!showAccesDays()">
+                    <div>
+                        <b>{{'companyAdmin.user.accesDays' | translate}}</b>
+                    </div>
+                    <table class="sme-table sme-table--responsive sme-table--check-list table">
+                        <thead>
+                            <tr>
+                                <th width="10%">{{'companyAdmin.user.alldays' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.saturday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.sunday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.monday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.tuesday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.wednesday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.thursday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.friday' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.accessFrom' | translate}}</th>
+                                <th width="10%">{{'companyAdmin.user.accessTo' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                    <input type="checkbox" [checked]="isAllDaysChecked()" [disabled]="!enabled"
+                                           (change)="checkAllDays()"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.alldays' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="saturday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.saturday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="sunday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.sunday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="monday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.monday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="tuesday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.tuesday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="wednesday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.wednesday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="thursday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.thursday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <label class="sme-checkbox checkbox-inline">
+                                        <input type="checkbox" formControlName="friday"> <i aria-hidden="true"></i>
+                                        <span class="visible-xs">{{'companyAdmin.user.friday' | translate}}</span>
+                                </label>
+                                </td>
+                                <td>
+                                    <div formGroupName="accessHour">
+                                        <label>{{'companyAdmin.user.accessFrom' | translate}}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                            formControlName="accessFrom" style="min-width: 100px;">
+                                            <ng-option *ngFor="let hour of combosData['hours']" value="{{hour.key}}">
+                                                {{hour.value}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div formGroupName="accessHour">
+                                        <label>{{'companyAdmin.user.accessTo' | translate}}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                            formControlName="accessTo" style="min-width: 100px;">
+                                            <ng-option *ngFor="let hour of combosData['hours']" value="{{hour.key}}">
+                                                {{hour.value}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="10">
+                                    <div *ngIf="enabled && !formModel.controls.friday.valid && oneTouchDay()" class="alert alert-danger">
+                                        <small>{{'companyAdmin.user.oneDay' | translate }} {{ 'error.required' | translate }}</small>
+                                    </div>
+
+                                    <div formGroupName="accessHour">
+                                        <div *ngIf="enabled && !formModel.controls.accessHour['controls']?.accessFrom.valid && formModel.controls.accessHour['controls']?.accessFrom.touched" class="alert alert-danger">
+                                            <small>{{'companyAdmin.user.accessFrom' | translate }} {{ 'error.required' | translate }}</small>
+                                        </div>
+
+                                        <div *ngIf="enabled && formModel.controls.accessHour['controls']?.accessTo.hasError('required') && formModel.controls.accessHour['controls']?.accessTo.touched" class="alert alert-danger">
+                                            <small>{{'companyAdmin.user.accessTo' | translate }} {{ 'error.required' | translate }}</small>
+                                        </div>
+
+                                        <div *ngIf="enabled && formModel.controls.accessHour['controls']?.accessTo.hasError('notAcceptedTime') && formModel.controls.accessHour['controls']?.accessTo.touched" class="alert alert-danger">
+                                            <small>{{ 'error.mustBiggerAccessTimeUser' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </fieldset>
+    </arb-panel>
+    <!-- user authentication -->
+    <arb-panel *ngIf="showUserDetailPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+
+                <div class="col-xs12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.login' | translate }}</label>
+                        <div class="sme-radio radio" *ngIf="allowCHALLENGEMethod()">
+                            <label> <input type="radio" formControlName="userAuthenticationType" value="CHALLENGE">
+                                <i aria-hidden="true"></i>
+                                <span>{{'companyAdmin.user.softToken' | translate }}</span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio" *ngIf="allowOTPMethod()">
+                            <label> <input type="radio" formControlName="userAuthenticationType" value="OTP">
+                                <i aria-hidden="true"></i>
+                                <span>{{'companyAdmin.user.otp' | translate }}</span>
+                            </label>
+                        </div>
+                        <div *ngIf="enabled && !formModel.controls.userAuthenticationType.valid" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.login' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs12 col-sm-12"></div>
+            </div>
+            <div class="row" *ngIf="showToken()">
+                <div class="col-xs12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.softToken' | translate }}</label>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            formControlName="tokenSerial">
+                            <ng-option *ngFor="let tok of combosData['tokens']" [value]="tok">
+                                {{tok}}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="enabled && !formModel.controls.tokenSerial.disabled && !formModel.controls.tokenSerial.valid" class="alert alert-danger">
+                            <small>{{'companyAdmin.token.tokenSerial' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs12 col-sm-3">
+                    <div class="form-group">
+                        <label class="required">{{'public.language' | translate }}</label>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            formControlName="tokenLanguage">
+                            <ng-option selected value="">
+                                {{ enabled ? '-- ' + ('public.selectOption' | translate) + ' --' : ''}}
+                            </ng-option>
+                            <ng-option *ngFor="let item of combosData['languages']" [value]="item.key">{{item.value}}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="enabled && formModel.controls.tokenLanguage.hasError('required') && formModel.controls.tokenLanguage.touched" class="alert alert-danger">
+                            <small>{{'public.language' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs12 col-sm-4">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.passwordDelivery' | translate }}</label>
+                        <div class="form-control" style="display: flex;">
+                            <span class="sme-radio radio" style="width: 150px; margin-top: 5px;">
+                                <label> <input type="radio" value="EMAIL" formControlName="passwordDelivery"> <i
+                                        aria-hidden="true"></i>
+                                    <span>{{'public.email' | translate}}</span>
+                            </label>
+                            </span>
+                            <span class="sme-radio radio" style="width: 150px; margin-top: 5px;">
+                                <label> <input type="radio" value="SMS" formControlName="passwordDelivery">
+                                    <i aria-hidden="true"></i> <span>{{'public.sms' | translate}}</span>
+                            </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs12 col-sm-2">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.tokenStatus' | translate }}</label>
+                        <div class="form-control" *ngIf="!canShowTokenStatus()">
+                            <span>{{'tokenStatus' | modelPipe: 'UNASSIGNED'}}</span>
+                        </div>
+                        <div class="form-control" *ngIf="canShowTokenStatus()">
+                            <span>{{'tokenStatus' | modelPipe: formModel.get('oldTokenStatus').value}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="canEditToken()">
+                <div class="col-xs12 col-sm-12">
+                    <arb-buttons>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('reset')" (click)="tokenReset()">{{ 'button.reset' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('resendActivation')" (click)="tokenResendActivation()">{{ 'button.activation' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('nonOperative')" (click)="tokenNonOperative()">{{ 'button.nonOperative' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('lost')" (click)="tokenLost()">{{ 'button.lost' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('unblock')" (click)="tokenUnblock()">{{ 'button.unblock' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('block')" (click)="tokenBlock()">{{ 'button.block' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('remove')" (click)="tokenRemove()">{{ 'button.remove' | translate}}</button>
+                        <button class="btn btn-default btn-wide" type="button" [disabled]="!canExecuteTokenAction('unlock')" (click)="tokenUnlock()">{{ 'button.unlock' | translate}}</button>
+                    </arb-buttons>
+                </div>
+            </div>
+
+        </fieldset>
+    </arb-panel>
+    <!-- user accounts -->
+    <arb-panel *ngIf="showPrivilegesPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <legend style="margin-top: 10px;">{{'public.accounts' | translate }}</legend>
+                    <div formArrayName="accountList">
+                        <table class="sme-table sme-table--responsive sme-table--check-list table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxAccInquires"
+                                               (change)="checkAccInquires()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'companyAdmin.user.inquiry' | translate}}</span>
+                                    </th>
+
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL1Acc" (change)="checkL1Acc()" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l1' | translate}}</span>
+                                    </th>
+
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL2Acc" (change)="checkL2Acc()" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l2' | translate}}</span>
+                                    </th>
+
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL3Acc" (change)="checkL3Acc()" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l3' | translate}}</span>
+                                    </th>
+
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL4Acc" (change)="checkL4Acc()" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l4' | translate}}</span>
+                                    </th>
+
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL5Acc" (change)="checkL5Acc()" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l5' | translate}}</span>
+                                    </th>
+
+                                    <th>{{'companyAdmin.user.account' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let account of formModel.controls?.accountList['controls']; let i=index">
+                                    <td class="visible-xs">
+                                        <div [formGroupName]="i">
+                                            <label>{{'companyAdmin.user.account' | translate}}</label>
+                                            <div>
+                                                <span>
+                                            {{formModel.controls.accountList['controls'][i].controls.account.value}}
+                                        </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="inquiry"> <i
+                                                aria-hidden="true"></i>
+                                                <span class="visible-xs">{{'companyAdmin.user.inquiry' |
+                                                    translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l1"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l1' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l2"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l3"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l3' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l4"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l4' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l5"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l5' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <div [formGroupName]="i">
+                                            <span class="visible-xs">{{'public.account'| translate}}</span>
+                                            <input type="hidden" formControlName="account">
+                                            <label class="sme-checkbox checkbox-inline">
+                                            {{formModel.controls.accountList['controls'][i].controls.accountLabel.value}}
+                                        </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </arb-panel>
+    <!-- user privileges -->
+    <arb-panel *ngIf="showPrivilegesPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <legend style="margin-top: 10px;">{{'companyAdmin.user.privileges' | translate}}</legend>
+                    <div formArrayName="backEndAccountPrivileges">
+                        <table class="sme-table sme-table--responsive sme-table--check-list table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL1Priv"
+                                               (change)="checkL1Priv()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l1' | translate}}</span>
+                                    </th>
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL2Priv"
+                                               (change)="checkL2Priv()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l2' | translate}}</span>
+                                    </th>
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL3Priv"
+                                               (change)="checkL3Priv()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l3' | translate}}</span>
+                                    </th>
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL4Priv"
+                                               (change)="checkL4Priv()"/>
+                                        <i aria-hidden="true"> </i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l4' | translate}}</span>
+                                    </th>
+                                    <th>
+                                        <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                            <input type="checkbox" [checked]="checkboxL5Priv"
+                                               (change)="checkL5Priv()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                        <span>&nbsp;&nbsp;{{'public.l5' | translate}}</span>
+                                    </th>
+                                    <th>{{'companyAdmin.user.functionality' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let privilege of formModel.controls?.backEndAccountPrivileges['controls']; let i=index">
+                                    <td class="visible-xs">
+                                        <div [formGroupName]="i">
+                                            <label>{{'companyAdmin.user.functionality' | translate}}</label>
+                                            <div>
+                                                <span>
+                                                    {{ ('privileges.functionality.' +
+                                                    formModel.controls.backEndAccountPrivileges['controls'][i].controls.label.value)
+                                                    | translate}}
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l1"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l1' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l2"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l3"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l3' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l4"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l4' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l5"> <i aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l5' | translate}}</span>
+                                        </label>
+                                        </div>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                            <input type="hidden" formControlName="l1">
+                                                {{ ('privileges.functionality.' +
+                                                formModel.controls.backEndAccountPrivileges['controls'][i].controls.label.value)
+                                                | translate}}
+                                        </label>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </arb-panel>
+    <arb-panel *ngIf="showPrivilegesPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <legend style="margin-top: 10px;">{{'companyAdmin.user.etradePrivileges' | translate}}</legend>
+                    <div formArrayName="eTradePrivileges">
+                        <table class="sme-table sme-table--responsive sme-table--check-list table">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                        <input type="checkbox"
+                                               [checked]="checkboxL1eTradeInit"
+                                               (change)="checkEtradeInit()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <span>&nbsp;&nbsp;{{'public.initiate' | translate}}</span>
+                                </th>
+                                <th>
+                                    <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                        <input type="checkbox"
+                                               [checked]="checkboxL1eTrade"
+                                               (change)="checkL1eTradeAll()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <span>&nbsp;&nbsp;{{'public.l1' | translate}}</span>
+                                </th>
+                                <th>
+                                    <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                        <input type="checkbox"
+                                               [checked]="checkboxL2eTrade"
+                                               (change)="checkL2eTradeAll()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <span>&nbsp;&nbsp;{{'public.l2' | translate}}</span>
+                                </th>
+                                <th>
+                                    <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                        <input type="checkbox"
+                                               [checked]="checkboxL3eTrade"
+                                               (change)="checkL3eTradeAll()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <span>&nbsp;&nbsp;{{'public.l3' | translate}}</span>
+                                </th>
+                                <th>
+                                    <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                        <input type="checkbox"
+                                               [checked]="checkboxL4eTrade"
+                                               (change)="checkL4eTradeAll()"/>
+                                        <i aria-hidden="true"> </i>
+                                    </label>
+                                    <span>&nbsp;&nbsp;{{'public.l4' | translate}}</span>
+                                </th>
+                                <th>
+                                    <label class="sme-checkbox checkbox-inline" *ngIf="enabled">
+                                        <input type="checkbox"
+                                               [checked]="checkboxL5eTrade"
+                                               (change)="checkL5eTradeAll()"/>
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <span>&nbsp;&nbsp;{{'public.l5' | translate}}</span>
+                                </th>
+                                <th>{{'companyAdmin.user.functionality' | translate}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let privilege of formModel.controls?.eTradePrivileges['controls']; let i=index">
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="initiator"> <i
+                                                aria-hidden="true"></i>
+                                            <span
+                                                    class="visible-xs">{{'public.initiate' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="visible-xs">
+                                    <div [formGroupName]="i">
+                                        <label>{{'companyAdmin.user.functionality' | translate}}</label>
+                                        <div>
+                                            <span>
+                                                {{ (translate.currentLang!=='en' ? formModel.controls.eTradePrivileges['controls'][i].controls.descriptionAr.value : formModel.controls.eTradePrivileges['controls'][i].controls.descriptionEn.value)}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l1"> <i
+                                                aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l1' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l2" 
+                                            (change)="checkL2eTrade(i)"> <i
+                                                aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l3" 
+                                            (change)="checkL3eTrade(i)"> <i
+                                                aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l3' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l4" 
+                                            (change)="checkL4eTrade(i)"> <i
+                                                aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l4' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="checkbox" formControlName="l5" 
+                                            (change)="checkL5eTrade(i)"> <i
+                                                aria-hidden="true"></i>
+                                            <span class="visible-xs">{{'public.l5' | translate}}</span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="hidden-xs">
+                                    <div [formGroupName]="i">
+                                        <label class="sme-checkbox checkbox-inline">
+                                            <input type="hidden" formControlName="descriptionEn">
+                                            {{ (translate.currentLang!=='en' ? formModel.controls.eTradePrivileges['controls'][i].controls.descriptionAr.value : formModel.controls.eTradePrivileges['controls'][i].controls.descriptionEn.value)}}
+                                        </label>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </arb-panel>
+    <!-- user groups -->
+    <arb-panel *ngIf="showPrivilegesPanel">
+        <fieldset [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <legend style="margin-top: 10px;">{{'companyAdmin.user.groups' | translate}}</legend>
+
+                    <ng-container *ngFor="let group of userData?.realGroup; index as gi">
+
+                        <fieldset [formGroup]="formModel" *ngIf="group.key!=='groupListEmCrey'" class="col-xs-12 col-sm-3" style="margin-top: -20px; margin-bottom: 10px;">
+                            <legend style="margin-bottom: -10px; margin-top: 10px;">
+                                <div class="sme-checkbox checkbox">
+                                    <label *ngIf="enabled">
+                                        <input type="checkbox" [checked]="_groupsMarkAllSubItemsAsChecked[group.key]"
+                                            (change)="checkAllGroupsByParentGroup(group.key)" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <b style="position: relative;top: -5px;left: 5px;">
+                                        {{ combosData['companyUserGroups'] && combosData['companyUserGroups'][group.key]
+                                        ? combosData['companyUserGroups'][group.key] : (('groups.' + group.key) |
+                                        translate) }}
+                                    </b>
+                                </div>
+                            </legend>
+                            <div>
+                                <div *ngFor="let check of group.controls" class="sme-checkbox checkbox">
+                                    <label>
+                                        <ng-container *ngIf="check['editable']">
+                                            <input type="checkbox" [formControl]="check.control" (change)="checkGroupsAllSubItemsChecked()" *ngIf="check.group != 'URPayGroup'">
+                                            <input type="checkbox" [formControl]="check.control" (change)="checkGroupsAllSubItemsChecked()" *ngIf="check.group == 'URPayGroup' && isLocalExist()" >
+                                        </ng-container>
+                                        <ng-container *ngIf="!check['editable']">
+                                            <input type="checkbox" [disabled]="true" [checked]="check.control.value">
+                                        </ng-container>
+                                        <i aria-hidden="true"></i>
+                                        <span style="line-height: 1.9">{{ combosData['companyUserGroups'] &&
+                                            combosData['companyUserGroups'][check.description] ?
+                                            combosData['companyUserGroups'][check.description] : (check.description |
+                                            translate)}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <hr />
+                        </fieldset>
+                        <fieldset [formGroup]="formModel" *ngIf="group.key==='groupListEmCrey'" class="col-xs-12 col-sm-3" style="margin-top: -20px; margin-bottom: 10px;">
+                            <legend style="margin-bottom: -10px; margin-top: 10px;">
+                                <div class="sme-checkbox checkbox">
+                                    <label *ngIf="enabled">
+                                        <input type="checkbox" [checked]="(userData.companyUserDetails.type === 'CA')?true:_groupsMarkAllSubItemsAsChecked[group.key] "
+                                               (change)="checkAllGroupsByParentGroup(group.key)" [disabled]="userData.companyUserDetails.type === 'CA'" />
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                    <b style="position: relative;top: -5px;left: 5px;">
+                                        {{ combosData['companyUserGroups'] && combosData['companyUserGroups'][group.key]
+                                        ? combosData['companyUserGroups'][group.key] : (('groups.' + group.key) |
+                                            translate) }}
+                                    </b>
+                                </div>
+                            </legend>
+                            <div *ngIf="userData.companyUserDetails.type==='CA'" class="sme-checkbox checkbox">
+                                <label>
+                                    <ng-container>
+                                        <input type="checkbox" [disabled]="true" [checked]="true">
+                                    </ng-container>
+                                    <i aria-hidden="true"></i>
+                                    <span style="line-height: 1.9">{{ "emcrey.admin"|translate}}</span>
+                                </label>
+                            </div>
+                            <div *ngIf="showDropDownList && userData.companyUserDetails.type !=='CA'">
+                                <ng-select [(ngModel)]="selectedMerchantPortalObject"
+                                           [disabled]="!enabled"
+                                           [ngModelOptions]="{standalone: true}"
+                                           (change)="onDropDownChange($event,gi)">
+                                    <ng-option *ngFor="let check of group.controls" [value]="check">
+                                        {{ combosData['companyUserGroups'] &&
+                                    combosData['companyUserGroups'][check.description] ?
+                                        combosData['companyUserGroups'][check.description] : (check.description |
+                                            translate)}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                            <hr />
+                        </fieldset>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('limit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.transferUserLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="limit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.limit.hasError('required') && formModel.controls.limit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.transferLimitRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.limit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.transferUserLimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.limit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.transferUserLimit' | translate }} {{ 'error.numeric' | translate
+                                }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.limit.hasError('limitCICExceeded')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.companyDailyLimitBreached' | translate }} {{companyLimit}} </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('billPaymentLimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.billPaymentLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="billPaymentLimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.billPaymentLimit.hasError('required') && formModel.controls.billPaymentLimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.billPaymentLimit' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.billPaymentLimit.hasError('maxlength') && formModel.controls.billPaymentLimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.billPaymentLimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.billPaymentLimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.billPaymentLimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('governmentPaymentLimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.govPaymentLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="governmentPaymentLimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.governmentPaymentLimit.hasError('required') && formModel.controls.governmentPaymentLimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.govPaymentLimit' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.governmentPaymentLimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.govPaymentLimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.governmentPaymentLimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.govPaymentLimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('ownacclimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.ownTransferLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="ownacclimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.ownacclimit.hasError('required') && formModel.controls.ownacclimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.ownLimitRequired' | translate }} {{ 'error.required' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.ownacclimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.ownTransferLimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.ownacclimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.ownTransferLimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('sadadInvoiceHubLimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.invoiceHubLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="sadadInvoiceHubLimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.sadadInvoiceHubLimit.hasError('required') && formModel.controls.sadadInvoiceHubLimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.sadadInvoiceHubLimitRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.sadadInvoiceHubLimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.invoiceHubLimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.sadadInvoiceHubLimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.invoiceHubLimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('withinlimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.withinlimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="withinlimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.withinlimit.hasError('required') && formModel.controls.withinlimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.withinlimitRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.withinlimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.withinlimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.withinlimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.withinlimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.withinlimit.hasError('limitCICExceeded')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.companyDailyLimitBreached' | translate }} {{companyLimit}} </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('locallimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.locallimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="locallimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.locallimit.hasError('required') && formModel.controls.locallimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.locallimitRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.locallimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.locallimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.locallimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.locallimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.locallimit.hasError('limitCICExceeded')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.companyDailyLimitBreached' | translate }} {{companyLimit}} </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('locallimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.qtlLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="qtlLimit" inputPattern="onlyPositiveNumbers" maxlength="9" (input)="checkLimitValidation()">
+                    </div>
+                    <div *ngIf="enabled && formModel.controls.qtlLimit.hasError('required') && formModel.controls.qtlLimit.touched" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.qtllimitRequired' | translate }}</small>
+                    </div>
+                    <div *ngIf="enabled && companyLimitError" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.companyLimitError' | translate }} {{companyQTL}}</small>
+                    </div>
+                    <div *ngIf="enabled && emptyCompanyLimit" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.EmptyCompanyLimitFirstPart' | translate }} {{companyQTL}} {{'companyAdmin.user.error.EmptyCompanyLimitSecondPart' | translate }}</small>
+                    </div>
+                    <div *ngIf="enabled && updatingAdminLimit" class="alert alert-warning">
+                        <small>{{'companyAdmin.user.error.UpdatingAdminLimit' | translate }} {{companyQTL}} </small>
+                    </div>
+                    <div *ngIf="enabled && maxLimitBreach" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.maxLimitBreach' | translate }} {{companyMaxQTL}} </small>
+                    </div>
+                    <div *ngIf="enabled && companyLimitBreach" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.companyLimitBreach' | translate }} {{companyQTL}} </small>
+                    </div>
+                    <div *ngIf="enabled && localLimitBreached" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.localLimitBreached' | translate }} {{localLimit}} </small>
+                    </div>
+                    <div *ngIf="enabled && dailyLimitBreached" class="alert alert-danger">
+                        <small>{{'companyAdmin.user.error.dailyLimitBreached' | translate }} {{dailyLimit}} </small>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('internationallimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.internationallimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="internationallimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.internationallimit.hasError('required') && formModel.controls.internationallimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.internationallimitRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.internationallimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.internationallimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.internationallimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.internationallimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.internationallimit.hasError('limitCICExceeded')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.companyDailyLimitBreached' | translate }} {{companyLimit}} </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3" *ngIf="isAllowedDependentFieldBySelectedGroup('bulkLimit')">
+                    <div class="form-group">
+                        <label class="required">{{'companyAdmin.user.bulkLimit' | translate }}</label>
+                        <input type="text" class="form-control" formControlName="bulkLimit" inputPattern="onlyPositiveNumbers" maxlength="9">
+                        <div *ngIf="enabled && formModel.controls.bulkLimit.hasError('required') && formModel.controls.bulkLimit.touched" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.error.bulkLimitRequired' | translate }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.bulkLimit.hasError('maxlength')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.bulkLimit' | translate }} {{ 'error.maxlength' | translate:{size: 9} }}</small>
+                        </div>
+                        <div *ngIf="enabled && formModel.controls.bulkLimit.hasError('pattern')" class="alert alert-danger">
+                            <small>{{'companyAdmin.user.bulkLimit' | translate }} {{ 'error.numeric' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12"></div>
+                <div class="col-xs-12 col-sm-12" *ngIf="combosData && combosData.vaPermissions && isAllowedDependentFieldBySelectedGroup('vaPermissions')">
+                    <hr />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-5">
+                            <b style="font-size: medium">{{'companyAdmin.user.vaPermissions' |translate }}</b>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="form-group">
+                                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                            formControlName="vaPermissions">
+                                            <ng-option disabled="disabled" value="">
+                                                {{ enabled ? '-- ' + ('public.selectOption' | translate) + ' --' : ''}}
+                                            </ng-option>
+                                            <ng-option *ngFor="let vaPermission of combosData.vaPermissions" [value]="vaPermission['key']">
+                                                {{vaPermission['value']}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3" *ngIf="enabled">
+                                    <button class="btn btn-primary" type="button" (click)="refreshVaPermissions()">
+                                        {{'public.refresh' | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </arb-panel>
+</ng-container>
+<!-- modal -->
+<div class="modal fade" bsModal #confirmationPopUp="bs-modal" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog large" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeConfirmationPopUp()">
+                    <span aria-hidden="true" class="icon -close"></span>
+                </button>
+            </div>
+
+            <div class='modal-msg center'>  {{'public.confirmAction'  | translate}}  </div>
+
+            <form autocomplete='off' *ngIf='isActionUnlock' [formGroup]='formModel' class='sme-form__form' novalidate>
+                <div class='sme-form'>
+                    <div class='sme-form__content'>
+                        <div class='sme-form__body'>
+                            <fieldset>
+                                <div class='row'>
+                                    <div class='col-xs-12 col-sm-12'>
+                                        <div class='form-group'>
+                                            <label>{{ 'userManagement.tokenUnlockChallengeNumber' | translate }}</label>
+                                            <div>
+                                                <input type='text' class='form-control' name='unlockTokenChallengeNumber'
+                                                       placeholder='{{ "vat-company.enter" | translate }}' inputPattern='onlyNumbers'
+                                                       maxlength='7' formControlName='unlockTokenChallengeNumber' />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-wide" (click)="closeConfirmationPopUp()">
+                    {{'public.cancel' | translate }}
+                </button>
+                <button type="button" class="btn btn-primary btn-wide" [disabled]="isActionUnlock && (formModel.controls['unlockTokenChallengeNumber'].invalid || !formModel.controls['unlockTokenChallengeNumber'].value)" (click)="confirmTokenAction()">
+                    {{confirmationPopUpData.buttonMessage | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

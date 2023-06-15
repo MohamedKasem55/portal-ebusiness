@@ -1,0 +1,39 @@
+<!-- BREADCRUMB -->
+<arb-steps
+        [steps]="['public.completeDetails','commercialCards.previewTitle', 'public.confirm', 'public.summary']"
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<app-debit-card-change-pin-step1 *ngIf="wizardStep == 1"
+                                 (onInit)="onInitStep(1,$event)"
+                                 [formModel]="formModel"
+                                 [card]="selectedCard">
+</app-debit-card-change-pin-step1>
+
+<app-debit-card-change-pin-step2 *ngIf="wizardStep == 2"
+                                 (onInit)="onInitStep(2,$event)"
+                                 [formModel]="formModel"
+                                 [card]="selectedCard">
+</app-debit-card-change-pin-step2>
+
+<app-debit-card-change-pin-step3 *ngIf="wizardStep == 3"
+                                 (onInit)="onInitStep(3,$event)"
+                                 [generateChallengeAndOTP]='validationResponse'
+                                 [requestValidate]="requestValidate">
+</app-debit-card-change-pin-step3>
+
+<app-debit-card-change-pin-step4 *ngIf="wizardStep == 4">
+</app-debit-card-change-pin-step4>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed() && wizardStep!=1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()"
+            (click)="previous()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

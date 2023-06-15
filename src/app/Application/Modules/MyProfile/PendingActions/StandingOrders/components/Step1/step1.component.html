@@ -1,0 +1,13 @@
+<app-standing-order-table
+        [items]="tablePagedResults.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="tablePagedResults.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (changeDisplaySize)="changeDisplaySize($event)">
+</app-standing-order-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

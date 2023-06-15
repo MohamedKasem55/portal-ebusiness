@@ -1,0 +1,29 @@
+<ng-container *ngFor="let item of pendingActionsSelected; index as i">
+    <arb-panel>
+        <hr *ngIf="i!=0"/>
+        <fieldset [formGroup]="this.pendingActionsSelectedFormModels[i]">
+            <app-dynamic-simple-extras-form-fields
+                    [combosData]="service.getCombosData()"
+                    [translate_prefix]="service.getTranslatePrefix()"
+                    [custom_fields_templates]="custom_fields_templates"
+                    [formModel]="this.pendingActionsSelectedFormModels[i]"
+                    [fieldsConfigs]="this.pendingActionsSelectedFormConfigs[i]"
+                    (onAllFieldsCreated)="onDetailsFormCreated($event, i)"
+                    [title]="'swiftCodes.swiftCodeDetail' | translate">
+            </app-dynamic-simple-extras-form-fields>
+        </fieldset>
+    </arb-panel>
+</ng-container>
+
+<arb-panel *ngIf="operation && !editable">
+    <div>
+        <div>
+            <label><span
+                    class="icon -help"></span> {{ 'pendingActions.general.wizardStep2HelpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ ('pendingActions.general.wizardStep2HelpText' + operation) | translate }}
+        </div>
+    </div>
+</arb-panel>

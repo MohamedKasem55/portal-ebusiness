@@ -1,0 +1,161 @@
+<arb-breadcrumb [routes]="[
+    ['companyAdmin.companyAdmin'],
+	['menu.company_admin.saudi-payments.account-verify.accountVerify'],
+	['menu.company_admin.saudi-payments.account-verify.accountVerifyNew']]">
+</arb-breadcrumb>
+
+<arb-steps
+        [steps]="['public.details', 'public.summary', 'public.finish']"
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<arb-panel *ngIf="wizardStep < 3">
+    <fieldset [formGroup]="formModel">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h3 style="margin-bottom: 1%; margin-left: 0.2%; font-weight: bold">{{'saudiPayments.accountVerify.dear' | translate}}</h3>
+                <div style="display: flex; flex-flow: column">
+                    <div *ngFor="let proxyType of proxyTypes" class="sme-radio radio" style="margin-bottom: 10px; margin-top: 10px">
+                        <label>
+                            <input
+                                type="radio"
+                                formControlName="proxyType"
+                                (change)="selectProxy(proxyType)"
+                                [value]="proxyType.key"
+                            />
+                            <i aria-hidden="true"></i>
+                            <span>{{ proxyType.value | translate}}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-6" >
+                <div class="form-group">
+                    <label class="required">{{ 'uRPay.iban' | translate }}</label>
+                    <input class="form-control" type="text" (focusout)="focusOutIbanAccountEvent($event.target)" formControlName="beneficiaryIban" maxlength="24">
+                </div>
+                <div *ngIf="formModel.controls['beneficiaryIban'].hasError('pattern')||
+                            formModel.controls['beneficiaryIban'].hasError('maxlength') ||
+                            formModel.controls['beneficiaryIban'].hasError('minlength')"
+                     class="alert alert-danger">
+                    <small>{{'validation.IBAN' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.beneficiaryIban.hasError('required') && formModel.controls.beneficiaryIban.touched"
+                     class="alert alert-danger">
+                    <small>{{'error.required' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.beneficiaryIban.hasError('alrajhiIBAN') && formModel.controls.beneficiaryIban.touched"
+                     class="alert alert-danger">
+                    <small>{{'saudiPayments.accountVerify.alrajhi-not-allowed' | translate }}</small>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <!-- BANKS -->
+                <div class="form-group">
+                    <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate }} *</label>
+                    <div>
+                        <input type="text" class="form-control" formControlName="bankName"
+                                required disabled/>
+                    </div>
+                </div>
+                <!-- /BANKS -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div  class="col-xs-12 col-sm-6">
+                <app-select-account
+                        [accounts]="accounts"
+                        [clearable]="false"
+                        (onAccountChange)="onAccountChange($event)"
+                        [(selectedFullAccountNumber)]="selectedAccount"
+                        [isDisabled]="isAccountSelectDisabled">
+                </app-select-account>
+            </div>
+            <div *ngIf="selectedProxyType" class="col-xs-12 col-sm-6" >
+                <div class="form-group">
+                    <label class="required">{{( 'transfer.ips.proxyType.enter' | translate) + ' ' + (selectedProxyType.value | translate) }}</label>
+                    <input class="form-control" type="text" formControlName="beneficiaryId"
+                           inputPattern="onlyPositiveNumbers" maxlength="10">
+                </div>
+                <div *ngIf="formModel.controls.beneficiaryId.hasError('pattern') ||
+                            formModel.controls.beneficiaryId.hasError('maxlength') ||
+                            formModel.controls.beneficiaryId.hasError('minlength')"
+                     class="alert alert-danger">
+                    <small>{{'transfer.ips.proxyType.validation.' + selectedProxyType.key | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.beneficiaryId.hasError('required') && formModel.controls.beneficiaryId.touched"
+                     class="alert alert-danger">
+                    <small>{{'error.required' | translate }}</small>
+                </div>
+            </div>
+
+        </div>
+
+    </fieldset>
+
+</arb-panel>
+
+<arb-panel *ngIf="wizardStep == 2 && fees">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <b><h4>{{'chequebook.totalFees' | translate }}<br/>{{ (fees?.totalFeeAmt.amount | amountCurrency) + ' ' + fees?.totalFeeAmt.currency }}</h4></b>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <b><h4>{{'saudiPayments.accountVerify.vatFees' | translate }}<br/>{{ (fees?.vatAmt.amount | amountCurrency) + ' ' + fees?.vatAmt.currency }}</h4></b>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-panel *ngIf="wizardStep == 2 && generateChallengeAndOTP">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization>
+            </app-secured-authentication>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-panel *ngIf="wizardStep == 3">
+    <div class="final-step-message-container">
+        <div class="final-step-message">
+            <div class="icon -check -success ticks-success"></div>
+            <h2>{{'saudiPayments.accountVerify.successHeader' | translate}}</h2>
+            <br>
+            <h3>{{'saudiPayments.accountVerify.success' | translate}} <span (click)="routeToList()" style="text-decoration: underline; cursor: pointer">{{'saudiPayments.accountVerify.successHyper' | translate}}</span> </h3>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-buttons>
+
+    <div class="row" *ngIf="wizardStep < 3">
+        <div class="col-xs-12 col-sm-8" style="text-align: start">
+            <button style="margin-right: auto" class="btn btn-default btn-wide" type="button" (click)="routeToList()">
+                {{ 'public.cancel' | translate}}
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <button [disabled]="!canGoBack()" (click)="back()" class=" btn btn-default btn-wide">
+                {{ 'public.back' | translate }}
+            </button>
+            <button [disabled]="!canGoNext()" (click)="next()" class="btn btn-primary btn-wide">
+                {{'public.proceed' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <button *ngIf="wizardStep == 3" class="btn btn-primary btn-wide" (click)="routeToRoot()">
+        {{'customer-documents.goToDashboard' | translate}}
+    </button>
+</arb-buttons>

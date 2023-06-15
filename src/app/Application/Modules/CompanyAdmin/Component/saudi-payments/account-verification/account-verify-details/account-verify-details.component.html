@@ -1,0 +1,144 @@
+<arb-breadcrumb [routes]="[
+    ['companyAdmin.companyAdmin'],
+	['menu.company_admin.saudi-payments.account-verify.accountVerify'],
+	['saudiPayments.accountVerify.details.details']]">
+</arb-breadcrumb>
+
+
+<arb-panel-title [title]="'saudiPayments.accountVerify.details.title' | translate"></arb-panel-title>
+
+<ng-container *ngIf="accountVerifyReqDetails">
+    <!--  Approved status  -->
+    <arb-panel *ngIf="accountVerifyReqDetails.status == 'VERIFIED'">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -check -success ticks-success"></div>
+                <h2>{{'saudiPayments.accountVerify.details.success' | translate}}</h2>
+                <p>{{getDisclaimerText()}}</p>
+                
+                <br>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label>{{ 'saudiPayments.accountVerify.details.ReqMessageId' | translate }}</label>
+                        <h4>{{ messageId  }}</h4>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.details.benId' | translate }}</label>
+                        <div style="display: flex; justify-content: center; align-items: center">
+                            <h4>{{ accountVerifyReqDetails.beneficiaryID  }}</h4>
+                            <span class='icon -help icon-help-container' style="margin: 0 5px 0 5px"
+                                  tooltip="{{'saudiPayments.accountVerify.details.benIdType' | translate}}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.details.benIban' | translate }}</label>
+                        <h4>{{ accountVerifyReqDetails.beneficiaryIBAN }}</h4>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.reqDate' | translate }}</label>
+                        <h4>
+                            {{ accountVerifyReqDetails.creationTmstmp | date: 'yyyy/MM/dd -'}}
+                            {{ accountVerifyReqDetails.creationTmstmp | date: 'mediumTime'}}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </arb-panel>
+
+    <!--  Failed or Rejected status -->
+    <arb-panel *ngIf="accountVerifyReqDetails.status == 'REJECTED' || accountVerifyReqDetails.status == 'FAILED'">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -close icon-failure ticks-failure"></div>
+                <h2>{{'saudiPayments.accountVerify.details.failure' | translate}}</h2>
+                <p>{{getDisclaimerText()}}</p>
+                
+                <br>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label>{{ 'saudiPayments.accountVerify.details.ReqMessageId' | translate }}</label>
+                        <h4>{{ messageId  }}</h4>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.details.benId' | translate }}</label>
+                        <div style="display: flex; justify-content: center; align-items: center">
+                            <h4>{{ accountVerifyReqDetails.beneficiaryID  }}</h4>
+                            <span class='icon -help icon-help-container' style="margin: 0 5px 0 5px"
+                                  tooltip="{{'saudiPayments.accountVerify.details.benIdType' | translate}}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.details.benIban' | translate }}</label>
+                        <h4>{{ accountVerifyReqDetails.beneficiaryIBAN }}</h4>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.reqDate' | translate }}</label>
+                        <h4>
+                            {{ accountVerifyReqDetails.creationTmstmp | date: 'yyyy/MM/dd -'}}
+                            {{ accountVerifyReqDetails.creationTmstmp | date: 'mediumTime'}}
+                        </h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </arb-panel>
+
+    <!--  Pending status  -->
+    <arb-panel *ngIf="accountVerifyReqDetails.status == 'ACV_PENDING'">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="ticks-warning">!</div>
+                <h2>{{'saudiPayments.accountVerify.details.pending' | translate}}</h2>
+                <p>{{getDisclaimerText()}}</p>
+
+                <br>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label>{{ 'saudiPayments.accountVerify.details.ReqMessageId' | translate }}</label>
+                        <h4>{{ messageId  }}</h4>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.details.benId' | translate }}</label>
+                        <div style="display: flex; justify-content: center; align-items: center">
+                            <h4>{{ accountVerifyReqDetails.beneficiaryID  }}</h4>
+                            <span class='icon -help icon-help-container' style="margin: 0 5px 0 5px"
+                                  tooltip="{{'saudiPayments.accountVerify.details.benIdType' | translate}}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.details.benIban' | translate }}</label>
+                        <h4>{{ accountVerifyReqDetails.beneficiaryIBAN }}</h4>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <label >{{ 'saudiPayments.accountVerify.reqDate' | translate }}</label>
+                        <h4>
+                            {{ accountVerifyReqDetails.creationTmstmp | date: 'yyyy/MM/dd -'}}
+                            {{ accountVerifyReqDetails.creationTmstmp | date: 'mediumTime'}}
+                        </h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </arb-panel>
+</ng-container>
+
+<arb-buttons>
+
+    <div class="row" >
+        <div class="col-xs-12 col-sm-8" style="text-align: start">
+            <button style="margin-right: auto" class="btn btn-default btn-wide" type="button" (click)="routeToList()">
+                {{ 'public.back' | translate}}
+            </button>
+        </div>
+    </div>
+
+</arb-buttons>

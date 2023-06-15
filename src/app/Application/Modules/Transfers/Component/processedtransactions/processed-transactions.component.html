@@ -1,0 +1,419 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li><span>{{ 'menu.transfers.transfers.menu' | translate }}</span>
+        <li class="active">{{ 'transfer.processed_transactions.processed_transactions' | translate }}</li>
+    </ol>
+</div>
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()"
+    #searchablePanelComponent>
+
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="paymentType">{{ 'transfer.processed_transactions.paymentType' | translate }}</label>
+                    <div>
+                        <ng-select class="form-control" id="paymentType" formControlName="paymentType" [placeholder]="canShowSelectPlaceHolder(searchForm.get('paymentType').value) ? ('-- '+('public.all' | translate )+' --'):''">
+                            <ng-option value="">--{{ 'public.all' | translate }}--</ng-option>
+                            <ng-option [value]="01">
+                                {{ 'transfer.transferRahji' | translate }}</ng-option>
+                            <ng-option [value]="02">{{ 'transfer.transferLocal' | translate }}
+                            </ng-option>
+                            <ng-option [value]="03">
+                                {{ 'transfer.transferInternational' | translate }}</ng-option>
+                            <option [value]="05">
+                                {{ 'transfer.transferLocalQuick' | translate }}</option>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="debitAccount">{{ 'transfer.processed_transactions.debitAccount' | translate }}</label>
+                    <ng-select class="form-control" id="debitAccount" formControlName="debitAccount" [placeholder]="canShowSelectPlaceHolder(searchForm.get('debitAccount').value) ? ('-- '+('transfer.processed_transactions.selectDebitAccount' | translate )+' --'):''">
+                        <ng-option selected value>--
+                            {{ 'transfer.processed_transactions.selectDebitAccount' | translate}}
+                            --
+                        </ng-option>
+                        <ng-option *ngFor="let debitAccount of debitAccountSelect" [value]="debitAccount['value']">
+                            {{debitAccount['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="countryName">{{ 'transfer.processed_transactions.country' | translate }}</label>
+                    <ng-select class="form-control" id="countryName" formControlName="countryName"
+                        (change)="onChangeCountry($event)"[placeholder]="canShowSelectPlaceHolder(searchForm.get('countryName').value) ? ('-- '+('transfer.processed_transactions.selectCountry' | translate )+' --'):''">
+                        <ng-option selected value>-- {{ 'transfer.processed_transactions.selectCountry' | translate}}
+                            --</ng-option>
+                        <ng-option *ngFor="let countryName of countryNameSelect" [value]="countryName['key']">
+                            {{countryName['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="beneficiaryBankCode">{{ 'transfer.processed_transactions.beneficiaryBankCode' |
+                        translate }}</label>
+                    <ng-select class="form-control" id="beneficiaryBankCode" formControlName="beneficiaryBankCode" [placeholder]="canShowSelectPlaceHolder(searchForm.get('beneficiaryBankCode').value) ? ('-- '+('transfer.processed_transactions.selectBeneficiaryBank' | translate )+' --'):''">
+                        <ng-option selected value>--
+                            {{ 'transfer.processed_transactions.selectBeneficiaryBank' | translate}} -- </ng-option>
+                            <!--                            <option *ngFor="let beneficiaryBank of beneficiaryBankCode"  [value]="beneficiaryBank.key" >-->
+                            <!--                                {{beneficiaryBank.value }}-->
+                            <!--                            </option>-->
+                        <ng-option *ngFor="let beneficiaryBank of beneficiaryBankCode"
+                            [value]="beneficiaryBank['bankName']">
+                            {{beneficiaryBank['bankName']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="amountRangeFrom">{{ 'transfer.processed_transactions.amountRangeFrom' | translate
+                        }}</label>
+                    <input class="form-control" id="amountRangeFrom" formControlName="amountFrom" maxlength=10
+                        inputPattern="onlyPositiveDecimalNumbers" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="amountRangeTo">{{ 'transfer.processed_transactions.to' | translate }}</label>
+                    <input class="form-control" id="amountRangeTo" formControlName="amountTo" maxlength=10
+                        inputPattern="onlyPositiveDecimalNumbers" />
+                    <div *ngIf="searchForm.controls.amountTo.value && !amountRangeValidation(searchForm)"
+                        class="alert alert-danger">
+                        <small>
+                            {{'transfer.processed_transactions.validationAmounRangeTo' | translate }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="currency">{{ 'transfer.processed_transactions.currency' | translate }}</label>
+                    <ng-select class="form-control" id="currency" formControlName="currency" [placeholder]="canShowSelectPlaceHolder(searchForm.get('currency').value) ? ('-- '+('transfer.processed_transactions.selectCurrency' | translate )+' --'):''">
+                        <ng-option selected value>-- {{ 'transfer.processed_transactions.selectCurrency' | translate}}
+                            -- </ng-option>
+                        <ng-option *ngFor="let cur of currency" [value]="cur['key']">
+                            {{cur['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="status">{{ 'transfer.processed_transactions.status' | translate }}</label>
+                    <ng-select class="form-control" id="status" formControlName="status"  [placeholder]="canShowSelectPlaceHolder(searchForm.get('status').value) ? ('-- '+('transfer.processed_transactions.selectStatus' | translate )+' --'):''">
+                        <ng-option selected value>-- {{ 'transfer.processed_transactions.selectStatus' | translate}} -- </ng-option>
+                        <ng-option *ngFor="let status of statusSelect" [value]="status['key']">
+                            {{status['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="lastApprovalDateFrom">{{
+                        'transfer.processed_transactions.lastApprovalDateFrom' | translate }}</label>
+                    <input type="text" [(ngModel)]="dateFrom" id="lastApprovalDateFrom" #lastApprovalDateFrom
+                        bsDatepicker formControlName="lastApprovalDateFrom" class="form-control" [bsConfig]="bsConfig"
+                        (click)="changeDateTo()" />
+                </div>
+                <div *ngIf="searchForm.get('lastApprovalDateFrom').invalid" class="alert alert-danger">
+                    <small>
+                        {{ 'transfer.processed_transactions.validationLastApprovalDateFrom' | translate }}
+                    </small>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <span class="icon -calendar"></span>
+                <span [attr.disabled]="null"> {{ 'payments.hajjumrahcards.gredate' | translate }}</span>
+            </div>
+            <div class="col-xs-12 col-sm-5">
+                <div class="form-group">
+                    <span class="icon -calendar"></span>
+                    <span> {{ 'payments.hajjumrahcards.hijiradate' |
+                        translate }}</span>
+                    <input type="text" class="form-control" id="hijra-date-card"
+                        formControlName="jirahLastApprovalDateFrom">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="lastApprovalDateTo">{{
+                        'transfer.processed_transactions.lastApprovalDateTo' | translate }}</label>
+                    <input type="text" [(ngModel)]="dateTo" id="lastApprovalDateTo" #lastApprovalDateTo bsDatepicker
+                        formControlName="lastApprovalDateTo" class="form-control" [bsConfig]="bsConfig"
+                        [minDate]="dateFrom" />
+                </div>
+                <div *ngIf="searchForm.get('lastApprovalDateTo').invalid && dateTo" class="alert alert-danger">
+                    <small>
+                        {{ 'transfer.processed_transactions.validationLastApprovalDateto' | translate }}
+                    </small>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <span class="icon -calendar"></span>
+                <span [attr.disabled]="null"> {{ 'payments.hajjumrahcards.gredate' | translate }}</span>
+            </div>
+            <div class="col-xs-12 col-sm-5">
+                <div class="form-group">
+                    <span class="icon -calendar"></span>
+                    <span> {{ 'payments.hajjumrahcards.hijiradate' |
+                        translate }}</span>
+                    <input type="text" class="form-control" id="jirahLastApprovalDateTo"
+                        formControlName="jirahLastApprovalDateTo">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="initiatedBy">{{ 'transfer.processed_transactions.initiatedBy' | translate }}</label>
+                    <ng-select class="form-control" id="initiatedBy" formControlName="initiatedBy" [placeholder]="canShowSelectPlaceHolder(searchForm.get('initiatedBy').value) ? ('-- '+('transfer.processed_transactions.initiatedBy' | translate )+' --'):''">
+                        <ng-option selected value>--
+                            {{ 'transfer.processed_transactions.initiatedBy' | translate}}
+                            --
+                        </ng-option>
+                        <ng-option *ngFor="let user of usersSelect" [value]="user">
+                            {{user}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="approvedBy">{{ 'transfer.processed_transactions.approvedBy' | translate }}</label>
+                    <ng-select class="form-control" id="approvedBy" formControlName="approvedBy" [placeholder]="canShowSelectPlaceHolder(searchForm.get('approvedBy').value) ? ('-- '+('transfer.processed_transactions.approvedBy' | translate )+' --'):''">
+                        <ng-option selected value>--
+                            {{ 'transfer.processed_transactions.approvedBy' | translate}}
+                            --
+                        </ng-option>
+                        <ng-option *ngFor="let user of usersSelect" [value]="user">
+                            {{user}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-searchable-panel>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'transfer.processed_transactions.processed_transactions'| translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="elementsTable"
+                        [header]="'transfer.processed_transactions.processed_transactions' | translate"
+                        [columns]="[
+
+                    {'title':'transfer.processed_transactions.paymentType' | translate,'dataKey':'transferType', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.beneficiary' | translate,'dataKey':'beneficiaryName', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.beneficiaryAccount' | translate,'dataKey':'beneficiaryAccount', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.beneficiaryBankCode' | translate,'dataKey':'beneficiaryBank', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.country' | translate,'dataKey':'country', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.debitAccount' | translate,'dataKey':'accountFrom.fullAccountNumber', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.accountNickname' | translate,'dataKey':'accountFrom.alias', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.debitAmount' | translate,'dataKey':'isSAR', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.transferAmount' | translate,'dataKey':'isTransfer', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.fees' | translate,'dataKey':'feesAmount', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.exchangeRate' | translate,'dataKey':'exchangeRate', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.status' | translate ,'dataKey':'beStatus', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.initiationDateBy' | translate,'dataKey':'initiatedBy', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.datetime' | translate,'dataKey':'initiationDate', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.approvalDateBy' | translate,'dataKey':'approvedBy', 'width': 'auto'},
+                    {'title':'transfer.processed_transactions.datetime' | translate,'dataKey':'approvedDate', 'width': 'auto'}]">
+                    </table-export>
+                </div>
+            </div>
+
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+                [columnMode]="defaultColumnMode" [headerHeight]="60" [rowHeight]="45" [footerHeight]="footerHeight"
+                [externalPaging]="true" [externalSorting]="true" [count]="elementsPage.page.totalElements"
+                [limit]="elementsPage.page.pageSize" [selectionType]="defaultSelectionType"
+                [selected]="tableSelectedRows" (page)='setPage($event)' [scrollbarV]="false" [scrollbarH]="true"
+                (sort)="setSort($event)" (select)='onSelect($event)'>
+
+
+                <ngx-datatable-column [width]="100" prop="transferType" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.paymentType' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p>{{ row.transferType | paymentType}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="200" prop="beneficiary" class="mobile-hidden">
+                    <ng-template let-value="name" let-row="row" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.beneficiary' | translate }}<br />
+                            {{ 'transfer.processed_transactions.beneficiaryAccount' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p *ngIf="row.transferType!='5' ||  isBeneficiary(row.beneficiaryAccount)"><a class="human-selectable" (click)="onClickRow(row, name)">{{
+                            row.beneficiaryName}}</a></p>
+                        <p *ngIf="row.transferType!='5' || isBeneficiary(row.beneficiaryAccount) ">{{
+                            row.beneficiaryAccount}}</p>
+                        <p *ngIf="row.transferType =='5' && !isBeneficiary(row.beneficiaryAccount)  ">{{
+                            row.proxyValue}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="200" prop="beneficiaryBankCode" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.beneficiaryBankCode' | translate }}<br />
+                            {{ 'transfer.processed_transactions.country' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p>{{ row.beneficiaryBank}}</p>
+                        <p>{{ 'backEndCountryCode'| modelPipe: row.country }}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="200" prop="debitAccount" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.debitAccount' | translate }}<br />
+                            {{ 'transfer.processed_transactions.accountNickname' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p>{{ row.accountFrom.fullAccountNumber}}</p>
+                        <p>{{ row.accountFrom.alias }}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="100" prop="debitAmount" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.debitAmount' | translate }}<br />
+                            {{ 'transfer.processed_transactions.transferAmount' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p> {{row.sarAmount | amountCurrency }} {{ 'currencyIso' | modelPipe:'608' }}
+                        </p>
+                        <p> {{row.amount | amountCurrency }} {{ 'currencyIso' | modelPipe:row.currency }}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="100" prop="fees" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.fees' | translate }}<br />
+                            {{ 'transfer.processed_transactions.exchangeRate' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p> {{row.feesAmount}} <ng-container *ngIf="row.feesAmount > 0"> {{'currencyIso' | modelPipe:
+                                row.feesCurrency}}
+                            </ng-container>
+                        </p>
+                        <p> {{row.exchangeRate | number:'1.4-6' }}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column [width]="100" prop="beStatus" [sortable]="false" [draggable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'transfer.processed_transactions.status' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p *ngIf="value">{{'errors' | modelPipe:'errorTable.'+value}}</p>
+                        <p *ngIf="!value">{{'errors' | modelPipe:'errorTable.'+errorTableNull}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+
+                <ngx-datatable-column [width]="100" prop="initiationDate" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.initiationDateBy' | translate }}<br />
+                            {{ 'transfer.processed_transactions.datetime' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p> {{row.initiatedBy}} </p>
+                        <p> {{row.initiationDate | date:"dd-MM-yyyy HH:mm" }} </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="100" prop="approvalDateBy" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'transfer.processed_transactions.approvalDateBy' | translate }}<br />
+                            {{ 'transfer.processed_transactions.datetime' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <p> {{row.approvedBy}} </p>
+                        <p> {{row.approvedDate | date:"dd-MM-yyyy HH:mm" }} </p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                (change)="elementsTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                            (change)="this.setPage(null)">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

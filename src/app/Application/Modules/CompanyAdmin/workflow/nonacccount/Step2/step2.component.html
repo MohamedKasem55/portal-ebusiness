@@ -1,0 +1,115 @@
+<div class="sme-content-container container-fluid"
+     *ngFor="let workflow of sharedData?.result?.batchList?.toProcess; let i = index">
+    <div class="sme-data-table" *ngIf="isEdited(workflow.paymentId)">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'batchTypes' | modelPipe: workflow.paymentId }}
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <table class="sme-table sme-table--responsive sme-table--check-list table">
+                <thead>
+                <tr>
+                    <th>{{'public.l1' | translate}}</th>
+                    <th>{{'public.l2' | translate}}</th>
+                    <th>{{'public.l3' | translate}}</th>
+                    <th>{{'public.l4' | translate}}</th>
+                    <th>{{'public.l5' | translate}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[0]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l1' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[1]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[2]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l3' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[3]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l4' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[4]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l5' | translate}}</span>
+                        </label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="sme-content-container container-fluid"
+     *ngFor="let workflow of sharedData?.result?.batchList?.toAuthorize; let i = index">
+    <div class="sme-data-table" *ngIf="isEdited(workflow.paymentId)">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'batchTypes' | modelPipe: workflow.paymentId }}
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <table class="sme-table sme-table--responsive sme-table--check-list table">
+                <thead>
+                <tr>
+                    <th>{{'public.l1' | translate}}</th>
+                    <th>{{'public.l2' | translate}}</th>
+                    <th>{{'public.l3' | translate}}</th>
+                    <th>{{'public.l4' | translate}}</th>
+                    <th>{{'public.l5' | translate}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[0]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l1' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[1]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l2' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[2]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l3' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[3]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l4' | translate}}</span>
+                        </label>
+                    </td>
+                    <td>
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="workflow.levels[4]" disabled> <i aria-hidden="true"></i>
+                            <span class="visible-xs">{{'public.l5' | translate}}</span>
+                        </label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

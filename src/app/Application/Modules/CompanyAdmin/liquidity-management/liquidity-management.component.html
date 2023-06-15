@@ -1,0 +1,526 @@
+<div>
+  <div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+      <li class="active">{{ 'companyAdmin.companyAdmin' | translate }}</li>
+      <li class="active">{{ 'companyAdmin.liquidityManagement.title' | translate }}</li>
+    </ol>
+  </div>
+  <div class="container-fluid">
+         <div class="sme-page-block">
+                <div class="sme-data-table">
+        <!-- sme-data-table -->
+                     <div class="sme-data-table">
+                          <div class="sme-page-block">
+                              <ul class="sme-box sme-wizard__steps">
+                                  <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+                                      <span>
+                                          <span class="num">1</span>
+                                          <span class="text">{{ 'preferences.step1' | translate }}</span>
+                                      </span>
+                                  </li>
+                                  <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                                      <span>
+                                          <span class="num">2</span>
+                                          <span class="text">{{ 'preferences.step2' | translate}}</span>
+                                      </span>
+                                  </li>
+                                  <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                                      <span>
+                                          <span class="icon -check"></span>
+                                          <span class="text">{{ 'preferences.step3' | translate }}</span>
+                                      </span>
+                                  </li>
+                              </ul>
+                          </div>
+                          <div *ngIf="step !== 3">
+                                <div class="sme-data-table__head">
+                                 <div class="sme-data-table__title">
+                                    {{ 'companyAdmin.liquidityManagement.availableAccountList' | translate }}
+                                 </div>
+                              </div>
+
+                                <div class="sme-data-table__head">
+                                     <div class="sme-data-table__title sub-titles">
+                                     {{ 'companyAdmin.liquidityManagement.internalAccountList' | translate }}
+                                     </div>
+                                    <div class="sme-data-table__export">
+                                        <table-export [dataTable]="tableInternalAccount"
+                                                      [header]="'companyAdmin.liquidityManagement.internalAccountList' | translate "
+                                                      [columns]="[
+                                              {'title': 'Account', 'dataKey':'liquidityAccountNumber'}
+                                               ]">
+                                        </table-export>
+                                    </div>
+                                </div>
+                                <ngx-datatable
+                                      [messages]="{ emptyMessage: 'public.noData' | translate }"
+                                      #tableInternalAccount
+                                      class="material sme-table sme-table--responsive table"
+                                      [rows]="internalAccounts"
+                                      [headerHeight]="30"
+                                      [footerHeight]="footerHeight"
+                                      [rowHeight]="defaultHeight"
+                                      [limit]="10"
+                                      [columnMode]="defaultColumnMode"
+                                      [selected]="internalAccountsSelected"
+                                      [selectionType]="defaultSelectionType"
+                                      (select)='onSelectInternal($event)'>
+
+                                 <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow>
+                                          <ng-template
+                                                  let-row="row"
+                                                  let-expanded="expanded"
+                                                  ngx-datatable-row-detail-template>
+                                                  <div class="row">
+                                                    <fieldset>
+                                                      <div class="col-xs-6">
+                                                        <!-- sme-form-group -->
+                                                        <div class="form-group">
+                                                          <label>Account</label>
+                                                          <div>
+                                                              <span class="human-selectable">
+                                                                  <a class="mobile-hidden">{{row.liquidityAccountNumber}}</a>
+                                                              </span>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </fieldset>
+                                                  </div>
+                                           </ng-template>
+                                 </ngx-datatable-row-detail>
+
+                                 <ngx-datatable-column
+                                    [width]="250"
+                                    [sortable]="false"
+                                    [canAutoResize]="false"
+                                    [draggable]="false"
+                                    [resizeable]="false"
+                                    prop="liquidityAccountNumber">
+                                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template >
+                                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                  {{'public.account' | translate }}
+                                            </span>
+                                    </ng-template>
+                                 </ngx-datatable-column>
+
+                                 <ngx-datatable-column
+                                        [sortable]="false"
+                                        [canAutoResize]="false"
+                                        [draggable]="false"
+                                        [resizeable]="false"
+                                        [headerCheckboxable]="false"
+                                        [checkboxable]="true">
+                               </ngx-datatable-column>
+
+                                  <ngx-datatable-footer>
+                                        <ng-template
+                                          ngx-datatable-footer-template
+                                          let-rowCount="rowCount"
+                                          let-pageSize="pageSize"
+                                          let-selectedCount="selectedCount"
+                                          let-curPage="curPage"
+                                          let-offset="offset">
+                                              <div class="sme-data-table__footer">
+                                                <app-datatable-pager
+                                                  [pagerLeftArrowIcon]="
+                                                    translate.currentLang === 'en'
+                                                      ? 'datatable-icon-left'
+                                                      : 'datatable-icon-right'
+                                                  "
+                                                  [pagerRightArrowIcon]="
+                                                    translate.currentLang === 'en'
+                                                      ? 'datatable-icon-right'
+                                                      : 'datatable-icon-left'
+                                                  "
+                                                  [pagerPreviousIcon]="
+                                                    translate.currentLang === 'en'
+                                                      ? 'datatable-icon-prev'
+                                                      : 'datatable-icon-skip'
+                                                  "
+                                                  [pagerNextIcon]="
+                                                    translate.currentLang === 'en'
+                                                      ? 'datatable-icon-skip'
+                                                      : 'datatable-icon-prev'
+                                                  "
+                                                  [page]="curPage"
+                                                  [size]="pageSize"
+                                                  [count]="rowCount"
+                                                  [hidden]="!(rowCount / pageSize > 1)"
+                                                  [visiblePagesCount]="visiblePagesCount"
+                                                  (change)="tableInternalAccount.onFooterPage($event)"
+                                                >
+                                                </app-datatable-pager>
+                                                <div class="sme-data-table__actions form-inline">
+                                                  <span class="sme-data-table__action-group">
+                                                      {{ 'public.showingLabel' | translate }}
+                                                        {{
+                                                          rowCount - pageSize * (curPage - 1) > pageSize
+                                                            ? pageSize
+                                                            : rowCount - pageSize * (curPage - 1)
+                                                        }}
+                                                    {{ 'public.ofLabel' | translate }} {{ rowCount }}
+                                                  </span>
+                                                  <span class="hidden-xs"> | </span>
+                                                  <span class="sme-data-table__action-group">
+                                                    <span>{{ 'public.showRowsLabel' | translate }}</span>
+                                                    <div class="sme-select form-control">
+                                                      <select class="form-control" [(ngModel)]="internalAccounts.length">
+                                                        <option [value]="10">10</option>
+                                                        <option [value]="20">20</option>
+                                                        <option [value]="50">50</option>
+                                                      </select>
+                                                    </div>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                        </ng-template>
+                                  </ngx-datatable-footer>
+                              </ngx-datatable>
+
+
+                                <div class="sme-data-table__head">
+                                    <div class="sme-data-table__title sub-titles">
+                                    {{ 'companyAdmin.liquidityManagement.subCICAccountsList' | translate }}
+                                    </div>
+                                    <div class="sme-data-table__export">
+                                        <table-export [dataTable]="tableSubCICAccount"
+                                                      [header]="'companyAdmin.liquidityManagement.subCICAccountsList' | translate "
+                                                      [columns]="[
+                                              {'title': 'Account', 'dataKey':'liquidityAccountNumber'}
+                                               ]">
+
+                                        </table-export>
+                                    </div>
+                                </div>
+                                <ngx-datatable
+                                    [messages]="{ emptyMessage: 'public.noData' | translate }"
+                                    #tableSubCICAccount
+                                    class="material sme-table sme-table--responsive table"
+                                    [rows]="internalSubCICAccounts"
+                                    [headerHeight]="30"
+                                    [footerHeight]="footerHeight"
+                                    [rowHeight]="defaultHeight"
+                                    [limit]="10"
+                                    [selectionType]="defaultSelectionType"
+                                    [columnMode]="defaultColumnMode"
+                                    [selected]="internalSubCICAccountsSelected"
+                                    (select)='onSelectInternalSub($event)'>
+                                     <ngx-datatable-row-detail
+                                      [rowHeight]="defaultHeight"
+                                      #myDetailRow
+                                      (toggle)="onDetailToggle($event)">
+                                          <ng-template
+                                            let-row="row"
+                                            let-expanded="expanded"
+                                            ngx-datatable-row-detail-template>
+                                                <div class="row">
+                                                     <fieldset>
+                                                        <div class="col-xs-6">
+                                                          <!-- sme-form-group -->
+                                                          <div class="form-group">
+                                                            <label>Account</label>
+                                                            <div>
+                                                              <span class="human-selectable">
+                                                                  <a>{{row.liquidityAccountNumber}}</a>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                     </fieldset>
+                                                 </div>
+                                          </ng-template>
+                                     </ngx-datatable-row-detail>
+
+                                     <ngx-datatable-column
+                                      [width]="250"
+                                      [sortable]="false"
+                                      [canAutoResize]="false"
+                                      [draggable]="false"
+                                      [resizeable]="false"
+                                      prop="liquidityAccountNumber">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template >
+                                  <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.account' | translate }}
+                                  </span>
+                                </ng-template>
+                              </ngx-datatable-column>
+
+                                     <ngx-datatable-column
+                                                    [width]="150"
+                                                    [sortable]="false"
+                                                    [canAutoResize]="false"
+                                                    [draggable]="false"
+                                                    [resizeable]="false"
+                                                    [headerCheckboxable]="false"
+                                                    [checkboxable]="true">
+                                     </ngx-datatable-column>
+
+                                    <ngx-datatable-footer>
+                                           <ng-template
+                                                    ngx-datatable-footer-template
+                                                    let-rowCount="rowCount"
+                                                    let-pageSize="pageSize"
+                                                    let-selectedCount="selectedCount"
+                                                    let-curPage="curPage"
+                                                    let-offset="offset">
+                                                     <div class="sme-data-table__footer">
+                                                             <app-datatable-pager
+                                                                [pagerLeftArrowIcon]="
+                                                                  translate.currentLang === 'en'
+                                                                    ? 'datatable-icon-left'
+                                                                    : 'datatable-icon-right'
+                                                                "
+                                                                [pagerRightArrowIcon]="
+                                                                  translate.currentLang === 'en'
+                                                                    ? 'datatable-icon-right'
+                                                                    : 'datatable-icon-left'
+                                                                "
+                                                                [pagerPreviousIcon]="
+                                                                  translate.currentLang === 'en'
+                                                                    ? 'datatable-icon-prev'
+                                                                    : 'datatable-icon-skip'
+                                                                "
+                                                                [pagerNextIcon]="
+                                                                  translate.currentLang === 'en'
+                                                                    ? 'datatable-icon-skip'
+                                                                    : 'datatable-icon-prev'
+                                                                "
+                                                                [page]="curPage"
+                                                                [size]="pageSize"
+                                                                [count]="rowCount"
+                                                                [hidden]="!(rowCount / pageSize > 1)"
+                                                                [visiblePagesCount]="visiblePagesCount"
+                                                                (change)="tableSubCICAccount.onFooterPage($event)"
+                                                                 >
+                                                             </app-datatable-pager>
+                                                             <div class="sme-data-table__actions form-inline">
+                                                                    <span class="sme-data-table__action-group"
+                                                                      >{{ 'public.showingLabel' | translate }}
+                                                                      {{
+                                                                        rowCount - pageSize * (curPage - 1) > pageSize
+                                                                          ? pageSize
+                                                                          : rowCount - pageSize * (curPage - 1)
+                                                                      }}
+                                                                      {{ 'public.ofLabel' | translate }} {{ rowCount }}
+                                                                    </span>
+                                                                    <span class="hidden-xs"> | </span>
+                                                                    <span class="sme-data-table__action-group">
+                                                                      <span>{{ 'public.showRowsLabel' | translate }}</span>
+                                                                      <div class="sme-select form-control">
+                                                                        <select  class="form-control" [(ngModel)]="internalSubCICAccounts.length">
+                                                                          <option [value]="10">10</option>
+                                                                          <option [value]="20">20</option>
+                                                                          <option [value]="50">50</option>
+                                                                        </select>
+                                                                      </div>
+                                                                    </span>
+                                                             </div>
+                                                     </div>
+                                           </ng-template>
+                                    </ngx-datatable-footer>
+                            </ngx-datatable>
+
+
+                                <div class="sme-data-table__head">
+                                    <div class="sme-data-table__title sub-titles">
+                                      {{ 'companyAdmin.liquidityManagement.externalAccountList' | translate }}
+                                    </div>
+                                    <div class="sme-data-table__export">
+                                        <table-export [dataTable]="tableExternalAccount"
+                                                      [header]="'companyAdmin.liquidityManagement.externalAccountList' | translate "
+                                                      [columns]="[
+                                                                  {'title': 'Account', 'dataKey':'liquidityAccountNumber'},
+                                                                  {'title': 'Bank' , 'dataKey':'bankBusinessIdentifierCode'}
+                                                                   ]">
+                                        </table-export>
+                                    </div>
+                                </div>
+                                <ngx-datatable
+                                        [messages]="{ emptyMessage: 'public.noData' | translate }"
+                                        #tableExternalAccount
+                                        class="material sme-table sme-table--responsive table"
+                                        [rows]="externalAccounts"
+                                        [headerHeight]="30"
+                                        [footerHeight]="footerHeight"
+                                        [rowHeight]="defaultHeight"
+                                        [limit]="10"
+                                        [selectionType]="defaultSelectionType"
+                                        [columnMode]="defaultColumnMode"
+                                        [selected]="externalAccountsSelected"
+                                        (select)='onSelectExternal($event)'>
+                                        <ngx-datatable-row-detail
+                                              [rowHeight]="defaultHeight"
+                                              #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                                                 <ng-template
+                                                    let-row="row"
+                                                    let-expanded="expanded"
+                                                    ngx-datatable-row-detail-template>
+                                                    <div class="row">
+                                                      <fieldset>
+                                                        <div class="col-xs-6">
+                                                          <!-- sme-form-group -->
+                                                          <div class="form-group">
+                                                            <label>Account</label>
+                                                            <div>
+                                                              <span class="human-selectable">
+                                                                  <a>{{row.liquidityAccountNumber}}</a>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <!-- sme-form-group -->
+                                                            <div class="form-group">
+                                                              <label>Bank</label>
+                                                              <div>
+                                                                <span class="human-selectable">
+                                                                    <a >{{row.bankBusinessIdentifierCode}}</a>
+                                                                </span>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                      </fieldset>
+                                                    </div>
+                                                 </ng-template>
+                                        </ngx-datatable-row-detail>
+
+                                         <ngx-datatable-column
+                                            [width]="250"
+                                            [sortable]="false"
+                                            [canAutoResize]="false"
+                                            [draggable]="false"
+                                            [resizeable]="false"
+                                            prop="liquidityAccountNumber">
+                                              <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template >
+                                              <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{'public.account' | translate }}
+                                              </span>
+                                              </ng-template>
+                                         </ngx-datatable-column>
+
+                                        <ngx-datatable-column
+                                            [width]="250"
+                                            [sortable]="false"
+                                            [canAutoResize]="false"
+                                            [draggable]="false"
+                                            [resizeable]="false"
+                                            prop="bankBusinessIdentifierCode">
+                                              <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template >
+                                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{'public.bank' | translate }}
+                                                     </span>
+                                              </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column
+                                        [width]="100"
+                                        [sortable]="false"
+                                        [canAutoResize]="false"
+                                        [draggable]="false"
+                                        [resizeable]="false"
+                                        [headerCheckboxable]="false"
+                                        [checkboxable]="true">
+                                    </ngx-datatable-column>
+
+                                        <ngx-datatable-footer>
+                                            <ng-template
+                                                ngx-datatable-footer-template
+                                                let-rowCount="rowCount"
+                                                let-pageSize="pageSize"
+                                                let-selectedCount="selectedCount"
+                                                let-curPage="curPage"
+                                                let-offset="offset">
+                                                    <div class="sme-data-table__footer">
+                                                      <app-datatable-pager
+                                                            [pagerLeftArrowIcon]="
+                                                              translate.currentLang === 'en'
+                                                                ? 'datatable-icon-left'
+                                                                : 'datatable-icon-right'
+                                                            "
+                                                            [pagerRightArrowIcon]="
+                                                              translate.currentLang === 'en'
+                                                                ? 'datatable-icon-right'
+                                                                : 'datatable-icon-left'
+                                                            "
+                                                            [pagerPreviousIcon]="
+                                                              translate.currentLang === 'en'
+                                                                ? 'datatable-icon-prev'
+                                                                : 'datatable-icon-skip'
+                                                            "
+                                                            [pagerNextIcon]="
+                                                              translate.currentLang === 'en'
+                                                                ? 'datatable-icon-skip'
+                                                                : 'datatable-icon-prev'
+                                                            "
+                                                            [page]="curPage"
+                                                            [size]="pageSize"
+                                                            [count]="rowCount"
+                                                            [hidden]="!(rowCount / pageSize > 1)"
+                                                            [visiblePagesCount]="visiblePagesCount"
+                                                            (change)="tableExternalAccount.onFooterPage($event)">
+                                                      </app-datatable-pager>
+                                                      <div class="sme-data-table__actions form-inline">
+                                                            <span class="sme-data-table__action-group"
+                                                              >{{ 'public.showingLabel' | translate }}
+                                                              {{
+                                                                rowCount - pageSize * (curPage - 1) > pageSize
+                                                                  ? pageSize
+                                                                  : rowCount - pageSize * (curPage - 1)
+                                                              }}
+                                                              {{ 'public.ofLabel' | translate }} {{ rowCount }}</span
+                                                            >
+                                                            <span class="hidden-xs"> | </span>
+                                                            <span class="sme-data-table__action-group">
+                                                              <span>{{ 'public.showRowsLabel' | translate }}</span>
+                                                              <div class="sme-select form-control">
+                                                                <select
+                                                                  class="form-control"
+                                                                  [(ngModel)]="externalAccounts.length"
+                                                                >
+                                                                  <option [value]="10">10</option>
+                                                                  <option [value]="20">20</option>
+                                                                  <option [value]="50">50</option>
+                                                                </select>
+                                                              </div>
+                                                            </span>
+                                                      </div>
+                                                    </div>
+                                            </ng-template>
+                                        </ngx-datatable-footer>
+                              </ngx-datatable>
+                          </div>
+                          <div *ngIf="step === 3 && loadSuccess" class="sme-box sme-wizard__content">
+                                  <div>
+                                      <div class="sme-wizard__success">
+                                          <span class="icon -check"></span>
+                                          {{ 'public.requestOk' | translate }}
+                                          <!-- <br/>
+                                          {{ 'accounts.chequeBook.lastStepText2' | translate }} -->
+                                          <br/><br/>
+                                          {{ 'public.thanks' | translate }}
+
+                                      </div>
+                                  </div>
+                              </div>
+                          <div *ngIf="step === 1" class="sme-page-block sme-wizard__navigation sme-form__actions">
+                                  <button (click)="goNext()" class=" btn btn-primary btn-wide"
+                                      [disabled]="!dataChanged">{{ 'public.proceed' | translate }}</button>
+                              </div>
+                          <div *ngIf="step === 2" class="sme-page-block sme-wizard__navigation sme-form__actions">
+                                  <button type="button" (click)="goBack()" class=" btn btn-default btn-wide">
+                                      {{ 'public.back' | translate }}
+                                  </button>
+                                  <button (click)="confirm()"class=" btn btn-primary btn-wide" [disabled]="false">
+                                      {{ 'public.confirm' | translate }}
+                                  </button>
+                              </div>
+                          <div *ngIf="step === 3" class="sme-page-block sme-wizard__navigation sme-form__actions">
+                                  <button (click)="finish()" type="submit" class=" btn btn-primary btn-wide">
+                                      {{ 'public.finish' | translate }}
+                                  </button>
+                              </div>
+                     </div>
+                </div>
+         </div>
+  </div>
+</div>

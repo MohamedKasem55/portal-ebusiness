@@ -1,0 +1,127 @@
+<form autocomplete="off" #f="ngForm" >
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label>{{ 'accounts.account' | translate }} *</label>
+                <div class="form-control">
+                    <ng-select [notFoundText]="'public.noData' | translate" name="account" [(ngModel)]="selectedAccount" required>
+                        <ng-option *ngFor="let account of accountFrom" [value]="account.value.fullAccountNumber">
+                            {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}} {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label>{{ 'accounts.exportLanguage' | translate }} *</label>
+                <div class="form-control">
+                    <ng-select [notFoundText]="'public.noData' | translate" name="languaje"  [(ngModel)]="selectedLanguage" required>
+                        <ng-option *ngFor="let language of languages" [value]="language.key">
+                            {{ language.value }}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label>{{ 'accounts.exportType' | translate }} *</label>
+                <div class="form-control">
+                    <ng-select [notFoundText]="'public.noData' | translate" name="type"  [(ngModel)]="selectedType" required>
+                        <ng-option *ngFor="let type of types" [value]="type.key">
+                            {{ type.value }}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label>{{ 'accounts.datefrom' | translate }} *</label>
+                <input name="fromDate" type="text" id="fromDate" class="form-control" required #dateFrom="bsDatepicker" bsDatepicker [(ngModel)]="fromDate"
+                       [bsConfig]="bsConfig" [maxDate]="getMaxDateToday(toDate)" />
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label>{{ 'accounts.dateto' | translate }} *</label>
+                <input name="toDate" type="text" id="toDate" class="form-control" required #dateTo="bsDatepicker" bsDatepicker [(ngModel)]="toDate"
+                       [bsConfig]="bsConfig" [minDate]="fromDate" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <label>{{ 'accounts.amountRangeFrom' | translate }}</label>
+            <input name="rangeFrom" type="text" inputPattern="onlyPositiveDecimalNumbers" class="form-control" id="amountRangeFrom" [(ngModel)]="amountRangeFrom" [max]="amountRangeTo" maxlength="8" />
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <label>{{ 'accounts.amountRangeTo' | translate }}</label>
+            <input name="rangeTo" type="text" inputPattern="onlyPositiveDecimalNumbers" class="form-control" id="amountRangeTo" [(ngModel)]="amountRangeTo" [min]="amountRangeFrom" maxlength="8" />
+        </div>
+    </div>
+    <div *ngIf="!amountValid()">
+        <p class="alert alert-danger">
+            {{ 'error.amountRangeInvalid' | translate }}
+        </p>
+    </div>
+    <div class="row radio-row">
+        <div class="col-xs-12 col-sm-4 radio-label">
+            <div class="col-xs-1 col-sm-2">
+                <input type="radio" name="transactions" [(ngModel)]="transactions" value="0"
+                       class="form-control radio-button" id="allTransactions" />
+            </div>
+            <div class="col-xs-9 col-sm-10 labels">
+                {{ 'accounts.allTransactions' | translate }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 radio-label">
+            <div class="col-xs-1 col-sm-2">
+                <input type="radio" name="transactions" [(ngModel)]="transactions" value="1"
+                       class="form-control radio-button" id="creditTransactions" />
+            </div>
+            <div class="col-xs-9 col-sm-10 labels">
+                {{ 'accounts.creditTransactions' | translate }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 radio-label">
+            <div class="col-xs-1 col-sm-2"><input type="radio" name="transactions" [(ngModel)]="transactions"
+                                                  value="2" class="form-control radio-button" id="debitTransactions" />
+            </div>
+            <div class="col-xs-9 col-sm-10 labels">
+                {{ 'accounts.debitTransactions' | translate }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-5 col-sm-5">
+            <label>{{ 'accounts.filterBy' | translate }}</label>
+            <select name="filtersAdd" multiple="multiple" [(ngModel)]="selectedFiltersAdd" class="form-control" (change)="getSelectedValue()">
+                <option *ngFor="let filter of filtersList" value="{{filter.id}}">{{ filter.text }}</option>
+            </select>
+        </div>
+        <div class="col-xs-2 col-sm-2">
+            <button type="button" class="btn btn-wide add-quit-button"
+                    (click)="clickAdd(selectedFiltersAdd)" [disabled]="selectedFiltersAdd.length >5 || selectedFiltersList.length ==5 || disableButton"><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-wide add-quit-button"
+                    (click)="clickQuit(selectedFiltersQuit)">      <span class="glyphicon glyphicon-minus"></span></button>
+        </div>
+        <div class="col-xs-5 col-sm-5">
+            <select name="filtersQuit" multiple="multiple" [(ngModel)]="selectedFiltersQuit" class="form-control">
+                <option *ngFor="let saved of selectedFiltersList" value="{{saved.id}}">{{ saved.text }}</option>
+            </select>
+        </div>
+    </div>
+</form>

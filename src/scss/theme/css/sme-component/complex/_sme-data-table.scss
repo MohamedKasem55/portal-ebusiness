@@ -1,0 +1,254 @@
+.sme-data-table {
+  $head-height: 64px;
+
+  &__title {
+    @include heading2;
+    color: $brand-black;
+    padding-#{$left}: 20px;
+  }
+
+  &__export,
+  &__actions {
+    .btn,
+    .form-control {
+      height: 35px;
+      min-width: 0;
+    }
+
+    .form-control {
+      margin-#{$left}: 8px;
+    }
+
+    .btn + .btn {
+      margin-#{$left}: 8px;
+    }
+  }
+
+  &__export {
+    .btn {
+      background: #fff;
+      color: #172328;
+
+      padding: 7px 10px;
+
+      .icon {
+        vertical-align: top;
+        @include icon-size(19px);
+      }
+
+      .text {
+        vertical-align: top;
+        display: inline-block;
+        padding: 3px;
+
+        @if $dir != ltr {
+          line-height: 14px;
+          padding: 0;
+        }
+      }
+
+      &.btn-export--xlsx .icon {
+        color: #02955f;
+      }
+      &.btn-export--pdf .icon {
+        color: #db5565 !important;
+      }
+    }
+  }
+  &__advisory {
+    @include font($font-size-10);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-10 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-10 * $factor2);
+    }
+    font-weight: 500;
+    color: $brand-black;
+
+    padding-#{$left}: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+  }
+
+  .table {
+    margin: 0;
+    border-bottom: 1px solid $table-border-color;
+  }
+
+  &__footer {
+    background: $table-bg-accent;
+    padding: 13px 20px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+
+  &__pagination {
+    .pagination {
+      margin: 0;
+    }
+  }
+
+  &__actions {
+    > .form-control {
+      background: none;
+      border-color: #e8e8e8;
+    }
+
+    > span {
+      @include font($font-size-15);
+      @media screen and (max-width: $max-width) {
+        @include font($font-size-12 * $factor);
+      }
+      @media screen and (max-width: $max-width2) {
+        @include font($font-size-12 * $factor2);
+      }
+    }
+
+    .dropdown-menu {
+      a {
+        color: $brand-grey-light;
+
+        .icon {
+          float: left;
+          @include icon-size(18px);
+          margin-top: 1px;
+        }
+
+        .icon + .text {
+          margin-#{$right}: 10px;
+        }
+      }
+    }
+  }
+
+  &__action-group {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    color: #979caf;
+
+    .sme-select {
+      width: auto;
+      background: none;
+      border: 1px solid #e8e8e8;
+
+      &:before,
+      > button,
+      > select {
+        color: #979caf;
+      }
+    }
+  }
+
+  @media #{$sm-up} {
+    &__head,
+    &__footer {
+      display: table;
+      width: 100%;
+    }
+
+    &__head {
+      height: $head-height;
+    }
+
+    &__title,
+    &__export,
+    &__pagination,
+    &__actions {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    &__export,
+    &__actions {
+      text-align: $right;
+    }
+
+    &__action-group {
+      display: inline;
+    }
+  }
+
+  @media #{$xs-only} {
+    &__head,
+    &__footer {
+      display: table;
+      width: 100%;
+    }
+
+    &__title {
+      padding-#{$left}: 0;
+    }
+
+    &__title,
+    &__export,
+    &__pagination,
+    &__actions {
+      display: block;
+      vertical-align: middle;
+    }
+
+    /*&__export, &__actions {*/
+    &__export {
+      float: none;
+      margin: 10px 0;
+
+      .btn {
+        /*&:first-child {}*/
+
+        .text {
+          display: none;
+        }
+      }
+    }
+
+    &__footer {
+      padding: 10px;
+    }
+
+    &__pagination {
+      .pagination {
+        display: table;
+        width: 100%;
+
+        li {
+          display: table-cell;
+
+          > a,
+          > span {
+            width: 100%;
+            padding-#{$left}: 0;
+            padding-#{$right}: 0;
+            text-align: center;
+          }
+        }
+
+        margin: 0;
+      }
+    }
+
+    &__action-group {
+      @include clearfix;
+
+      > .btn {
+        width: 49%;
+        display: block;
+        margin: 0;
+
+        margin: 0 0 5px;
+
+        & + .btn {
+          margin-#{$left}: 0;
+        }
+
+        &:nth-child(2n + 1) {
+          float: $left;
+        }
+        &:nth-child(2n + 2) {
+          float: $right;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,155 @@
+<!-- BREADCRUMB -->
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li>{{ 'myProfile.myProfile' | translate }}</li>
+		<li class="active">{{ 'myProfile.alerts.manageAlerts' | translate }}</li>
+	</ol>
+</div>
+<!-- BREADCRUMB -->
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<!-- sme-form -->
+		<div class="sme-form">
+			
+
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{'myProfile.alerts.manageAlerts' | translate }}
+				</div>
+				<div class="col-xs-12 col-sm-6 text-right">
+					<a class="btn btn-primary btn-wide" routerLinkActive="active" [routerLink]="['/myprofile/alerts/create']">{{
+							'myProfile.alerts.subscribe' | translate }}</a>
+				</div>
+			</div>
+			<div class="sme-form__content">
+
+			</div>
+		</div>
+
+
+
+		<!-- sme-data-table -->
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+	
+					<div class="sme-data-table__title">
+						{{ 'myProfile.alerts.alertList'| translate }}
+					</div>
+
+					<div class="sme-data-table__export">
+						<table-export [dataTable]="alertTable" [header]="'myProfile.alerts.alertList' | translate"
+						[columns]="[
+						{'title':'public.accounts' | translate,'dataKey':'accountNumber'},
+						{'title':'public.subscriptionDate' | translate,'dataKey':'subscriptionDate'}
+						]"></table-export>
+					</div>
+
+			</div>	
+
+				<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #alertTable class="material sme-table sme-table--responsive table" [rows]="alertPage.data" [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+				 [rowHeight]="defaultHeight" [externalPaging]="true" [count]="alertPage.page.totalElements" [offset]="alertPage.page.pageNumber"
+				 [limit]="alertPage.page.pageSize" [selectionType]="defaultSelectionType" [rowIdentity]="getIdFunction()" (page)='setPage($event)'
+				 (sort)="setSort($event)" (select)='onSelect($event)'>
+
+				 	<!-- Row Detail Template -->
+				<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)" >
+					<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+					  <!-- <div style="padding-left:60px; font-size:14px">
+						<div>{{row.date}}, {{row.time}}</div>
+					  </div> -->
+
+					  <div class="row">
+						<fieldset>
+							<div class="col-xs-6">
+								<!-- sme-form-group -->
+								<div class="form-group">
+									<label>{{'public.accounts' | translate }} </label>
+									<div>
+										<span>{{ row.accountNumber }}</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<!-- sme-form-group -->
+								<div class="form-group">
+									<label>{{'public.subscriptionDate' | translate }}</label>
+									<div>
+										<span>{{row.subscriptionDate | date:'dd/MM/yyyy'}}</span>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					</ng-template>
+				</ngx-datatable-row-detail>
+					<ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"
+					 [checkboxable]="true">
+					</ngx-datatable-column>
+
+					<ngx-datatable-column prop="accountNumber">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.accounts' | translate }} 
+								</span>
+						</ng-template>
+					</ngx-datatable-column>
+
+					<ngx-datatable-column prop="subscriptionDate">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.subscriptionDate' | translate }}
+								</span>
+						</ng-template>
+						<ng-template let-value="value" ngx-datatable-cell-template>
+								<div>
+									<span>{{value | date:'dd/MM/yyyy'}}</span>
+								</div>
+							</ng-template>
+					</ngx-datatable-column>
+
+				
+
+					<ngx-datatable-footer>
+						<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+						 let-curPage="curPage" let-offset="offset">
+							<div class="sme-data-table__footer">
+								<app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+								 [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')" [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+								 [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')" [page]="curPage"
+								 [visiblePagesCount]="visiblePagesCount"  
+								 [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)" (change)="alertTable.onFooterPage($event)">
+								</app-datatable-pager>
+
+								<div class="sme-data-table__actions form-inline">
+									<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{this.alertPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+									<span class="hidden-xs"> | </span>
+									<span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+										<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="this.alertPage.page.pageSize" (change)="this.setPage(null)">
+														<option [value]="10">10</option>
+														<option [value]="20">20</option>
+														<option [value]="50">50</option>
+													    <option [value]="100">100</option>
+												</select>
+										</div>
+									</span>
+								</div>
+							</div>
+						</ng-template>
+					</ngx-datatable-footer>
+
+				</ngx-datatable>
+			</div>
+		</div>
+		<div class="sme-form__actions">
+			<button type="button" class="btn btn-default btn-wide" [routerLink]="['/myprofile/alerts/delete']" [disabled]="this.tableSelectedRows.length === 0">{{
+												'myProfile.alerts.delete' | translate }}</button>
+			<button type="button" class="btn btn-primary btn-wide" [routerLink]="['/myprofile/alerts/edit']" [disabled]="this.tableSelectedRows.length === 0">{{
+												'myProfile.alerts.edit' | translate }}</button>
+
+		</div>
+		<div>
+			<!-- ./sme-data-table -->
+		</div>

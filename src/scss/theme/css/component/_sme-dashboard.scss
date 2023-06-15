@@ -1,0 +1,69 @@
+.sme-dashboard {
+  @include clearfix;
+  padding: ($grid-gutter-width * 0.5 - 15) 0;
+  @media (min-width: 768px) {
+    max-width: calc(100vw - 71px);
+  }
+
+  /*    &__row {
+          display: table;
+      }*/
+
+  &__slot {
+    float: #{$left};
+    padding: ($grid-gutter-width * 0.25) ($grid-gutter-width * 0.5);
+  }
+
+  &__slot--1col {
+    width: 33.33333%;
+  }
+
+  &__slot--2cols {
+    width: 66.66666%;
+  }
+
+  &__slot--3cols {
+    width: 100%;
+  }
+
+  .sme-message-block {
+    padding-top: 0;
+
+    .message-container {
+      height: 71px;
+
+      box-shadow: 0 0.5px 0 0 #e4e5e6;
+
+      background-color: #29419b;
+
+      .messageText {
+        height: 37px;
+        font-family: 'noto-sans-en',"noto-sans-ar";
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: -0.71px;
+        color: #ffffff;
+        padding-top: $font-size-14;
+      }
+    }
+  }
+  .container-fluid {
+    padding-top: ($grid-gutter-width * 0.5);
+  }
+
+  .container,
+  .container-fluid {
+    > .row + .row {
+      margin-top: $grid-gutter-width * 0.5;
+    }
+
+    @media #{$xs-only} {
+      > .row > div + div {
+        margin-top: $grid-gutter-width * 0.5;
+      }
+    }
+  }
+}

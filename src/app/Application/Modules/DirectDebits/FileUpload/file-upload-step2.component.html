@@ -1,0 +1,448 @@
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'directDebits.uploadAFile' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="deduct-from-account-input">{{ 'directDebits.account' |
+											translate }}</label>
+                                        <span id="deduct-from-account-input"
+                                            class="form-control">{{initDirectDebitPayment.directDebitFeesOutput.feesAccountNumber}}</span>
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.customerCIC' |
+											translate }}</label>
+                                        <span class="form-control">
+                                            {{initDirectDebitPayment.directDebit.cic}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.organizationName' |
+											translate }}</label>
+                                        <span class="form-control">
+                                            {{initDirectDebitPayment.directDebit.companyName}}
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'directDebits.paymentDate' |
+											translate }}</label>
+                                        <span class="form-control"
+                                           >{{ initDirectDebitPayment.directDebit.claimDate | date:'dd/MM/yyyy' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'payroll.hijraDate' |
+											translate }}</label>
+                                        <span class="form-control"
+                                           >{{initDirectDebitPayment.directDebit.initiationDate | hijraDateFormat:'dd/MM/yyyy'}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'directDebits.batchName' |
+											translate }}</label>
+                                        <span class="form-control">
+                                            {{initDirectDebitPayment.directDebit.batchName}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'public.status' |
+											translate }}</label>
+                                        <span class="form-control">
+                                            {{initDirectDebitPayment.directDebit.status}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'directDebits.payerList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="payerPageTable" [header]="'directDebit.payerList' | translate" [columns]="[
+{'title': 'directDebits.payerNumber' | translate, 'dataKey': 'payerCodeMandate'},
+{'title': 'directDebits.civilianID' | translate, 'dataKey': 'civilianId'},
+{'title': 'public.bank' | translate, 'dataKey': 'bankCode'},
+{'title': 'public.account' | translate, 'dataKey': 'account'},
+{'title': 'directDebits.salary' | translate, 'dataKey': 'salary'}
+]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #payerPageTable
+                        class="material sme-table sme-table--responsive table" [rows]="payerPage.data"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [rowHeight]="defaultHeight" [externalPaging]="false" [externalSorting]="false"
+                        [count]="payerPage.page.totalElements" [offset]="payerPage.page.pageNumber-1"
+                        [limit]="payerPage.page.pageSize"  (page)="setPage($event)"
+                        (sort)="setSort($event)">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>
+                                                    {{'directDebits.payerNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.payerCodeMandate }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'directDebits.originatorId' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.originatorId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.bank' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.payerBankCode }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.account' | translate }}</label>
+                                                <div>
+                                                    <span>{{ (row.payerAccount != null && row.payerAccount != "" ? bank[row.payerAccount] : '') }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'directDebits.salary' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.amount | amountCurrency }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="payerCodeMandate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.payerNumber' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="originatorId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.originatorId' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="payerBankCode">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.bank' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ (value != null && value != "" ? bank[value] : '') }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="payerAccount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.account' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.salary' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value  | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="payerPageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{this.payerPage.page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="this.payerPage.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'directDebits.summaryAndFees' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberOfPayer' |
+											translate }}</label>
+                                        <span
+                                            class="form-control">{{initDirectDebitPayment.directDebitFeesOutput?.numEmployees}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-amount-input">{{ 'directDebits.totalAmount' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-amount-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput?.totalAmount  | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberRajhiTransfer' |
+											translate }}</label>
+                                        <span class="form-control"
+                                           >{{initDirectDebitPayment.directDebitFeesOutput.numRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label for="total-rajhi-transfer-input" class="required">{{ 'directDebits.totalRajhiTransfer' |
+                                                translate }}</label>
+                                        <span class="form-control" id="total-rajhi-transfer-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput.totalNumRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberNonRajhiTransfer' |
+											translate }}</label>
+                                        <span class="form-control"
+                                           >{{initDirectDebitPayment.directDebitFeesOutput.numNonRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label for="total-non-rajhi-transfer-input" class="required">{{ 'directDebits.totalNonRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-non-rajhi-transfer-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput.totalNumNonRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-rajhi-transfer-name-input">{{ 'directDebits.feesRajhiTransfers' |
+											translate }}</label>
+                                        <span type="text" class="form-control" id="fee-rajhi-transfer-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput.alRajhiCustomersFeeSuccess | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-non-rajhi-transfer-name-input">{{ 'directDebits.totalFeesRajhi' |
+                                            translate }}</label>
+                                        <span class="form-control" id="fee-non-rajhi-transfer-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput.totalFeesRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-non-rajhi-transfer-name-input">{{ 'directDebits.feesNonRajhiTransfers' |
+											translate }}</label>
+                                        <span class="form-control" id="fee-non-rajhi-transfer-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput.nonAlRajhiCustomersFeeSuccess | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-non-rajhi-name-input">{{ 'directDebits.totalFeesNonRajhi' |
+                                            translate }}</label>
+                                        <span class="form-control"
+                                            id="fee-non-rajhi-input">{{initDirectDebitPayment.directDebitFeesOutput.totalFeesNonRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-estimated-amount-input" class="required">{{ 'directDebits.totalEstimatedAmount' |
+											translate }}</label>
+                                        <span class="form-control" id="total-estimated-amount-input">
+                                            {{initDirectDebitPayment.directDebitFeesOutput.totalEstimated  | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+
+                                        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate" #authorization>
+                                        </app-secured-authentication>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

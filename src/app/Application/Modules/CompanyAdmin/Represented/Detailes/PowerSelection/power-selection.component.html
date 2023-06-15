@@ -1,0 +1,105 @@
+<div class='container-fluid'>
+  <div class='sme-head' *ngIf='pageType!=PageType.VIEW'>
+    <div class='sme-head__title'>
+      {{ 'represented.powerSelection' | translate }}
+    </div>
+  </div>
+
+  <arb-panel>
+    <div class='legend underLine'>{{ 'represented.repPowers' | translate }}</div>
+    <div class='row' *ngFor='let item of powerList'>
+      <div class='form-group checkboxItem'>
+        <input type='checkbox' class='checkboxInput' (change)='onChangePower(item)' [checked]='item.enabled'
+               [disabled]='formModel.disabled || pageType==PageType.VIEW' />
+        <label class='checkboxLabel'> {{item.value ? item.value : item.dis }}</label>
+      </div>
+
+    </div>
+    <form autocomplete='off' #PowerForm='ngForm' class='sme-form__form' novalidate>
+      <fieldset [formGroup]='formModel'>
+        <div class='legend underLine'>{{ 'represented.validity' | translate }}</div>
+        <div class='row'>
+          <!-- From Date -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.from' | translate }} *</label>
+              <div class='input-group calendar'>
+                <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+                       bsDatepicker formControlName='repStartDate' [bsConfig]='bsConfig' [minDate]='today' />
+                <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+              </div>
+            </div>
+          </div>
+          <!-- /From Date -->
+
+          <!-- To Date -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.to' | translate }} *</label>
+              <div class='input-group calendar'>
+                <input type='text' class='form-control onTop' placement='top' #dateTo='bsDatepicker'
+                       bsDatepicker formControlName='repEndDate' [bsConfig]='bsConfig'
+                       [minDate]='formModel.controls.repStartDate.value? formModel.controls.repStartDate.value: today'
+                       [maxDate]='maxDate' />
+                <span class=' input-group-addon icon -calendar' (click)='dateTo.show()'></span>
+              </div>
+            </div>
+          </div>
+          <!-- /To Date -->
+        </div>
+      </fieldset>
+    </form>
+  </arb-panel>
+
+
+  <!--  File  Upload-->
+  <arb-panel *ngIf='pageType==PageType.ADD'>
+    <div class='row' [ngClass]='showUpload? "underLine" : "" '>
+      <div class='col-xs-12 col-sm-6 uploadTxtDiv'> {{ 'represented.uploadTitle' | translate }} </div>
+      <div class='col-xs-12 col-sm-6 endDiv'>
+        <!--        <label class='switch'>-->
+        <!--          <input type='checkbox' [ngModel]='showUpload' (ngModelChange)='toggleShow()' [disabled]='formModel.disabled'>-->
+        <!--          <span class='slider round' [ngClass]='formModel.disabled? "spanDisable":""'></span>-->
+        <!--        </label>-->
+      </div>
+    </div>
+    <div *ngIf='showUpload' class='uploadDiv'>
+      <div class='row underLine'>
+        <div class='col-xs-12 col-sm-6 legend noMargin'> {{ 'represented.uploadTxt' | translate }} </div>
+        <div class='col-xs-12 col-sm-6 endDiv' *ngIf='!formModel.disabled'>
+          <button class='btn btn-default btn-wide btn-black' type='button'
+                  (click)='download()'>{{ 'represented.download' | translate}}</button>
+        </div>
+      </div>
+
+      <div class='row'>
+
+        <div class='col-xs-12 col-sm-6'>
+          <div class='form-group space'>
+            <label>{{ 'represented.attach' | translate }}</label>
+            <div class='input-group flex'>
+              <input type='text' class='form-control' placeholder='Upload file' [disabled]='true'
+                     [(ngModel)]='file'>
+              <span class='input-group-btn'>
+                        <div class='fileUpload btn'>
+                            <span>{{'public.upload' | translate | uppercase}}</span>
+                            <input type='file' (change)='fileUploadChange($event)'
+                                   accept='.jpeg,.gif,.jpg,.png'
+                                   [disabled]='formModel.disabled'
+                                   class='upload'>
+                        </div>
+                    </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-12 col-sm-12'>
+          <span class='hint'>{{'represented.uploadHint' | translate}}</span>
+        </div>
+      </div>
+
+    </div>
+  </arb-panel>
+</div>

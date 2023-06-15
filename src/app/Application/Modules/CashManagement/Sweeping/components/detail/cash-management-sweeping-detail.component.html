@@ -1,0 +1,111 @@
+<arb-breadcrumb
+  [routes]="[
+    ['dashboard.accounts'],
+    ['dashboard.cashManagement.cashManagement'],
+    ['dashboard.cashManagement.sweeping.menu', ['/cashManagement/sweeping']],
+    ['dashboard.cashManagement.sweeping.detail'],
+    [structure && structure.alias ? structure.alias : '']
+  ]"
+  class="print"
+>
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="true">
+  <span
+    style="position: absolute; left: 20px"
+    *ngIf="structure && structure.alias && structure.structureId"
+  >
+    <b>{{ structure.alias }} - {{ structure.structureId }}</b>
+  </span>
+</arb-panel-buttons>
+<arb-panel>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="!structureAction">
+      <app-tree-view-configurator-utility
+        [service]="service"
+        (onAllFieldsCreated)="onAllFieldsCreated($event)"
+        (onItemsUpdated)="onItemsUpdated($event)"
+      >
+      </app-tree-view-configurator-utility>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="structureActionRequested">
+      <div
+        class="modal fade in"
+        tabindex="-1"
+        role="dialog"
+        style="display: block; position: static"
+      >
+        <div class="" role="document">
+          <div class="modal-content">
+            <div class="modal-header"></div>
+            <div class="modal-body">
+              <span class="icon -check icon-success"></span>
+              <p>
+                {{
+                  'dashboard.cashManagement.sweeping.confirmAction' +
+                    structureAction | translate
+                }}
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-default btn-wide"
+                (click)="onCancelAction()"
+              >
+                {{
+                  'dashboard.cashManagement.sweeping.cancelAction' | translate
+                }}
+              </button>
+
+              <button
+                class="btn btn-default btn-wide"
+                (click)="onConfirmAction()"
+              >
+                {{
+                  'dashboard.cashManagement.sweeping.confirmAction' | translate
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="structureActionConfirmed">
+      <arb-confirm-panel
+        (finishAction)="onFinish()"
+        [pending]="false"
+        [hasFinishAction]="true"
+      >
+      </arb-confirm-panel>
+    </div>
+  </div>
+</arb-panel>
+
+<arb-buttons *ngIf="true">
+  <!--    <span style="position: absolute; left: 20px;" *ngIf="structure.alias && structure.structureId">-->
+  <!--        <b>{{structure.alias}} - {{structure.structureId}}</b>-->
+  <!--    </span>-->
+  <a class="btn btn-default btn-wide print" (click)="onFinish()">{{
+    'dashboard.cashManagement.sweeping.backButton' | translate
+  }}</a>
+  <button
+    class="btn btn-danger btn-wide print"
+    (click)="onRemoveStructure()"
+    [disabled]="structureAction"
+  >
+    {{ 'dashboard.cashManagement.sweeping.removeStructure' | translate }}
+  </button>
+  <button
+    class="btn btn-primary btn-wide print"
+    (click)="onSaveStructure()"
+    [disabled]="structureAction || !structureModified"
+  >
+    {{ 'dashboard.cashManagement.sweeping.saveStructure' | translate }}
+  </button>
+  <a class="btn btn-primary btn-wide print" (click)="printPdf($event)">
+    <span class="icon -print"></span>
+    <span class="text">{{ 'public.print' | translate }}</span>
+  </a>
+</arb-buttons>

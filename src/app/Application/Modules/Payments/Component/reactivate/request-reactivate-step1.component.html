@@ -1,0 +1,82 @@
+<div class="container-fluid" *ngIf="batch">
+	<div class="sme-head">
+        <div class="sme-head__title">{{ 'payments.bill-payments' | translate}}</div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+	<div class="sme-page-block">
+		<div class="sme-form">		
+			<div class="sme-form__content">
+			<div class="sme-form__form">
+					<div class="sme-form__body">
+						<div class="row">
+                            <fieldset>    
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.biller-name' | translate }}</label>
+                                    <span class="form-control" *ngIf="translate.currentLang === 'en'">{{ batch.addDescriptionEn  }}</span>
+                                     <span class="form-control" *ngIf="translate.currentLang != 'en'">{{ batch.addDescriptionAr  }}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.bill-ref' | translate }}</label>
+                                    <span class="form-control">{{batch.billRef}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.nick-name' | translate }}</label>
+                                    <span class="form-control">{{batch.nickname}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.amount' | translate }}</label>
+                                    <input name="newAmount" class="form-control" [(ngModel)]="batch.newAmount" inputPattern="onlyDecimalNumbers" required [disabled]="batch.paymentType != 'partial'">
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.due-date' | translate }}</label>
+                                    <span class="form-control">{{batch.initiationDate | date:'dd/MM/yyyy'}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                            <div class="col-xs-12 col-sm-4">
+                             <label>{{ 'myProfile.pending_actions.rejectedReason' |
+                                            translate }}</label> 
+                                       <span  class="form-control">{{batch.rejectedReason}}</span>
+                            </div>           
+                            </fieldset>
+                        </div>
+                       
+					</div>
+			</div>		
+			</div>
+		</div>
+    </div>
+    </form>
+</div>	
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+
+
+
+
+

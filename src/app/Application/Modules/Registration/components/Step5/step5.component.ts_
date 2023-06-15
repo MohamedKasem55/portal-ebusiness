@@ -1,0 +1,78 @@
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
+import { TranslateService } from '@ngx-translate/core';
+import { RegistrationService } from "../../../../Modules/Registration/registration.service";
+
+
+@Component({
+    templateUrl: './step5.component.html',
+    styleUrls: ['../../registration.component.scss']
+})
+export class Step5Component implements OnInit, OnDestroy{
+
+    @ViewChild('stepForm', { static: true }) stepForm: NgForm;
+
+    step = 5;
+    formData: any;
+    groupsServices: any[] = [];
+
+    constructor(private service: RegistrationService, public translate: TranslateService) { }
+
+    ngOnInit() {
+      //  console.log(this.formData.validateAdmin.services);
+        const services: any[] = this.formData.validateAdmin.services;
+        const orderServices = services.sort((a, b) => {
+            return (a.group > b.group) ? 1 :
+                (
+                    (a.group === b.group) ?
+                        (a.order > b.order) ? 1 : -1
+                        : -1);
+        });
+
+        this.groupsServices = [];
+        this.groupsServices.push([]);
+        let currentGroup = 0;
+        for (let i = 0; i < orderServices.length - 1; i++) {
+            if (currentGroup != orderServices[i].group - 1) {
+                this.groupsServices.push([]);
+                currentGroup++;
+            }
+            orderServices[i]['check'] = orderServices[i].agreement === 'N' ? false : true;
+            this.groupsServices[currentGroup].push(orderServices[i]);
+        }
+        //console.log(this.groupsServices);
+        if(this.formData.options && this.formData.options.length > 0){
+            this.groupsServices = this.formData.options;
+        }else{
+            this.formData.options = this.groupsServices;
+        }
+        this.formData.limit = ((this.formData.limit && this.formData.limit != 0) ? this.formData.limit : (this.formData.validateAdmin.transferLimit || 0));
+        this.formData.tokenType = this.formData.validateAdmin.tokenType || "S";
+        this.formData.status = this.formData.validateAdmin.status;
+
+        //console.log("quinta pantalla")
+        //console.log(this.formData)
+    }
+
+
+    ngOnDestroy() { }
+
+    valid() {
+        let serviceCheck = false;
+        for (let i = this.formData.options.length - 1; i >= 0 && !serviceCheck; i--) {
+            for (let j = this.formData.options[i].length - 1; j >= 0; j--) {
+                if (this.formData.options[i][j]['check']) {
+                    serviceCheck = true;
+                    break;
+                }
+            }
+        }
+        return this.formData.limit > 0 && serviceCheck;
+    }
+
+    isPrint(){
+        return false;
+    }
+
+}

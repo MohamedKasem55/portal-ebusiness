@@ -1,0 +1,52 @@
+<div class='sme-breadcrumb'>
+  <ol class='breadcrumb'>
+    <li>{{ 'dashboard.transfers' | translate }}</li>
+    <li class='active'>{{ 'uRPay.name' | translate }}</li>
+    <li class='active' *ngIf='wizardStep>1 && payType=="phone"'>{{ 'uRPay.transferByPhone' | translate }}</li>
+    <li class='active' *ngIf='wizardStep>1 && payType=="iban"'>{{ 'uRPay.transferByIBAN' | translate }}</li>
+  </ol>
+</div>
+
+
+<div class='container-fluid'>
+
+  <arb-steps [currentStep]='wizardStep' [steps]="['uRPay.selectType','uRPay.amount',
+        'public.summary','public.finish']">
+  </arb-steps>
+
+  <arb-panel *ngIf='pageName=="OTP"'>
+    <app-secured-authentication *ngIf='generateChallengeAndOTP' [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                [requestValidate]='requestValidate'></app-secured-authentication>
+  </arb-panel>
+
+
+  <uRPayComponentPayType *ngIf='wizardStep==1 && pageName=="STEEPER"' [payType]='payType' [formModel]='formModel'
+                         (modelChange)='payTypeChange($event)'></uRPayComponentPayType>
+
+  <!-- *ngIF && purposes-->
+  <!--  [purposes]='purposes'-->
+  <uRPayComponentPayDetails *ngIf='wizardStep==2  && pageName=="STEEPER" && accounts'
+                            [formModel]='formModel' [accounts]='accounts'
+  ></uRPayComponentPayDetails>
+
+  <uRPayComponentPaySummary *ngIf='wizardStep==3  && pageName=="STEEPER"'
+                            [formModel]='formModel'></uRPayComponentPaySummary>
+
+  <uRPayComponentPayFinish *ngIf='wizardStep==4  && pageName=="STEEPER"'
+                           [formModel]='formModel' [isAuthorize]='isAuthorize()'></uRPayComponentPayFinish>
+
+  <arb-buttons>
+    <button class='btn btn-default btn-wide' type='button' *ngIf='wizardStep>1 && wizardStep<4'
+            (click)='back()'>{{ 'public.back' |  translate}}</button>
+    <button class='btn btn-default btn-wide' type='button' *ngIf='wizardStep!=4'
+            (click)='finish()'>{{ 'public.cancel' |  translate}}</button>
+    <button class='btn btn-primary btn-wide' type='button' [disabled]='valid()' (click)='next()'
+            *ngIf='wizardStep<4'>  {{  'public.proceed' |  translate}}</button>
+    <button class='btn btn-primary btn-wide' type='button' *ngIf='wizardStep==4'
+            (click)='finish()'>{{  'uRPay.toDashBoard' |  translate}}</button>
+
+  </arb-buttons>
+
+</div>
+
+

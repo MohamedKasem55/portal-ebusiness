@@ -1,0 +1,64 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#"
+               [routerLink]="['/wpspayroll/wpspayroll-management']">{{ 'dashboard.wpspayrollManagment'| translate }}</a>
+        </li>
+        <li class="active">{{ 'wpspayroll.modifyEmployee'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid docs-component">
+    <div class="sme-panel">
+        <div class="sme-panel__body">
+            <div class="sme-wizard">
+                <ul class="sme-wizard__steps">
+                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+						<span>
+							<span class="num">1</span>
+							<span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+						</span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+						<span>
+							<span class="num">2</span>
+							<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+						</span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+						<span>
+							<span class="icon -check"></span>
+							<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+						</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modify-employee-step1 *ngIf="step === 1"
+                           [form]="formEmployees"
+                           [banksMap]="banksMap"
+                           [departments]="departments"
+                           [bankList]="this.banksList">
+
+</app-modify-employee-step1>
+
+<app-modify-employee-step2 *ngIf="step === 2"
+                           [form]="formEmployees"
+                           [banksMap]="banksMap"
+                           [departments]="departments">
+
+</app-modify-employee-step2>
+
+<app-modify-employee-step3 *ngIf="step === 3"></app-modify-employee-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()"
+            *ngIf="step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3"
+            [disabled]="employees.length == 0 || !formEmployees.valid">{{'public.next' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 3"
+            [disabled]="employees.length == 0 || !formEmployees.valid">{{'public.finish' | translate}}</button>
+</div>

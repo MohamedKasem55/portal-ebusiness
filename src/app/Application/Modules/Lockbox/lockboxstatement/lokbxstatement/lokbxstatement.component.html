@@ -1,0 +1,394 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.lockbox'| translate }}</li>
+        <li class="active">{{ 'lockbox.menu.lockboxstat'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <!-- search -->
+
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+
+                <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                   class="sme-form__head human-selectable sme-form__title" [ngClass]="{'collapsed': isSearchCollapsed}">
+                    <span>{{ 'public.search' | translate }}</span>
+                </a>
+
+                <div class="sme-form__collapse" id="sme-demo--form--search-criteria-" [collapse]="isSearchCollapsed">
+
+                    <!-- radio button -->
+                    <div class="sme-form__body" style="border-bottom: 2px solid #f9f9f9;background: #fff">
+                        <!-- first set -->
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label style="margin-top:8%">{{  'lockbox.menu.lockbxmach'| translate }}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate" id="terminal" class="form-control" [(ngModel)]="lokbxterminalId"
+                                                   #terminalId="ngModel"
+                                                   name="terminalId">
+                                            <ng-option selected="selected" value="" disabled="disabled">
+                                                --{{ 'public.selectDropdown' | translate }}--
+                                            </ng-option>
+                                            <ng-option *ngFor="let terminals of terminalsComboList"
+                                                       [value]="terminals.serialNumber">
+                                                {{ terminals.terminalIDName }}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <!-- footer -->
+                        <div class="sme-form__actions">
+                            <button class="btn btn-default btn-wide" (click)="reset()">
+                                {{ 'public.reset' | translate }}
+                            </button>
+                            <button class="btn btn-primary btn-wide" (click)="searchListOfStatementData()"
+                                    [disabled]="lokbxterminalId==='' || lokbxterminalId===null || lokbxterminalId===undefined">
+                                {{ 'public.search' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /radio button -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="sme-page-block">
+
+            <div class="sme-data-table">
+
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__title">
+                        {{ 'lockbox.menu.lockboxstat'| translate }}
+                    </div>
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="table" [header]="'lockbox.menu.lockboxstat' | translate"
+                                      [columns]="
+                                                [
+                                                {'title': 'lockbox.menu.civilianId' |  translate | uppercase,'dataKey': 'civilianId'},
+                                                {'title':'lockbox.menu.depositAccount' | translate | uppercase,'dataKey':'depositAccount'},
+                                                {'title':'lockbox.menu.amount' | translate | uppercase,'dataKey':'amount'},
+                                                {'title': 'lockbox.menu.status' |  translate | uppercase,'dataKey': 'status'},
+                                                {'title': 'lockbox.menu.terminalId' |  translate | uppercase,'dataKey': 'terminalId'},
+                                                {'title': 'lockbox.menu.terminalName' |  translate | uppercase,'dataKey': 'terminalName'},
+                                                {'title': 'lockbox.menu.location' |  translate | uppercase,'dataKey':'location1'},
+                                                {'title': 'lockbox.menu.city' |  translate | uppercase,'dataKey': 'city'},
+                                                {'title': 'lockbox.menu.region' |  translate | uppercase,'dataKey': 'region'},
+                                                {'title': 'lockbox.menu.transactionId' |  translate | uppercase,'dataKey': 'transactionId'},
+                                                {'title': 'lockbox.menu.transactionDate' |  translate | uppercase,'dataKey': 'transactionDate'},
+                                                {'title': 'lockbox.menu.transactionTime' |  translate | uppercase,'dataKey': 'transactionTime'},
+                                                {'title':'lockbox.menu.userId' | translate | uppercase,'dataKey':'userId'},
+                                                {'title':'lockbox.menu.userName' | translate | uppercase,'dataKey':'userName'}
+                                                ]">
+                        </table-export>
+                    </div>
+                </div>
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                               #table class="material sme-table sme-table--responsive table"
+                               [rows]="searchlistPage.data"
+                               [columnMode]="defaultColumnMode"
+                               [headerHeight]="60"
+                               [footerHeight]="footerHeight"
+
+                               [rowHeight]="defaultHeight"
+                               [offset]="searchlistPage.page.pageNumber - 1"
+                               [count]="searchlistPage.page.totalElements"
+                               [limit]="searchlistPage.page.pageSize"
+                               [externalPaging]="false"
+                               [externalSorting]="false"
+
+                               [selected]="selected"
+                               (select)="onSelect($event)">
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.civilianId' | translate }}</label>
+                                            <div>
+                                                <span>{{row.civilianId}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.account' | translate }}</label>
+                                            <div>
+                                                <span>{{row.depositAccount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.amount' | translate }}</label>
+                                            <div>
+                                                <span>{{row.amount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.status' | translate }}</label>
+                                            <div>
+                                                <span>{{row.status}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.terminalId' | translate }}</label>
+                                            <div>
+                                                <span>{{row.terminalId}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.terminal_name' | translate }}</label>
+                                            <div>
+                                                <span>{{row.terminalName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.location' | translate }}</label>
+                                            <div>
+                                                <span>{{row.location1}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.city' | translate }}</label>
+                                            <div>
+                                                <span>{{row.city}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.region' | translate }}</label>
+                                            <div>
+                                                <span>{{row.region}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.transactionId' | translate }}</label>
+                                            <div>
+                                                <span>{{row.transactionId}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.transactionDate' | translate }}</label>
+                                            <div>
+                                                <span>{{row.transactionDate | date : 'dd/MM/yyyy'}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.userId' | translate }}</label>
+                                            <div>
+                                                <span>{{row.userId}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{'lockbox.menu.userName' | translate }}</label>
+                                            <div>
+                                                <span>{{row.userName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+                    <!--
+                    <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                                          [resizeable]="false" [headerCheckboxable]="true"
+                                          [checkboxable]="true">
+                    </ngx-datatable-column>
+                    -->
+
+                    <ngx-datatable-column prop="civilianId" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'lockbox.menu.civilianId' | translate }}<br/>
+                                {{'lockbox.menu.account' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span class="mobile-hidden">
+                                {{row.civilianId}}<br/>
+                                {{row.depositAccount}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="amount" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'lockbox.menu.amount' | translate }}<br/>
+                                {{'lockbox.menu.status' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span class="mobile-hidden">
+                                {{row.amount}}<br/>
+                                {{row.status}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="terminalId" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'lockbox.menu.terminalId' | translate }}<br/>
+                                {{'lockbox.menu.terminal_name' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span class="mobile-hidden">
+                                {{row.terminalId}}<br/>
+                                {{row.terminalName}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="location1" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'lockbox.menu.location' | translate }}
+                                    </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="city" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'lockbox.menu.city' | translate }}<br/>
+                                {{'lockbox.menu.region' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span class="mobile-hidden">
+                                {{row.city}}<br/>
+                                {{row.region}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="transactionId" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'lockbox.menu.transactionId' | translate }}<br/>
+                                {{'lockbox.menu.transactionDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span class="mobile-hidden">
+                                {{row.city}}<br/>
+                                {{row.transactionDate | date: 'dd/MM/yyyy'}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <!--
+                    <ngx-datatable-column prop="transactionTime" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'lockbox.menu.transactionTime' | translate }}
+                                    </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    -->
+
+                    <ngx-datatable-column prop="userId" [width]="100">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'lockbox.menu.userId' | translate }}<br/>
+                                {{'lockbox.menu.userName' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span class="mobile-hidden">
+                                {{row.userId}}<br/>
+                                {{row.userName}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount"
+                                     let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)"
+                                        [visiblePagesCount]="visiblePagesCount"
+                                        (change)="table.onFooterPage($event)">
+                                </app-datatable-pager>
+
+                                <div class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{(pageSize > rowCount ? rowCount : pageSize)}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" [(ngModel)]="searchlistPage.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                                <option [value]="100">100</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+
+                </ngx-datatable>
+
+            </div>
+            <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                <!--
+                <button type="button" [routerLink]="['/accounts/posStatement']" class=" btn btn-default btn-wide">
+                    {{ 'public.back' | translate }}
+                </button>
+                -->
+                <button class="btn btn-primary btn-wide" (click)=downloadStatement()
+                        [disabled]="searchlistPage.data.length==0 || this.lokbxterminalId === '' || this.lokbxterminalId === null || this.lokbxterminalId === undefined">
+                    {{'accounts.pos.download' | translate }} </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

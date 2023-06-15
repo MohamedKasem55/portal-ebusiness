@@ -1,0 +1,86 @@
+<arb-breadcrumb [routes]="[
+                        ['dashboard.payments'], ['menu.payments.oneTimePayment.multiple']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps *ngIf="wizardStep" [currentStep]="wizardStep"
+           [steps]="['oneTimePayment.upload', 'oneTimePayment.billDetails', 'public.confirm','public.summary']">
+</arb-steps>
+
+<div class="title">
+    <h2>{{'oneTimePayment.billsDetails' | translate}}</h2>
+</div>
+
+
+<arb-panel *ngIf="wizardStep==1">
+
+    <div class="row padding">
+        <app-select-account [accounts]="accounts" [useOldDesign]="true" (onAccountChange)="onAccountChange($event)">
+        </app-select-account>
+    </div>
+    <div class="sme-form__title">
+        <div class="col-xs-12 col-sm-9 text-left">
+
+        </div>
+        <div class="col-xs-12 col-sm-3 text-right">
+            <button class="btn btn-info btn-wide" (click)="download()">
+                <span class="glyphicon glyphicon-download-alt"></span>&nbsp;&nbsp;
+                <span>{{'oneTimePayment.download' | translate }}</span>
+            </button>
+        </div>
+    </div>
+
+
+    <sheet-import #sheetImporterComponent
+                  [label]="'oneTimePayment.upload' "
+                  [file]="file"
+                  (fileUploaded)="fileUploaded($event)"
+                  [columns]="columns">
+    </sheet-import>
+    <span class="note">{{'oneTimePayment.upload-note' | translate}}</span>
+</arb-panel>
+
+<div *ngIf="wizardStep==4 ">
+    <arb-panel>
+        <div class='sme-form__body'>
+            <div>
+                <div class='sme-wizard__success'>
+                    <span class=' icon -check'></span>
+                    <div></div>
+                    <div>
+                        <p *ngIf="isAuthorized">{{'oneTimePayment.success' | translate }} </p>
+                        <p *ngIf="!isAuthorized">{{'oneTimePayment.pending-authorization' | translate }} </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep==2 ||  wizardStep==3  || (wizardStep ==4 &&  batchListsContainer.toProcess.length>0 ) ">
+
+    <arb-bill-detail-payments [step]="wizardStep" [bills]="bills" [totalAmount]="totalAmount" #BillDetailsPayments
+                              [selectedAccount]="selectedAccount"
+                              [showDelete]="true" [generateChallengeAndOTP]="generateChallengeAndOTP"
+                              [requestValidate]="requestValidate" (onDelete)="delete($event)">
+    </arb-bill-detail-payments>
+
+
+</div>
+
+<arb-buttons class="start">
+    <button *ngIf="wizardStep<4" class="btn btn-default btn-wide" (click)="back()">
+        {{ 'public.back' | translate}}</button>
+
+    <button *ngIf="wizardStep<4" class="btn btn-primary btn-wide" [disabled]="!isValid()"
+            (click)="next()">{{ 'public.next' | translate}}</button>
+
+    <button *ngIf="wizardStep==4" class="btn btn-primary btn-wide"
+            (click)="finish()">{{ 'oneTimePayment.goToDashboard' | translate}}</button>
+
+    <button *ngIf="wizardStep==4" class="btn btn-primary btn-wide"
+            (click)="goToPay()">{{ 'oneTimePayment.payAnotherBills' | translate}}</button>
+
+</arb-buttons>
+

@@ -1,0 +1,30 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-management']">{{ 'dashboard.payrollManagment'| translate }}</a></li>
+        <li class="active">{{ 'payroll.downloadTemplates'| translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block sme-wizard-choices">
+            <div>
+                <ul class="sme-radio-buttons">
+                    <li class="col-md-4">
+                        <div class="sme-radio radio">
+                            <label>
+                            <span class="glyphicon mouseoverblue">&#xe166; <a (click)="emitFile('Payroll_employees_list.xlsm')"> {{'payroll.payrollEmployees' | translate }}</a></span> 
+                            </label>
+                        </div>
+                    </li>
+                    <li class="col-md-4">
+                        <div class="sme-radio radio">
+                            <label>
+                            <span class="glyphicon mouseoverblue">&#xe166; <a (click)="emitFile('Payroll_Upload_File.xlsm')"> {{'payroll.payrollUploadFile' | translate }}</a></span> 
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+                               
+            </div>
+    </div>
+</div>

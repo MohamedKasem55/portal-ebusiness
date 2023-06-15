@@ -1,0 +1,54 @@
+<div class='container-fluid'>
+  <div class='sme-page-block'>
+    <div class='sme-form'>
+
+      <div class='sme-form__content'>
+        <div class='sme-form__form'>
+          <div class='sme-form__body'>
+            <div>
+              <div class='sme-wizard__success'>
+                <span class=' icon -check'></span>
+                <div></div>
+                <div>
+                  <p>{{'financeProduct.newRequest.success' | translate }} </p>
+                  <p>{{'financeProduct.newRequest.dossierID' | translate }} : {{dossierId}}</p>
+                </div>
+                <div>
+                  <p>{{'financeProduct.newRequest.successMsg' | translate : {FinanceType: productType | translate } }} </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<arb-panel>
+
+  <div class='legend marginBottom'>{{ 'financeProduct.newRequest.attachDocuments' | translate }}</div>
+  <div class='row'>
+    <div class='col-xs-12 col-sm-3 uploadItem' *ngFor='let item of mandatoryDocuments'>
+      <div class='form-group'>
+        <label class='lable'>{{ item.name }}</label>
+        <div class='input-group'>
+          <label *ngIf='item.uploadStatus!==1' class='item'>{{item.file}} </label>
+          <label *ngIf='item.uploadStatus===1'
+                 class='item error'>{{'financeProduct.newRequest.again' | translate}} </label>
+          <span class='input-group-btn'>
+                        <div class='fileUpload btn'>
+                            <span *ngIf='item.uploadStatus===2' class=' icon -check greenCheck'></span>
+                            <span *ngIf='item.uploadStatus===0' class='noClick'> 50%</span>
+                            <span (click)='upload(item)' *ngIf='item.uploadStatus===1'>
+                              <img class='redo' src='../../../../../../../assets/img/blue-redo.png' alt=''></span>
+                        </div>
+                    </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</arb-panel>

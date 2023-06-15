@@ -1,0 +1,251 @@
+<arb-panel *ngIf="step!=4">
+    <div class="legend">{{ 'oneTimePayment.amountDetails' | translate }}</div>
+    <div class='row topPadding'>
+        <div *ngIf="!isOneTimePayment" class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+                <label>{{ 'oneTimePayment.numberOfBills' | translate }}</label>
+                <div class='input-group'>
+                    <label>{{ bills.length }}</label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!isOneTimePayment" class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+                <label>{{ 'oneTimePayment.totalAmount' | translate }}</label>
+                <div class='input-group'>
+                    <label>{{ totalAmount | amountCurrency }}</label>
+                </div>
+            </div>
+        </div>
+        <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+                <label>{{ 'oneTimePayment.account' | translate }}</label>
+                <div class='input-group'>
+                    <label>{{ this.selectedAccount['fullAccountNumber'] + ' - ' + (this.selectedAccount['alias'] ? (this.selectedAccount['alias'] + ' - ') : '') + (this.selectedAccount['availableBalance'] | amountCurrency) + ' ' +
+                    accountService.transformComboValue('currencyIso', this.selectedAccount['currency']) }}</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</arb-panel>
+
+<div *ngFor="let bill of bills,index as _index">
+    <arb-panel *ngIf="isOneTimePayment">
+        <div class="legend">{{ 'oneTimePayment.billDetails' | translate }} - {{bill.billRef}}
+            <span *ngIf="step==2 && showDelete" (click)="delete(bill,_index)" class="pull-right human-selectable">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </span>
+        </div>
+        <div class='row topPadding'>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.billProvider' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ translate.currentLang === 'en' ? bill.addDescriptionEn : bill.addDescriptionAr }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.billNumber' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.billRef }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2' *ngIf="step!=4">
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.billAmount' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.amountOriginal }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label *ngIf="step==2"style="color: #1d2232;">{{ 'oneTimePayment.amount' | translate }}</label>
+                    <label *ngIf="step!=2">{{ 'oneTimePayment.amount' | translate }}</label>
+                    <div class='input-group'>
+                        <input class="form-control"
+                            [disabled]="step==3 || step==4"
+                            [maxlength]="18"
+                            [(ngModel)]="bill.billAmount"
+                            inputPattern="onlyPositiveDecimalNumbers"
+                            amount-format/>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="step!=2" class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.vatAmount' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.vatAmount ? bill.vatAmount : '0.00' }}</label>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="step!=2" class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.totalAmount' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.amountPayment }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2' *ngIf="step==4">
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.status' | translate }}</label>
+                    <div class='input-group'>
+                        <label *ngIf="bill.returnCode=='000'"
+                            class="paid">{{ 'oneTimePayment.paid' | translate }}</label>
+                        <label *ngIf="bill.returnCode!='000'"
+                            class="failed">{{ 'oneTimePayment.failed' | translate }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="row">-->
+        <!--                <div class='col-xs-12 col-sm-4'>-->
+
+        <!--                    <label class="sme-checkbox checkbox-inline margin-top">-->
+        <!--                        <input type="checkbox" [ngModel]="bill.save" (ngModelChange)="billSaveChange(bill)"-->
+        <!--                               [disabled]="step==3 "/>-->
+        <!--                        <i aria-hidden="true"></i>-->
+        <!--                        <span class="link">{{ 'oneTimePayment.save' | translate }}</span>-->
+        <!--                    </label>-->
+
+        <!--                </div>-->
+        <!--    </div>-->
+        <div class="row" *ngIf="bill.save">
+            <div class='col-xs-12 col-sm-3 padding'>
+
+                <label>{{ 'oneTimePayment.nickName' | translate }}</label>
+                <div class='input-group'>
+                    <input class="form-control"
+                        [maxlength]="50"
+                        [(ngModel)]="bill.nickName"
+                        type="text"/>
+                </div>
+
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<arb-colapsable-panel *ngIf="!isOneTimePayment" [title]="'oneTimePayment.billsDetails'">
+    <div *ngFor="let bill of bills,index as _index">
+        <div class="legend">{{ 'oneTimePayment.billDetails' | translate }} - {{bill.billRef}}
+            <span *ngIf="step==2 && showDelete" (click)="delete(bill,_index)" class="pull-right human-selectable">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </span>
+        </div>
+        <div class='row topPadding'>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.billProvider' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ translate.currentLang === 'en' ? bill.addDescriptionEn : bill.addDescriptionAr }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.billNumber' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.billRef }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2' *ngIf="step!=4">
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.billAmount' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.amountOriginal }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.amount' | translate }}</label>
+                    <div class='input-group'>
+                        <input class="form-control"
+                               [disabled]="step==3 || step==4"
+                               [maxlength]="18"
+                               [(ngModel)]="bill.billAmount"
+                               inputPattern="onlyPositiveDecimalNumbers"
+                               amount-format/>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.vatAmount' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.vatAmount ? bill.vatAmount : '0.00' }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2'>
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.totalAmount' | translate }}</label>
+                    <div class='input-group'>
+                        <label>{{ bill.amountPayment }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-2' *ngIf="step==4">
+                <div class='form-group'>
+                    <label>{{ 'oneTimePayment.status' | translate }}</label>
+                    <div class='input-group'>
+                        <label *ngIf="bill.returnCode=='000'"
+                               class="paid">{{ 'oneTimePayment.paid' | translate }}</label>
+                        <label *ngIf="bill.returnCode!='000'"
+                               class="failed">{{ 'oneTimePayment.failed' | translate }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="row">-->
+        <!--                <div class='col-xs-12 col-sm-4'>-->
+
+        <!--                    <label class="sme-checkbox checkbox-inline margin-top">-->
+        <!--                        <input type="checkbox" [ngModel]="bill.save" (ngModelChange)="billSaveChange(bill)"-->
+        <!--                               [disabled]="step==3 "/>-->
+        <!--                        <i aria-hidden="true"></i>-->
+        <!--                        <span class="link">{{ 'oneTimePayment.save' | translate }}</span>-->
+        <!--                    </label>-->
+
+        <!--                </div>-->
+        <!--    </div>-->
+        <div class="row" *ngIf="bill.save">
+            <div class='col-xs-12 col-sm-3 padding'>
+
+                <label>{{ 'oneTimePayment.nickName' | translate }}</label>
+                <div class='input-group'>
+                    <input class="form-control"
+                           [maxlength]="50"
+                           [(ngModel)]="bill.nickName"
+                           type="text"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</arb-colapsable-panel>
+
+<div class="row padding" *ngIf="step!=4">
+    <app-levels-table [futureSecurityLevels]="bills[0]?.futureSecurityLevelsDTOList">
+    </app-levels-table>
+</div>
+
+<arb-panel *ngIf="generateChallengeAndOTP && step==3 ">
+    <div class="row padding">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate" #authorization>
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>

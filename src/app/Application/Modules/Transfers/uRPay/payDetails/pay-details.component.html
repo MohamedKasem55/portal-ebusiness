@@ -1,0 +1,153 @@
+<arb-panel>
+  <form autocomplete='off' class='sme-form__form' novalidate>
+    <div class='legend' *ngIf='formModel.controls["type"].value=="phone"'>
+      {{ 'uRPay.transferByPhone' | translate }}  </div>
+    <div class='legend' *ngIf='formModel.controls["type"].value=="iban"'>
+      {{ 'uRPay.transferByIBAN' | translate }}  </div>
+
+    <fieldset [formGroup]='formModel'>
+      <div class='row'>
+
+        <!--Phone-->
+        <div class='col-xs-12 col-sm-6' *ngIf='formModel.controls["type"].value=="phone"'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.phone' | translate }}*</label>
+            <div class='form-group'>
+              <input class='form-control' formControlName='wallet' inputPattern='onlyDigits'
+                  maxlength='10'   placeholder="{{ 'uRPay.phoneHint' | translate }}" />
+            </div>
+          </div>
+          <div
+            *ngIf="formModel.controls.wallet.hasError('required') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.phone' | translate }}</span>
+          </div>
+          <div
+            *ngIf=" formModel.controls.wallet.hasError('pattern') && formModel.controls.wallet.touched"
+            class='alert alert-danger'>
+            <span>{{ 'uRPay.phoneInvalid' | translate }}</span>
+          </div>
+        </div>
+        <!--/Phone-->
+
+        <!--iban-->
+        <div class='col-xs-12 col-sm-6' *ngIf='formModel.controls["type"].value=="iban"'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.iban' | translate }}*</label>
+            <div class='form-group'>
+              <input class='form-control' formControlName='wallet' maxlength='24'
+                     placeholder="{{ 'uRPay.ibanHint' | translate }}" />
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.wallet.hasError('required') && formModel.controls.wallet.touched"
+               class='alert alert-danger'>
+            <span>{{ 'uRPay.iban' | translate }}</span>
+          </div>
+          <div *ngIf="formModel.controls.wallet.hasError('minlength') && formModel.controls.wallet.touched"
+               class='alert alert-danger'>
+            <span>{{ 'uRPay.ibanInvalid' | translate }}</span>
+          </div>
+        </div>
+        <!--/iban-->
+
+        <!--WalletCustomerName-->
+        <div class='col-xs-12 col-sm-6' >
+          <div class='form-group'>
+            <label>{{ 'uRPay.walletCustomerName' | translate }}</label>
+            <div class='form-group'>
+              <input class='form-control' formControlName='walletCustomerName'/>
+            </div>
+          </div>
+        </div>
+        <!--/WalletCustomerName-->
+      </div>
+      <div class=' row'>
+        <!-- Accounts -->
+        <div class='col-xs-12 col-sm-6'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.account' | translate }}*</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='account'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor='let item of accounts' [value]='item'>
+                  {{item.fullAccountNumber}}{{(item.alias != '' ? ' - ' +
+                  item.alias : '')}} {{(item.inquiry ? (' - ' +
+                  (item.availableBalance | amountCurrency:item.currency)) : '')}}
+                  {{(item.inquiry ? ('currencyIso' | modelPipe:item.currency) : '')}}
+                </ng-option>
+              </ng-select>
+            </div>
+            <div *ngIf="formModel.controls.account.hasError('required') && formModel.controls.account.touched"
+                 class='alert alert-danger'>
+              <small> {{ 'uRPay.account' | translate }} {{ 'uRPay.required' | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- /Accounts -->
+
+        <!-- Details -->
+        <div class='col-xs-12 col-sm-6'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.details' | translate }}</label>
+            <div class='form-control'>
+              <input class='form-control' formControlName='details' maxlength='150'
+                     placeholder="{{ 'uRPay.detailsHint' | translate }}" />
+            </div>
+          </div>
+        </div>
+        <!-- /Details -->
+
+        <!-- Purpose -->
+<!--        <div class='col-xs-12 col-sm-6'>-->
+<!--          <div class='form-group'>-->
+<!--            <label>{{ 'uRPay.purpose' | translate }}*</label>-->
+<!--            <div class='form-control'>-->
+<!--              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"-->
+<!--                         formControlName='purpose'>-->
+<!--                <ng-option selected='selected' value='' disabled='disabled'>-->
+<!--                  &#45;&#45;{{ 'public.selectOption' | translate }}&#45;&#45;-->
+<!--                </ng-option>-->
+<!--                <ng-option *ngFor='let item of purposes' [value]='item'>-->
+<!--                  <span *ngIf='translate.currentLang=="ar"'> {{item.purposeDescriptionAr}}</span>-->
+<!--                  <span *ngIf='translate.currentLang!="ar"'> {{item.purposeDescriptionEn}}</span>-->
+<!--                </ng-option>-->
+<!--              </ng-select>-->
+<!--            </div>-->
+<!--            <div *ngIf="formModel.controls.purpose.hasError('required') && formModel.controls.purpose.touched"-->
+<!--                 class='alert alert-danger'>-->
+<!--              <small> {{ 'uRPay.purpose' | translate }} {{ 'uRPay.required' | translate }}-->
+<!--              </small>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- /Purpose -->
+
+      </div>
+
+      <div class='row'>
+        <!-- Amount -->
+        <div class='col-xs-12 col-sm-6'>
+          <div class='form-group'>
+            <label>{{ 'uRPay.amountSAR' | translate }}*</label>
+            <div class='form-control'>
+              <input class='form-control' formControlName='amount' placeholder="{{ 'uRPay.amountHint' | translate }}"
+                     inputPattern='onlyPositiveDecimalNumbers' amount-format />
+            </div>
+          </div>
+          <div
+            *ngIf="(formModel.controls.amount.hasError('required') || formModel.controls.amount.hasError('min')) && formModel.controls.amount.touched"
+            class='alert alert-danger'>
+            <small>   {{'uRPay.amount' | translate}} {{ 'uRPay.required' | translate }}
+            </small>
+          </div>
+        </div>
+        <!-- /Amount -->
+      </div>
+
+    </fieldset>
+  </form>
+</arb-panel>

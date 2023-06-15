@@ -1,0 +1,144 @@
+<arb-breadcrumb [routes]="[
+['dashboard.payments'],
+['dashboard.governmentRevenue', ['/government-revenue']],
+['governmentRevenue.previousPayments']
+]">
+</arb-breadcrumb>
+<arb-panel-buttons>
+    <a class="btn btn-primary btn-wide"
+       [routerLink]="['/government-revenue/new-payment']">{{ 'governmentRevenue.newPayment' | translate }}</a>
+    <a class="btn btn-primary btn-wide"
+       [routerLink]="['/government-revenue/request-status']">{{ 'governmentRevenue.requestStatus' | translate }}</a>
+</arb-panel-buttons>
+<arb-table-panel [title]="'governmentRevenue.previousPaymentsTitle'">
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #paymentTable [rows]="paymentPage.data"
+                   [columnMode]="defaultColumnMode" class="material sme-table sme-table--responsive table" [rowHeight]="defaultHeight"
+                   [headerHeight]="30" [footerHeight]="footerHeight" [externalPaging]="true"
+                   [count]="paymentPage.page.totalElements" [offset]="paymentPage.page.pageNumber"
+                   (page)='setPage($event)'
+                   [limit]="paymentPage.page.pageSize"  [rowIdentity]="getIdFunction()">
+
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{ 'governmentRevenue.accountFrom' | translate }}</label>
+                                <div>
+                                <span class="human-selectable"><a
+                                        (click)="selectPreviousPayment(row)">{{ row.accountNumber }}</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{ 'governmentRevenue.bank' | translate }}</label>
+                                <div>
+                                    <span>{{ row.beneficiaryBank}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{ 'governmentRevenue.totalAmount' | translate }}</label>
+                                <div>
+                                    <span>{{ row.totalAmount  | amountCurrency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{ 'public.status' | translate }}</label>
+                                <div>
+                                    <span>{{row.status | statusPipe}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="accountNumber">
+            <ng-template ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{ 'governmentRevenue.accountFrom' | translate }}</span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <a class="human-selectable mobile-hidden text-align-center"
+                   (click)="selectPreviousPayment(row)"> {{value}}</a>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="beneficiaryBank">
+            <ng-template ngx-datatable-header-template>
+							<span class="datatable-header-cell-wrapper">
+									{{ 'governmentRevenue.bank' | translate }}
+                            </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="totalAmount">
+            <ng-template ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+									{{ 'governmentRevenue.totalAmount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value | amountCurrency}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="status">
+            <ng-template ngx-datatable-header-template>
+							<span class="datatable-header-cell-wrapper">
+									{{ 'public.status' | translate }}
+								</span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span class="text">{{value | statusPipe}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount"
+                         let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage"
+                            [visiblePagesCount]="visiblePagesCount"
+                            [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                            (change)="paymentTable.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{paymentPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+										<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="paymentPage.page.pageSize"
+                                                        (change)="this.setPage(null)">
+														<option [value]="10">10</option>
+														<option [value]="20">20</option>
+														<option [value]="50">50</option>
+												</select>
+										</div>
+
+									</span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</arb-table-panel>
+

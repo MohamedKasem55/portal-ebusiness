@@ -1,0 +1,171 @@
+<!-- BREADCRUMB -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>
+            {{ 'myProfile.myProfile' | translate }}
+        </li>
+        <li><a class="human-selectable" href="#"
+               [routerLink]="['/myprofile/alerts']">{{ 'myProfile.alerts.manageAlerts' | translate }}</a></li>
+        <li class="active">{{ 'myProfile.alerts.delete' | translate }}</li>
+    </ol>
+</div>
+<!-- BREADCRUMB -->
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- Elemento a iterar -->
+        <!-- sme-form -->
+        <form autocomplete="off" class="sme-form__form" [formGroup]="formAlert" (ngSubmit)="delete()">
+            <div formArrayName="secretLairs">
+                <div class="sme-form" *ngFor="let alert of formAlert['controls'].secretLairs['controls']; let i=index"
+                     [formGroupName]="i">
+                    <div class="sme-form__title">
+                        <div class="col-xs-12 col-sm-6">{{ 'myProfile.alerts.alert' |
+                            translate }} {{i + 1}}</div>
+                    </div>
+                    <div class="sme-form__content">
+                        <div>
+
+                            <a class="sme-form__close btn"> <span class="icon -close"></span>
+                            </a>
+                            <div class="sme-form__body">
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{
+                                                'companyAdmin.user.mobile' | translate }}</label>
+
+                                            <!-- sme-select -->
+
+                                            <input class="form-control" formControlName="mobile" [disabled]="true"/>
+
+
+                                            <!-- ./sme-select -->
+
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{
+                                                'public.account' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div class="sme-input form-control">
+                                                <input id="search-criteria-collapsed-input-date" type="text" name=""
+                                                       class="form-control" formControlName="notificationAccount"
+                                                       [disabled]="true">
+
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{
+                                                'public.language' | translate }}</label>
+
+                                            <!-- sme-select -->
+                                            <div class="sme-input form-control">
+                                                <input id="search-criteria-collapsed-input-date" type="text" name=""
+                                                       class="form-control" formControlName="language"
+                                                       [disabled]="true">
+                                            </div>
+                                            <!-- ./sme-select -->
+
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                                <div formArrayName="secretNotifLairs">
+                                    <div class="row" style="align-items: center;display:flex"
+                                         *ngFor="let notifications of alert.controls.secretNotifLairs['controls']; let j=index"
+                                         [formGroupName]="j">
+                                        <div class="col-xs-1 col-sm-1">
+                                            <div class="form-group">
+                                                <input id="search-criteria-collapse-input-check-type"
+                                                       class="checkbox form-check" type="checkbox"
+                                                       formControlName="notificationFlag" [disabled]="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-11 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'public.type' | translate }}</label>
+                                                <div>
+                                                    <input type="text" *ngIf="this.translate.currentLang == 'en'"
+                                                           class="form-control" formControlName="englishDescription"
+                                                           [disabled]="true"/>
+                                                    <input type="text" *ngIf="this.translate.currentLang == 'ar'"
+                                                           class="form-control" formControlName="arabicDescription"
+                                                           [disabled]="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'public.amount' | translate }}</label>
+
+                                                <div>
+                                                    <input type="text"
+
+                                                           class="form-control" formControlName="notificationAmount"
+                                                           [disabled]="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- ./sme-form -->
+            <!-- ./Elemento a iterar -->
+        </form>
+
+        <div class="sme-form__actions">
+            <button class="btn btn-default btn-wide"
+                    [routerLink]="['/myprofile/alerts']">{{ 'public.cancel' |
+                translate }}</button>
+            <button class="btn btn-primary btn-wide" (click)="delete()">{{
+                'public.delete' | translate }}</button>
+        </div>
+
+        <!-- OVERLAY BALANCE CERTIFICATE REQUEST -->
+        <div class="modal fade" bsModal #requestSubmittedModal="bs-modal" tabindex="-1" role="dialog"
+             aria-labelledby="requestSubmittedModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="icon-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="icon-check icon-success"></span>
+                        <p>{{ 'myProfile.alerts.modalDeleteOK' | translate }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-wide" [routerLink]="['/myprofile/alerts']"
+                                data-dismiss="modal" aria-label="Close">{{ 'public.finish' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

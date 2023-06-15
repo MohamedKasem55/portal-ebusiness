@@ -1,0 +1,46 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>
+            <a class="human-selectable" href="#" routerLinkActive="active"
+               [routerLink]="['/companyadmin']">{{ 'companyAdmin.companyAdmin' | translate }}</a>
+        </li>
+        <li class="active">{{ 'companyAdmin.alerts.title' | translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--form--user1 -->
+        <!-- sme-form -->
+        <div class="sme-form">
+            <div class="sme-form__title"></div>
+
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <li>
+                                    <a class="human-selectable" href="#" routerLinkActive="active"
+                                       [routerLink]="['/companyadmin/alerts/registration']">{{ 'companyAdmin.alerts.smsRegistration' | translate }}</a>
+                                </li>
+                                <li>
+                                    <a class="human-selectable" href="#" routerLinkActive="active"
+                                       [routerLink]="['/companyadmin/alerts/renewal']">{{ 'companyAdmin.alerts.smsRenewal' | translate }}</a>
+                                </li>
+                                <li>
+                                    <a class="human-selectable" href="#" routerLinkActive="active"
+                                       [routerLink]="['/companyadmin/alerts/report']">{{ 'companyAdmin.alerts.smsReport' | translate }}</a>
+                                </li>
+                                <li>
+                                    <a class="human-selectable" href="#" routerLinkActive="active"
+                                       [routerLink]="['/companyadmin/alerts/desactivate']">{{ 'companyAdmin.alerts.smsDesactivateProcess' | translate }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

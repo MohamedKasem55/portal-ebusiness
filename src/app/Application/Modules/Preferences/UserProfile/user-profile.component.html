@@ -1,0 +1,30 @@
+<ng-template #checkboxesCell let-row="row" let-value="value" let-i="index">
+
+    <label class="sme-checkbox checkbox-inline margin-xs" *ngFor="let item of value">
+        <input type="checkbox" [checked]="item" disabled>
+        <i aria-hidden="true"></i>
+        <span class="visible-xs"></span>
+    </label>
+
+</ng-template>
+
+
+<div class="sme-head">
+    <div class="sme-head__title">
+        <h2>{{ 'dashboard.userProfile'| translate }}</h2>
+    </div>
+</div>
+
+<arb-panel *ngIf="messageError?.code">
+    <div class="alert alert-danger">
+        <small>{{messageError['code']}} {{messageError['description']}}</small>
+    </div>
+</arb-panel>
+
+<company-admin-user-management-edit-form [formModel]="formModel"
+                                         [userData]="userData"
+                                         [formAction]="'profile'"
+                                         [combosData]="combosData"
+                                         [messageError]="messageError"
+                                         [enabled]="false">
+</company-admin-user-management-edit-form>

@@ -1,0 +1,455 @@
+<app-duplicate-bulkPayment [duplicateData]="initPayment.suspiciousPendingDuplicatedFiles"
+                           *ngIf="initPayment.suspiciousPendingDuplicatedFiles && initPayment.suspiciousPendingDuplicatedFiles.length>0"></app-duplicate-bulkPayment>
+
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'payroll.uploadAFile' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="batchName">{{ 'payroll.batchName' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.batchName}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                                for="batchName">{{ 'payments.bulkPaymentUpload.currentStatus' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.status}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                                for="batchName">{{ 'payments.bulkPaymentUpload.valueDate' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.paymentDate | dateFormat:'dd/MM/yyyy'}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                                for="batchName">{{ 'payments.bulkPaymentUpload.deductAccount' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.accountNumber}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                                for="batchName">{{ 'payments.bulkPaymentUpload.remark' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.remarks}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'payments.bulkPaymentUpload.customerReference' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.fileHeader.fileReference}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                                for="batchName">{{ 'payments.bulkPaymentUpload.customerCIC' | translate }}</label>
+                                        <span id="batchName"
+                                              class="form-control">{{initPayment.bulkPaymentsBatchDTO.fileHeader.companyProfile}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-levels-table [futureSecurityLevels]="initPayment.bulkPaymentsBatchDTO.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'payroll.employeeList' | translate }}
+                </div>
+
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="uploadFilePageTable" [header]="'payroll.employeeList' | translate"
+                                  [columns]="[
+                                  {'title':'payments.bulkPaymentUpload.beneficiaryName' | translate , 'dataKey': 'beneficiaryName'},
+                                  {'title':'payments.bulkPaymentUpload.civilianID' | translate , 'dataKey': 'civilianId'},
+                                  {'title':'payments.bulkPaymentUpload.bank' | translate , 'dataKey': 'bankCode'},
+                                  {'title':'payments.bulkPaymentUpload.accountNumber' | translate , 'dataKey': 'account'},
+                                  {'title':'payments.bulkPaymentUpload.purpose' | translate, 'dataKey': 'paymentPurpose'},
+                                  {'title':'payments.bulkPaymentUpload.beneficiaryRemarks' | translate , 'dataKey': 'beneficiaryRemarks'},
+                                  {'title':'payments.bulkPaymentUpload.amount' | translate , 'dataKey': 'amount'}
+                                ]">
+                    </table-export>
+                </div>
+            </div>
+
+            <div class="sme-table table headerDataTable">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #uploadFilePageTable
+                               class="material sme-table sme-table--responsive table" [rows]="uploadFilesPage.data"
+                               [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                               [rowHeight]="defaultHeight"
+                               [externalPaging]="false" [externalSorting]="false"
+                               [count]="uploadFilesPage.page.totalElements"
+                               [limit]="uploadFilesPage.page.totalElements">
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                     ngx-datatable-row-detail-template>
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.beneficiaryName' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.beneficiaryName }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.civilianID' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.civilianId }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.bank' | translate }}</label>
+                                            <div>
+                                                <span>{{'payrollBankCode'| modelPipe:row.bankCode }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.accountNumber' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.account }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.purpose' | translate }}</label>
+                                            <div>
+                                                <span>{{ 'bulkFilePurpose' | modelPipe:row.paymentPurpose }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.beneficiaryRemarks' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.beneficiaryRemarks }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                            >{{'payments.bulkPaymentUpload.amount' | translate }}</label>
+                                            <div>
+                                                <span>{{row.amount | amountCurrency}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+                    <ngx-datatable-column prop="beneficiaryName">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.beneficiaryName' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="civilianId">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.civilianID' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="bankCode">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.bank'| translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>{{  'payrollBankCode' | modelPipe:value }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="account">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.accountNumber' |translate}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="paymentPurpose" [width]="250">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.purpose' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>{{  'bulkFilePurpose' | modelPipe:value }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="beneficiaryRemarks">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.beneficiaryRemarks' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="beneficiaryReference">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.beneficiaryReference' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="amount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'payments.bulkPaymentUpload.amount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span>{{ value | amountCurrency }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)"
+                                        (change)="uploadFilePageTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{this.uploadFilesPage.page.size}} {{ 'public.ofLabel' | translate}}
+                                        {{rowCount}}</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'payroll.summaryAndFees' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.noofTransfers' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsDetailsDTO.numRajhiTransfers + initPayment.bulkPaymentsDetailsDTO.numNonRajhiTransfers
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.totalAmount' | translate }}</label>
+                                        <span class="form-control"
+                                        >{{initPayment.bulkPaymentsDetailsDTO.totalAmount | amountCurrency }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.noofRajhiTransfers' | translate }}</label>
+                                        <span
+                                                class="form-control">{{initPayment.bulkPaymentsDetailsDTO.numRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.totalNoofRajhiTransfers' | translate }}</label>
+                                        <span class="form-control"
+                                        >{{initPayment.bulkPaymentsDetailsDTO.totalNumRajhi | amountCurrency }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.noofLocalBankTransfers' | translate }}</label>
+                                        <span
+                                                class="form-control">{{initPayment.bulkPaymentsDetailsDTO.numNonRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.totalNoofLocalBankTransfers' | translate }}</label>
+                                        <span class="form-control"
+                                        >{{initPayment.bulkPaymentsDetailsDTO.totalNumNonRajhi | amountCurrency }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.feesforRajhiTransfers' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.rajhiFeesRecord | amountCurrency}}</span>
+                                        <app-vat-calculator
+                                                [fee]="initPayment.bulkPaymentsBatchDTO.rajhiFeesRecord"></app-vat-calculator>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.totalfeesforRajhiTransfers' | translate }}</label>
+                                        <span
+                                                class="form-control">{{initPayment.bulkPaymentsBatchDTO.rajhiFeesAmount | amountCurrency}}</span>
+                                        <app-vat-calculator
+                                                [fee]="initPayment.bulkPaymentsBatchDTO.rajhiFeesAmount"></app-vat-calculator>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.feesfornoneRajhiTransfers' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.localFeesRecord | amountCurrency}}</span>
+                                        <app-vat-calculator
+                                                [fee]="initPayment.bulkPaymentsBatchDTO.localFeesRecord"></app-vat-calculator>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.totalfeesfornoneRajhiTransfers' | translate }}</label>
+                                        <span class="form-control">{{initPayment.bulkPaymentsBatchDTO.localFeesAmount | amountCurrency}}</span>
+                                        <app-vat-calculator
+                                                [fee]="initPayment.bulkPaymentsBatchDTO.localFeesAmount"></app-vat-calculator>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bulkPaymentUpload.totalEstimatedAmount' | translate }}</label>
+                                        <span class="form-control"
+                                        >{{initPayment.bulkPaymentsDetailsDTO.totalEstimated | amountCurrency}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" *ngIf="generateChallengeAndOTP">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'payments.bulkPaymentUpload.verification' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                                                    [requestValidate]="requestValidate" #authorization>
+                                        </app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

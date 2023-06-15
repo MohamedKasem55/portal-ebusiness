@@ -1,0 +1,38 @@
+.sme-export-actions {
+  .btn {
+    height: 35px;
+    min-width: 0;
+
+    background: #fff;
+    color: #172328;
+
+    padding: 7px 10px;
+
+    .icon {
+      vertical-align: top;
+      @include icon-size(19px);
+    }
+
+    .text {
+      vertical-align: top;
+      display: inline-block;
+      padding: 3px;
+
+      @if $dir != ltr {
+        line-height: 14px;
+        padding: 0;
+      }
+    }
+
+    &.btn-export--xlsx .icon {
+      color: #02955f;
+    }
+    &.btn-export--pdf .icon {
+      color: #db5565 !important;
+    }
+
+    & + .btn {
+      margin-#{$left}: 8px;
+    }
+  }
+}

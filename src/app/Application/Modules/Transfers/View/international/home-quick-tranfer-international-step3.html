@@ -1,0 +1,234 @@
+<form autocomplete="off" autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+    <div formArrayName="beneficiaries">
+        <div *ngFor="let item of form.controls.beneficiaries['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="sme-form">
+                    <div class="sme-form__form" style="background-color: #EEF0F7">
+                        <a class="sme-form__close btn" (click)="removeTransfer(i)">
+                            <span class="icon -close"></span>
+                        </a>
+                        <div class="sme-form__title">{{'transfer.transferTo' | translate}}:
+                            {{beneficiaries[i].beneficiaryFullName}} - {{'transfer.accountTo' | translate}}:
+                            {{beneficiaries[i].beneficiaryAccountCode}} - {{'transfer.bankName' | translate}}:
+                            {{beneficiaries[i].bankName}} - {{'public.country' | translate}}:
+                            {{'sadadOLPCountryCode' | modelPipe: beneficiaries[i].countryCode}}
+                        </div>
+
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">{{
+                                                    'transfer.accountFrom' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div class="form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="accountFrom" required="required"
+                                                               (change)="enableAmount(form, i)">
+                                                        <ng-option selected="selected" value="" disabled="disabled">
+                                                            --{{ 'public.selectAccount' | translate }}--
+                                                        </ng-option>
+                                                        <ng-container *ngFor="let account of accountsFrom">
+                                                            <ng-option
+                                                                    *ngIf=" account.value.currency == '608' || account.value.currency == beneficiaries[i].beneficiaryCurrency"
+                                                                    [value]="account.key">
+                                                                {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}
+                                                                {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}}
+                                                                {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                                                            </ng-option>
+                                                        </ng-container>
+                                                    </ng-select>
+                                                    <div *ngIf="item.controls.accountFrom.hasError('required') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.error.accountFromRequired' | translate }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-2">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">{{
+                                                    'transfer.amount' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input class="form-control"
+                                                           formControlName="amount" [maxlength]="18"
+                                                           inputPattern="onlyPositiveDecimalNumbers"
+                                                           amount-format/>
+                                                    <div *ngIf="item.controls.amount.hasError('required') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{ 'error.amountRequired' | translate }} </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('min') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.minValue' | translate }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('max') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.maxValue' | translate :{value: transfersLimit[i]} }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('pattern') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric' | translate }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <!-- CURRENCY -->
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ 'transfer.currency' | translate }}
+                                                </label>
+                                                <div class=" form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="currency" required>
+                                                        <ng-option selected value disabled>
+                                                            --{{ 'public.selectDropdown' | translate }}--
+                                                        </ng-option>
+                                                        <ng-option
+                                                                *ngFor="let op of totalCurrencies[i]; let j = index;"
+                                                                [value]="op.currencyCode">
+                                                            {{op.currencyName}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /CURRENCY -->
+                                        <!-- PROPOSE -->
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ 'transfer.purpose' | translate }}
+                                                </label>
+                                                <div class=" form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="propose"
+                                                               required>
+                                                        <ng-option selected value disabled>
+                                                            --{{ 'public.selectDropdown' | translate }}--
+                                                        </ng-option>
+                                                        <ng-option *ngFor="let row of reasons[i]"
+                                                                   [value]="this.translate.currentLang =='ar' ?  row.transferReasonsAr : row.transferReasonsEn"
+                                                                   [innerHTML]=" this.translate.currentLang =='ar' ? row.purposeDescriptionAr : row.purposeDescriptionEn">
+                                                        </ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="item.controls.propose.hasError('required') && item.controls.propose.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{ 'error.purposeRequired' | translate }} </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- PROPOSE -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.remarks' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input class="form-control"
+                                                           formControlName="remarks" maxlength="50" />
+
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.email' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input class="form-control" [disabled]="true"
+                                                           [value]="item.controls.email.value" maxlength="50"/>
+                                                </div>
+                                                <div *ngIf="item.controls.email.hasError('incorrectMailFormat')  &&  item.controls.email.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'public.email' | translate }}{{ 'error.formatNotValid' | translate }}</small>
+                                                </div>
+                                                <div *ngIf="item.controls.email.hasError('maxlength')  &&  item.controls.email.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'public.email' | translate }}{{ 'error.maxlength' | translate:{size: 50} }}</small>
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <!-- ADDITIONAL DATA -->
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="isAdditionalInfo(item.controls.propose.value,i)">
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ getLabelAdditionalInfo1(item.controls.propose.value) }}
+                                                </label>
+                                                <div>
+                                                    <input class="form-control"
+                                                           formControlName="additional1" maxlength="20"/>
+                                                    <div *ngIf="item.controls.additional1.hasError('required') && item.controls.additional1.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{getLabelAdditionalInfo1(item.controls.propose.value) }}{{ 'error.required' | translate }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.additional1.hasError('pattern')  &&  item.controls.additional1.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'error.onlyEnglish' | translate }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="isAdditionalInfo(item.controls.propose.value,i)">
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ getLabelAdditionalInfo2(item.controls.propose.value) }}
+                                                </label>
+                                                <div>
+                                                    <input class="form-control"
+                                                           formControlName="additional2" maxlength="20"/>
+                                                    <div *ngIf="item.controls.additional2.hasError('required') && item.controls.additional2.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{getLabelAdditionalInfo2(item.controls.propose.value) }}{{ 'error.required' | translate }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.additional2.hasError('pattern')  &&  item.controls.additional2.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'error.onlyEnglish' | translate }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ADDITIONAL DATA -->
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ./sme-form -->
+            </div>
+        </div>
+    </div>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide"
+                (click)="cancel()">{{'public.back' | translate }}</button>
+
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!form.valid">{{buttonLabel}}</button>
+
+    </div>
+</form>

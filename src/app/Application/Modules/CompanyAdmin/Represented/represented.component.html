@@ -1,0 +1,189 @@
+<div class='sme-breadcrumb'>
+  <ol class='breadcrumb'>
+    <li>{{ 'represented.representatives' | translate }}</li>
+    <li class='active'>{{ 'represented.view' | translate }}</li>
+  </ol>
+</div>
+
+<div class='sme-page-block' *ngIf='!showNoData'>
+  <div class='sme-form'>
+    <div class='sme-form__content'>
+      <a (click)='isSearchCollapsed = !isSearchCollapsed'
+         class='sme-form__head human-selectable sme-form__title'
+         [ngClass]="{'collapsed': isSearchCollapsed}"> <span>{{ 'public.search' | translate }}</span>
+      </a>
+      <div class='sme-form__collapse' id='sme-demo--form--search-criteria-'
+           [collapse]='isSearchCollapsed'>
+        <form autocomplete='off' #RepSearch='ngForm' class='sme-form__form' novalidate>
+          <div class='sme-form__body'>
+            <div class='row'>
+              <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                  <label>{{ 'represented.type' | translate  }}</label>
+
+                  <!-- Rep TYPE -->
+                  <ng-select class='form-control' name='repType' [clearable]='false'
+                             [(ngModel)]='repType'>
+                    <!--    (change)='onChangeRepType($event.target)'-->
+                    <ng-option [value]="'ALl'">{{
+                      'represented.ALL' | translate }}
+                    </ng-option>
+                    <ng-option [value]="'ACTIVE'">{{
+                      'represented.ACTIVE' | translate }}
+                    </ng-option>
+                    <ng-option [value]="'NOT_ACTIVE'">{{
+                      'represented.NOT_ACTIVE' | translate }}
+                    </ng-option>
+                    <ng-option [value]="'EXPIRED'">{{
+                      'represented.EXPIRED' | translate }}
+                    </ng-option>
+                  </ng-select>
+                  <!-- /Rep TYPE -->
+
+                </div>
+              </div>
+            </div>
+            <div class='sme-form__actions'>
+              <button type='button' (click)='resetValues()' class='btn btn-default btn-wide'>
+                {{ 'public.reset' | translate }}
+              </button>
+              <button type='button' (click)='onChangeRepType()' class='btn btn-primary btn-wide'>
+                {{ 'public.search' | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<arb-panel>
+  <div *ngIf='showNoData' class='noData'>
+    <img class='img' src='img/infoIcon.svg' alt='' />
+    <p>{{'represented.no-data' | translate }} </p>
+  </div>
+  <div class='addBtn'>
+    <button class='btn btn-primary btn-wide' type='button' *ngIf='showNoData' (click)='addNew()'>{{
+      'represented.add-your-first' | translate}}</button>
+    <button class='btn btn-primary btn-wide' type='button' *ngIf='!showNoData' (click)='addNew()'>{{
+      'represented.add' | translate}}</button>
+  </div>
+</arb-panel>
+
+
+<arb-panel *ngIf='!showNoData'>
+  <div class='table_head'>{{ 'represented.representatives' | translate }}</div>
+  <div class='sme-data-table'>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #AccountTable
+                   class='material sme-table sme-table--responsive table' [rows]='repList' [headerHeight]='30'
+                   [footerHeight]='footerHeight' [columnMode]="'force'" [rowHeight]='defaultHeight'
+                   [externalPaging]='false' [count]='repList.length' [externalSorting]='false'>
+
+      <ngx-datatable-column
+        [width]='80'
+        [sortable]='false'
+        [canAutoResize]='false'
+        [draggable]='false'
+        [resizeable]='false'>
+        <ng-template ngx-datatable-header-template let-value='value'>
+          <label class='addPadding'>
+            <input type='checkbox' [checked]='isAllSelected' (change)='selectAll()' />
+          </label>
+        </ng-template>
+        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+          <label class='addPadding'>
+            <input type='checkbox'
+                   [checked]='row.enabled'
+                   (change)='onChangeRow(row)' />
+          </label>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='name' [width]='500' [resizeable]='false' [canAutoResize]='false'
+                            headerClass='text-align-center'>
+        <ng-template ngx-datatable-header-template>
+                            <span class='addPadding datatable-header-cell-wrapper'>
+                                {{'represented.name' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span class='addPadding select' (click)='showDetails(row)'>
+                                {{row.repGivenName}} {{row.repFamilyName}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='id' [resizeable]='false'
+                            headerClass='text-align-center'>
+        <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.idNumber' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.repIDNum}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='createdBy' [resizeable]='false'
+                            headerClass='text-align-center'>
+        <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.createdBy' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.repUsrNm}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+
+      <ngx-datatable-column prop='createdDate' [resizeable]='false' [width]='200' [canAutoResize]='false'
+                            headerClass='text-align-center'>
+        <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'represented.createdDate' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.repCrtnDate |  date:'dd/MM/yyyy'}}
+                            </span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column prop='status' [resizeable]='false' [width]='150' [canAutoResize]='false'
+                            headerClass='text-align-center'>
+        <ng-template ngx-datatable-header-template>
+                            <span class='addPadding datatable-header-cell-wrapper'>
+                                {{'represented.status' | translate }}
+                            </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-row='row'>
+          <div class='statusSpan' [ngClass]="row.repSttsCd=='ACTIVE'? 'greenSpan':'yellowSpan'">
+                                  <span>
+                                      {{'represented.' + row.repSttsCd | translate}}
+                                  </span>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+
+    </ngx-datatable>
+
+  </div>
+</arb-panel>
+
+<arb-buttons *ngIf='isItemSelected || isAllSelected'>
+  <button class='btn btn-primary btn-wide' type='button'
+          (click)='delete()'>{{ 'represented.delete' |  translate}}</button>
+</arb-buttons>
+
+<represented-delete [show]='showDelete' (deleteAction)='deleteAction($event)'></represented-delete>

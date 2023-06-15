@@ -1,0 +1,219 @@
+<form autocomplete="off" [formGroup]="form" (ngSubmit)="submit()">
+
+    <div formArrayName="beneficiaries">
+        <div *ngFor="let item of form['controls'].beneficiaries['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="sme-form">
+                    <div class="sme-form__form" style="background-color: #EEF0F7">
+                        <div class="sme-form__title">{{'transfer.transferTo' | translate}}
+                            {{beneficiaries[i].beneficiaryFullName}}
+
+                        </div>
+
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-5">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.accountFrom' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div class="form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" id="transfer-account-from" formControlName="accountFrom">
+                                                        <ng-option selected="selected" value="" disabled="disabled">
+                                                            --{{ 'public.selectAccount' | translate }}--
+                                                        </ng-option>
+                                                        <ng-option *ngFor="let account of accountsFrom"
+                                                                   [value]="account.key">
+                                                            {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}
+                                                            {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}}
+                                                            {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                                                        </ng-option>
+                                                    </ng-select>
+                                                    <div *ngIf="item.controls.accountFrom.hasError('required') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.accountFrom' | translate }}{{ 'error.required' | translate }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'transfer.amountInCurrency' | translate:{value: ('currencyIso' | modelPipe:beneficiaries[i].beneficiaryCurrency)} }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input id="transfer-amount" class="form-control"
+                                                           formControlName="amount" amount-format/>
+                                                    <div *ngIf="item.controls.amount.hasError('required') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.required' | translate }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('min') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.minValue' | translate }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('max') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.maxValue' | translate }}
+                                                        </small>
+                                                    </div>
+                                                    <div *ngIf="item.controls.amount.hasError('pattern') && item.controls.amount.touched"
+                                                         class="alert alert-danger">
+                                                        <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric' | translate }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="transfer-aditional1">{{
+                                                    'transfer.remarks' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input id="transfer-aditional1" class="form-control"
+                                                           formControlName="additional1"/>
+
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'transfer.feesAmount' | translate:{value: ('currencyIso' | modelPipe:beneficiaries[i].beneficiaryCurrency)} }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input id="transfer-fees" class="form-control"
+                                                           formControlName="feesAmount"/>
+                                                    <!-- <app-vat-fee-calculator [fee]="form.feesAmount.value">
+                                                    </app-vat-fee-calculator> -->
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="legend">{{'transfer.beneficiarySummary' | translate}}</div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-summary-group -->
+                                            <dl class="sme-summary-group">
+                                                <dt class="sme-summary-group__label">
+                                                    {{'companyAdmin.user.name' | translate}}</dt>
+                                                <dd class="sme-summary-group__value">
+                                                    {{beneficiaries[i].beneficiaryFullName}}</dd>
+                                            </dl>
+                                            <!-- ./sme-summary-group -->
+
+                                        </div>
+
+
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-summary-group -->
+                                            <dl class="sme-summary-group">
+                                                <dt class="sme-summary-group__label">
+                                                    {{'transfer.accountTo' | translate}}</dt>
+                                                <dd class="sme-summary-group__value">
+                                                    {{beneficiaries[i].beneficiaryAccountCode}}</dd>
+                                            </dl>
+                                            <!-- ./sme-summary-group -->
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <dl class="sme-summary-group">
+                                                <dt class="sme-summary-group__label">{{'public.email' | translate}}</dt>
+                                                <dd class="sme-summary-group__value">{{item.controls.email.value}}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <app-levels-table
+                                                *ngIf="getLevelMapKey(accounts[item.controls.accountFrom.value].fullAccountNumber+'-'+beneficiaries[i].beneficiaryAccountCode)"
+                                                [futureSecurityLevels]="getLevelMapKey(accounts[item.controls.accountFrom.value].fullAccountNumber+'-'+beneficiaries[i].beneficiaryAccountCode)">
+                                        </app-levels-table>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ./sme-form -->
+            </div>
+        </div>
+    </div>
+
+
+    <div class="sme-form">
+        <div class="sme-form__form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="legend">
+                                    <span>
+                                        {{
+                                        'transfer.totalAmountIn' | translate:{value: ('currencyIso' | modelPipe:beneficiaries[0].beneficiaryCurrency)} }}</span><span> {{totalAmount | amountCurrency}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="legend">{{'transfer.totalFee' | translate}}
+                                    {{totalFeesAmount | amountCurrency}}</div>
+                                <app-vat-calculator [fee]="totalFeesAmount"></app-vat-calculator>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <app-levels-table *ngIf="confirmSave.futureSecurityLevelsDTOList"
+                                      [futureSecurityLevels]="confirmSave.futureSecurityLevelsDTOList">
+                    </app-levels-table>
+                    <fieldset *ngIf="confirmSave.generateChallengeAndOTP">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="confirmSave.generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate"
+                                            #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide"
+                (click)="cancel()">{{'public.back' | translate }}</button>
+
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!valid()">{{buttonLabel}}</button>
+    </div>
+</form>

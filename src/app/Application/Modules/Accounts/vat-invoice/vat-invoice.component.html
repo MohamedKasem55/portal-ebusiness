@@ -1,0 +1,91 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'public.accounts'| translate }}</li>
+        <!--
+		<li><a class="human-selectable" href="#" routerLinkActive="active" class="active"
+			[routerLink]="['accounts/currentaccounts']">{{ 'accounts.currentAccounts.name'| translate }}</a></li>
+		-->
+        <li class="active">{{ 'accounts.vat.name'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+
+    <div class="sme-page-block">
+        <!-- FILTROS BUSQUEDA -->
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <label class="sme-form__title">
+                    <span>{{ 'accounts.vat.name' | translate }}</span>
+                </label>
+                <div class="sme-form__form" id="sme-demo--form--search-criteria-">
+                    <form autocomplete="off" #vatInvoice="ngForm" [formGroup]="form" (ngSubmit)="searchVatInvoice()"
+                        class="sme-wizard">
+
+                        <div class="sme-form__body">
+                            <div class="sme-data-table__advisory">
+                                <span> {{'accounts.vat.advisory'| translate}}</span>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-2">
+                                    <!-- YEAR -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'accounts.vat.year' | translate }}</label>
+                                        <div>
+                                            <ng-select id="year" class="form-control" name="year" formControlName="year"
+                                                (change)="currentYear($event)" [placeholder]="canShowSelectPlaceHolder(form.get('year').value) ? ('-- '+('public.selectDropdown' | translate )+' --'):''">
+                                                <ng-option selected value="">
+                                                    -- {{ 'public.selectDropdown' | translate }} --
+                                                </ng-option>
+                                                <ng-option *ngFor="let year of years" [value]="year.getFullYear()"> {{
+                                                    year | date:'yyyy' }} </ng-option>
+                                            </ng-select>
+                                        </div>
+                                        <div *ngIf="form.controls.year.hasError('required') && form.controls.year.touched"
+                                            class="alert alert-danger">
+                                            <small>{{'accounts.vat.year' | translate }}{{ 'error.required' | translate
+                                                }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-2">
+
+                                    <div class="form-group">
+                                        <label class="required">{{ 'accounts.vat.month' | translate }}</label>
+
+                                        <!-- MONTH -->
+                                        <div>
+                                            <ng-select id="month" class="form-control" name="month"
+                                                formControlName="month" [placeholder]="canShowSelectPlaceHolder(form.get('month').value) ? ('-- '+('public.selectDropdown' | translate )+' --'):''">
+                                                <ng-option selected value=""> -- {{ 'public.selectDropdown' | translate
+                                                    }} --
+                                                </ng-option>
+                                                <ng-option *ngFor="let month of months" [value]="month"> {{
+                                                    ('public.months.' + monthsNames[month]) | translate }} </ng-option>
+                                            </ng-select>
+                                        </div>
+                                        <div *ngIf="form.controls.month.hasError('required') && form.controls.month.touched"
+                                            class="alert alert-danger">
+                                            <small>{{'accounts.vat.month' | translate }}{{ 'error.required' | translate
+                                                }}</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="submit" class="btn btn-primary btn-wide" [disabled]="!this.form.valid">
+                                {{ 'public.search' | translate }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- FILTROS BUSQUEDA -->
+    </div>
+</div>

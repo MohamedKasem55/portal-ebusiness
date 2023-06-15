@@ -1,0 +1,375 @@
+<arb-breadcrumb [routes]="[
+['business-hub.businessHub'], ['business-hub.e-commerce.e-commerce',['/business-hub/zid/dashboard/']],
+ ['business-hub.e-commerce.register.register']]">
+</arb-breadcrumb>
+
+
+<!-- Registration landing -->
+<arb-panel-title *ngIf="!startRegistration" [title]="'business-hub.e-commerce.register.registerTitle'">
+</arb-panel-title>
+
+<div *ngIf="subscriptionStatus?.messageEn" class="container-fluid">
+    <div class="alert alert-warning" style="margin-bottom: 0">
+        <h4>{{ currentLang == 'en' ? subscriptionStatus?.messageEn : subscriptionStatus?.messageAr }}</h4>
+    </div>
+</div>
+
+<arb-panel *ngIf="!startRegistration">
+    <div class="legend" style="margin-top: 15px;"> {{ 'business-hub.shared.register.getASub' | translate }}</div>
+    <hr [ngClass]="{'hr-break': getCurrentLang() == 'en', 'hr-break-rtl':  getCurrentLang() == 'ar'}">
+
+    <div class="pre-register-getSub">
+        <div>
+            <div class="container-fluid">
+                <img style="width: 25rem; height: auto" src="img/zid_image.png" alt="{{ 'business-hub.e-commerce.register.registerImgAlt' | translate }}"/>
+            </div>
+        </div>
+        <div style="margin-left: 20px; margin-right: 20px">
+            <div style="display: inline-block">
+                <img [ngClass]="{'icon-float-left': currentLang == 'en',
+                 'icon-float-right': currentLang == 'ar'}" class='productImage' src='img/infoIcon.svg' alt='' />
+                <p>{{'business-hub.e-commerce.register.preRegisterTextLine' | translate}}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <p>{{'business-hub.shared.register.yearlyFee' | translate}}</p>
+        </div>
+        <div class="col-xs-12 col-sm-6" style="text-align: end">
+            <span *ngIf="fees.discountPercentage && currentLang == 'en'" class="statusSpan redSpan">
+                {{fees.discountPercentage}}{{'business-hub.shared.register.off' | translate}}
+            </span>
+            <span *ngIf="fees.discountPercentage && currentLang == 'ar'" class="statusSpan redSpan">
+                {{'business-hub.shared.register.off' | translate}}{{fees.discountPercentage}}
+            </span>
+        </div>
+    </div>
+    <hr>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions" style="text-align: start; padding: 0">
+        <h3 style="margin-bottom: 10px; text-decoration: line-through">{{fees?.oldFees | amountCurrency}} {{'currencyIso' | modelPipe:'608'}}</h3>
+        <h1>{{fees?.subscriptionTotalFees | amountCurrency}} {{'currencyIso' | modelPipe:'608'}}</h1>
+    </div>
+</arb-panel>
+
+<arb-panel *ngIf="!startRegistration">
+    <div class="legend" style="margin-top: 15px;"> {{ 'business-hub.e-commerce.zidEcommerce' | translate }}</div>
+    <hr [ngClass]="{'hr-break': getCurrentLang() == 'en', 'hr-break-rtl':  getCurrentLang() == 'ar'}">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6" style="margin-left: auto">
+                <p>{{'business-hub.shared.register.features' | translate}}</p>
+            </div>
+        </div>
+        <hr>
+
+        <div>
+            <div>
+                <span class="icon -check -success ticks" [ngClass]="{'ticks-rtl': currentLang == 'ar'}"></span>
+                {{   'business-hub.e-commerce.register.preRegisterFeature1' | translate}}
+            </div>
+            <br>
+            <div>
+                <span class="icon -check -success ticks" [ngClass]="{'ticks-rtl': currentLang == 'ar'}"></span>
+                {{   'business-hub.e-commerce.register.preRegisterFeature2' | translate}}
+            </div>
+            <br>
+            <div>
+                <span class="icon -check -success ticks" [ngClass]="{'ticks-rtl': currentLang == 'ar'}"></span>
+                {{   'business-hub.e-commerce.register.preRegisterFeature3' | translate}}
+            </div>
+        </div>
+        <br>
+        <arb-buttons>
+<!--            <button class=" btn btn-default btn-wide" type="button">-->
+<!--                <a href="{{loginUrl+redirectUri}}" style="text-decoration: none; color: inherit" class="anchor-link">-->
+<!--                    {{ 'business-hub.invoicing.register.loginButton' | translate }}-->
+<!--                </a>-->
+<!--            </button>-->
+            <button class="btn btn-primary btn-wide " type="button" [disabled]="!canStartRegistration || !subscriptionStatus?.canSubscribe" (click)="startRegistrationProcess()">
+                {{'newProduct.subscribe' |translate}}
+            </button>
+        </arb-buttons>
+    </div>
+</arb-panel>
+
+<br>
+<!-- Pre register end -->
+
+<!-- Registration form -->
+<div *ngIf="startRegistration">
+    <arb-steps [currentStep]="wizardStep"
+               [steps]="['business-hub.e-commerce.register.step1','business-hub.e-commerce.register.step2', 'business-hub.e-commerce.register.step3']">
+    </arb-steps>
+
+    <arb-panel-title *ngIf="wizardStep < 3" [title]="'business-hub.e-commerce.register.registerWizardTitle'">
+    </arb-panel-title>
+
+    <!-- Step 1-->
+    <div *ngIf="wizardStep === 1">
+
+        <arb-panel>
+            <form autocomplete="off" #zidRegisterStep1="ngForm" class="sme-form__form" novalidate>
+                <fieldset [formGroup]="formModel">
+                    <div class="legend" style="margin-top: 15px;"> {{ 'business-hub.e-commerce.register.intro' | translate }}
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.fullName' | translate }}</label>
+                                <div class="input-group extend-input" >
+                                    <input class="form-control" formControlName="fullName"
+                                           placeholder="{{'business-hub.e-commerce.register.fullName' | translate}}"/>
+                                </div>
+                                <div *ngIf="formModel.controls.fullName.hasError('required')"
+                                     class="alert alert-danger">
+                                    <small>{{'business-hub.e-commerce.register.fullName' | translate }}{{ 'error.required' | translate }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.email' | translate }}</label>
+                                <div class="input-group extend-input">
+                                    <input class="form-control" formControlName="email"
+                                           placeholder="{{'business-hub.e-commerce.register.email' | translate}}"/>
+                                </div>
+                                <div *ngIf="formModel.controls.email.hasError('required') && formModel.controls.email.touched"
+                                     class="alert alert-danger">
+                                    <small>{{'business-hub.e-commerce.register.email' | translate }}{{ 'error.required' | translate }}
+                                    </small>
+                                </div>
+                                <div *ngIf="formModel.controls.email.hasError('pattern') && formModel.controls.email.touched"
+                                     class="alert alert-danger">
+                                    <small>{{'business-hub.shared.errors.emailPattern' | translate }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.mobileNumber' | translate }}</label>
+                                <div class="input-group extend-input">
+                                    <input class="form-control" formControlName="mobileContact"
+                                           placeholder="{{'business-hub.e-commerce.register.mobileNumber' | translate}}"/>
+                                </div>
+                                <div *ngIf="formModel.controls.mobileContact.hasError('required')"
+                                     class="alert alert-danger">
+                                    <small>{{'business-hub.e-commerce.register.mobileNumber' | translate }}{{ 'error.required' | translate }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.orgName' | translate }}</label>
+                                <div class="input-group extend-input">
+                                    <input class="form-control" formControlName="organizationName"
+                                           placeholder="{{'business-hub.e-commerce.register.orgName' | translate}}"/>
+                                </div>
+                                <div *ngIf="formModel.controls.organizationName.hasError('required')"
+                                     class="alert alert-danger">
+                                    <small>{{'business-hub.e-commerce.register.orgName' | translate }}{{ 'error.required' | translate }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </arb-panel>
+
+        <arb-panel>
+            <form autocomplete="off" #zidRegisterStep1="ngForm" class="sme-form__form" novalidate>
+                <fieldset [formGroup]="formModel">
+                    <div class="legend" style="margin-top: 15px;"> {{ 'business-hub.e-commerce.register.finalOffer' | translate }}
+                    </div>
+                    <hr [ngClass]="{'hr-break': getCurrentLang() == 'en',
+                                    'hr-break-rtl':  getCurrentLang() == 'ar'}">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-5">
+                            <app-select-account [accounts]="accounts" (onAccountChange)="selectAccount($event)">
+                            </app-select-account>
+                            <div *ngIf="formModel.controls.fromAcct.hasError('required') || formModel.controls.fromAcct.invalid && formModel.controls.fromAcct.touched"
+                                 class="alert alert-danger">
+                                <small>{{'business-hub.shared.errors.fromAccount' | translate }}{{ 'error.required' | translate }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                                <h4 style="margin-bottom: 10px">{{ 'business-hub.e-commerce.register.serviceCost' | translate }}</h4>
+                                <h3 style="color: #9d9d9d">{{fees?.subscriptionTotalFees | amountCurrency}} {{'currencyIso' | modelPipe:'608'}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
+        </arb-panel>
+
+        <arb-panel>
+            <form autocomplete="off" #qoyodRegisterTermsStep1="ngForm" class="sme-form__form" novalidate>
+                <fieldset [formGroup]="formModel">
+                    <p class="terms checkbox-inline">
+                        <input style="position: relative" type="checkbox" class="sme-checkbox checkbox-inline" formControlName="termsAccept" />
+                        <span class="checkSpan checkbox-margin">{{ 'newProduct.wps-new.accept' | translate }}
+                            <span (click)="showTC()" class="anchor-link">{{ 'business-hub.e-commerce.register.conditionsAnchor' | translate }}</span>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+        </arb-panel>
+    </div>
+
+    <!-- Step 2-->
+    <div *ngIf="wizardStep === 2">
+        <arb-panel>
+            <form autocomplete="off" #qoyodRegisterStep2="ngForm" class="sme-form__form" novalidate>
+                <fieldset [formGroup]="formModel">
+                    <div class="legend" style="margin-top: 15px;"> {{ 'business-hub.e-commerce.register.intro' | translate }}
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.fullName' | translate }}</label>
+                                <div class="input-group extend-input" >
+                                    <input [attr.disabled]="true" class="form-control" formControlName="fullName"
+                                           placeholder="{{'business-hub.e-commerce.register.fullName' | translate}}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.email' | translate }}</label>
+                                <div class="input-group extend-input">
+                                    <input [attr.disabled]="true" class="form-control" formControlName="email"
+                                           placeholder="{{'business-hub.e-commerce.register.email' | translate}}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.mobileNumber' | translate }}</label>
+                                <div class="input-group extend-input">
+                                    <input [attr.disabled]="true" class="form-control" formControlName="mobileContact"
+                                           placeholder="{{'business-hub.e-commerce.register.mobileNumber' | translate}}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label>{{ 'business-hub.e-commerce.register.orgName' | translate }}</label>
+                                <div class="input-group extend-input">
+                                    <input [attr.disabled]="true" class="form-control" formControlName="organizationName"
+                                           placeholder="{{'business-hub.e-commerce.register.orgName' | translate}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </arb-panel>
+
+        <arb-panel>
+            <form autocomplete="off" #qoyodRegisterStep2="ngForm" class="sme-form__form" novalidate>
+                <fieldset [formGroup]="formModel">
+                    <div class="legend" style="margin-top: 15px;"> {{ 'business-hub.e-commerce.register.finalOffer' | translate }}
+                    </div>
+                    <hr [ngClass]="{'hr-break': getCurrentLang() == 'en',
+                                    'hr-break-rtl':  getCurrentLang() == 'ar'}">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-5">
+                            <app-select-account [isDisabled]="true" [accounts]="displayAccount" (onAccountChange)="selectAccount($event)">
+                            </app-select-account>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                                <h4 style="margin-bottom: 10px">{{ 'business-hub.e-commerce.register.serviceCost' | translate }}</h4>
+                                <h3 style="color: #9d9d9d;">{{fees?.subscriptionTotalFees | amountCurrency}} {{'currencyIso' | modelPipe:'608'}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
+        </arb-panel>
+
+        <arb-panel>
+            <form autocomplete="off" #qoyodRegisterTermsStep2="ngForm" class="sme-form__form" novalidate>
+                <fieldset [formGroup]="formModel">
+                    <p class="terms checkbox-inline">
+                        <input [attr.disabled]="true" style="position: relative" type="checkbox" class="sme-checkbox checkbox-inline" formControlName="termsAccept" />
+                        <span class="checkSpan checkbox-margin">{{ 'newProduct.wps-new.accept' | translate }}
+                            <span (click)="showTC()" class="anchor-link">{{ 'business-hub.e-commerce.register.conditionsAnchor' | translate }}</span>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+        </arb-panel>
+    </div>
+
+
+    <arb-panel *ngIf="wizardStep === 2 && otpStep">
+        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate"
+                                    #authorization>
+        </app-secured-authentication>
+    </arb-panel>
+
+    <!-- Step 3-->
+    <div *ngIf="wizardStep === 3">
+
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="sme-form">
+
+                    <div class="sme-form__content">
+                        <div class="sme-form__form">
+                            <div class="sme-form__body">
+                                <div>
+                                    <div class="sme-wizard__success">
+                                        <span class=" icon -check"></span>
+                                        <br>
+                                        <div>
+                                            <h3 class="success">{{'business-hub.e-commerce.register.finish' | translate }} </h3>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<arb-buttons *ngIf="startRegistration">
+
+    <button *ngIf=" wizardStep === 3" class=" btn btn-primary btn-wide" type="button" (click)="goBackToDashboard()">{{ 'business-hub.goBackToHub' | translate}}</button>
+
+    <div class="row" >
+        <div class="col-xs-12 col-sm-8" style="text-align: start">
+            <button *ngIf="wizardStep >= 1 && wizardStep < 3" class=" btn btn-default btn-wide" type="button" (click)="back()" [disabled]="!canGoBack()">{{ 'public.back' | translate}}</button>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <button *ngIf="wizardStep >= 1 && wizardStep < 3" type="submit" class=" btn btn-default btn-wide" (click)="cancel()">
+                {{'public.cancel' | translate}}</button>
+            <button *ngIf="wizardStep >= 1 && wizardStep < 3" class="btn btn-primary btn-wide" type="button" [disabled]="!canProceed()" (click)="proceed()">{{
+                'public.proceed' |translate}}</button>
+        </div>
+    </div>
+
+</arb-buttons>
+

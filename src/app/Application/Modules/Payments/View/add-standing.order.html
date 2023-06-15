@@ -1,0 +1,716 @@
+<div class="modal fade" bsModal #template2="bs-modal" role="document" style="overflow:auto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-xs-8 col-md-8 pull-left">
+                    <span class="modal-title"> {{ 'standingOrder.search'| translate }}</span>
+                    <input type='text' style='padding:8px;margin:15px auto;width:80%;' placeholder='Name'
+                           (keyup)='updateFilter($event)'/>
+                </div>
+                <div>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="template2.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-body defaultAlign" (onOpen)="Open()">
+                <div class="sme-data-table">
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                                   class="material sme-table sme-table--responsive table" [columns]="columns"
+                                   [columnMode]="defaultColumnMode" [headerHeight]="30"
+                                   [footerHeight]="50" [rowHeight]="defaultHeight" [limit]="6" [rows]='saad'
+                                   [selected]="selected"
+                                   [selectionType]="defaultSelectionTypeSingle" (activate)="onActivate($event)"
+                                   [loadingIndicator]="loadingIndicator"
+                                   (select)='onSelectInternacional($event)'>
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <div (click)='onSelectInternacionalMobile(row)'>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'standingOrder.bankName' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.bankName }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'standingOrder.name' |translate }}</label>
+                                                    <div>
+                                                        <span>{{row.name}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'standingOrder.fullAccountNumber' | translate}}</label>
+                                                    <div>
+                                                        <span>{{ row.beneficiaryAccount.fullAccountNumber }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="bankName" class="mobile-hidden">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'standingOrder.bankName' | translate }}
+								</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span class="mobile-hidden" [innerHtml]="value"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="name" class="mobile-hidden">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'standingOrder.name' |translate }}
+								</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span class="mobile-hidden">{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="beneficiaryAccount.fullAccountNumber" class="mobile-hidden">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'standingOrder.fullAccountNumber' | translate}}
+								</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span class="mobile-hidden">{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                    </ngx-datatable>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" bsModal #template="bs-modal" role="document" style="overflow:auto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class=" col-md-8 pull-left">
+                    <span class="modal-title"> {{ 'standingOrder.search'| translate }}</span>
+                    <input type='text' style='padding:8px;margin:15px auto;width:80%;' placeholder='Name'
+                           (keyup)='updateFilter($event)'/>
+                </div>
+                <div>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="template.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body defaultAlign" (onOpen)="Open()">
+                <div>
+
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tableLocal
+                                   class="material sme-table sme-table--responsive table"
+                                   [columns]="columns" [columnMode]="defaultColumnMode" [headerHeight]="30"
+                                   [footerHeight]="50"
+                                   [rowHeight]="defaultHeight" [limit]="6" [rows]='local' [selected]="selected"
+                                   [selectionType]="defaultSelectionTypeSingle"
+                                   (activate)="onActivate($event)" (select)='onSelectLocal($event)' [rowHeight]="defaultHeight"
+                                   [loadingIndicator]="loadingIndicator">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <div (click)='onSelectLocalMobile(row)'>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'standingOrder.bankName' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.bankCode }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'standingOrder.name' |translate }}</label>
+                                                    <div>
+                                                        <span>{{row.name}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'standingOrder.fullAccountNumber' | translate}}</label>
+                                                    <div>
+                                                        <span>{{ row.beneficiaryAccountCode }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="bankCode" [resizeable]="true" [width]="150" class="mobile-hidden">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'standingOrder.bankName' | translate }}
+								</span>
+                            </ng-template>
+                            <ng-template let-value="value" let-sort="sortFn" ngx-datatable-cell-template>
+                                <span class="mobile-hidden">{{ 'bankCode' | modelPipe:value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="name" [resizeable]="true" [width]="150" class="mobile-hidden">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'standingOrder.name' |translate }}
+								</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span class="mobile-hidden">{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="beneficiaryAccountCode" [resizeable]="true" [width]="300"
+                                              class="mobile-hidden">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'standingOrder.fullAccountNumber' | translate}}
+								</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span class="mobile-hidden">{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ngx-datatable>
+                </div>
+
+
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'public.transfers' | translate }}</li>
+        <li class="human-selectable" [routerLink]="['/payments/stadingOrders']">
+            {{ 'companyAdmin.user.standingOrds'| translate }}</li>
+        <li>{{ 'public.add' | translate }} {{ 'companyAdmin.user.standingOrds' | translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+
+    <ul class="sme-box sme-wizard__steps">
+        <li class="sme-wizard__step" [ngClass]="{'current': wizardStep<=3}"><span>
+				<span class="num">1</span>
+				<span class="text">{{ 'public.add' | translate }} </span>
+			</span>
+        </li>
+        <li class="sme-wizard__step" [ngClass]="{'current': wizardStep>=2}"><span>
+				<span class="num">2</span>
+				<span class="text">{{ 'public.confirm' | translate }}</span>
+			</span>
+        </li>
+        <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3}"><span>
+				<span class="num">3</span>
+				<span class="text">{{ 'public.summary' | translate }}</span>
+			</span>
+        </li>
+    </ul>
+
+</div>
+
+
+<!--formulario-->
+
+<div class="container-fluid">
+    <div class="sme-panel">
+        <div class="sme-panel__head">
+            <div *ngIf="wizardStep==1" class="sme-panel__title">{{ 'public.add' | translate }}
+                {{ 'companyAdmin.user.standingOrds' | translate }}</div>
+            <div *ngIf="wizardStep==2" class="sme-panel__title">{{ 'public.confirm' | translate }}</div>
+            <div *ngIf="wizardStep==3" class="sme-panel__title">{{ 'public.summary' | translate }}</div>
+        </div>
+
+    </div>
+    <div class="sme-panel">
+        <div class="sme-data-table__advisory" *ngIf="wizardStep==1">
+            {{ 'standingOrder.advisory'| translate }}
+        </div>
+        <form autocomplete="off" class="sme-form" [formGroup]="myGroup" novalidate>
+            <div *ngIf="wizardStep==1" class="sme-form__body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label>{{ 'payments.accountFrom' | translate }}</label>
+                            <span class="form-control">{{ accountFrom }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+
+                        <div class="form-group ">
+
+                            <!-- sme-select -->
+                            <div class="form-control" style="border-bottom:0px;margin-bottom:40px ">
+                                <div class="col-md-6" style="border:0px ">
+									<span> <button class=" btn btn-default btn-block  " (click)="openModal(template) ">
+											<i aria-hidden="true "></i>
+											<span>{{'beneficiaries.beneficiaryTypes.LocalBeneficiaries' | translate }}</span></button>
+									</span>
+                                </div>
+                                <div class="col-md-6">
+									<span> <button class=" btn btn-default btn-block " (click)="openModal2(template2) ">
+											<i aria-hidden="true "></i>
+											<span>{{'beneficiaries.beneficiaryTypes.AlRajhiBeneficiary' | translate }}</span></button>
+									</span>
+                                </div>
+
+
+                            </div>
+                            <!-- ./sme-select -->
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+
+                        <div class="form-group">
+                            <label>{{ 'public.amountType' | translate }} *</label>
+                            <div class="form-control" style="border-bottom:0px;margin-bottom:40px">
+                                <div class="sme-radio radio">
+                                    <label>
+                                        <input type="radio" name="amounttype" value="0" formControlName="amounttype"
+                                               required>
+                                        <i aria-hidden="true"></i> <span>{{'payments.amount' | translate }}</span>
+                                    </label></div>
+                                <div class="sme-radio radio">
+                                    <label>
+                                        <input type="radio" name="amounttype" value="1" formControlName="amounttype"
+                                               required>
+                                        <i aria-hidden="true"></i>
+                                        <span>{{'payments.minimumBalance' | translate }}</span>
+                                    </label>
+
+                                </div>
+
+
+                            </div>
+                            <!-- ./sme-select -->
+
+                        </div>
+
+
+                        <!--validate-->
+
+                        <div *ngIf="myGroup.get('amounttype').touched &&myGroup.get('amounttype').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'public.amountType' | translate }} is required
+                        </div>
+                        <!--clotse validate-->
+
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+
+                        <div class="form-group">
+                            <label>{{ 'payments.accountTo' | translate }} *</label>
+                            <div class="form-group">
+                                <input [readOnly]="true" type="text" name="Accountto"
+                                       formControlName="Accountto" [(ngModel)]="accountTo" inputPattern="notArabic"
+                                       class="form-control" required>
+                            </div>
+
+                        </div>
+
+                        <!--validate-->
+
+                        <div *ngIf="myGroup.get('Accountto').errors&& myGroup.get('Accountto').dirty&&myGroup.get('Accountto').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'payments.accountTo' | translate }}is required
+                        </div>
+
+                        <div [hidden]="myGroup.controls['Accountto'].valid || myGroup.controls['Accountto'].pristine"
+                             class="alert alert-danger">
+                            Username is required.
+                        </div>
+
+                        <!--clotse validate-->
+
+                    </div>
+
+
+                    <div class="col-xs-12 col-sm-4">
+
+                        <div class="form-group ">
+                            <label>{{ 'payments.purpose' | translate }} *</label>
+                            <div class="sme-select form-control dropdown">
+                                <select class="form-control" required formControlName="purpose"
+                                        style="z-index: 0 !important">
+                                    <option value selected disable>--{{ 'public.selectDropdown' | translate }}--
+                                    </option>
+                                    <option *ngFor="let purpose of purposeTypes"
+                                            [ngValue]="purpose?.key">
+                                        {{ purpose?.value }}
+                                    </option>
+                                </select>
+                            </div>
+
+
+                            <!--validate-->
+
+                            <div *ngIf="myGroup.get('purpose').invalid && myGroup.get('Accountto').dirty&& isValidFormSubmitted != null && !isValidFormSubmitted"
+                                 class="alert alert-danger">
+                                {{ 'payments.purpose' | translate }}is required
+                            </div>
+
+                            <!--close validate-->
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row" style="height:40px">
+
+                    <div class="sme-panel__title">
+                        <span>{{ 'payments.ordertype' | translate }}</span>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <label>{{ 'payments.monthfrecuency' | translate }} *</label>
+                            <div class="sme-select form-control dropdown">
+                                <select class="form-control" formControlName="monthfrecuency" name="monthfrecuency"
+                                        required>
+                                    <option value selected disabled>--{{ 'public.selectDropdown' | translate }}--
+                                    </option>
+                                    <option value="1">Every 1 month/s</option>
+                                    <option value="3">Every 3 month/s</option>
+                                    <option value="6">Every 6 month/s</option>
+                                    <option value="12">Every 12 month/s</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!--validate-->
+
+                        <div *ngIf="myGroup.get('monthfrecuency').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'payments.monthfrecuency' | translate }} is required
+                        </div>
+                        <!--clotse validate-->
+                    </div>
+
+
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group ">
+                            <label>{{ 'payments.amount' | translate }} *</label>
+                            <input type="text " name="amount" class="form-control" min="1" formControlName="amount"
+                                   [(ngModel)]="amount" inputPattern="onlyDecimalNumbers">
+                        </div>
+
+
+                        <!--validate-->
+
+                        <div *ngIf="myGroup.get('amount').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'payments.amount' | translate }} is required
+                        </div>
+
+                        <div *ngIf="validominimo" class="alert alert-danger">
+                            {{ 'standingOrder.amount' | translate }} debe ser minimo 1
+                        </div>
+                        <!--clotse validate-->
+                    </div>
+
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group ">
+                            <label>{{ 'standingOrder.dayOfMonth' | translate }} * </label>
+                            <input type="number" name="day" class="form-control " min="1" max="31"
+                                   formControlName="day">
+                        </div>
+
+                        <div *ngIf="myGroup.get('day').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'standingOrder.dayOfMonth' | translate }} is required
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="form-group">
+                            <label>{{ 'standingOrder.dateFrom' | translate }} *</label>
+                            <div class="input-group">
+
+                                <input type="text" style="z-index: 1000;" [(ngModel)]="datefrom" class="form-control"
+                                       placement="top" #dateFrom="bsDatepicker" bsDatepicker
+                                       formControlName="datefrom"
+                                       [bsConfig]="bsConfig"
+                                       (ngModelChange)="changeDateTo()"
+                                       [minDate]="today"/>
+                                <span class=" input-group-addon icon -calendar" (click)="dateFrom.show()"></span>
+                            </div>
+                        </div>
+                        <div *ngIf="myGroup.get('datefrom').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'standingOrder.datefrom' | translate }} is required
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12  col-sm-2">
+
+                        <div class="form-group">
+
+                            <label>{{ 'standingOrder.dateTo' | translate }} *</label>
+                            <div class="input-group">
+
+                                <input type="text" style="z-index: 1000;" #dateTo="bsDatepicker" class="form-control"
+                                       placement="top" bsDatepicker formControlName="to" [bsConfig]="bsConfig"
+                                       [minDate]="minimato" [(ngModel)]="to"/>
+                                <span class=" input-group-addon icon -calendar" (click)="dateTo.show()"></span>
+                            </div>
+
+                        </div>
+                        <div *ngIf="myGroup.get('to').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'standingOrder.dateTo' | translate }} is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3 ">
+                        <div class="form-group ">
+                            <label>{{ 'standingOrder.remarks' | translate }}</label>
+                            <input type="text" name="remarks" formControlName="remarks" [(ngModel)]="remarks"
+                                   class="form-control" maxlength="100">
+                        </div>
+
+                        <!--validation-->
+                        <div *ngIf="myGroup.get('remarks').invalid && isValidFormSubmitted != null && !isValidFormSubmitted"
+                             class="alert alert-danger">
+                            {{ 'standingOrder.remarks' | translate }} is required
+                        </div>
+                    </div>
+                    <!--cierre validation>-->
+
+
+                </div>
+            </div>
+
+            <div *ngIf="wizardStep==2" class="sme-wizard__content ">
+                <div class="sme-form__body">
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4 ">
+                            <h4>{{ 'payments.accountFrom' | translate }}</h4>
+                            <label>{{ accountFrom }}</label>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4 ">
+
+                            <h4>{{ 'public.amountType' | translate }}</h4>
+
+                            <label *ngIf="myGroup.value.amounttype==0">{{'payments.amount' | translate }}</label>
+                            <label
+                                    *ngIf="myGroup.value.amounttype==1">{{'payments.minimumBalance' | translate }}</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'payments.accountTo' | translate }}</h4>
+                                <label>{{ accountTo }}</label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'payments.purpose' | translate }}</h4>
+                                <label>{{'purposeType' | modelPipe: myGroup.value.purpose}}</label>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 ">
+
+                            <h4>{{ 'payments.monthfrecuency' | translate }}</h4>
+
+
+                            <label *ngIf="myGroup.value.monthfrecuency==1">Every 1 month/s</label>
+                            <label *ngIf="myGroup.value.monthfrecuency==3">Every 3 month/s</label>
+                            <label *ngIf="myGroup.value.monthfrecuency==6">Every 6 month/s</label>
+                            <label *ngIf="myGroup.value.monthfrecuency==12">Every 12 month/s</label>
+
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'payments.amount' | translate }}</h4>
+                                <label> {{ amount | amountCurrency }}</label>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.dayOfMonth' | translate }}</h4>
+                                <label>{{  day }}</label>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.dateFrom' | translate }}</h4>
+                                <label>{{ datefrom | date }}</label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.dateTo' | translate }}</h4>
+                                <label>{{ to | date }}</label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.remarks' | translate }}</h4>
+                                <label>{{  remarks }}</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="wizardStep==2" class="sme-wizard__content ">
+                <div class="sme-form__body">
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-3 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.beneficiaryFee' | translate }}</h4>
+                                <label>{{ resulValidation.standingOrderPreview.beneficiaryFee  | amountCurrency }}</label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-3 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.orderFee' | translate }}</h4>
+                                <label>{{ resulValidation.standingOrderPreview.orderFee  | amountCurrency }}</label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-3 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.registrationFee' | translate }}</h4>
+                                <label>{{  resulValidation.standingOrderPreview.registrationFee  | amountCurrency }}</label>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 ">
+                            <div class="form-group ">
+                                <h4>{{ 'standingOrder.remitterFee' | translate }}</h4>
+                                <label>{{  resulValidation.standingOrderPreview.remitterFee  | amountCurrency }}</label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <app-levels-table
+                            [futureSecurityLevels]="resulValidation.standingOrderBatch.futureSecurityLevelsDTOList">
+                    </app-levels-table>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 ">
+                            <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                                        [requestValidate]="requestValidate"
+                                                        #authorization></app-secured-authentication>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="wizardStep==3 " class="sme-wizard__content ">
+
+                <div class="sme-wizard__success" *ngIf="!isPending()">
+                    <span class="icon -check"></span>
+                    {{ 'standingOrder.standingOrderAddedSuccesfully' | translate }}
+                </div>
+                <div class="sme-wizard__success" *ngIf="isPending()">
+                    <span class="icon -check"></span>
+                    {{ 'payments.sucessPendingRequest' | translate }}
+                </div>
+
+            </div>
+
+
+            <div>
+                <router-outlet (activate)="componentAdded($event)"></router-outlet>
+            </div>
+
+            <div class="sme-wizard__navigation sme-form__actions">
+                <button *ngIf="wizardStep
+										<3 " (click)="goBack()" type="button" class="
+										    btn btn-default btn-wide ">{{ 'public.back' | translate }}</button>
+                <button *ngIf="wizardStep==1 " (click)="onFormSubmit()" [disabled]="!myGroup.valid"
+                        type="submit " class=" btn btn-primary
+											btn-wide ">{{ 'public.next' | translate }}</button>
+                <button *ngIf="wizardStep==2 " (click)="saveStandingOrder()" [disabled]="!myGroup.valid || !valid()"
+                        type="submit " class=" btn btn-primary
+										    btn-wide ">{{ 'public.confirm' | translate }}</button>
+                <button *ngIf="wizardStep==3 " [routerLink]="['/payments/stadingOrders']" type="submit " class=" btn btn-primary
+										    btn-wide ">{{ 'public.finish' | translate }}</button>
+
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
+
+
+<!--<p>Form value: {{ myGroup.value | json }}</p>
+<p>Form status: {{ myGroup.status | json }}</p> -->

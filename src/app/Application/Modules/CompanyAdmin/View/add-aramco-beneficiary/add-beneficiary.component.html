@@ -1,0 +1,43 @@
+<div class="sme-breadcrumb">
+        <ol class="breadcrumb">
+            <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+           <li><a href="#" routerLinkActive="active" [routerLink]="['/companyadmin/aramco']">{{ 'aramcoPayments.aramcoBeneficiary' |
+                translate }}</a></li>
+        
+            <li class="active">{{ 'aramcoPayments.addBeneficiary'| translate }}</li>
+        </ol>
+    </div>
+<div class="sme-content-container container-fluid">
+
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+					<span class="num">1</span>
+				<span class="text">{{ 'aramcoPayments.details' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+					<span class="num">2</span>
+				<span class="text">{{ 'aramcoPayments.confirm' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3}"><span>
+					<span class="num">3</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div>
+		<router-outlet (activate)="componentAdded($event)"></router-outlet>
+</div>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+		<button *ngIf="wizardStep==1" class="btn btn-default btn-wide" type="button" (click)="back()">{{ 'public.back' | translate}}</button>
+		<button *ngIf="wizardStep>1 && wizardStep<3" (click)="backButton()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+		<button class="btn btn-primary btn-wide" (click)="nextStep()" *ngIf="wizardStep < 3" [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+		<button class="btn btn-primary btn-wide" (click)="finish()" *ngIf="wizardStep == 3" >{{'public.finish' | translate}}</button>
+		
+</div>

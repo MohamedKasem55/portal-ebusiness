@@ -1,0 +1,17 @@
+<arb-panel>
+        <div class="sme-box sme-wizard__content">
+            <div>
+                <div class="sme-wizard__success" *ngIf="isPending()">
+                    <span class="icon -check"></span>
+                    {{'payments.sucessPendingRequest' | translate}}
+                    <small>{{'public.thanks' | translate }}</small>
+                </div>
+                <div class="sme-wizard__success" *ngIf="!isPending()">
+
+                    <span class="icon -check"></span>
+                    {{'public.requestProcessedOk' | translate}}
+                    <small>{{'public.thanks' | translate }}</small>
+                </div>
+            </div>
+        </div>
+    </arb-panel>

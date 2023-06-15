@@ -1,0 +1,48 @@
+<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" [rows]="getOriginator()"
+    [columnMode]="defaultColumnMode" class="material sme-table sme-table--responsive table" [rowHeight]="defaultHeight"
+    [headerHeight]="30">
+    <ngx-datatable-column *ngIf="showName" prop="depositorOriginatorName">
+        <ng-template ngx-datatable-header-template>
+            <span *ngIf="type==OriginatorType.BENEFICIARY" class="datatable-header-cell-wrapper">{{
+                'companyAdmin.beneficiaryOriginator.depositorOriginatorName' | translate }}</span>
+            <span *ngIf="type==OriginatorType.DEPOSITOR" class="datatable-header-cell-wrapper">{{
+                'governmentRevenue.depositorOrigName' | translate }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="chapter">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'companyAdmin.beneficiaryOriginator.chapter' | translate
+                }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="branch">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'companyAdmin.beneficiaryOriginator.branch' | translate
+                }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="division">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'companyAdmin.beneficiaryOriginator.division' | translate
+                }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="serial">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'companyAdmin.beneficiaryOriginator.serial' | translate
+                }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="headOffice">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'companyAdmin.beneficiaryOriginator.headOffice' | translate
+                }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="relatedDiv">
+        <ng-template ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">{{ 'companyAdmin.beneficiaryOriginator.relatedDiv' | translate
+                }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+</ngx-datatable>

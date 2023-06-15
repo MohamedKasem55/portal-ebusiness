@@ -1,0 +1,185 @@
+<arb-breadcrumb [routes]="[
+	['public.accounts'],
+	['accounts.balanceCertificate.menu']
+]">
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="authenticationService.activateOption('NewBalanceCertificate',[],[])">
+    <a class="btn btn-primary btn-wide"
+       [routerLink]="['/accounts/balanceCertificate/request-status']">{{
+        'posRequest.requestStatus' | translate }}</a>
+    <a class="btn btn-primary btn-wide" routerlinkactive="active"
+       ng-reflect-router-link="/accounts/balanceCertificate/request" ng-reflect-router-link-active="active"
+       [routerLink]="['/accounts/balanceCertificate/request']">
+        {{ 'accounts.balanceCertificate.btnRequestCertificate'| translate }}
+    </a>
+</arb-panel-buttons>
+
+
+<arb-table-panel [title]="'accounts.balanceCertificate.viewRequest'">
+    <table-export [dataTable]="accountBalanceCertificateTable"
+                  [header]="'accounts.balanceCertificate.name' | translate"
+                  [columns]="[
+                    {'title':'accounts.balanceCertificate.requestDate' | translate,'dataKey':'requestDate'},
+                    {'title':'public.account' |translate ,'dataKey':'account'},
+                    {'title':'public.company' | translate,'dataKey':'company'},
+                    {'title':'public.city' | translate,'dataKey':'city','modelKey':'cityType','transformFn': getExportedFieldValue},
+                    {'title':'public.postal_code' | translate,'dataKey':'postalCode'}]"></table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #accountBalanceCertificateTable
+                   class="material sme-table sme-table--responsive table" [rows]="accountBalancePage.data"
+                   [columnMode]="defaultColumnMode" [headerHeight]="30"
+                   [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [externalPaging]="true"
+                   [count]="accountBalancePage.page.totalElements" [offset]="accountBalancePage.page.pageNumber-1"
+                   [limit]="accountBalancePage.page.pageSize"  (page)='setPage($event)'
+                   (sort)="setSort($event)">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'accounts.balanceCertificate.requestDate' | translate }}</label>
+                                <div>
+                                    <span>{{row.requestDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'public.account' | translate }}</label>
+                                <div>
+                                    <span>{{row.account}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'public.company' | translate }}</label>
+                                <div>
+                                    <span>{{row.company}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'public.city' | translate }}</label>
+                                <div>
+                                    <span [innerHTML]="'cityType' | modelPipe:row.city"
+                                          *ngIf="checkCityIsModelPipe(row.city)"></span>
+                                    <span *ngIf="!checkCityIsModelPipe(row.city)">{{row.city}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'public.postal_code' | translate }}</label>
+                                <div>
+                                    <span>{{row.postalCode}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="requestDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'accounts.balanceCertificate.requestDate' | translate }}
+								</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="account">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.account' | translate }}
+								</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="company">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.company' | translate }}
+								</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="city">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.city' | translate }}
+								</span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span [innerHTML]="'cityType' | modelPipe:value" *ngIf="checkCityIsModelPipe(value)"></span>
+                <span *ngIf="!checkCityIsModelPipe(value)">{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="postalCode">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.postal_code' | translate }}
+								</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)"
+                            [visiblePagesCount]="visiblePagesCount"
+                            (change)="accountBalanceCertificateTable.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                            {{accountBalancePage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control"
+                                                        [(ngModel)]="this.accountBalancePage.page.pageSize"
+                                                        (change)="this.setPage(null)">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+
+												</select>
+											</div>
+										</span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</arb-table-panel>
+

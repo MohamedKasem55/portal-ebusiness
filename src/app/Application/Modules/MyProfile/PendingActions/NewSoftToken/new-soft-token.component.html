@@ -1,0 +1,18 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'myProfile.myProfile' | translate }}</li>
+        <li><a class="human-selectable" href="#"
+                [routerLink]="['/myprofile/pending/requeststatus']">{{ 'myProfile.pending_actions.pending_actions' | translate }}</a>
+        </li>
+        <li>{{ 'companyAdmin.token.requestSoftToken' | translate }}</li>
+    </ol>
+</div>
+
+<app-pending-actions-utility [service]="service"
+                             [fieldsConfigForList]="service.getFieldsConfigForList()"
+                             [combosKeys]="service.getCombosKeys()"
+                             [translate_prefix]="service.getTranslatePrefix()"
+                             (onSelectPendingActions)="onSelect($event)"
+                             (onClickPendingAction)="onClickItem($event)"
+                             [hasSearchFilters]="false">
+</app-pending-actions-utility>

@@ -1,0 +1,49 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{'menu.collections_management.menu' | translate}}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/posstatement']">{{ 'posStatement.name' | translate }}</a></li>
+        <li class="active">{{ 'posStatement.posTerminal' | translate }}</li>
+    </ol>
+</div>
+
+<!--<div class="container-fluid sme-content-container">-->
+<!--    <div class="sme-page-block">-->
+<!--                <ul class="sme-box sme-wizard__steps">-->
+<!--                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">-->
+<!--                        <span>-->
+<!--                            <span class="num">1</span>-->
+<!--                            <span class="text">{{ 'payments.hajjumrahcards.step1' | translate | uppercase }}</span>-->
+<!--                        </span>-->
+<!--                    </li>-->
+<!--                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">-->
+<!--                        <span>-->
+<!--                            <span class="num">2</span>-->
+<!--                            <span class="text">{{ 'payments.hajjumrahcards.step2' | translate | uppercase}}</span>-->
+<!--                        </span>-->
+<!--                    </li>-->
+<!--                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">-->
+<!--                            <span>-->
+<!--                                <span class="icon -check"></span>-->
+<!--                                <span class="text">{{ 'payments.hajjumrahcards.step3' | translate | uppercase }}</span>-->
+<!--                            </span>-->
+<!--                        </li>-->
+<!--                </ul>-->
+<!--    </div>-->
+<!--</div>-->
+
+<app-update-cards-step1 [form]="this.form" [batch]="this.terminalDetailsData" *ngIf="step === 1"
+                        (onInit)="onInitStep1($event)"></app-update-cards-step1>
+<app-update-cards-step2 [form]="this.form" [batch]="this.terminalDetailsData" *ngIf="step === 2"
+                        (onInit)="onInitStep2($event)"></app-update-cards-step2>
+<app-update-cards-step3 *ngIf="step === 3"></app-update-cards-step3>
+
+
+<arb-buttons>
+    <button class="btn btn-primary btn-wide" (click)="clear()"> {{ 'public.back' | translate }} </button>
+    <!--    <button *ngIf="step === 1" class=" btn btn-primary btn-wide" (click)="nextStep()"  [disabled]="isDisabled()">{{'public.update' | translate}}</button>-->
+    <button *ngIf="false" class="btn btn-primary btn-wide" (click)="nextStep()"
+            [disabled]="isDisabled()">{{'public.update' | translate}}</button>
+    <button *ngIf="step === 2" class="btn btn-primary btn-wide"
+            (click)="confirmPage()">{{'public.confirm' | translate}}</button>
+</arb-buttons>

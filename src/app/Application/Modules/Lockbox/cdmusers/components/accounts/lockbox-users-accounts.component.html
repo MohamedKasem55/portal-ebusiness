@@ -1,0 +1,130 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-initiator-wizard-modify *ngIf="accountsData && accountsData.lockBoxUser"
+                             [title]="'lockbox.cdmUsers.accounts.menu'"
+                             [currentItem]="accountsData.lockBoxUser"
+                             [entityName]="null"
+                             [entityProperties]="entityProperties"
+                             [service]="accountsService"
+                             [translate_prefix]="'lockbox.cdmUsers'"
+                             [backUrl]="getBackUrl()"
+                             [combosKeys]="combosKeys"
+                             [combosData]="combosData"
+                             (onAllFieldsCreated)="initFormCreated($event)"
+                             [custom_fields_templates]="{
+                                    terminalPKHeader: terminalPKHeader,
+                                    terminalAccountsNewList: terminalAccountsNewList,
+                                    terminalAccountsAssignedList: terminalAccountsAssignedList
+                                }"
+                             [pending]="false">
+</app-initiator-wizard-modify>
+
+<ng-template #terminalPKHeader>
+    <div class="col-xs-12 col-sm-12">
+        <hr/>
+        <div class="form-group">
+            <div class="form-control">
+                <span><b>{{'lockbox.cdmUsers.accounts.terminalPKHeader' | translate}}</b></span>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #terminalAccountsNewList>
+
+    <app-dynamic-searchable-table
+            *ngIf="accountsData && accountsData.lockBoxUserTerminalAccountsNewList"
+            [service]="accountsService"
+            [showSearchForm]="false"
+            [searchForm_checkValid]="false"
+            [fieldsConfigForSearchForm]="[]"
+            [fieldsConfigForList]="terminalAccountsFieldsConfigForList1"
+            [combosData]="combosData"
+            [search_form_combosData]="combosData"
+            [search_form_translate_prefix]="'lockbox.cdmUsers.details.terminalAccounts'"
+            [table_title]="'lockbox.cdmUsers.details.terminalAccounts.listNew'"
+            [table_translate_prefix]="''"
+            [table_export_pdf_size]="{width: 1200, height: 800}"
+
+            [table_export_show_buttons]="true"
+            [table_export_header]="'lockbox.cdmUsers.details.terminalAccounts.listNew' | translate"
+            [table_export_columns]="terminalAccountsFieldsConfigForExport1"
+
+            [search_form_custom_fields_templates]="{}"
+
+            [table_export_selected_rows]="[]"
+            [table_externalPaging]="false"
+            [table_externalSorting]="false"
+
+            [table_elements_rows]="accountsData.lockBoxUserTerminalAccountsNewList"
+            [table_headerHeight]="60"
+            [table_elements_count]="accountsData.lockBoxUserTerminalAccountsNewList.length"
+            [table_elements_offset]="0"
+            [table_elements_limit]="accountsData.lockBoxUserTerminalAccountsNewList.length"
+
+            [table_footer_show_buttons]="true"
+            [table_footer_visiblePagesCount]="1"
+            [table_footer_pageSize]="50"
+
+            [table_elements_selected_rows]="accountsData.terminalAccountsListNewSelected"
+            [table_selection_disabled]="this.accountsForm && this.accountsForm.disabled"
+            [table_rowIdentity]="getRowIdentityFn1()"
+            (onTableSelect)="onTableSelectNew($event)">
+
+    </app-dynamic-searchable-table>
+
+    <div class="col-xs-12 col-sm-12">
+        <div class="form-group">
+            <div class="form-control">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+
+<ng-template #terminalAccountsAssignedList>
+
+    <app-dynamic-searchable-table
+            *ngIf="accountsData && accountsData.lockBoxUserTerminalAccountsAssignedList"
+            [service]="accountsService"
+            [showSearchForm]="false"
+            [searchForm_checkValid]="false"
+            [fieldsConfigForSearchForm]="[]"
+            [fieldsConfigForList]="terminalAccountsFieldsConfigForList2"
+            [combosData]="combosData"
+            [search_form_combosData]="combosData"
+            [search_form_translate_prefix]="'lockbox.cdmUsers.details.terminalAccounts'"
+            [table_title]="'lockbox.cdmUsers.details.terminalAccounts.listAssigned'"
+            [table_translate_prefix]="''"
+            [table_export_pdf_size]="{width: 1200, height: 800}"
+
+            [table_export_show_buttons]="true"
+            [table_export_header]="'lockbox.cdmUsers.details.terminalAccounts.listAssigned' | translate"
+            [table_export_columns]="terminalAccountsFieldsConfigForExport2"
+
+            [search_form_custom_fields_templates]="{}"
+
+            [table_export_selected_rows]="[]"
+            [table_externalPaging]="false"
+            [table_externalSorting]="false"
+
+            [table_elements_rows]="accountsData.lockBoxUserTerminalAccountsAssignedList"
+            [table_headerHeight]="60"
+            [table_elements_count]="accountsData.lockBoxUserTerminalAccountsAssignedList.length"
+            [table_elements_offset]="0"
+            [table_elements_limit]="accountsData.lockBoxUserTerminalAccountsAssignedList.length"
+
+            [table_footer_show_buttons]="true"
+            [table_footer_visiblePagesCount]="1"
+            [table_footer_pageSize]="50"
+
+            [table_elements_selected_rows]="accountsData.terminalAccountsListAssignedSelected"
+            [table_selection_disabled]="this.accountsForm && this.accountsForm.disabled"
+            [table_rowIdentity]="getRowIdentityFn2()"
+            (onTableSelect)="onTableSelectAssigned($event)">
+
+    </app-dynamic-searchable-table>
+
+</ng-template>

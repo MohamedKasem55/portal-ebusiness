@@ -1,0 +1,34 @@
+<!--<arb-confirm-panel-->
+<!--        [pending]="false"-->
+<!--        [hasFinishAction]="true"-->
+<!--        (finishAction)="finish()">-->
+<!--</arb-confirm-panel>-->
+
+
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+<!--                    <ng-container *ngIf="sharedData['confirm'] && sharedData['confirm']['fileName']">-->
+<!--                        {{ 'wpspayroll.management.systemFileName' | translate }} {{ sharedData['confirm']['fileName'] }}-->
+<!--                    </ng-container>-->
+                    <ng-container *ngIf="sharedData['confirm'] && sharedData['confirm']['processedFileList'] && sharedData['confirm']['processedFileList'].length">
+                        {{ 'wpspayroll.management.systemFileName' | translate }}
+                        <ng-container *ngFor="let file of sharedData['confirm']['processedFileList']; index as i">
+                            {{ sharedData['confirm']['processedFileList'][i] }}{{i != sharedData['confirm']['processedFileList'].length - 1 ? ', ' : '.'}}
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button"
+                            class="btn btn-primary btn-wide">{{ 'public.finish' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

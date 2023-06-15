@@ -1,0 +1,22 @@
+<div class="banner-container loginCampaignBanner">
+  <ngb-carousel *ngIf="banner && banner.length > 0" [showNavigationArrows]="showNavigationArrows"
+    [showNavigationIndicators]="showNavigationIndicators">
+    <ng-template ngbSlide *ngFor="let hero of banner">
+      <div class="picsum-img-wrapper">
+        <a [href]="hero.hyperlink" *ngIf="error == null" target="_blank">
+          <img src="{{ 'data:image/jpg;base64,' + hero.image.content }}" width="570px" height="274px" />
+        </a>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+  <ngb-carousel class="no-indicators" *ngIf="!banner || banner.length === 0">
+    <ng-template ngbSlide>
+      <div class="picsum-img-wrapper padding-image">
+        <a target="_blank">
+          <img *ngIf="translate.currentLang ==='ar'" src="./assets/img/banner-ar.png" />
+          <img *ngIf="translate.currentLang ==='en'" src="./assets/img/banner-en.png" />
+        </a>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>

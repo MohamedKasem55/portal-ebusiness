@@ -1,0 +1,269 @@
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body" *ngIf="!errorList()">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                </div>
+                <div class="modal-body" *ngIf="errorList()">
+                    <span class="icon -close icon-failure"></span>
+                    <p>{{ 'payments.failedRequest' | translate }}</p>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button"
+                            class="btn btn-primary btn-wide">{{ 'public.finish' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid" *ngIf="errorList()">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.detailResult' | translate }}</div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="reportErrorTable"
+                              [header]="'myProfile.pending_actions.detailResult' | translate" [columns]="[
+                        {'title':'myProfile.pending_actions.account' | translate ,'dataKey':'accountNumber'},
+                        {'title':'payments.bill-ref' | translate,'dataKey':'billRef'},
+                        {'title':'payments.nick-name' | translate,'dataKey':'nickname'},
+                        {'title':'payments.original-amount' | translate,'dataKey':'amountOriginal'},
+                        {'title':'payments.updated-amount' | translate,'dataKey':'amountPayment'},
+                        {'title':'payments.without-vat-amount' | translate,'dataKey':'amountWithoutVat'},
+                        {'title':'payments.vat-amount' | translate,'dataKey':'vatAmount'},
+                        {'title':'payroll.operation' | translate,'dataKey':'paymentType'},
+                        {'title':'companyAdmin.alerts.result' | translate ,'dataKey':'rejectedReason'}
+                       ]"></table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #reportErrorTable
+                           class="material sme-table sme-table--responsive table"
+                           [rows]="sharedData.validation.errorList" [columnMode]="defaultColumnMode"
+                           [headerHeight]="30"
+                           [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [externalPaging]="false"
+                           [count]="sharedData.validation.errorList.length"
+                           [limit]="(sharedData.validation.errorList.length < 5? sharedData.validation.errorList.length : 5)">
+                <!-- Row Detail Template -->
+                <!-- Row Detail Template -->
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.account' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.accountNumber | date:'dd/MM/yyyy' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.bill-ref' | translate }}</label>
+                                        <div>
+                                            <span>{{row.billRef}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.nick-name' | translate }}</label>
+                                        <div>
+                                            <span>{{row.nickname}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.original-amount' | translate }}</label>
+                                        <div>
+                                            <span>{{row.amountOriginal}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.updated-amount' | translate }}</label>
+                                        <div>
+                                            <span>{{row.amountPayment}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.without-vat-amount' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.amountWithoutVat | amountCurrency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.vat-amount' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.vatAmount | amountCurrency}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payroll.operation' |translate }}</label>
+                                        <div>
+                                            <span *ngIf="row.paymentType != null && (row.paymentType == 'over' || row.paymentType == 'partial' || row.paymentType == 'advanced')">{{'billPaymentType' | modelPipe:row.paymentType}}</span>
+                                            <span *ngIf="row.paymentType != null && (row.paymentType != 'over' && row.paymentType != 'partial' && row.paymentType != 'advanced')">{{'billPaymentType' | modelPipe:'payment'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row" *ngIf="sharedData.validation.errorList.length < 5">
+                            <fieldset>
+
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'companyAdmin.alerts.result' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.rejectedReason }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="accountNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'myProfile.pending_actions.account' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="billRef" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bill-ref' | translate }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="nickname" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.nick-name' | translate }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amountOriginal" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.original-amount' | translate }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amountPayment" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.updated-amount' | translate }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amountWithoutVat" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'payments.without-vat-amount' | translate }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="vatAmount" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{ 'payments.vat-amount' | translate }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="paymentType">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payroll.operation' |translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span
+                                *ngIf="value != null && (value == 'over' || value == 'partial' || value == 'advanced')">{{'billPaymentType' | modelPipe:value}}</span>
+                        <span
+                                *ngIf="value != null && (value != 'over' && value != 'partial' && value != 'advanced')">{{'billPaymentType' | modelPipe:'payment'}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="rejectedReason" *ngIf="sharedData.validation.errorList.length < 5">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'companyAdmin.alerts.result' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-sort="sortFn" ngx-datatable-cell-template>
+                        <span>
+                            {{value}}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [hidden]="!((rowCount / pageSize) > 1)"
+                                    [visiblePagesCount]="visiblePagesCount"
+                                    (change)="reportErrorTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

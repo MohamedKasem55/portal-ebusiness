@@ -1,0 +1,407 @@
+<div [hidden]="firstLoad">
+    <!-- Modal -->
+    <div class="modal fade" bsModal #backConfirm="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ 'public.logout' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'public.confirmBackButton' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" (click)="closeBackConfirm()" class="btn btn-default" data-dismiss="modal">{{
+                        'public.cancel' | translate }}</button>
+                    <button type="button" (click)="logout()" class="btn btn-default" data-dismiss="modal">{{
+                        'public.logout' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" bsModal #backConfirm="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ 'public.logout' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'public.confirmBackButton' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" (click)="closeBackConfirm()" class="btn btn-default" data-dismiss="modal">
+                        {{
+                        'public.cancel' | translate }}
+                    </button>
+                    <button type="button" (click)="logout()" class="btn btn-default" data-dismiss="modal">
+                        {{
+                        'public.logout' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" bsModal #logoutConfirm="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ 'public.logout' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'public.confirmLogout' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" (click)="closeLogoutConfirm()" class="btn btn-default" data-dismiss="modal">
+                        {{ 'public.cancel' | translate }}
+                    </button>
+                    <button type="button" (click)="logout()" class="btn btn-default" data-dismiss="modal">
+                        {{ 'public.logout' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Session Idle Modal -->
+    <div class="modal fade" bsModal #sessionIdleConfirm="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ 'public.logout' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'public.confirmSessionIdle' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" (click)="logout()" class="btn btn-default" data-dismiss="modal">
+                        {{ 'public.logout' | translate }}
+                    </button>
+                    <button type="button" (click)="renewSession()" class="btn btn-default" data-dismiss="modal">
+                        {{ 'public.keepWorking' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- sme-header -->
+    <div class="sme-header navbar navbar-fixed-top print">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="sme-header__menu-toggler sme-header__btn human-selectable sme-header-left-menu-options"
+                   (click)="toggleMenuLeft($event)" title="{{ 'public.toggle' | translate }} {{
+    'public.menu' | translate
+    }}" data-toggle="sme-navigation">
+                    <span class="icon -menu"></span>
+                    <span class="sr-only">{{ 'public.toggle' | translate }}
+                        {{ 'public.menu' | translate }}</span>
+                </a>
+
+                <a (click)="showLogoutConfirm()" class="sme-header__logout sme-header__btn human-selectable"
+                   title="{{ 'public.logout' | translate }}">
+                    <span class="icon -logout"></span>
+                    <span class="sr-only">{{ 'public.logout' | translate }}</span>
+                </a>
+
+                <a ngTourStepARB="stepWelcomePage" class="sme-header__brand" routerLinkActive="active"
+                   [routerLink]="['/dashboard']">
+                    <img  src="img/logo.svg" alt="{{ 'public.al-rajhi' | translate }}"  />
+                </a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li *ngIf="
+    authenticationService.activateOption(
+        'MailCenter',
+        [],
+        ['corporate']
+    )
+    " class="sme-header__notifications dropdown" dropdown>
+                    <a dropdownToggle id="sme-header--messages" class="sme-header__btn dropdown-toggle"
+                       data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="{{ 'public.toggle' | translate }} {{
+                        'dashboard.messages' | translate }}">
+                        <span class="icon -message"></span>
+                        <span class="badge" *ngIf="unReadMails > 0">{{ unReadMails }}</span>
+                        <span class="sr-only">{{ 'public.toggle' | translate }}
+                            {{ 'dashboard.messages' | translate }}</span>
+                    </a>
+
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu--messages scrollable-menu"
+                        aria-labelledby="sme-header--messages">
+                        <li class="dropdown-title">
+                            <a routerLinkActive="active" [routerLink]="['/myprofile/mails']">
+                                {{ 'dashboard.messages' | translate }}
+                            </a>
+                        </li>
+                        <li class="dropdown-item" *ngFor="let mail of mails; let i = index">
+                            <a routerLinkActive="active" (click)="navigateToMailDetail(i)">
+                                <span class="from">{{ mail.fromName }}</span>
+                                <span class="excerpt">{{ mail.subject }}</span>
+                            </a>
+                        </li>
+                        <li *ngIf="!mails || mails.length == 0">
+                            <a>
+                                <span class="from"></span>
+                                <span class="excerpt">{{
+                                    'dashboard.nomessages' | translate
+                                    }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngIf="
+    authenticationService.activateOption(
+        'PendingActionsMenu',
+        [],
+        ['corporate']
+    )
+    " class="sme-header__notifications dropdown" ngTourStepARB="stepPendingActions" dropdown>
+                    <a dropdownToggle id="sme-header--notifications" class="sme-header__btn dropdown-toggle"
+                       data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="{{ 'public.toggle' | translate }} {{
+        'dashboard.notifications' | translate
+    }}">
+                        <span class="icon -notification"></span>
+                        <span class="badge" *ngIf="pendingActions.total > 0">{{
+                            pendingActions.total ? pendingActions.total : 0
+                            }}</span>
+                        <span class="sr-only">{{
+                            'dashboard.notifications' | translate
+                            }}</span>
+                    </a>
+
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu--notifications"
+                        aria-labelledby="sme-header--notifications" style="height: 300px;">
+                        <perfect-scrollbar class="scroll-container" fxFlex="auto" [scrollIndicators]="true">
+                            <div style="height: 300px;" [ngClass]="{
+            'dropdown-menu': true,
+            'dropdown-menu--notifications-ff': !isSafariOrIE(),
+            'dropdown-menu--notifications-ie-safari': isSafariOrIE()
+        }">
+                                <li class="dropdown-title">
+                                    <a [routerLink]="['/myprofile/pending']">
+                                        {{ 'dashboard.pending-actions' | translate }}
+                                    </a>
+                                </li>
+                                <ng-container *ngFor="let counter of pendingActions.counters; let i = index">
+                                    <li *ngIf="counter.value != 0">
+                                        <a [routerLink]="[counter.route]">
+                                            <span class="badge">{{ counter.value }}</span>
+                                            <span class="text">&nbsp;&nbsp;{{ counter.name | translate }}</span>
+                                        </a>
+                                    </li>
+                                </ng-container>
+                                <li
+                                        *ngIf="
+            !pendingActions.total ||
+            pendingActions.total == 0 ||
+            !pendingActions.counters ||
+            !pendingActions.counters.length
+            ">
+                                    <span class="text">{{
+                                        'dashboard.nopendings' | translate
+                                        }}</span>
+                                </li>
+                            </div>
+                        </perfect-scrollbar>
+                    </ul>
+                </li>
+                <li class="sme-header__user dropdown">
+                    <a id="sme-header--user" class="dropdown-toggle" role="button" (click)="toggleMenuRight($event)"
+                       title="{{ 'public.myProfile' | translate }}">
+                        <span class="sme-header__user-avatar">
+                            <a [routerLink]="['/preferences/user-profile']">
+                                <img src="{{ userImage }}" />
+                            </a>
+                        </span>
+                        <span class="sme-header__user-name">{{currentUser}}</span>
+                        <span class="caret"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a (click)="showLogoutConfirm()" class="sme-header__btn human-selectable"
+                       title="{{ 'public.logout' | translate }}">
+                        <span class="icon -logout"></span>
+                        <span class="sr-only">{{ 'public.logout' | translate }}</span>
+                    </a>
+                </li>
+            </ul>
+
+            <p class="sme-header__switch navbar-text navbar-right">
+                <a *ngIf="!translate || translate.currentLang !== 'en'" class="header-switch-ar human-selectable"
+                   (click)="changeEnglish()">{{ 'public.english' | translate }}</a>
+                <a *ngIf="!translate || translate.currentLang !== 'ar'" class="header-switch-enhuman-selectable" (click)="changeArabic()">{{
+                    'public.arabic' | translate }}</a>
+            </p>
+        </div>
+    </div>
+    <!-- ./sme-header -->
+
+    <!-- sme-navigation -->
+
+    <dashboard-menu #menuLeft [menu]="dataMenuLeft" [isSearchable]="true" [hasMessage]="true" [hasHelp]="false"
+                    [side]="'left'" ngTourStepARB="stepMenuOptions">
+        <div class="sme-navigation__head sme-navigation__menu" navigation_menu withoutCounter>
+            <div class="sme-navigation__menu-toggler collapsed">
+                <a (click)="menuLeft.isSearchCollapsed = !menuLeft.isSearchCollapsed"
+                   class="sme-navigation__menu-toggler" [ngClass]="{ collapsed: menuLeft.isSearchCollapsed }"
+                   role="button">
+                    <span class="sme-navigation__img sme-navigation__user-avatar">
+                        <span>
+                            <img src="{{ userImage }}" />
+                        </span>
+                    </span>
+                    <span class="text sme-navigation__user-name">{{currentUser}}</span>
+                </a>
+
+                <a class="sme-navigation__menu-link collapsed" [routerLink]="['/myprofile/mails']">
+                    <span class="icon -message">
+                        <span class="badge" *ngIf="unReadMails > 0">{{ unReadMails }}</span>
+                    </span>
+                </a>
+                <a class="sme-navigation__menu-link collapsed" [routerLink]="['/myprofile/pending/requeststatus']">
+                    <span class="icon -notification">
+                        <span class="badge" *ngIf="pendingActions.total > 0">{{
+                            pendingActions.total ? pendingActions.total : 0
+                            }}</span>
+                    </span>
+                </a>
+
+                <a class="sme-navigation__language sme-navigation__menu-link collapsed">
+                    <span class="sme-navigation__img">
+                        <span *ngIf="!translate||translate.currentLang!=='ar'">
+                            <img src="img/languages/arab-language.svg"
+                                 alt="Ã¯Âºï¿½Ã¯Â»Å¸Ã¯Â»Å’Ã¯ÂºÂ®Ã¯Âºâ€˜Ã¯Â»Â´Ã¯Âºâ€�" (click)="changeArabic()" />
+                        </span>
+                        <span *ngIf="!translate||translate.currentLang!=='en'">
+                            <img src="img/languages/english-language.svg"
+                                 alt="Ã¯Âºï¿½Ã¯Â»Å¸Ã¯Â»Å’Ã¯ÂºÂ®Ã¯Âºâ€˜Ã¯Â»Â´Ã¯Âºâ€�" (click)="changeEnglish()" />
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </dashboard-menu>
+
+    <dashboard-menu #menuRight [menu]="dataMenuRight" [isSearchable]="false" [hasMessage]="false" [hasHelp]="false"
+                    [side]="'right'" ngTourStepARB="stepRightBarOptions">
+        <ul class="sme-navigation__menu-up">
+            <li class="panel">
+                <a *ngIf="translate.currentLang!=='en'" class="human-selectable" (click)="changeEnglish()">{{
+                    'public.english' | translate }}</a>
+                <a *ngIf="translate.currentLang!=='ar'" class="human-selectable" (click)="changeArabic()">{{
+                    'public.arabic' | translate }}</a>
+            </li>
+        </ul>
+
+        <div widget_menu class="menu_widget" *ngIf="menuRight.isNavigationOpen()">
+            <arb-calendar></arb-calendar>
+        </div>
+        <div widget_menu class="menu_widget" *ngIf="menuRight.isNavigationOpen()">
+            <div class="sme-page-block" *ngIf="banner && banner.length > 0; else noData">
+                <div class="left-menu-banner">
+                    <app-banner [banner]="banner"></app-banner>
+                </div>
+            </div>
+        </div>
+    </dashboard-menu>
+
+    <!-- ./sme-navigation -->
+
+    <div id="sme-main">
+        <div class="sme-dashboard">
+            <div class="container-fluid" *ngIf="haveToShowNational()">
+                <div *ngIf="
+    haveToShowNational() &&
+    authenticationService.activateOption(
+        'NationalAddress',
+        [],
+        ['CompanyAdmins']
+                   )
+    " class="alert alert-warning print">
+                    {{ 'companyAdmin.nationalAddress.warning' | translate
+                    }}<a [routerLink]="['/companyadmin/nationalAddress']">{{ 'companyAdmin.nationalAddress.register' |
+                    translate }}</a>
+                </div>
+                <div *ngIf="
+    haveToShowNational() &&
+    !authenticationService.activateOption(
+        'NationalAddress',
+        [],
+        ['CompanyAdmins']
+    )
+    " class="alert alert-warning print">
+                    {{ 'companyAdmin.nationalAddress.warningUser' | translate }}
+                </div>
+            </div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sarie Modal -->
+<div class="modal fade" bsModal #IPSTCStatusModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="headerDiv">
+                    <h4 class="ips-modal-title">{{ 'menu.company_admin.alias-management.menu' | translate }}</h4>
+                </div>
+                <div class="headerDiv headerImg">
+                    <img class="sarieImg" src="assets/img/SARIE.png">
+                </div>
+            </div>
+            <div class="ips-modal-title2">
+                <p>{{ 'menu.company_admin.alias-management.link_alias' | translate }}</p>
+            </div>
+            <div class="ips-modal-body">
+                <p>{{ 'menu.company_admin.alias-management.modelText' | translate }}</p>
+            </div>
+            <div class="modal-icons">
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/phone.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.mobile' | translate }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/email.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.email' | translate }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/store.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.comercialRegistration' | translate
+                        }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/group.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.unn' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="ipSLater()" class="btn btn-default" data-dismiss="modal">{{
+                    'menu.company_admin.alias-management.later' | translate }}</button>
+                <button type="button" (click)="IPSreject()" class="btn btn-default" data-dismiss="modal">{{
+                    'menu.company_admin.alias-management.reject' | translate }}</button>
+                <button type="button" (click)="IPSagree()" class="btn btn-primary" data-dismiss="modal">{{
+                    'menu.company_admin.alias-management.accepet' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VAT Modal -->
+<vat-company-modal #VATCompany></vat-company-modal>
+<app-free-sms-alert #SMSAlert></app-free-sms-alert>
+<request-to-pay-modal #RequestToPay></request-to-pay-modal>

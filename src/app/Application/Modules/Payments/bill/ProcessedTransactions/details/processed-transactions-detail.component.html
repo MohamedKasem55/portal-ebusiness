@@ -1,0 +1,17 @@
+<p style="padding-left: 15px">{{'payments.bill-payments' | translate}}</p>
+<arb-panel *ngIf="selectedItem">
+    <fieldset>
+        <app-dynamic-simple-extras-form-fields [translate_prefix]="'payments'" [combosData]="[]"
+            [formModel]="billProcessTransactionsForm" [fieldsConfigs]="entityPropertiesbillProcessTransactions">
+        </app-dynamic-simple-extras-form-fields>
+    </fieldset>
+</arb-panel>
+<app-levels-table *ngIf="selectedItem?.securityLevelsDTOList"
+    [futureSecurityLevels]="selectedItem.securityLevelsDTOList">
+</app-levels-table>
+
+<arb-panel-buttons>
+    <a class="btn btn-default btn-wide" [routerLink]="[getBackUrl()]">{{
+        'public.back' | translate }}
+    </a>
+</arb-panel-buttons>

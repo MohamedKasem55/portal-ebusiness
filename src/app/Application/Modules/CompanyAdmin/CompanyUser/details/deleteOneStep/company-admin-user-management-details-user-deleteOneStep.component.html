@@ -1,0 +1,16 @@
+<arb-breadcrumb [routes]="[
+['companyAdmin.companyAdmin'],
+	['companyAdmin.user.management',['/companyadmin/manage/user']],
+	['companyAdmin.user.delete']
+]">
+</arb-breadcrumb>
+
+<arb-panel>
+    <arb-confirm-panel [pending]="false" [hasFinishAction]="false">
+    </arb-confirm-panel>
+</arb-panel>
+
+<arb-panel-buttons>
+    <a href="#" class="btn btn-default btn-wide" routerLinkActive="active" [routerLink]="['/companyadmin/manage/user']">
+        {{'public.back' | translate }}</a>
+</arb-panel-buttons>

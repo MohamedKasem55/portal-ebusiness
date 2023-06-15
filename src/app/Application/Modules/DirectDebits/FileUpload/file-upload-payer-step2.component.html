@@ -1,0 +1,115 @@
+<div class="container-fluid">
+	<div class="sme-head">
+        <div class="sme-head__title">{{ 'directDebits.addPayer' | translate}}</div>
+    </div>
+</div>    
+
+<div class="container-fluid" *ngFor="let payer of initPayer?.companyCustomersList">
+	<div class="sme-page-block">
+		<div class="sme-form">		
+			<div class="sme-form__content">
+			<form autocomplete="off" class="sme-form__form"  >
+					<div class="sme-form__body">
+							<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="deduct-from-account-input">{{ 'directDebits.mandateReference' |
+											translate }}</label> 
+										<span id="deduct-from-account-input" class="form-control">{{payer.mandate}}</span>
+                                        
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.personalName' |
+											translate }}</label> 
+										<span class="form-control">{{payer.personalName}}
+                                        </span>
+									</div>
+								</div>
+							</div>
+							</fieldset>
+							<fieldset>
+							<div class="row">
+								
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'directDebits.payerAccount' |
+											translate }}</label> 
+										<span class="form-control">{{payer.account}}
+                                        </span>
+									</div>	
+								</div>	
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'public.bank' |
+											translate }}</label> 
+										<span class="form-control" >{{ 'directDebitBankCode' | modelPipe:payer.bank}}
+                                        </span>
+									</div>	
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'public.amount' |
+											translate }}</label> 
+										<span class="form-control" >{{ payer.amount | amountCurrency}}
+                                        </span>
+									</div>	
+								</div>	
+							</div>
+							</fieldset>
+							<fieldset>
+							<div class="row">	
+								
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'directDebits.personalAddress1' |
+											translate }}</label> 
+										<span class="form-control" >{{payer.personalAddress1}}
+                                        </span>
+									</div>	
+								</div>	
+									<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'directDebits.personalAddress2' |
+											translate }}</label> 
+										<span class="form-control" >{{payer.personalAddress2}}
+                                        </span>
+									</div>	
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'directDebits.description1' |
+											translate }}</label> 
+										<span class="form-control" >{{payer.description1}}
+                                        </span>
+									</div>	
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'directDebits.description2' |
+											translate }}</label> 
+										<span class="form-control" >{{payer.description2}}
+                                        </span>
+									</div>	
+								</div>
+							</div>
+							</fieldset>
+														
+					</div>
+			</form>		
+			</div>
+		</div>
+	</div>		
+</div>	

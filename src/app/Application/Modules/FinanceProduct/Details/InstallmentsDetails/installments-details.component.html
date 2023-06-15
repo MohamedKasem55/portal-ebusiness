@@ -1,0 +1,84 @@
+<arb-panel>
+  <div class='sme-page-block'>
+
+    <div class='sme-data-table'>
+      <div class='sme-data-table__head'>
+        <div class='sme-data-table__export'>
+          <table-export [dataTable]='StatusTable' [header]="'financeProduct.details.installmentsDetails' | translate"
+                        [columns]="[
+                                   {'title':'financeProduct.details.name' | translate,'dataKey':'name'},
+                                   {'title':'financeProduct.details.date' | translate,'dataKey':'dueDate'},
+                                   {'title':'financeProduct.details.amount' | translate,'dataKey':'amt'},
+                                   {'title':'financeProduct.details.status' | translate,'dataKey':'statusText'}]">
+          </table-export>
+        </div>
+      </div>
+      <div>
+
+        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #StatusTable
+                       class='material sme-table sme-table--responsive table' [rows]='data' [headerHeight]='30'
+                       [footerHeight]='footerHeight' [columnMode]="'force'" [rowHeight]='defaultHeight'
+                       [externalPaging]='false' [count]='data.length' [externalSorting]='false'>
+
+
+          <ngx-datatable-column prop='name' [width]='220' [resizeable]='false' headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.details.name' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span>
+                               {{row.name }}
+                            </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column prop='dueDate' [width]='220' [resizeable]='false' headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.details.date' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{ row.dueDate}}
+                            </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+
+          <ngx-datatable-column prop='amt' [width]='220' [resizeable]='false' headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                  {{'financeProduct.details.amount' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.amt | amountCurrency}} {{row.currency}}
+                            </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column prop='status' [width]='220' [resizeable]='false'
+                                headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                  {{'financeProduct.details.status' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                            <span class='statusSpan'
+                                  [ngClass]=" (row.status=='P' || row.status=='C')? 'greenSpan':'yellowSpan'">
+                             {{row.statusText }}
+                            </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+        </ngx-datatable>
+
+      </div>
+    </div>
+  </div>
+</arb-panel>

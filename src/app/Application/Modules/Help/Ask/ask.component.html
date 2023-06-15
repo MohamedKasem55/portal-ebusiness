@@ -1,0 +1,148 @@
+<arb-breadcrumb [routes]="[['public.help'], ['dashboard.ask']]">
+</arb-breadcrumb>
+
+<arb-steps
+  [currentStep]="step"
+  [steps]="['help.step1', 'help.step2', 'help.step3']"
+>
+</arb-steps>
+
+<div class="container-fluid">
+  <div class="sme-page-block">
+    <div class="sme-form">
+      <div class="sme-form__content">
+        <div class="sme-form__body">
+
+          <form autocomplete="off" #f="ngForm" [formGroup]="askForm" *ngIf="step !== 3">
+
+            <div class="sme-form__title">
+              <div class="col-xs-12 col-sm-6"> {{ 'dashboard.ask' | translate }} </div>
+			</div>
+			
+
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>{{ 'help.ask.customerCic' | translate }}</label>
+                  <input formControlName="customerCic" type="text" class="form-control" required maxlength="16" />
+                </div>
+			  </div>
+			  
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>{{ 'help.ask.customerName' | translate }}</label>
+                  <input formControlName="customerName" type="text" class="form-control" required maxlength="16" />
+                </div>
+			  </div>
+			  
+			</div>
+			
+
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>{{ 'help.ask.customerEmail' | translate }} *</label>
+				  <input formControlName="customerEmail" type="text" class="form-control" required />
+				  <div class="alert alert-danger" *ngIf="isValidEmail()">
+					  <p> {{ 'public.emailVerification' | translate }} </p>
+				  </div>
+                </div>
+			  </div>
+			  
+              <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <label>{{ 'help.ask.mobileNumber' | translate }} *</label>
+                  <input formControlName="mobileNumber" type="text" class="form-control" required maxlength="15"  inputPattern="onlyMobileNumbers" />
+					<div *ngIf="askForm.controls.mobileNumber.hasError('required') && (askForm.controls.mobileNumber.touched || askForm.controls.mobileNumber.value.length > 0 )"
+						 class="alert alert-danger">
+						<small>{{'companyAdmin.user.error.movilNumberRequired' | translate }}</small>
+					</div>
+					<div *ngIf="askForm.controls.mobileNumber.hasError('maxlength') && (askForm.controls.mobileNumber.touched || askForm.controls.mobileNumber.value.length > 0 )"
+						 class="alert alert-danger">
+						<small>{{'companyAdmin.user.movilNumber' | translate }}{{ 'error.maxlength' | translate:{size: 15} }}</small>
+					</div>
+					<div *ngIf="askForm.controls.mobileNumber.hasError('pattern') && (askForm.controls.mobileNumber.touched || askForm.controls.mobileNumber.value.length > 0 )"
+						 class="alert alert-danger">
+						<small>{{'companyAdmin.user.movilNumber' | translate }}{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+					</div>
+				</div>	
+			  </div>
+
+			</div>
+
+			  
+			<div class="row">
+
+				<div class="col-xs-12 col-sm-6">
+					<div *ngIf="listLoaded" class="form-group">
+						<label>{{ 'help.ask.service' | translate }} *</label>
+						<ng-select [notFoundText]="'public.noData' | translate" formControlName="serviceValue" required>
+							<ng-option *ngFor="let type of servicesList" [value]="type.key" >
+							{{ type.value }}
+							</ng-option>
+						</ng-select>
+						<div class="alert alert-danger" *ngIf="isValidService()">
+							<p> {{ 'public.serviceVerification' | translate }} </p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-6">
+					<div *ngIf="listLoaded" class="form-group">
+						<label>{{ 'help.ask.problem' | translate }} *</label>
+						<ng-select [notFoundText]="'public.noData' | translate" formControlName="problemValue" required>
+							<ng-option *ngFor="let type of problemsList" [value]="type.key" >
+							{{ type.value }}
+							</ng-option>
+						</ng-select>
+						<div class="alert alert-danger" *ngIf="isValidProblem()">
+							<p> {{ 'public.problemVerification' | translate }} </p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">
+
+				<div class="col-xs-12 col-sm-6">
+					<div class="form-group">
+						<label>{{ 'help.ask.comments' | translate }} *</label>
+						<input formControlName="comments" type="text" class="form-control" required />
+						<div class="alert alert-danger" *ngIf="isValidComments()">
+							<p> {{ 'public.commentVerification' | translate }} </p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			  
+          </form>
+
+          <div *ngIf="step === 3 && responseSuccessful" class="sme-box sme-wizard__content" >
+            <div>
+              <div class="sme-wizard__success">
+                <span class="icon -check"></span>
+                {{ 'public.requestOk' | translate }}
+                <br /><br />
+                {{ 'public.thanks' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <arb-buttons>
+            <button *ngIf="step === 1" type="button" class="btn btn-primary btn-wide" (click)="proceed()" [disabled]="proceedIsDisabled() ">
+              {{ 'public.proceed' | translate }}
+            </button>
+            <button *ngIf="step === 2" type="button" class="btn btn-primary btn-wide" (click)="back()" > {{ 'public.back' | translate }} </button>
+            <button *ngIf="step === 2" type="button" class="btn btn-primary btn-wide" (click)="confirm()" > {{ 'public.confirm' | translate }} </button>
+            <button *ngIf="step === 3" type="button" class="btn btn-primary btn-wide" (click)="finish()" > {{ 'public.finish' | translate }} </button>
+		  </arb-buttons>
+		  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls' | translate }}</li>
+        <li>
+            <a class="human-selectable" href="#"
+               [routerLink]="['/payroll/payroll-cards']">
+                {{ 'dashboard.payrollCards' | translate }}
+            </a>
+        </li>
+        <li class="active">{{ 'payroll.cardOperationsPage' | translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid docs-component" *ngIf="fourSteps()">
+    <div class="sme-panel">
+        <div class="sme-panel__body">
+            <div class="sme-wizard">
+                <ul class="sme-wizard__steps">
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 1, completed: step > 1 }">
+                        <span>
+                          <span class="num">1</span>
+                          <span class="text">{{ 'public.selectDropdown' | translate }}</span>
+                        </span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 2, completed: step > 2 }">
+                        <span>
+                          <span class="num">2</span>
+                          <span class="text">{{ 'public.edit' | translate }}</span>
+                        </span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 3, completed: step > 3 }">
+                        <span>
+                          <span class="num">3</span>
+                          <span class="text">{{ 'public.confirm' | translate }}</span>
+                        </span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 4, completed: step > 4 }">
+                        <span>
+                          <span class="icon -check"></span>
+                          <span class="text">{{ 'public.summary' | translate }}</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid docs-component" *ngIf="!fourSteps()">
+    <div class="sme-panel">
+        <div class="sme-panel__body">
+            <div class="sme-wizard">
+                <ul class="sme-wizard__steps">
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 1, completed: step > 1 }">
+                        <span>
+                          <span class="num">1</span>
+                          <span class="text">{{ 'public.selectDropdown' | translate }}</span>
+                        </span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 2, completed: step > 2 }">
+                        <span>
+                          <span class="num">2</span>
+                          <span class="text">{{ 'public.confirm' | translate }}</span>
+                        </span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{ current: step === 4, completed: step > 4 }">
+                        <span>
+                          <span class="icon -check"></span>
+                          <span class="text">{{ 'public.summary' | translate }}</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <router-outlet (activate)="componentAdded($event)"></router-outlet>
+</div>
+
+<!--
+	<app-card-operations-step1 *ngIf="step === 1"></app-card-operations-step1>
+	<app-card-operations-step2 *ngIf="step === 2"></app-card-operations-step2>
+	<app-card-operations-step3 *ngIf="step === 3"></app-card-operations-step3>
+ -->
+<!--
+ <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button *ngIf="step > 1 && step < 3" type="button" class=" btn btn-default btn-wide" (click)="previous()" >{{'public.back' | translate }}</button>
+    <button *ngIf="step < 3" type="submit" class=" btn btn-primary btn-wide" (click)="next()" >{{'public.next' | translate}}</button>
+    <button *ngIf="step == 3" type="submit" class=" btn btn-primary btn-wide" (click)="next()" >{{'public.finish' | translate}}</button>
+</div>
+-->
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button *ngIf="wizardStep === 1"
+            (click)="backCardInquiries()"
+            class=" btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+    <button *ngIf="wizardStep === 2 || wizardStep === 3"
+            (click)="back()"
+            class=" btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+    <button *ngIf="wizardStep === 1 || (wizardStep === 2 && fourSteps())"
+            (click)="proceed()"
+            [disabled]="!(
+                            sharedData.operationCode !== '' &&
+                            actualForm.form.valid &&
+                            (sharedData.selectedRows.length && sharedData.selectedRows.length > 0)
+                          ) || !validStepForms()" class=" btn btn-primary btn-wide">
+        {{ 'public.next' | translate }}
+    </button>
+    <!-- <button *ngIf="wizardStep===1" (click)="proceed()" class=" btn btn-primary btn-wide">{{ 'public.next' | translate }}</button> -->
+    <button *ngIf="(wizardStep === 2 && !fourSteps()) || wizardStep === 3"
+            (click)="confirm()"
+            [disabled]="!actualForm.form.valid"
+            class=" btn btn-primary btn-wide">
+        {{ 'public.confirm' | translate }}
+    </button>
+    <button *ngIf="wizardStep === 4"
+            (click)="finish()"
+            class=" btn btn-primary btn-wide">
+        {{ 'public.finish' | translate }}
+    </button>
+</div>

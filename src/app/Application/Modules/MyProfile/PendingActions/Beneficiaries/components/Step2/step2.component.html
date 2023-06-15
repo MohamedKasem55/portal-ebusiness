@@ -1,0 +1,217 @@
+<app-beneficiaries-table *ngIf="!sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0"
+                         [items]="sharedData.beneficiariesSelected"
+                         [modal]="modalAuth"
+                         [futureLevels]="false"
+                         [externalPagination]="false"
+                         [selectable]="false"
+                         [selected]="sharedData.beneficiariesSelected">
+</app-beneficiaries-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListAlrajhi
+&& sharedData.authorizeValidate.batchListAlrajhi['toAuthorize'].length>0)
+||
+(sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListLocal
+&& sharedData.authorizeValidate.batchListLocal['toAuthorize'].length>0)
+||
+(sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListInternational
+&& sharedData.authorizeValidate.batchListInternational['toAuthorize'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-beneficiaries-within-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListAlrajhi
+&& sharedData.authorizeValidate.batchListAlrajhi['toAuthorize'].length>0"
+                                [items]="sharedData.authorizeValidate.batchListAlrajhi.toAuthorize"
+                                [modal]="modalAuth"
+                                [futureLevels]="true"
+                                [externalPagination]="false"
+                                [selectable]="false">
+</app-beneficiaries-within-table>
+
+<app-beneficiaries-local-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListLocal
+&& sharedData.authorizeValidate.batchListLocal['toAuthorize'].length>0"
+                               [items]="sharedData.authorizeValidate.batchListLocal.toAuthorize"
+                               [modal]="modalAuth"
+                               [futureLevels]="true"
+                               [externalPagination]="false"
+                               [selectable]="false">
+</app-beneficiaries-local-table>
+
+<app-beneficiaries-international-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListInternational
+&& sharedData.authorizeValidate.batchListInternational['toAuthorize'].length>0"
+                                       [items]="sharedData.authorizeValidate.batchListInternational.toAuthorize"
+                                       [modal]="modalAuth"
+                                       [futureLevels]="true"
+                                       [externalPagination]="false"
+                                       [selectable]="false">
+</app-beneficiaries-international-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListAlrajhi
+&& sharedData.authorizeValidate.batchListAlrajhi['toProcess'].length>0)
+||
+(sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListLocal
+&& sharedData.authorizeValidate.batchListLocal['toProcess'].length>0)
+||
+(sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListInternational
+&& sharedData.authorizeValidate.batchListInternational['toProcess'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-beneficiaries-within-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListAlrajhi
+&& sharedData.authorizeValidate.batchListAlrajhi['toProcess'].length>0"
+                                [items]="sharedData.authorizeValidate.batchListAlrajhi.toProcess"
+                                [modal]="modalAuth"
+                                [futureLevels]="true"
+                                [externalPagination]="false"
+                                [selectable]="false">
+</app-beneficiaries-within-table>
+
+<app-beneficiaries-local-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListLocal
+&& sharedData.authorizeValidate.batchListLocal['toProcess'].length>0"
+                               [items]="sharedData.authorizeValidate.batchListLocal.toProcess"
+                               [modal]="modalAuth"
+                               [futureLevels]="true"
+                               [externalPagination]="false"
+                               [selectable]="false">
+</app-beneficiaries-local-table>
+
+<app-beneficiaries-international-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListInternational
+&& sharedData.authorizeValidate.batchListInternational['toProcess'].length>0"
+                                       [items]="sharedData.authorizeValidate.batchListInternational.toProcess"
+                                       [modal]="modalAuth"
+                                       [futureLevels]="true"
+                                       [externalPagination]="false"
+                                       [selectable]="false">
+</app-beneficiaries-international-table>
+
+<app-beneficiaries-within-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListAlrajhi
+&& sharedData.authorizeValidate.batchListAlrajhi['notAllowed'].length>0"
+                                [items]="sharedData.authorizeValidate.batchListAlrajhi.notAllowed"
+                                [modal]="modalAuth"
+                                [futureLevels]="true"
+                                [externalPagination]="false"
+                                [selectable]="false">
+</app-beneficiaries-within-table>
+
+<app-beneficiaries-local-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListLocal
+&& sharedData.authorizeValidate.batchListLocal['notAllowed'].length>0"
+                               [items]="sharedData.authorizeValidate.batchListLocal.notAllowed"
+                               [modal]="modalAuth"
+                               [futureLevels]="true"
+                               [externalPagination]="false"
+                               [selectable]="false">
+</app-beneficiaries-local-table>
+
+<app-beneficiaries-international-table *ngIf="sharedData.aproveFlow
+&& sharedData.beneficiariesSelected.length > 0
+&& sharedData.authorizeValidate.batchListInternational
+&& sharedData.authorizeValidate.batchListInternational['notAllowed'].length>0"
+                                       [items]="sharedData.authorizeValidate.batchListInternational.notAllowed"
+                                       [modal]="modalAuth"
+                                       [futureLevels]="true"
+                                       [externalPagination]="false"
+                                       [selectable]="false">
+</app-beneficiaries-international-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="sharedData.aproveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;"
+                     *ngIf="sharedData.authorizeValidate && sharedData.authorizeValidate.generateChallengeAndOTP && sharedData.authorizeValidate.generateChallengeAndOTP !=null && sharedData.authorizeValidate.generateChallengeAndOTP.typeAuthentication !=='IVR'">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.authorizeValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sme-form__body" style="padding: 15px;"
+                     *ngIf="sharedData.authorizeValidate && sharedData.authorizeValidate.generateChallengeAndOTP !=null && sharedData.authorizeValidate.generateChallengeAndOTP.typeAuthentication ==='IVR'">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div style="text-align: justify; padding: 20px;">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.authorizeValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sme-form__content" *ngIf="!sharedData.aproveFlow">
+        <div class="sme-form__form">
+            <div class="sme-form__body" style="padding: 15px;">
+                <div class="sme-form__box sme-form__box--form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                <textarea class="form-control" rows="3" maxlength="150"
+                                          [(ngModel)]="sharedData.rejectReason"
+                                          name="rejectReason"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

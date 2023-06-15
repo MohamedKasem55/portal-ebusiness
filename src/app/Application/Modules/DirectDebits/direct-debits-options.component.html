@@ -1,0 +1,65 @@
+   <div class="sme-breadcrumb">
+       <ol class="breadcrumb">
+           <li class="active">{{ 'dashboard.payments' | translate }}</li>
+           <li class="active">{{ 'dashboard.directDebits' | translate }}</li>
+       </ol>
+   </div>
+
+   <div class="container-fluid">
+       <div class="sme-page-block">
+           <div class="sme-form">
+               <div class="sme-form__title"></div>
+
+               <div class="sme-form__content">
+                   <form autocomplete="off" class="sme-form__form">
+                       <div class="sme-form__body">
+                           <div class="row">
+                               <ul>
+                                   <li *ngIf="authenticationService.activateOption('DirectDebitDashboard',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active" (click)="goDashboard()">
+                                           {{ 'directDebits.dashboard' | translate }}
+                                       </a>
+                                   </li>
+                                   <li *ngIf="authenticationService.activateOption('DirectDebitManagePayer',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active"
+                                           (click)="goDirectDebitsManagePayer()">
+                                           {{ 'directDebits.directDebitsCustomers' | translate }}
+                                       </a>
+                                   </li>
+                                   <li *ngIf="authenticationService.activateOption('DirectDebitManagePayer',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active" (click)="goUploadPayer()">
+                                           {{ 'directDebits.uploadPayer' | translate }}
+                                       </a>
+                                   </li>
+                                   <li
+                                       *ngIf="authenticationService.activateOption('DirectDebitGenerateClaimFile',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active"
+                                           (click)="goGenerateClaimFile()">
+                                           {{ 'directDebits.generateClaimFile' | translate }}
+                                       </a>
+                                   </li>
+                                   <li *ngIf="authenticationService.activateOption('DirectDebitUploadClaimFile',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active"
+                                           (click)="goUploadClaimFile()">
+                                           {{ 'directDebits.uploadClaimFile' | translate }}
+                                       </a>
+                                   </li>
+                                   <li *ngIf="authenticationService.activateOption('DirectDebitProcessFile',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active" (click)="goProcessFile()">
+                                           {{ 'directDebits.processFile' | translate }}
+                                       </a>
+                                   </li>
+                                   <li *ngIf="authenticationService.activateOption('DirectDebitRequestStatus',[],[])">
+                                       <a class="human-selectable" routerLinkActive="active"
+                                           (click)="goRequestStatus()">
+                                           {{ 'directDebits.requestStatus' | translate }}
+                                       </a>
+                                   </li>
+                               </ul>
+                           </div>
+                       </div>
+                   </form>
+               </div>
+           </div>
+       </div>
+   </div>

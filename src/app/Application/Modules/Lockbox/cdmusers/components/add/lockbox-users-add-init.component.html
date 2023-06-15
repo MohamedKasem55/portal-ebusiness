@@ -1,0 +1,25 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-panel [formGroup]="form">
+    <form autocomplete="off" [formGroup]="form">
+        <div class="row">
+            <fieldset>
+                <app-dynamic-simple-extras-form-fields
+                        [formModel]="this.form"
+                        [fieldsConfigs]="this.entityProperties"
+                        [translate_prefix]="'lockbox.cdmUsers'"
+                        [combosData]="[]">
+                </app-dynamic-simple-extras-form-fields>
+            </fieldset>
+        </div>
+    </form>
+</arb-panel>
+<arb-buttons>
+    <button class="btn btn-default btn-wide" (click)="back()">{{ 'public.back' | translate }}
+    </button>
+    <button class="btn btn-primary btn-wide" (click)="proceed()"
+            [disabled]="!this.form.valid">
+        {{'public.proceed' | translate}}
+    </button>
+</arb-buttons>

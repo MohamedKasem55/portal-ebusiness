@@ -1,0 +1,401 @@
+import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
+import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
+import { LangChangeEvent, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {ModalDirective} from "ngx-bootstrap";
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { RegistrationService } from "../../../../Modules/Registration/registration.service";
+
+@Component({
+    templateUrl: './step4.component.html',
+    styleUrls: ['../../registration.component.scss']
+})
+export class Step4Component implements OnInit, OnDestroy {
+    @ViewChild('confirmFileModal', { static: true }) confirmFileModal: ModalDirective;
+    @ViewChild('stepForm', { static: true }) stepForm: NgForm;
+    @ViewChild('file1', { static: true }) file1: any;
+    @ViewChild('file2', { static: true }) file2: any;
+    @ViewChild('file3', { static: true }) file3: any;
+    @ViewChild('fileModal', { static: true }) fileModal: any;
+
+    readonly NATIONAL_ID_FILE: number = 1;
+    readonly POWER_ATTORNEY_FILE: number = 2;
+    readonly OTHER_FILE: number = 3;
+
+    formDatafilePowerAttorneyname: string = "";
+    formDatafilePowerAttorneystatus: string = "";
+    formDatafilePowerAttorneysize: Number = 0;
+    formDatafilePowerAttorneyerror =false;
+    formDatafileNationalIdname: string = "";
+    formDatafileNationalIdstatus: string = "";
+    formDatafileNationalIdsize: Number = 0;
+    formDatafileNationalIderror = false;
+
+    formDataotherDocumentsInputname  = "";
+    formDataotherDocumentsInputstatus = "";
+    formDataotherDocumentsInputsize: Number = 0;
+
+    formDataotherDocumentsname: string[] = [];
+    formDataotherDocumentsstatus: string[] = [];
+    formDataotherDocumentssize: Number[] = [];
+    formDataotherDocumentserror = false;
+
+
+    bsConfig;
+
+
+    step = 4;
+    formData: any;
+    prefixs: any = {};
+    file: any;
+    currentDate:Date;
+    nextDate: Date;
+
+    filenamefirst = "rwe"
+    size = 0
+
+    codigoTelefono:any;
+
+    elementButtonName: any;
+    constructor(public service: RegistrationService, public translate:TranslateService) {
+
+    }
+
+
+    checkFile(name,event,boton:string){
+        console.log('name',name);
+        if(name){
+            this.elementButtonName = boton;
+            this.confirmFileModal.show();
+            event.preventDefault();
+        }
+    }
+
+    onClickOkModal(){
+        this.confirmFileModal.hide();
+        const elementButton: HTMLElement = document.getElementsByName(this.elementButtonName)[0] as HTMLElement;
+        console.log('showModal',elementButton);
+        if(this.elementButtonName === "fichero1"){
+            this.delete(this.formDatafileNationalIdname).subscribe((result) => {
+                  if (result.status != "OK") {
+                        console.log('no se pudo borrar el fichero');
+                  }else{
+                         this.file1.nativeElement.value="";
+                         this.formDatafileNationalIdname = ""
+                         this.formDatafileNationalIdstatus = ""
+                         this.formDatafileNationalIdsize = 0;
+                         this.formDatafileNationalIderror = false;
+                         this.formData.fileNationalId = null;
+                         //elementButton.click();
+                  }
+
+             });
+        }else if(this.elementButtonName === "fichero2"){
+            this.delete(this.formDatafilePowerAttorneyname).subscribe((result) => {
+                  if (result.status != "OK") {
+                       console.log('no se pudo borrar el fichero');
+                  }else{
+                      this.file2.nativeElement.value="";
+                      this.formDatafilePowerAttorneyname = ""
+                      this.formDatafilePowerAttorneystatus = ""
+                      this.formDatafilePowerAttorneysize = 0;
+                      this.formDatafilePowerAttorneyerror = false;
+                      this.formData.filePowerAttorney = null;
+                      //elementButton.click();
+                  }
+             });
+        }
+
+    }
+
+    onClickCloseModal(){
+        this.confirmFileModal.hide();
+        this.elementButtonName = null;
+
+    }
+
+    ngOnInit() {
+        this.currentDate = new Date();
+        this.currentDate.setHours(0,0,0,0);
+        this.nextDate = new Date(this.currentDate.getFullYear(),this.currentDate.getMonth(),this.currentDate.getDate()+1);
+        this.prefixs.data = [
+
+            { code: "AD", name: "Andorra", class: "ad", prefix: "+376" },
+            { code: "AE", name: "United Arab Emirates", class: "ae", prefix: "+971" },
+            { code: "AF", name: "Afghanistan", class: "af", prefix: "+93" },
+            { code: "AG", name: "Antigua and Barbuda", class: "ag", prefix: "+1-268" },
+            { code: "AI", name: "Anguilla", class: "ai", prefix: "+1-264" },
+            { code: "AL", name: "Albania", class: "al", prefix: "+355" },
+            { code: "AM", name: "Armenia", class: "am", prefix: "+374" },
+            { code: "AO", name: "Angola", class: "ao", prefix: "+244" },
+            { code: "AR", name: "Argentina", class: "ar", prefix: "+54" },
+            { code: "AS", name: "American Samoa", class: "as", prefix: "+1-684" },
+            { code: "AT", name: "Austria", class: "at", prefix: "+43" },
+            { code: "AU", name: "Australia", class: "au", prefix: "+61" },
+            { code: "AZ", name: "Azerbaijan", class: "az", prefix: "+994" },
+            { code: "SA", name: "Saudi Arabia", class: "sa", prefix: "+966" },
+            { code: "QA", name: "Qatar", class: "qa", prefix: "+974" },
+            { code: "KW", name: "Kuwait", class: "kw", prefix: "+965" },
+            { code: "BH", name: "Bahrain", class: "bh", prefix: "+973" }
+
+
+        ];
+        if(!this.formData.otherDocuments){
+            this.formData.otherDocuments = [];
+        }
+        this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue' }, { dateInputFormat: 'DD/MM/YYYY' });
+        this.service.initFiles(this.formData.registrationPk).subscribe((result) => {
+            this.initiateFiles(result);
+        })
+    }
+
+    initiateFiles(res: any) {
+        if (res.files) {
+            for (let i = res.files.length - 1; i >= 0; i--) {
+               // console.log(res.files[i]);
+                switch (res.files[i].typeOfFile) {
+                    case this.NATIONAL_ID_FILE:
+                        this.formDatafileNationalIdname = res.files[i].fileName;
+                        this.formDatafileNationalIdstatus = res.files[i].status;
+                        break;
+                    case this.POWER_ATTORNEY_FILE:
+                        this.formDatafilePowerAttorneyname = res.files[i].fileName;
+                        this.formDatafilePowerAttorneystatus = res.files[i].status;
+                        break;
+                    case this.OTHER_FILE:
+                        this.formDataotherDocumentsname.push(res.files[i].fileName);
+                        this.formDataotherDocumentsstatus.push(res.files[i].status);
+                        break;
+                }
+
+            }
+        }
+
+    }
+
+    checkErrorFile(file, typeOfFile){
+        let error = false;
+        if(file.name.toLowerCase().search("((\.pdf)|(\.doc)|(\.docx)|(\.jpg))$") == -1){
+            error = true;
+        }
+        if(file.size > 5120000){
+            error = true;
+        }
+        switch(typeOfFile){
+                    case this.NATIONAL_ID_FILE:
+                        this.formDatafileNationalIderror = error;
+                        break;
+                    case this.POWER_ATTORNEY_FILE:
+                        this.formDatafilePowerAttorneyerror = error;
+                        break;
+                    case this.OTHER_FILE:
+                        this.formDataotherDocumentserror = error;
+                        break;
+                }
+        return error;
+    }
+
+
+    fileChange(event) {
+        const fileList: FileList = event.target.files;
+        this.uploadFile(fileList);
+    };
+
+    uploadFile(fileList){
+        if (fileList.length > 0) {
+            const toDelete = this.formDatafileNationalIdname;
+            this.formData.fileNationalId = fileList[0];
+           // console.log(this.formData.fileNationalId);
+            this.formDatafileNationalIdname = this.formData.fileNationalId.name;
+            this.formDatafileNationalIdstatus = "";
+            this.formDatafileNationalIdsize = this.passbiteToKB(this.formData.fileNationalId.size);
+            if(this.checkErrorFile(fileList[0],this.NATIONAL_ID_FILE)){
+                return;
+            }
+            this.service.uploadFile(this.formData.fileNationalId, this.NATIONAL_ID_FILE, this.formData.registrationPk).subscribe((result) => {
+                if(toDelete != null && toDelete != ""){
+                    this.delete(toDelete).subscribe((resultDelete) => {
+
+                    });
+                }
+                console.log('upload file' + this.formDatafileNationalIdname);
+            });
+        }
+    }
+
+
+    fileChange2(event) {
+        const fileList: FileList = event.target.files;
+        this.uploadFile2(fileList);
+
+    };
+
+    uploadFile2(fileList){
+        if (fileList.length > 0) {
+            const toDelete = this.file2.nativeElement.value;
+            this.formData.filePowerAttorney = fileList[0];
+            //console.log(this.formData.filePowerAttorney);
+            this.formDatafilePowerAttorneyname = this.formData.filePowerAttorney.name;
+            this.formDatafilePowerAttorneystatus = "";
+            this.formDatafilePowerAttorneysize = this.passbiteToKB(this.formData.filePowerAttorney.size);
+            if(this.checkErrorFile(fileList[0],this.POWER_ATTORNEY_FILE)){
+                return;
+            }
+            this.service.uploadFile(this.formData.filePowerAttorney, this.POWER_ATTORNEY_FILE, this.formData.registrationPk).subscribe((result2) => {
+                   if(toDelete != null && toDelete != ""){
+                            this.delete(toDelete).subscribe((resultDelete) => {
+
+                    });
+                }
+              //  console.log('upload file' + this.formDatafilePowerAttorneyname);
+            });
+        }
+    }
+
+    fileChange3(event) {
+        const fileList: FileList = event.target.files;
+        this.uploadFile3(fileList);
+    };
+
+    fileChangeModal(event){
+        const fileList: FileList = event.target.files;
+        if(this.elementButtonName === "fichero1"){
+            this.uploadFile(fileList);
+        }else if(this.elementButtonName === "fichero2"){
+            this.uploadFile2(fileList);
+        }
+    }
+
+    uploadFile3(fileList){
+        if (fileList.length > 0) {
+            for (let i = fileList.length - 1; i >= 0; i--) {
+                const file = fileList[i];
+
+                this.formDataotherDocumentsInputname=file.name;
+                this.formDataotherDocumentsInputstatus = "";
+                this.formDataotherDocumentsInputsize = this.passbiteToKB(file.size);
+                if(this.checkErrorFile(fileList[0],this.OTHER_FILE)){
+                    return;
+                }
+                this.service.uploadFile(file, this.OTHER_FILE, this.formData.registrationPk).subscribe((result2) => {
+                    this.file3.nativeElement.value="";
+                    this.formDataotherDocumentsInputname="";
+                    this.formDataotherDocumentsInputstatus = "";
+                    this.formDataotherDocumentsInputsize = 0;
+                    this.formData.otherDocuments.push(file);
+                    this.formDataotherDocumentsname.push(file.name);
+                    this.formDataotherDocumentsstatus.push("");
+                    this.formDataotherDocumentssize.push(this.passbiteToKB(file.size));
+                });
+            }
+        }
+    }
+
+    passbiteToKB(number): Number {
+
+        return number / 1024
+    }
+
+    delete(name){
+        return this.service.deleteFile(name,this.formData.registrationPk);
+    }
+
+    deleteFile2($event) {
+        if(this.formDatafilePowerAttorneyname != ""){
+             this.delete(this.formDatafilePowerAttorneyname).subscribe((result) => {
+                  if (result.status != "OK") {
+                       console.log('no se pudo borrar el fichero');
+                  }else{
+                      this.file2.nativeElement.value="";
+                      this.formDatafilePowerAttorneyname = ""
+                      this.formDatafilePowerAttorneystatus = ""
+                      this.formDatafilePowerAttorneysize = 0;
+                      this.formDatafilePowerAttorneyerror = false;
+                      this.formData.filePowerAttorney = null;
+                  }
+
+             });
+        }else{
+            this.file2.nativeElement.value="";
+            this.formDatafilePowerAttorneyname = ""
+            this.formDatafilePowerAttorneystatus = ""
+            this.formDatafilePowerAttorneysize = 0;
+            this.formDatafilePowerAttorneyerror = false;
+            this.formData.filePowerAttorney = null;
+        }
+
+    }
+
+    deleteFile($event) {
+         if(this.formDatafileNationalIdname != ""){
+             this.delete(this.formDatafileNationalIdname).subscribe((result) => {
+                  if (result.status != "OK") {
+                        console.log('no se pudo borrar el fichero');
+                  }else{
+                         this.file1.nativeElement.value="";
+        this.formDatafileNationalIdname = ""
+        this.formDatafileNationalIdstatus = ""
+        this.formDatafileNationalIdsize = 0;
+        this.formDatafileNationalIderror = false;
+        this.formData.fileNationalId = null;
+                  }
+
+             });
+        }else{
+        this.file1.nativeElement.value="";
+        this.formDatafileNationalIdname = ""
+        this.formDatafileNationalIdstatus = ""
+        this.formDatafileNationalIdsize = 0;
+        this.formDatafileNationalIderror = false;
+        this.formData.fileNationalId = null;
+    }
+
+    }
+
+    deleteFile3($event,i) {
+        this.delete(this.formDataotherDocumentsname[i]).subscribe((result) => {
+            if (result.status != "OK") {
+                        console.log('no se pudo borrar el fichero');
+            }else{
+                  console.log(this.formData.otherDocuments);
+                  console.log(i);
+                  this.formData.otherDocuments.splice(i,1);
+                  this.formDataotherDocumentsname.splice(i,1);
+                  this.formDataotherDocumentsstatus.splice(i,1);
+                  this.formDataotherDocumentssize.splice(i,1);
+            }
+
+        });
+
+    }
+
+    deleteFileName($event){
+        this.file3.nativeElement.value="";
+        this.formDataotherDocumentsInputname="";
+        this.formDataotherDocumentsInputstatus = "";
+        this.formDataotherDocumentsInputsize = 0;
+        this.formDataotherDocumentserror = false;
+    }
+
+    ngOnDestroy() { }
+
+
+    valid() {
+        return true;
+    }
+
+isPrint(){
+        return false;
+    }
+
+
+}
+
+
+
+
+
+
+
+

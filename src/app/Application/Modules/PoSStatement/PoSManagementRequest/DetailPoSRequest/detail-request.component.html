@@ -1,0 +1,102 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{'menu.collections_management.menu' | translate}}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/posstatement']">{{ 'posStatement.name' | translate }}</a></li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/posstatement/pos-manage-request']">{{ 'posStatement.posManagementRequest'| translate }}</a></li>
+        <li class="active">{{ 'posRequest.posDetails'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'posRequest.posDetails' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form" >
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                        <fieldset>
+                             <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.requestId' | translate }}</label>
+                                    <span class="form-control">{{element.ticketNumber}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.terminalNumber' | translate }}</label>
+                                    <span class="form-control">{{element.terminalNumber}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.typeOfRequest' | translate }}</label>
+                                    <span class="form-control">{{'posManagementRequestType'|modelPipe:element.typeRequest}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                             </fieldset> 
+                        </div>    
+                        <div class="row">
+                        <fieldset>
+                             <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.contactName' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{element.contactName}}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.mobileNumber' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{element.mobile}}</span>
+                                    
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset> 
+                        </div>    
+                        <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.status' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{element.statusTicket}}</span>
+                                    
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset> 
+                        </div>
+                    </div>          
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="goBack()">{{'public.back' | translate }}</button>
+</div>

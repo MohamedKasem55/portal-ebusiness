@@ -1,0 +1,6 @@
+<div class="input-group" style="width:100%">
+	<input #calMax="ngbDatepicker" (click)="calMax.toggle()" [minDate]="getDateValue(mindate)"
+		[maxDate]="getDateValue(maxdate)" [(ngModel)]="value" ngbDatepicker placement="bottom"
+		style="border:0px; width:90%" name="{{id}}" (navigate)="date = $event.next" [firstDayOfWeek]="7">
+	<span class="human-selectable icon -calendar" (click)="calMax.toggle()" type="button"></span>
+</div>

@@ -1,0 +1,83 @@
+@import "./src/scss/theme/css/vendor/_directional.scss";
+.message-container {
+  height: 71px;
+  box-shadow: 0 0.5px 0 0 #e4e5e6;
+  background-color: #29419b;
+  justify-content: center;
+
+  .glyphicon {
+    color: #ffffff;
+    padding-right: 31px;
+    padding-left: 31px;
+    width: 23px;
+    height: 23px;
+  }
+
+  .alert-md-color {
+    height: 37px;
+    font-family: 'noto-sans-en',"noto-sans-ar";
+    @if $dir != ltr {
+      font-family: "noto-sans-ar",'noto-sans-en';
+    }
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -0.71px;
+    color: #ffffff;
+  }
+  @media screen and (max-width: 800px) {
+    .messageText {
+      height: 37px;
+      font-family: 'noto-sans-en',"noto-sans-ar";
+      @if $dir != ltr {
+        font-family: "noto-sans-ar",'noto-sans-en';
+      }
+      font-size: 10px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: -0.71px;
+      color: #ffffff;
+    }
+  }
+  @media screen and (min-width: 800px) {
+    .messageText {
+      height: 37px;
+      font-family: 'noto-sans-en',"noto-sans-ar";
+      @if $dir != ltr {
+        font-family: "noto-sans-ar",'noto-sans-en';
+      }
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: -0.71px;
+      color: #ffffff;
+    }
+  }
+
+  .align {
+    padding-top: 10px;
+    display: flex;
+  }
+  .btn-info {
+    margin-top: 8px;
+    color: white;
+    border-color: white;
+    background-color: #29419b;
+  }
+  .text-info {
+    font-family: 'noto-sans-en',"noto-sans-ar";
+    @if $dir != ltr {
+      font-family: "noto-sans-ar",'noto-sans-en';
+    }
+  }
+}
+.msg-color {
+  color: #ffffff;
+  letter-spacing: -0.71px;
+}

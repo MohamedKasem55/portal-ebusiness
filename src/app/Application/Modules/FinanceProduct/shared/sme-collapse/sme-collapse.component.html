@@ -1,0 +1,19 @@
+<div class="sme-collapse">
+  <div (click)="show = !show" class="sme-collapse-header">
+    <div class="sme-card-header-start">
+      <div class="sme-media-icon-nm">
+        <img [src]="" />
+      </div>
+      start title
+    </div>
+    <div class="sme-card-header-end">endTitle</div>
+    <ng-content class="sme-card-header-end" select=".end-header"></ng-content>
+  </div>
+  <div class="sme-card-body collapse" [ngClass]="{'sme-collapse-show-body':show}">
+    <!-- <ng-content select=".card-body"></ng-content> -->
+    <div>
+      <h2>Hagar</h2>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,24 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-dynamic-searchable-table [showSearchForm]="true" [searchForm_checkValid]="true" [searchForm]="searchForm"
+    [showSearchForm]="true" [service]="listService" [fieldsConfigForSearchForm]="fieldsConfigForSearchForm"
+    [fieldsConfigForList]="fieldsConfigForList" [combosData]="combosData" [search_form_combosData]="combosData"
+    [search_form_translate_prefix]="listService.getTranslatePrefix()" [table_title]="'invoiceHUB.esalProcessedPayments'"
+    [table_export_pdf_size]="{ width: 1400, height: 800 }"
+    [search_form_collapsed]='true'
+    (onSubmitSearchForm)="search()" (onResetSearchForm)="reset()" [table_export_show_buttons]="showExportButtons()"
+    [table_export_header]="getExportHeader()" [table_export_columns]="getExportColumns()"
+    (onTablePage)="setPage($event)" (onTableSort)="setSort($event)" [table_rowIdentity]="getIdFunction()"
+    (onTableSelect)="onSelect($event)" (onTableDetailToggle)="onDetailToggle($event)"
+    (onTableClickRowDetail)="onClickRow($event.row, $event.propName)"
+    (onSearchFormAllFieldsCreated)="onSearchFormAllFieldsCreated($event)" [search_form_custom_fields_templates]="{}"
+    [table_export_selected_rows]="tableSelectedRows" [table_externalPaging]="true" [table_externalSorting]="true"
+    [table_selectionType]="defaultSelectionType" [table_elements_rows]="elementsPage.data"
+    [table_columnMode]="defaultColumnMode" [table_headerHeight]="defaultHeight" [table_footerHeight]="footerHeight"
+    [table_rowHeight]="defaultHeight" [table_elements_count]="elementsPage.page.totalElements"
+    [table_elements_offset]="elementsPage.page.pageNumber-1" [table_elements_limit]="elementsPage.page.pageSize"
+    [table_footer_show_buttons]="true" [table_footer_visiblePagesCount]="visiblePagesCount"
+    [table_footer_pageSize]="elementsPage.page.pageSize"
+    (onTableFooterChangePageSize)="elementsPage.page.pageSize = $event.pageSize">
+</app-dynamic-searchable-table>

@@ -1,0 +1,69 @@
+<div class="container-fluid">
+     <div class="sme-head">
+        <div class="sme-head__title">{{ 'aramcoPayments.beneficiaryBankDetails' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- PASS NUMBER -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                    <div>
+                                        <span class="form-control">{{ sharedData.aramcoCustomer?.passNumber }}</span>
+                                    </div>
+                                </div>
+                                <!-- /PASS NUMBER -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- CUSTOMER NAME -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'aramcoPayments.beneficiaryName' | translate }}</label>
+                                    <div>
+                                        <span class="form-control">{{ sharedData.aramcoCustomer?.customerName }}</span>
+                                    </div>
+                                </div>
+                                <!-- /CUSTOMER NAME -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- CUSTOMER COUNTRY -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'aramcoPayments.cityName' | translate }}</label>
+                                    <div>
+                                        <span class="form-control">{{ sharedData.aramcoCustomer?.armCustomerCity }}</span>
+                                    </div>
+                                </div>
+                                <!-- /CUSTOMER COUNTRY -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="sme-content-container container-fluid" *ngIf="sharedData.generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP" [requestValidate]="sharedData.requestValidate"
+                                        #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

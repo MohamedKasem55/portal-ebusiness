@@ -1,0 +1,142 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'payroll.modifyEmployee' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+<form autocomplete="off" [formGroup]="form">
+<div class="container-fluid" formArrayName="employees" *ngFor="let employee of employees; let i=index">
+	<div [formGroupName]="i">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+				<a class="sme-form__close btn" (click)="removeEmployee(i)"><span class="icon -close"></span></a>
+					<div class="sme-form__body">
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'payroll.employeeNumber' |
+											translate }}</label> 
+										<input type="text" class="form-control"	formControlName="employeeNumber" disabled>
+										<div *ngIf="employee.controls.employeeNumber.hasError('required') && employee.controls.employeeNumber.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.employeeNumber' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employee.controls.employeeNumber.hasError('maxLength') && employee.controls.employeeNumber.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.employeeNumber' | translate }}{{ 'error.maxlength' | translate:{size:12} }} </small>
+                                        </div>
+                                        <div *ngIf="employee.controls.employeeNumber.hasError('pattern') && employee.controls.employeeNumber.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.employeeNumber' | translate }}{{ 'error.numeric' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'payroll.employeeName'
+											| translate }}</label> 
+										<input type="text" class="form-control" formControlName="employeeName" maxlength="50">
+										<div *ngIf="employee.controls.employeeName.hasError('required') && employee.controls.employeeName.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.employeeName' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employee.controls.employeeName.hasError('maxLength') && employee.controls.employeeName.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.employeeName' | translate }}{{ 'error.maxlength' | translate:{size:50} }} </small>
+                                        </div>
+										<div *ngIf="employee.controls.employeeName.hasError('pattern') && employee.controls.employeeName.touched" class="alert alert-danger">
+											<small>{{'payroll.employeeName' | translate }}{{ 'error.onlyAlphabetical' | translate }} </small>
+										</div>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="civilian-id-input" class="required">{{
+											'payroll.civilianID' | translate }}</label> 
+										<input type="text" class="form-control" id="civilian-id-input" formControlName="civilianId" maxlength="15">
+										<div *ngIf="employee.controls.civilianId.hasError('required') && employee.controls.civilianId.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.civilianID' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employee.controls.civilianId.hasError('maxLength') && employee.controls.civilianId.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.civilianID' | translate }}{{ 'error.maxlength' | translate:{size:15} }} </small>
+                                        </div> 
+                                        <div *ngIf="employee.controls.civilianId.hasError('pattern') && employee.controls.civilianId.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.civilianID' | translate }}{{ 'error.numeric' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="bank-input" class="required">{{
+											'public.bank' | translate }}</label> 
+										<select id="bank-input" class="form-control" formControlName="bank">
+                                                <option *ngFor="let bank of banks" [value]="bank.key">
+                                                {{bank.value}}</option>  
+                                         </select> 
+										<div *ngIf="employee.controls.bank.hasError('required') && employee.controls.bank.touched" class="alert alert-danger">
+                                                    <small>{{'public.bank' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+							</fieldset>	
+							</div>
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="account-input" class="required">{{ 'companyAdmin.user.account' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="account-input" formControlName="account" maxlength="24">
+										<div *ngIf="employee.controls.account.hasError('required') && employee.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'companyAdmin.user.account' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employee.controls.account.hasError('maxLength') && employee.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'companyAdmin.user.account' | translate }}{{ 'error.maxlength' | translate:{size:24} }} </small>
+                                        </div>  
+                                        <div *ngIf="employee.controls.account.hasError('pattern') && employee.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{ 'beneficiaries.ibanFrontValidation' | translate }} </small>
+                                        </div>  
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="salary-input" class="required">{{ 'payroll.salary'
+											| translate }}</label> 
+										<input type="text" class="form-control" id="salary-input" formControlName="salary" maxlength="15" inputPattern="onlyPositiveDecimalNumbers">
+										<div *ngIf="employee.controls.salary.hasError('required') && employee.controls.salary.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.salary' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employee.controls.salary.hasError('maxLength') && employee.controls.salary.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.salary' | translate }}{{ 'error.maxlength' | translate:{size:15} }} </small>
+                                        </div>  
+                                         <div *ngIf="employee.controls.salary.hasError('pattern') && employee.controls.salary.touched" class="alert alert-danger">
+                                                    <small>{{'payroll.salary' | translate }}{{ 'error.numeric' | translate}} </small>
+                                        </div>  
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								</fieldset>
+							</div>
+					</div>			
+				
+			</div>	
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+</form>	

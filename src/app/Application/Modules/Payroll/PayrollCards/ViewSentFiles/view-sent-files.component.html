@@ -1,0 +1,46 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li class="active">{{ 'payroll.viewSentFiles'| translate }}</li>
+    </ol>
+</div>
+ <!-- sme-head -->
+ <div class="sme-head">
+<div class="sme-head__title"><h2>{{ 'payroll.viewSentFiles'| translate }}</h2></div>
+</div>
+<!-- ./sme-head -->
+<!--RadioBotones-->
+<div class="container-fluid">
+    <div class="sme-form__content">
+        <form autocomplete="off" class="sme-form__form">
+            <br/>
+            <p>&nbsp;&nbsp;&nbsp; {{ 'payroll.selectOption' | translate }}: </p>
+            <br/>
+            <ul class="sme-radio-buttons">
+                <li><!--No se seleccionen todos-->
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" value="uploadedFile" name="radiobutton" [(ngModel)]="radio">
+                            <i aria-hidden="true"></i>
+                            <span> {{ 'payroll.viewPaymentUploadedFile' | translate }}</span> 
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="sme-radio radio">
+                        <label>
+                            <input type="radio" name="radiobutton" value="cardPayments" [(ngModel)]="radio">
+                            <i aria-hidden="true"></i>
+                            <span> {{ 'payroll.viewPaymentCardPayments' | translate }}</span> 
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+             <button type="button" class=" btn btn-default btn-wide" [routerLink]="['/payroll/payroll-cards']">{{'public.back' | translate }}</button>
+            <button type="button" class=" btn btn-primary btn-wide" [disabled]="!radio" (click)="selected()">{{'public.proceed' | translate}}</button>
+        </div>
+        </form>
+    </div>
+</div>

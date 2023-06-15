@@ -1,0 +1,132 @@
+<div class="sme-message-block" *ngIf="messages">
+    <app-messages [messages]="messages"></app-messages>
+</div>
+<div class="container-fluid" *ngIf="showBFM && isSoleProperty && isBFMEnabled">
+    <div class="sme-page-block">
+        <app-business-finance-management [accounts]="accounts"
+                                         [totalBalance]="totalBalance"></app-business-finance-management>
+    </div>
+        <button [ngStyle]="{'float':(lang === 'en')? 'left' : 'right'} "
+                (click)="showBFMContainer()"
+                class="btn btn-primary btn-wide bfm-back-button">
+            {{ 'bfm.backtodashboard' | translate }}</button>
+</div>
+<div class="container-fluid" *ngIf="!showBFM">
+    <div class="sme-page-block">
+        <div class="sme-panel pad" *ngIf="isAccountsInquiryEnabled" ngTourStepARB="stepAccount">
+            <div class="sme-panel__head">
+                <div class="sme-panel__title title-parent icon-center">
+                    <div class="panel-title-text">
+                        {{ 'dashboard.accounts' | translate }}
+                    </div>
+                    <div class="info-icon">
+                        <img src="img/infoIcon.svg" class="img-icon" alt=""/>
+                    </div>
+                    <div [ngClass]=" translate.currentLang === 'en'
+                                            ? 'home-dropdown-menu-en'
+                                            : 'home-dropdown-menu-ar'
+                                        ">
+                        <app-manage-accounts-widget (onUpdateAccounts)="onUpdateAccounts($event)">
+                        </app-manage-accounts-widget>
+                    </div>
+                </div>
+                <div class="sme-panel__title title-parent icon-center">
+                    <button class="btn btn-default btn-wide" (click)="createNewAccount()" *ngIf='isAllowed()'>
+                        {{ 'accounts.openAdditionalAccount.openAccount' | translate }}
+                    </button>
+                </div>
+            </div>
+            <div class="sme-data-table__advisory balance-bfm-section">
+                <div class="table-responsive-home">
+                    <div class="row">
+                        <div class="col-md-4 " *ngIf="isBFMEnabled && isSoleProperty" [ngClass]="(lang === 'en')?'bfm-en' :'bfm-ar' ">
+                            <img src="img/bfm-icon.svg" class="bfm-img" alt="{{ 'bfm.view-fin-pos' | translate }}">
+                            <b class="bfm-pos" (click)="showBFMContainer()">{{ 'bfm.view-fin-pos' | translate }}</b>
+                        </div>
+                        <table class="col-md-4 "
+                               [ngClass]="(lang === 'en')? 'balance-section-en' : 'balance-section-ar' ">
+                            <tr *ngFor="let balance of currencyBalance">
+                                <ng-container *ngFor="let balanceObj of balance | keyvalue">
+                                    <td class="paddign-total">
+                                        <strong class="color">
+                                            {{
+                                            'accounts.balanceIn'
+                                                | translate
+                                                : {value: 'currency' | modelPipe: balanceObj.key}
+                                            }}
+                                        </strong>
+                                    </td>
+                                    <td [ngStyle]="{'float':(lang === 'en')? 'right' : 'left' ,
+                                    'margin-left':(lang === 'en')? '1%' : '4%'} ">
+                                        <span class="big-font">{{ balanceObj.value | amountCurrency }} </span>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="sme-panel__body">
+                <div class="sme-table table headerDataTable">
+                    <app-account-list (accountDetail)="details($event)" [accountBalancePage]="accountBalancePage"
+                                      (sortAccounts)="doSort($event)" [shouldCollapse]="shouldCollapse"
+                                      [showFooterPaginator]="true"
+                                      (changePage)="changeAccountsPage($event)">
+                    </app-account-list>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="isAccountsInquiryEnabled">
+            <br/>
+        </div>
+
+        <div class="sme-page-block">
+            <div class="sme-panel">
+                <app-information [storedSession]="storedSession" [storedWelcome]="storedWelcome"></app-information>
+            </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="isAccountsInquiryEnabled">
+            <br/>
+        </div>
+        <div class="sme-page-block" *ngIf="isTransferEnabled && isAccountsInquiryEnabled"
+             ngTourStepARB="stepQuickTransfer">
+            <div class="sme-panel pad">
+                <quick-transfer></quick-transfer>
+            </div>
+        </div>
+
+        <div class="row mb-2" *ngIf="isTransferEnabled && isAccountsInquiryEnabled">
+            <br/>
+        </div>
+
+        <ng-container *ngIf="isAccountsInquiryEnabled">
+            <div class="sme-page-block" *ngIf="authenticationService.activateOption('BusinessCardsMenu',
+					['BUSINESS_CARDS_PRIVILEGE'],['BusinessCardsDisplay'])">
+                <div class="sme-panel pad">
+                    <app-commercialCardsHome></app-commercialCardsHome>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <br/>
+            </div>
+            <div class="sme-page-block" *ngIf="authenticationService.activateOption('PrepaidCardsMenu',
+					['PREPAID_CARDS_PRIVILEGE'],['PrepaidCardsDisplayGroup'])">
+                <div class="sme-panel pad">
+                    <app-pre-paid-cards></app-pre-paid-cards>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+
+    <div class="sme-page-block" *ngIf="banner && banner.length > 0">
+        <app-banner [banner]="banner"></app-banner>
+    </div>
+
+    <div class="row mb-2">
+        <br/>
+    </div>
+
+</div>

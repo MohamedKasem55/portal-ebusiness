@@ -1,0 +1,308 @@
+<div *ngIf="!loadConfirmation" class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+
+                <a class="sme-form__head collapsed" role="button" (click)="isCollapsedContent = !isCollapsedContent">
+                    <span>{{ 'public.search' | translate }}</span>
+                </a>
+
+                <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+                    <form autocomplete="off" class="sme-form__form" (ngSubmit)="getActivityLogs()">
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'companyAdmin.user.dateFrom' | translate }}</label>
+                                        <div style="display: flex;" class="form-control">
+                                            <input type="text" id="search-date-from" #activityDateFromPop="bsDatepicker"
+                                                bsDatepicker [bsConfig]="bsConfig" [maxDate]="maxDate"
+                                                [(bsValue)]="dateFrom" value="{{ dateFrom | date:'dd/MM/yyyy' }}"
+                                                style="border:0px;z-index:1000;" name="dateFrom" autocomplete="off" />
+                                            <label [attr.for]="'search-date-from'"
+                                                class="human-selectable icon -calendar"
+                                                style="font-size: initial;margin-top: 10px;position: absolute;right: 5px;">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'companyAdmin.user.dateTo' | translate }}</label>
+                                        <div style="display: flex;" class="form-control">
+                                            <input type="text" id="search-date-to" #activityDateToPop="bsDatepicker"
+                                                bsDatepicker [bsConfig]="bsConfig" [maxDate]="maxDate"
+                                                [(bsValue)]="dateTo" value="{{ dateTo | date:'dd/MM/yyyy' }}"
+                                                style="border:0px;z-index:1000;" name="dateTo" autocomplete="off" />
+                                            <label [attr.for]="'search-date-to'" class="human-selectable icon -calendar"
+                                                style="font-size: initial;margin-top: 10px;position: absolute;right: 5px;">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:20px;">
+                                        <p *ngIf="dateTo && dateFrom && dateTo < dateFrom" class="alert alert-danger">
+                                            {{ 'error.dateRangeInvalid' | translate}} </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label> {{ 'public.operations' | translate }}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                            [(ngModel)]="operation" #operationCtrl="ngModel" name="operation" required>
+                                            <ng-option *ngFor="let op of operations" [value]="op.key"> {{op.value}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-2">
+                                    <div class="form-group">
+                                        <label> {{'public.authorizers'|translate}}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                            [(ngModel)]="authority" #authorityCtrl="ngModel" name="authorities"
+                                            required>
+                                            <ng-option *ngFor="let auth of authorities" [value]="auth.key">
+                                                {{auth.value}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3" *ngIf="isAdmin">
+                                    <div class="form-group">
+                                        <label> {{'public.users' | translate}}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate"
+                                            (change)="onChangeUser($event)" class="form-control">
+                                            <ng-option *ngFor="let user of users" [value]="user.id"> {{ user.name }}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset($event)">{{
+                                'public.reset' | translate }}</button>
+                            <button type="submit" class="btn btn-primary btn-wide">{{ 'public.search' | translate
+                                }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <div *ngIf="!loadConfirmation" class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title"> {{ 'myProfile.activityLogs.activityLogs'| translate }} </div>
+
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="activityLogTable"
+                        [header]="'myProfile.activityLogs.activityLogs' | translate" [maxAllowedRows]="400" [columns]="[
+							{'title':'public.operation' | translate,'dataKey':'operationLog'},
+							{'title':'public.userName' |translate ,'dataKey':'userName'},
+							{'title':'public.date' | translate,'dataKey':'date'},
+							{'title':'public.status' | translate,'dataKey':'status'}
+							]">
+                    </table-export>
+                </div>
+
+            </div>
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #activityLogTable
+                class="material sme-table sme-table--responsive table" [rows]="activityLogsPage.data"
+                [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                [rowHeight]="defaultHeight" [count]="activityLogsPage.page.totalElements"
+                [offset]="activityLogsPage.page.pageNumber-1" [limit]="activityLogsPage.page.pageSize"
+                (page)='setPage($event)' (sort)="setSort($event)" [externalPaging]="true" [externalSorting]="true">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                        <div>{{row.date}}, {{row.time}}</div>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+
+                                    <div class="form-group">
+                                        <label>{{'public.operation' | translate }} </label>
+                                        <div>
+                                            <span>{{ row.operationLog }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+
+                                    <div class="form-group">
+                                        <label>{{'public.userId' | translate }}</label>
+                                        <div>
+                                            <span>{{row.userName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+
+                                    <div class="form-group">
+                                        <label>{{'public.date' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+
+                                    <div class="form-group">
+                                        <label>{{'public.time' | translate }}</label>
+                                        <div>
+                                            <span>{{row.timeStamp}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+
+                                    <div class="form-group">
+                                        <label>{{'public.status' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.status }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="operation">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper mobile-hidden"> {{'public.operation'
+                            | translate }} </span>
+                    </ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <a (click)="selecOperation(row['auditLinePk'])" style="cursor: pointer"> {{
+                            'activityOperationLog' | modelPipe: value }} </a>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="userName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper mobile-hidden"> {{'public.userId'
+                            | translate }} </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span> {{ value }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="date">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper mobile-hidden"> {{'public.date' |
+                            translate }} </span>
+                    </ng-template>
+
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span> {{ value | dateFormat: 'dd-MM-yyyy' }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="timeStamp">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper mobile-hidden"> {{'public.time' |
+                            translate }} </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span> {{ value }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="status">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper mobile-hidden"> {{'public.status' |
+                            translate }} </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span> {{ value }} </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager class="sme-data-table__pagination"
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                (change)="activityLogTable.onFooterPage($event)">
+                            </app-datatable-pager>
+
+                            <div class="sme-data-table__actions form-inline">
+
+                                <span class="sme-data-table__action-group">
+                                    {{ 'public.showingLabel' | translate}}
+                                    {{this.activityLogsPage.page.size}} {{ 'public.ofLabel' | translate}}
+                                    {{rowCount}}
+                                </span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="this.activityLogsPage.page.pageSize"
+                                            (change)="this.setPage(null)">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+
+            </ngx-datatable>
+
+        </div>
+
+        <div *ngIf="loadConfirmation" class="sme-box sme-wizard__content">
+            <div>
+                <div class="sme-wizard__success">
+                    <span class="icon -check"></span>
+                    {{ 'public.requestOk' | translate }}<br />
+                    {{ 'public.pendingAvailability' | translate }}<br />
+                    {{ 'public.thanks' | translate }}
+                </div>
+            </div>
+        </div>
+        <arb-buttons *ngIf=" this.authenticationService.activateOption( 'ActivityLogs', [], ['CompanyAdmins'] ) ">
+            <button *ngIf="!loadConfirmation" type="button" class="btn btn-primary btn-wide" (click)="requestReport()">
+                Request Log file
+            </button>
+            <button *ngIf="loadConfirmation" type="button" class="btn btn-primary btn-wide" (click)="finish()">finish
+            </button>
+        </arb-buttons>
+
+    </div>
+</div>

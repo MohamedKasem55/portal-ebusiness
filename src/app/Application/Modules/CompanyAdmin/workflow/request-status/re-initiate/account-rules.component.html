@@ -1,0 +1,69 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                    'aramcoPayments.details',
+                    'aramcoPayments.confirm',
+                    'myProfile.pending_actions.steps.summary'
+                    ]" [currentStep]="step">
+</arb-steps>
+
+<arb-panel [formGroup]="formModel" *ngIf="step != 3">
+        <form autocomplete="off" [formGroup]="formModel">
+                <div class="row">
+                        <fieldset>
+                                <app-dynamic-simple-extras-form-fields
+                                        [fieldsConfigs]="entityProperties"
+                                        [translate_prefix]="'workflow'"
+                                        [combosData]="combosData"
+                                        [formModel]="formModel">
+                                </app-dynamic-simple-extras-form-fields>
+                        </fieldset>
+                </div>
+        </form>
+</arb-panel>
+<app-rules-reinitiate-step1 *ngIf="step === 1"
+                (onInit)="onInitStep1($event)"
+                [selectedItem]="selectedItem">
+
+</app-rules-reinitiate-step1>
+
+<app-rules-reinitiate-step2 *ngIf="step === 2"
+                [selectedItem]="selectedItem"
+                [form]="this.formModify"
+        (onInit)="onInitStep2($event)">
+
+</app-rules-reinitiate-step2>
+
+<app-rules-reinitiate-step3 *ngIf="step === 3" [action]="action">
+</app-rules-reinitiate-step3>
+
+<app-levels-table *ngIf="step === 1"
+        [futureSecurityLevels]="selectedItem.securityLevelsDTOList">
+</app-levels-table>
+
+
+<arb-panel-buttons>
+        <button class="btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{ 'public.back' |
+                translate}}</button>
+        <button class="btn btn-default btn-wide" (click)="getBackUrl()" *ngIf="step == 1"> {{'public.back' |
+                translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 2">{{'public.confirm' |
+                translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="finish()" *ngIf="step == 3">{{'public.finish' |
+                translate}}</button>
+
+        <button *ngIf="step == 1"
+                class="btn btn-primary btn-wide"
+                (click)="executeAction('delete')"
+        >
+            {{ 'public.delete' | translate }}
+        </button>
+
+        <button *ngIf="step == 1"
+                class="btn btn-default btn-wide"
+                (click)="executeAction('reInitiate')"
+                [disabled]="isDisabled()">
+            {{ 'public.reInitiate' | translate }}
+        </button>
+</arb-panel-buttons>

@@ -1,0 +1,61 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'posManagement.deleteUser' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+
+
+<div class="container-fluid">
+<div *ngFor="let user of users; let i=index">
+		<div>
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+				<a class="sme-form__close btn" (click)="removeUser(i)"><span class="icon -close"></span></a>
+					<div class="sme-form__body">
+							<div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posManagement.userId' | translate }}</label>
+                                    <span class="form-control">{{user.userId}}</span>
+								</div>
+									<!-- ./sme-form-group -->
+							</div>
+							<div class="col-xs-12 col-sm-3">
+							<!-- sme-form-group -->
+								<div class="form-group">
+									<label class="required">{{ 'posManagement.userName' |
+										translate }}</label> 
+									<span  class="form-control">{{user.userName}}</span>
+								</div>
+							<!-- ./sme-form-group -->
+							</div>
+							<div class="col-xs-12 col-sm-3">
+							<!-- sme-form-group -->
+								<div class="form-group">
+									<label class="required">{{ 'posManagement.mobile' |
+										translate }}</label> 
+									<span  class="form-control">{{user.mobile}}</span>
+								</div>
+								<!-- ./sme-form-group -->
+							</div>
+						</fieldset>	
+						</div>
+							
+					</div>			
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>
+</div>
+</div>

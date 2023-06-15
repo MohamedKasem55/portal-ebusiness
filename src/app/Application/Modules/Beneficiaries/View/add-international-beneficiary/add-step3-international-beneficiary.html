@@ -1,0 +1,215 @@
+<arb-breadcrumb
+  [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary',['/beneficiaries/AddBeneficiaries']],
+                        ['beneficiaries.beneficiaryTypes.addInternationalBeneficiary']
+                    ]"
+>
+</arb-breadcrumb>
+
+<arb-steps
+  [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]"
+  [currentStep]="3"
+>
+</arb-steps>
+
+<arb-panel>
+  <arb-searchable-panel
+    class="legend"
+    [searchForm]="form"
+    [title]=" 'beneficiaries.beneficiaryListFields.category' | translate "
+    [hideButtons]="true"
+  >
+    <div class="row">
+      <div class="col-xs-12 col-sm-3">
+        <!-- CATEGORY -->
+        <div class="form-control">
+          <span
+            class="form-control"
+            [innerHTML]="formData.category"
+            disabled
+          ></span>
+        </div>
+        <!-- /CATEGORY -->
+      </div>
+    </div>
+  </arb-searchable-panel>
+  <form autocomplete="off" class="sme-form__form" novalidate>
+    <arb-searchable-panel
+      class="legend"
+      [searchForm]="form"
+      [title]=" 'beneficiaries.beneficiaryBankDetails' | translate "
+      [hideButtons]="true"
+    >
+      <fieldset>
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- COUNTRY -->
+            <div class="form-group">
+              <label>{{ 'public.country' | translate }}</label>
+              <div>
+                <span
+                  class="form-control"
+                  [innerHTML]="formData.selectedCountry.value"
+                  disabled
+                >
+                </span>
+              </div>
+            </div>
+            <!-- /COUNTRY -->
+          </div>
+
+          <div class="col-sm-6">
+            <!-- SWIFT CODE -->
+            <div class="form-group">
+              <label *ngIf="!formData.isIndia"
+                >{{ 'beneficiaries.beneficiaryListFields.swiftCode' | translate
+                }}</label
+              >
+              <label *ngIf="formData.isIndia"
+                >{{ 'beneficiaries.beneficiaryListFields.ifcs' | translate
+                }}</label
+              >
+              <div>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="swiftCode"
+                  [(ngModel)]="formData.swiftCode"
+                  disabled
+                />
+              </div>
+            </div>
+            <!-- /SWIFT CODE -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- BANK NAME -->
+            <div class="form-group">
+              <label
+                >{{ 'beneficiaries.beneficiaryListFields.bankName' | translate
+                }}</label
+              >
+              <div>
+                <span
+                  class="form-control"
+                  [innerHTML]="formData.selectedBank.bankName"
+                  disabled
+                >
+                </span>
+              </div>
+            </div>
+            <!-- /BANK NAME -->
+          </div>
+
+          <div class="col-sm-6">
+            <!-- BRANCH NAME -->
+            <div class="form-group">
+              <label
+                >{{ 'beneficiaries.beneficiaryListFields.branchName' | translate
+                }}</label
+              >
+              <div>
+                <span
+                  class="form-control"
+                  [innerHTML]="formData.selectedBranch.beneficiaryBankBranch"
+                  disabled
+                >
+                </span>
+              </div>
+            </div>
+            <!-- /BRANCH NAME -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- CURRENCY -->
+            <div class="form-group">
+              <label>{{ 'beneficiaries.currency' | translate }}</label>
+              <div>
+                <span
+                  class="form-control"
+                  [innerHTML]="formData.selectedCurrency.currencyName"
+                  disabled
+                >
+                </span>
+              </div>
+            </div>
+            <!-- /CURRENCY -->
+          </div>
+        </div>
+      </fieldset>
+    </arb-searchable-panel>
+    <div>
+      <arb-searchable-panel
+        class="legend"
+        [searchForm]="form"
+        [title]=" 'beneficiaries.beneficiaryDetails' | translate "
+        [hideButtons]="true"
+      >
+        <div class="row">
+          <div class="col-sm-6" *ngFor="let item of formData.mandatoryControls">
+            <div class="form-group">
+              <label>{{ item.name }}</label>
+              <div>
+                <span class="form-control" [innerHTML]="item.value" disabled>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </arb-searchable-panel>
+    </div>
+    <fieldset>
+      <div class="row">
+        <app-levels-table
+          [futureSecurityLevels]="sharedData['beneficiary'].futureSecurityLevelsDTOList"
+        >
+        </app-levels-table>
+      </div>
+    </fieldset>
+      <div class="row">
+        <div style="text-align: justify; padding: 20px">
+          <div class="form-group">
+            <app-secured-authentication
+              [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+              [requestValidate]="sharedData.requestValidate"
+              #authorization
+            >
+            </app-secured-authentication>
+          </div>
+        </div>
+      </div>
+  </form>
+</arb-panel>
+
+<arb-panel-buttons
+  *ngIf="!sharedData.generateChallengeAndOTP || sharedData.generateChallengeAndOTP.typeAuthentication !=='IVR'"
+>
+  <button type="button" (click)="goBack()" class="btn btn-default btn-wide">
+    {{ 'public.cancel' | translate }}
+  </button>
+
+  <button
+    class="btn btn-primary btn-wide"
+    (click)="saveInternationalBeneficiary()"
+    [disabled]="!valid()"
+  >
+    {{ 'public.next' | translate }}
+  </button>
+</arb-panel-buttons>
+<arb-panel-buttons
+  *ngIf="sharedData.generateChallengeAndOTP && sharedData.generateChallengeAndOTP.typeAuthentication ==='IVR'"
+>
+  <button class="btn btn-primary btn-wide" (click)="finish()">
+    {{ 'public.next' | translate }}
+  </button>
+</arb-panel-buttons>

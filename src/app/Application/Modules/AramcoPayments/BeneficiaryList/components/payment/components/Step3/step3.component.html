@@ -1,0 +1,109 @@
+<form autocomplete="off" [formGroup]="form">
+    <div formArrayName="beneficiaries">
+        <div class="container-fluid" *ngFor="let item of form.controls.beneficiaries['controls']; let i = index;">
+            <div [formGroupName]="i">
+                <div class="sme-page-block">
+                    <div class="sme-form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__head">{{ 'aramcoPayments.aramcoPayment' | translate }} {{i+1}}
+                                <a class="sme-form__close btn" (click)="removeBeneficiary(i)">
+                                        <span class="icon -close"></span>
+                                    </a>
+                            </div>
+                            <div class="sme-form__body">
+                                <fieldset [disabled]="true">
+                                    <div class="legend">{{'aramcoPayments.paymentDetails' | translate}}</div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-account" class="required">{{ 'aramcoPayments.account' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div class="sme-select form-control">
+                                                    <select class="form-control" formControlName="account">
+                                                        <option value disabled>--{{ 'public.selectAccount' | translate }}--</option>
+                                                         <option *ngFor="let account of sharedData.accounts" [value]="account.key">{{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}} {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}}</option>  
+                                                    </select>
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-amount" class="required">{{ 'aramcoPayments.amount' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <span disabled=""> {{ item.controls.amount.value | amountCurrency }}</span>
+<!--                                                    <input class="form-control" formControlName="amount" inputPattern="onlyPositiveDecimalNumbers" />-->
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="legend">{{'aramcoPayments.beneficiarySummary' | translate}}</div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-name">{{ 'aramcoPayments.name' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input class="form-control" formControlName="customerName" />
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="aramcoPayments-passNumber">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                                <!-- sme-select -->
+                                                <div>
+                                                    <input class="form-control" formControlName="customerId" />
+                                                </div>
+                                                <!-- ./sme-select -->
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <app-levels-table 
+                                    [futureSecurityLevels]="getFromLevelsMap(form.controls.beneficiaries['controls'][i].controls.customerId.value)">
+                                </app-levels-table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<div class="sme-content-container container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP" [requestValidate]="sharedData.requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

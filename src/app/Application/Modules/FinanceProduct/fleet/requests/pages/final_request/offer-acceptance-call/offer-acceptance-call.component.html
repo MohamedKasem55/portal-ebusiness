@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <!-- breadcrumb section -->
+  <sme-breadcrumb [list]="breadCrumbList"></sme-breadcrumb>
+  <!-- page title section -->
+  <section class="container-fluid sme-page-title-info">
+    <span class="sme-page-title">{{
+      'fleet.offerAccepanceCall.offerAccCallTitle' | translate
+    }}</span>
+  </section>
+  <!-- card section for information -->
+  <section>
+    <sme-card
+      [startTitle]="'fleet.offerAccepanceCall.ivrCall' | translate"
+      [headerFontSize]="'sm'"
+    >
+      <div class="card-body">
+        <sme-check
+          [img]="'assets/icons/ivrCall.svg'"
+          [status]="'accept'"
+          [title]="'fleet.offerAccepanceCall.nearly' | translate"
+        >
+          <div class="check-body">
+            <p>{{ 'fleet.offerAccepanceCall.callInText' | translate }}</p>
+            <div class="sme-check-time">
+              <span
+                >{{ minute | minSec }} |
+                {{ second | minSec }}</span
+              >
+            </div>
+            <div class="sme-check-link">
+              <a href="#">
+                {{ 'fleet.offerAccepanceCall.didnotReciveCall' | translate }}</a
+              >
+            </div>
+          </div>
+        </sme-check>
+      </div>
+    </sme-card>
+  </section>
+  <footer>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button
+        class="btn btn-default btn-wide sme-back-btn"
+        (click)="navigateTo('back')"
+      >
+        {{ 'fleet.btn.back' | translate }}
+      </button>
+      <ng-container>
+        <button
+          class="btn btn-primary btn-wide"
+          (click)="navigateTo('back')"
+          [disabled]="isrecallBtnDisabled"
+        >
+          {{ 'fleet.btn.recCallProcc' | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </footer>
+</div>

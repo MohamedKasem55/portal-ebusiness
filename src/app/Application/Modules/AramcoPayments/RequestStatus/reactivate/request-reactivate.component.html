@@ -1,0 +1,84 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.payments' | translate }}</li>
+        <li class="active"><a href="#"
+                              [routerLink]="['/aramcoPayments']">{{ 'dashboard.aramcoPayments' | translate }}</a></li>
+        <li><a href="#"
+               [routerLink]="['/aramcoPayments/request-status']">{{ 'aramcoPayments.requestStatus'| translate }}</a>
+        </li>
+        <li class="active">{{ 'aramcoPayments.requestStatus'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+						<span>
+							<span class="num">1</span>
+							<span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+						</span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+						<span>
+							<span class="num">2</span>
+							<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+						</span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+						<span>
+							<span class="icon -check"></span>
+							<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+						</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<app-request-reactivate-step1 *ngIf="step === 1"
+                              [batch]="this.requestReactivate['initialBatch']"
+                              [accounts]="accounts"
+                              [form]="this.form"
+                              (onInit)="onInitStep1($event)">
+
+
+</app-request-reactivate-step1>
+
+<app-request-reactivate-step2 *ngIf="step === 2"
+                              [batch]="this.requestReactivate['initialBatch']"
+                              [form]="this.form"
+                              [accounts]="accounts"
+                              [option]="option"
+                              [DeleteOption]="DeleteOption"
+                              [InitiateOption]="InitiateOption"
+                              [generateChallengeAndOTP]="generateChallengeAndOTP"
+                              [requestValidate]="requestValidate"
+                              (onInit)="onInitStep2($event)">
+
+</app-request-reactivate-step2>
+
+<app-request-reactivate-step3 *ngIf="step === 3"
+                              [generateChallengeAndOTP]="generateChallengeAndOTP"
+                              [option]="option"
+                              [DeleteOption]="DeleteOption"
+                              [InitiateOption]="InitiateOption"
+>
+
+</app-request-reactivate-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class="btn btn-default btn-wide" (click)="previous()"
+            *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-default btn-wide" [routerLink]="['/aramcoPayments/request-status']"
+            *ngIf="step == 1"> {{'public.cancel' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="delete()"
+            *ngIf="step == 1"> {{'public.delete' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="initiate()" *ngIf="step == 1"
+            [disabled]="!isValidStep1Form()"> {{'aramcoPayments.initiate' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 2"
+            [disabled]="!isValidForm()"> {{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="step == 3">{{'public.finish' | translate}}</button>
+</div>

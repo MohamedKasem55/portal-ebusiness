@@ -1,0 +1,215 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+
+                <div class="sme-form__body">
+
+                    <div class="sme-form__title">
+                        <div class="col-xs-12 col-sm-6 disclaimer">{{
+                            'menu.company_admin.alias-management.confirmationDetails' |
+                            translate }}</div>
+                    </div>
+                    <div class="row" style="margin-top:2%">
+                        <div class="col-xs-12 col-sm-12 text-left disclaimerBody">
+                            <p class="">{{ 'menu.company_admin.alias-management.disclaimer1' | translate }}</p>
+                            <br>
+                            <p>{{ 'menu.company_admin.alias-management.disclaimer2' | translate }}</p>
+                            <p>{{ 'menu.company_admin.alias-management.disclaimer3' | translate }}</p>
+                            <p>{{ 'menu.company_admin.alias-management.disclaimer4' | translate }}</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="legend" class="title-legend">
+                                    {{'menu.company_admin.alias-management.accounts' | translate}}
+                                </div>
+                                <hr class="hr-title">
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label class="required">{{
+                                            'menu.company_admin.alias-management.selecAccount' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" formControlName="account"
+                                                (change)="accountSelected()" required>
+                                                <option selected="true" disabled="disabled" value>--{{
+                                                    'public.selectAccount' | translate }}--</option>
+                                                <option *ngFor="let account of accounts"
+                                                    [value]="account.value['ibanNumber']">
+                                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? '
+                                                    - '+ account.value.alias : '')}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="showAliesDetails">
+        <!-- CRNumber -->
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="legend" class="title-legend">
+                                        {{'menu.company_admin.alias-management.comercialRegistration' | translate}}
+                                    </div>
+                                    <hr class="hr-title">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="crNumber">{{
+                                                'menu.company_admin.alias-management.crNumber' | translate }}</label>
+                                            <div>
+                                                <!-- <input id="crNumber" class="form-control" formControlName="crNumber"
+                                                    *ngIf="!isCR" /> -->
+                                                <div class="titlePin message" style="margin-top: 10px">
+                                                    <span *ngIf="crValue" class="border-none">{{crValue }}</span>
+                                                    <span *ngIf="!crValue" class="border-none crError">{{
+                                                        'menu.company_admin.alias-management.crNumber-faild' | translate
+                                                        }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="sme-form__actions">
+                                    <button class="btn btn-primary btn-wide" routerlinkactive="active" *ngIf="!isCR"
+                                        (click)="setLinkAction('UNN')" [disabled]="isDisabled('UNN')">{{
+                                        'menu.company_admin.alias-management.link' | translate }}</button>
+                                    <a class="btn btn-default btn-wide" routerlinkactive="active" *ngIf="isCR"
+                                        (click)="setUnLinkAction('UNN')">{{
+                                        'menu.company_admin.alias-management.unLink' |
+                                        translate }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile -->
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="legend" class="title-legend">
+                                        {{'menu.company_admin.alias-management.mobile' | translate}}
+                                    </div>
+                                    <hr class="hr-title">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="mobile">{{
+                                                'menu.company_admin.alias-management.mobileNumber' | translate
+                                                }}</label>
+                                            <div>
+                                                <!-- <input id="mobile" *ngIf="!isMobile" class="form-control"
+                                                    formControlName="mobile" /> -->
+                                                <div class="titlePin message" style="margin-top: 10px">
+                                                    <span class="border-none">{{mobileValue }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="sme-form__actions">
+                                    <button class="btn btn-primary btn-wide" routerlinkactive="active" *ngIf="!isMobile"
+                                        (click)="setLinkAction('MOBILE')" [disabled]="isDisabled('MOBILE')">
+                                        {{ 'menu.company_admin.alias-management.link' | translate }}</button>
+                                    <a class="btn btn-default btn-wide" routerlinkactive="active" *ngIf="isMobile"
+                                        (click)="setUnLinkAction('MOBILE')">{{
+                                        'menu.company_admin.alias-management.unLink' |
+                                        translate }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="legend" class="title-legend">
+                                        {{'menu.company_admin.alias-management.email' | translate}}
+                                    </div>
+                                    <hr class="hr-title">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="email">{{
+                                                'menu.company_admin.alias-management.email' | translate }}</label>
+                                            <div>
+                                                <!-- <input id="email" *ngIf="!isEmial" class="form-control"
+                                                    formControlName="email" /> -->
+                                                <div class="titlePin message" style="margin-top: 10px">
+                                                    <span class="border-none">{{emailValue }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="sme-form__actions">
+                                    <button class="btn btn-primary btn-wide" routerlinkactive="active" *ngIf="!isEmial"
+                                        (click)="setLinkAction('EMAIL')" [disabled]="isDisabled('EMAIL')">{{
+                                        'menu.company_admin.alias-management.link' | translate }}</button>
+                                    <a class="btn btn-default btn-wide" routerlinkactive="active" *ngIf="isEmial"
+                                        (click)="setUnLinkAction('EMAIL')">{{
+                                        'menu.company_admin.alias-management.unLink' |
+                                        translate }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="container-fluid">
+            <div class="sme-form__actions">
+                <a class="btn btn-default btn-wide" routerlinkactive="active" *ngIf="isCR || isMobile || isEmial"
+                    (click)="unLinkAll()">{{
+                    'menu.company_admin.alias-management.unLinkAll' |
+                    translate }}</a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</form>

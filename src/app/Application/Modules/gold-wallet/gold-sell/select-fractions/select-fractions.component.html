@@ -1,0 +1,105 @@
+<div class='container-fluid' *ngFor="let  trnx of  transactionList, let i = index">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.select-fractions-needed' | translate }}
+                    </div>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body" class="goldOnBoardingLanding">
+                        <arb-panel>
+                            <div class="row" style="margin-left: 1%;">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'gold-wallet.bar-serial-no' |
+                                            translate }}</label>
+                                        <input [ngModelOptions]="{standalone: true}" type="text"
+                                               [ngModel]="trnx.serialNumber"
+                                               class="form-control"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'gold-wallet.weight-avail' |
+                                            translate }}</label>
+                                        <input [ngModelOptions]="{standalone: true}" type="text"
+                                               [ngModel]="trnx.amount"
+                                               class="form-control"
+                                               disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <form *ngIf="trnx.customWeight">
+                                <div class="row" style="margin-left: 1%;">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'gold-wallet.chosen-weight-sell' |
+                                                translate }}</label>
+                                            <input  type="number"
+                                                   [max]="trnx.amount"
+                                                   [min]="1"
+                                                   [id]="'selectedValue'+i"
+                                                   name="selectedValue{{i}}"
+                                                   (change)="onAmountChange()"
+                                                   [(ngModel)]="trnx.selectedValue"
+                                                   #idx="ngModel"
+                                                   required
+                                                   class="form-control">
+                                            <div [hidden]="idx.valid||idx.pristine"
+                                                 class="alert alert-danger">
+                                                <small>
+                                                    {{'gold-wallet.weight-max-min-validation'
+                                                    | translate:{
+                                                    min: 1,
+                                                    max: trnx.amount
+                                                } }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </arb-panel>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class='sme-head'>
+                    <div class='sme-head__title'>
+                        {{ 'gold-wallet.weight-selected'| translate }}
+                    </div>
+                </div>
+                <hr>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row" style="margin-left: 1%;">
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label for="amountSelected">{{ 'gold-wallet.amount' |
+                                        translate }}</label>
+                                    <br>
+                                    <span id="amountSelected">{{totalAmountToSell}}
+                                        / {{'gold-wallet.gram' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

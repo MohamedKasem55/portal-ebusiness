@@ -1,0 +1,13 @@
+<div class="chart-container" *ngIf="chartData?.data && chartOptions"
+     [ngClass]="{'base_height': !height, 'bfm_height': height}">
+
+    <canvas  baseChart
+             [datasets]="chartData.data"
+             [options]="chartOptions"
+             [labels]="chartData.labels"
+             [chartType]="'line'">
+    </canvas>
+</div>
+
+<app-retry-action *ngIf="!chartData?.data" (onRetry)="onRefresh.emit($event)">
+</app-retry-action>

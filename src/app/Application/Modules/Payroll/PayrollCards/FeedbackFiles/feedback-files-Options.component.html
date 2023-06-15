@@ -1,0 +1,47 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'payroll.feedBackFiles.payroll' | translate }}</li>
+        <li class="active"><a class="human-selectable" href="#" routerLinkActive="active" class="active"
+            [routerLink]="['/payroll/payroll-cards']">{{ 'payroll.feedBackFiles.payrollCards' | translate }}</a></li>
+        <li class="active">{{ 'payroll.feedBackFiles.feedBackFilesBB' | translate }}</li>
+    </ol>
+</div>
+    
+ <div class="container-fluid">	
+   <div class="sme-page-block">
+        <div class="sme-form">
+         <div class="sme-form__title"></div>
+
+             <div class="sme-form__content">
+                 <form autocomplete="off" class="sme-form__form">
+                     <div class="sme-form__body">
+                       <div class="row">
+             <ul>
+                 <li>
+                     <a class="human-selectable" href="#" routerLinkActive="active" [routerLink]="['/payroll/payroll-cards/feedback-files/feedBackFilesViewUploadFiles']">
+                        {{ 'payroll.viewPaymentUploadedFile' | translate }}
+                     </a>
+                 </li>
+                 <li>
+                     <a class="human-selectable" routerLinkActive="active" [routerLink]="['/payroll/payroll-cards/feedback-files/feedBackFilesViewCardPayments']">
+                        {{ 'payroll.viewPaymentCardPayments' | translate }}
+                     </a>
+                 </li>
+                 <li>
+                     <a class="human-selectable" routerLinkActive="active" [routerLink]="['/payroll/payroll-cards/feedback-files/feedBackFilesViewOnlineRequest']">
+                        {{ 'payroll.feedBackFiles.viewOnlineRequestMenu' | translate }}
+                     </a>
+                 </li>
+                 <li>
+                     <a class="human-selectable" routerLinkActive="active" [routerLink]="['/payroll/payroll-cards/feedback-files/feedBackFilesViewDownloadWps']">
+                        {{ 'payroll.feedBackFiles.viewDownloadWpsFilesMenu' | translate }}
+                     </a>
+                 </li>
+             </ul> 
+           </div>
+         </div>	
+       </form>
+   </div>
+ </div>
+</div>
+</div>

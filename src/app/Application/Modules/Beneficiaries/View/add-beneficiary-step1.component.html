@@ -1,0 +1,79 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]"
+           [currentStep]="1">
+</arb-steps>
+
+<arb-panel>
+    <form autocomplete="off" #beneficiariesTypesForm="ngForm" class="sme-form__form" novalidate>
+        <div>
+            {{ 'beneficiaries.advisoryadd' | translate }}
+        </div>
+        <div class="sme-page-block sme-wizard-choices">
+            <div>
+                {{ 'beneficiaries.selectFollowingBeneficiary' | translate }}
+                <br/>
+
+                <ul class="sme-radio-buttons form-group">
+                    <li *ngIf="authenticationService.activateOption('BeneficiaryAdd',['TRANSFER_PRIVILEGE'],['TfGroup'])">
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" [(ngModel)]="formData.beneficiaryType" value="alRajhiBeneficiary"
+                                       name="typeOfBeneficiary"
+                                       #alRajhiBeneficiary="ngModel" id="alRajhiBeneficiary" class="form-control"
+                                       required/>
+
+                                <i aria-hidden="true"></i>
+                                <span>{{ 'beneficiaries.beneficiaryTypes.AlRajhiBankBeneficiary' | translate }}</span>
+                            </label>
+                        </div>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('BeneficiaryAdd',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])">
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" [(ngModel)]="formData.beneficiaryType" value="localBeneficiary"
+                                       name="typeOfBeneficiary"
+                                       #localBeneficiary="ngModel" id="localBeneficiary" class="form-control" required/>
+                                <i aria-hidden="true"></i>
+                                <span>{{ 'beneficiaries.beneficiaryTypes.LocalBeneficiary' | translate }}</span>
+                            </label>
+                        </div>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('BeneficiaryAdd',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup'])">
+
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" [(ngModel)]="formData.beneficiaryType"
+                                       value="internationalBeneficiary" name="typeOfBeneficiary"
+                                       #internationalBeneficiary="ngModel" id="internationalBeneficiary"
+                                       class="form-control" required/>
+                                <i aria-hidden="true"></i>
+                                <span>{{ 'beneficiaries.beneficiaryTypes.InternationalBeneficiary' | translate }}</span>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </form>
+</arb-panel>
+
+<arb-panel-buttons>
+    <a class="human-selectable" href="#" class="btn btn-default btn-wide" routerLinkActive="active"
+       [routerLink]="['/beneficiaries/beneficiariesOptions']">
+        {{'public.back' | translate }}</a>
+
+    <button class="btn btn-primary btn-wide" (click)="sendTypeBeneficiary(beneficiariesTypesForm.value)"
+            [disabled]="!beneficiariesTypesForm.form.valid">{{ 'public.next' | translate }}</button>
+</arb-panel-buttons>

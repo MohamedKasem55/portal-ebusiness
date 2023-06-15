@@ -1,0 +1,186 @@
+<form autocomplete="off" class="sme-wizard" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="sme-form__content">
+    <div class="sme-form__body">
+      <fieldset>
+
+        <arb-panel>
+          <div class="row">
+            <p style="padding: 10px; font-size: 16px">{{ 'public.details' | translate}}</p>
+            <div class="line"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-4">
+              <div class="form-group">
+                <label class="required">{{
+                  'transfer.accountFrom' | translate }}</label>
+                <!-- sme-select -->
+                <div class="form-control">
+                  <ng-select [notFoundText]="'public.noData' | translate"
+                             (change)="accountSelected($event)" required
+                             formControlName="accountFrom">
+                    <ng-option value="" disabled="disabled" selected="selected">
+                      --{{ 'public.selectAccount' | translate }}--
+                    </ng-option>
+                    <ng-option *ngFor="let account of accountsFrom"
+                               [value]="account">
+                      {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}
+                      {{(account.value.inquiry ? (' - ' + (account.value.availableBalance | amountCurrency:account.value.currency)) : '')}}
+                      {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+                <!-- ./sme-select -->
+              </div>
+
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+              <div class="form-group">
+                <label class="required">{{
+                  'transfer.ips.bankName' | translate }}</label>
+                <!-- sme-select -->
+                <div class="form-control">
+                  <ng-select [notFoundText]="'public.noData' | translate"
+                             (change)="onBankSelect($event)" required formControlName="bankTo">
+                    <ng-option value="" disabled="disabled" selected="selected">
+                      --{{ 'public.selectBank' | translate }}--
+                    </ng-option>
+                    <ng-option *ngFor="let bank of participantBanks"
+                               [value]="bank">
+                      {{bank.participantFullName}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+                <!-- ./sme-select -->
+              </div>
+            </div>
+          </div>
+        </arb-panel>
+        <arb-panel *ngIf="bankSelected && accountFromSelected">
+          <p style="padding: 10px; font-size: 16px">{{ 'transfer.ips.channel' | translate}}</p>
+          <div class="line"></div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-3" style="padding-top: 10px">
+              <div class="form-group">
+                <label class="required">{{
+                  'transfer.ips.selectChannel' | translate }}</label>
+                <ng-select [notFoundText]="'public.noData' | translate"
+                           (change)="onProxySelected($event)" required
+                           formControlName="proxyTypeSelected">
+                  <ng-option value="" disabled="disabled" selected="selected">
+                    --{{ 'public.selectDropdown' | translate }}--
+                  </ng-option>
+                  <ng-option *ngFor="let proxy of proxyTypes.proxyTypes"
+                             [value]="proxy">
+                    {{proxy.value | translate}}
+                  </ng-option>
+                </ng-select>
+                <div
+                  *ngIf="form.controls.proxyTypeSelected.hasError('required') && form.controls.proxyTypeSelected.touched"
+                  class="alert alert-danger">
+                  <small>{{'required' | translate }}</small>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="proxyTypeSelected" class="col-xs-12 col-sm-2" style="padding-top: 5px">
+              <div class="form-group">
+                <label class="required">{{
+                  proxyTypeSelected?.value | translate }}</label>
+                <input type="text" class="form-control" name="proxyType"
+                       formControlName="proxyTypeValue">
+                <div *ngIf="form.controls.proxyTypeValue.hasError('pattern') ||
+                                  form.controls.proxyTypeValue.hasError('maxlength') ||
+                                  form.controls.proxyTypeValue.hasError('minlength')"
+                     class="alert alert-danger">
+                  <small>{{'transfer.ips.proxyType.validation.' + proxyTypeSelected.key | translate }}</small>
+                </div>
+                <div *ngIf="form.controls.proxyTypeValue.hasError('required')"
+                     class="alert alert-danger">
+                  <small>{{'required' | translate }}</small>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="proxyTypeSelected && isIBAN" class="col-xs-12 col-sm-2" style="padding-top: 5px">
+              <div class="form-group">
+                <label class="required">{{'public.firstName' | translate }}</label>
+                <input type="text" class="form-control" name="firstName" formControlName="firstName">
+                <div *ngIf="form.controls.firstName.hasError('required')"
+                     class="alert alert-danger">
+                  <small>{{'required' | translate }}</small>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="proxyTypeSelected && isIBAN" class="col-xs-12 col-sm-2" style="padding-top: 5px">
+              <div class="form-group">
+                <label class="required">{{'public.lastName' | translate }}</label>
+                <input type="text" class="form-control" name="lastName" formControlName="lastName">
+                <div *ngIf="form.controls.lastName.hasError('required') && form.controls.lastName.touched"
+                     class="alert alert-danger">
+                  <small>{{'required' | translate }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-3" style="padding-top: 10px">
+              <div class="form-group">
+                <label class="required">{{
+                  'transfer.ips.purpose' | translate }}</label>
+                <ng-select [notFoundText]="'public.noData' | translate"
+                           required formControlName="transferPurpose">
+                  <ng-option value="" disabled="disabled" selected="selected">
+                    --{{ 'public.selectDropdown' | translate }}--
+                  </ng-option>
+                  <ng-option *ngFor="let purpose of transferPurposes"
+                             [value]="purpose">
+                    <span *ngIf="translate.currentLang === 'en'">{{ purpose.purposeDescriptionEn }}</span>
+                    <span *ngIf="translate.currentLang !== 'en'">{{ purpose.purposeDescriptionAr }}</span>
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="form.controls.transferPurpose.hasError('required') && form.controls.transferPurpose.touched"
+                     class="alert alert-danger">
+                  <small>{{'required' | translate }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="proxyTypeSelected" class="col-xs-12 col-sm-2" style="padding-top: 5px">
+            <div class="form-group">
+              <label>{{'transfer.remarks' | translate }}</label>
+              <input type="text" class="form-control" name="remarks" formControlName="remarks">
+            </div>
+          </div>
+        </arb-panel>
+
+      </fieldset>
+    </div>
+  </div>
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide"
+            (click)="back()">{{'public.back' | translate }}</button>
+
+    <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!validForm">{{buttonLabel}}</button>
+  </div>
+
+
+</form>
+
+
+<div class="modal fade" bsModal #ipsModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content modal-content__stretched">
+      <div class="modal-header">
+        <p class="modal-title">{{'transfer.ips.modal.messageHeader' | translate}}</p>
+      </div>
+      <div class="modal-body modal-side-align-text">
+        <p>{{ 'transfer.ips.modal.bankUnavailablePart1' | translate }}
+          {{bankSelected?.participantFullName}}
+          {{ 'transfer.ips.modal.bankUnavailablePart2' | translate }}</p>
+      </div>
+      <div class="modal-footer modal-side-align-button">
+        <button type="button" (click)="backHome()" class="btn btn-default"
+                data-dismiss="modal">{{ 'public.cancel' | translate }}</button>
+        <button type="button" (click)="normalTransfer()" class=" btn btn-primary btn-wide"
+                data-dismiss="modal">{{ 'transfer.ips.buttons.normalTransfer' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

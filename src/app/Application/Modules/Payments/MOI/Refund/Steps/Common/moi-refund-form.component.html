@@ -1,0 +1,74 @@
+<ng-container [formGroup]="formModel">
+
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'payments.moiPayments.refunds.serviceType' | translate }}</label>
+                <ng-select [notFoundText]="'public.noData' | translate" class="form-control" formControlName="serviceType" (onChange)="onChangeServiceType()"
+                           required>
+                    <ng-option *ngFor="let item of combosData['eGovSadadRType']" [value]="item.key">
+                        {{ item.value}}
+                    </ng-option>
+                </ng-select>
+                <!--
+                <div *ngIf="formModel.get('serviceType').errors && (formModel.get('serviceType').touched || formModel.get('serviceType').dirty)">
+                    <p *ngFor="let error of getFieldErrorsAsArray('serviceType')" class="alert alert-danger">
+                        {{ 'error.' + error.code | translate:error.params  }}
+                    </p>
+                </div>
+                -->
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'payments.moiPayments.refunds.applicationType' | translate }}</label>
+                <ng-select [notFoundText]="'public.noData' | translate" class="form-control" formControlName="applicationType" required>
+                    <ng-option *ngFor="let item of combosData['applicationsTypes']" [value]="item.key">
+                        {{ item.value}}
+                    </ng-option>
+                </ng-select>
+                <!--
+                <div *ngIf="formModel.get('applicationType').errors && (formModel.get('applicationType').touched || formModel.get('applicationType').dirty)">
+                    <p *ngFor="let error of getFieldErrorsAsArray('applicationType')" class="alert alert-danger">
+                        {{ 'error.' + error.code | translate:error.params  }}
+                    </p>
+                </div>
+                -->
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-5">
+            <div class="form-group">
+                <label>{{ 'payments.moiPayments.refunds.account' | translate }}</label>
+
+                <ng-select [notFoundText]="'public.noData' | translate" class="form-control" name="cardAccount" formControlName="account" required>
+                    <ng-option *ngFor="let account of combosData['accounts']" [value]="account.fullAccountNumber">
+                        {{account.fullAccountNumber}}{{(account.alias != '' ? ' - ' + account.alias : '')}} {{(account.inquiry ? (' - ' + (account.availableBalance | amountCurrency:account.currency)) : '')}} {{(account.inquiry ? ('currencyIso' | modelPipe:account.currency) : '')}}
+                    </ng-option>
+                </ng-select>
+                <!--
+                <div *ngIf="formModel.get('account').errors && (formModel.get('account').touched || formModel.get('account').dirty)">
+                    <p *ngFor="let error of getFieldErrorsAsArray('account')" class="alert alert-danger">
+                        {{ 'error.' + error.code | translate:error.params  }}
+                    </p>
+                </div>
+                -->
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <app-dynamic-simple-extras-form-fields
+                [formModel]="formModel"
+                [fieldsConfigs]="fieldsConfigs"
+                [combosData]="combosData"
+                [translate_prefix]="'payments.moiPayments'">
+        </app-dynamic-simple-extras-form-fields>
+
+    </div>
+
+</ng-container>

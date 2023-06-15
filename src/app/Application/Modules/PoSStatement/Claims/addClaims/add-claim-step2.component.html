@@ -1,0 +1,89 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'posRequest.addClaim' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+
+<form [formGroup]="form">
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+					<div class="sme-form__body">
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label>{{ 'posRequest.mobileNumber' |
+											translate }}</label> 
+									<span class="form-control disabled">{{form.controls.mobile?.value}}</span>
+								</div>
+							</div>
+						</div>
+					</div>			
+			</div>	
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid" formArrayName="elements" *ngFor="let element of elements; let i=index">
+	<div [formGroupName]="i">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+				<div class="sme-form__body">
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label>{{ 'posRequest.terminalNumber' |
+											translate }}</label> 
+									<span class="form-control disabled">{{element.controls.terminalID?.value}}</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="form-group">
+									<label>{{ 'posRequest.typeOfTransaction' |
+											translate }}</label> 
+									<span class="form-control disabled">{{element.controls.cardTypeDesc?.value}}</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="form-group">
+									<label>{{ 'posRequest.date' |
+											translate }}</label> 
+									<span class="form-control disabled">{{element.controls.trxnDate?.value |date:'dd-MM-yyyy'}}</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-2">
+								<div class="form-group">
+									<label>{{ 'posRequest.transactionAmount' |
+											translate }}</label> 
+									<span class="form-control disabled">{{element.controls.amountSARCur?.value | amountCurrency }}</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+                                   <label>{{ 'posRequest.fileUpload' |
+                                            translate }}</label>
+                                    <span class="form-control disabled">{{element.controls.fileName?.value}}</span>
+                                            
+                            </div>
+						</div>
+							
+				</div>			
+			</div>
+			</div>	
+		</div>
+	</div>
+	</div>
+</div>
+</form>	

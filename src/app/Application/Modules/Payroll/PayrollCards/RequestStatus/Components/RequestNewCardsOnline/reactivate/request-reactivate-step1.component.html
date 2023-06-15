@@ -1,0 +1,309 @@
+<!-- <div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                {{ 'payroll.newCardDetail' | translate}}
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'payroll.newCardDetail' | translate}}
+                </div>
+                <div class="col-xs-12 col-sm-6 sme-page-block sme-wizard__navigation sme-form__actions"
+                    style="padding: 0 0 0 0">
+
+                    <a class="btn btn-default btn-wide" (click)="clearEmployees()">
+                        <span>{{'public.clear' | translate }}</span></a>
+                    <a (click)="addEmployee()" class="btn btn-primary btn-wide">
+                        <span class="icon -plus"></span>
+                        <span>{{'payroll.addEmployee' | translate }}</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label
+                                            for="operation-type-input-type">{{'payroll.batchName' | translate }}</label>
+                                        <input type="text" class="form-control" id="operation-type-input-type"
+                                            name="operationType" [(ngModel)]="batch.batchName" inputPattern="onlyAlphabetics">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label
+                                            for="rejectedReason">{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                        <input class="form-control" id="rejectedReason" value="{{batch.rejectedReason}}"
+                                            disabled>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'payroll.employeeDetails' | translate}}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="payrollCardPageTable" [header]="'payroll.employeeDetails' | translate"
+                        [columns]="[
+							{'title': 'payroll.employeeId' | translate, 'dataKey': 'employeeId'}, 
+							{'title': 'payroll.employeeName' | translate, 'dataKey': 'employeeName'}, 
+							{'title': 'payroll.nationalId' | translate, 'dataKey': 'nationalId'},
+							{'title': 'payroll.movilNumber' | translate, 'dataKey': 'mobileNumber'}
+						]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #payrollCardPageTable
+                        class="material sme-table sme-table--responsive table" [rows]="batch.details"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="0"
+                        [rowHeight]="defaultHeight" [externalPaging]="false" [externalSorting]="false"
+                        [count]="batch.details.length" [limit]="PaymentPageSize" >
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.employeeId' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="width: 100%"
+                                                        (blur)="updateValue($event, 'employeeId', rowIndex)"
+                                                        value="{{row.employeeId}}" maxLength="12"
+                                                        inputPattern="onlyDecimalNumbers">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.employeeName' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="width: 100%"
+                                                        (blur)="updateValue($event, 'employeeName', rowIndex)"
+                                                        maxLength="50" value="{{row.employeeName}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.nationalId' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="width: 100%"
+                                                        (blur)="updateValue($event, 'nationalId', rowIndex)"
+                                                        value="{{row.nationalId}}" minLength="10" maxLength="10"
+                                                        inputPattern="onlyDecimalNumbers">
+                                                    <div *ngIf="row['errors']?.lt && row['errors']?.error"
+                                                        class="alert alert-danger">
+                                                        {{'registration.validation10DigitsNumber' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.movilNumber' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="width: 100%"
+                                                        (blur)="updateValue($event, 'mobileNumber', rowIndex)"
+                                                        value="{{row.mobileNumber}}" minLength="10" maxLength="10"
+                                                        inputPattern="onlyDecimalNumbers">
+                                                    <div *ngIf="row['errors']?.lt && row['errors']?.error"
+                                                        class="alert alert-danger">
+                                                        {{'registration.validation10DigitsNumber' | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.delete' | translate }}</label>
+                                                <div>
+                                                    <span class="human-selectable glyphicon glyphicon-trash"
+                                                        (click)="removeEmployee(rowIndex)">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="employeeId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.employeeId' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+                                <span><input type="text" style="width: 100%"
+                                        (blur)="updateValue($event, 'employeeId', rowIndex)" value="{{value}}"
+                                        maxLength="12" inputPattern="onlyDecimalNumbers"> </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="employeeName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.employeeName' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+                                <span><input type="text" style="width: 100%"
+                                        (blur)="updateValue($event, 'employeeName', rowIndex)" maxLength="50"
+                                        value="{{value}}"> </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="nationalId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.nationalId' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template
+                                let-rowIndex="rowIndex">
+                                <span>
+                                    <input type="text" style="width: 100%"
+                                        (blur)="updateValue($event, 'nationalId', rowIndex)" value="{{value}}"
+                                        minLength="10" maxLength="10" inputPattern="onlyDecimalNumbers">
+                                    <div *ngIf="row['errors']?.lt && row['errors']?.error" class="alert alert-danger">
+                                        {{'registration.validation10DigitsNumber' | translate }}
+                                    </div>
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="mobileNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.movilNumber' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template
+                                let-rowIndex="rowIndex">
+                                <span>
+                                    <input type="text" style="width: 100%"
+                                        (blur)="updateValue($event, 'mobileNumber', rowIndex)" value="{{value}}"
+                                        minLength="10" maxLength="10" inputPattern="onlyDecimalNumbers">
+                                    <div *ngIf="row['errors']?.lt && row['errors']?.error" class="alert alert-danger">
+                                        {{'registration.validation10DigitsNumber' | translate }}
+                                    </div>
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="nationalId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.delete' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template
+                                let-rowIndex="rowIndex">
+                                <span class="human-selectable glyphicon glyphicon-trash"
+                                    (click)="removeEmployee(rowIndex)">
+                                    <!-- <a class="glyphicon glyphicon-trash"></a> -->
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="payrollCardPageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{batch.details.length}} Of
+                                            {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="PaymentPageSize" (change)="batch.details.setPage($event)">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

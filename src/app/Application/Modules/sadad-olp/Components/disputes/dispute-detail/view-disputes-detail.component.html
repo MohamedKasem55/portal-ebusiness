@@ -1,0 +1,98 @@
+<arb-breadcrumb [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+	['sadadOLP.disputes.menu']
+]">
+</arb-breadcrumb>
+<form autocomplete="off" [formGroup]="form">
+    <arb-panel-title [title]="'sadadOLP.disputes.menu'">
+    </arb-panel-title>
+    <arb-panel>
+        <div class="row">
+            <fieldset [disabled]="true">
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="disputeId-input">{{ 'sadadOLP.disputes.disputesId' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="disputeId-input" formControlName="disputeId">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="transactionID-input">{{ 'sadadOLP.disputes.transactionId' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="transactionID-input"
+                            formControlName="transactionID">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="disputeReason-input">{{ 'sadadOLP.disputes.disputeReason' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="disputeReason-input" formControlName="categoryDesc">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="transactionAmount-input">{{ 'sadadOLP.disputes.transactionAmount' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="transactionAmount-input"
+                            formControlName="transactionAmount">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+            </fieldset>
+        </div>
+        <div class="row">
+            <fieldset [disabled]="true">
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="requestDate-input">{{ 'sadadOLP.disputes.requestDate' |
+                                                translate }}</label>
+                        <input type="text" class="form-control" id="requestDate-input" formControlName="requestDate">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label>{{ 'sadadOLP.disputes.status' |
+                                                translate }}</label>
+                        <input type="text" class="form-control" id="status-input" value="{{ 'olpDisputesStatus' | modelPipe: form.controls.status.value }}">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="details-input">{{ 'sadadOLP.disputes.details' |
+                                                translate }}</label>
+                        <input type="text" class="form-control" id="details-input" formControlName="details">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="assignedTo-input">{{ 'sadadOLP.disputes.assignedTo' |
+                                                translate }}</label>
+                        <input type="text" class="form-control" id="assignedTo-input" formControlName="assignedTo">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+            </fieldset>
+        </div>
+    </arb-panel>
+</form>
+
+<arb-buttons>
+    <button type="button" class="btn btn-default btn-wide" (click)="back()">{{ 'public.back' | translate}}</button>
+</arb-buttons>

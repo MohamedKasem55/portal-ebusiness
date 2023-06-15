@@ -1,0 +1,83 @@
+<div class="sme-table table headerDataTable">
+    <br />
+    <div class="sme-form__body" *ngIf="slides.length>0; else noData">
+        <ngb-carousel [showNavigationArrows]="showArrowsOption()" [interval]=0 [pauseOnHover]="false"
+            class="carousel-own-styles">
+            <ng-template ngbSlide *ngFor="let BusinessCardsListArray of slides">
+                <div class="flex-wrap">
+                    <div class="list-line" (click)="infoDetails(BusinessCardsItem)"
+                        *ngFor="let BusinessCardsItem of BusinessCardsListArray.businessCardsList;let i=index">
+                        <div class="head-list" style="margin-top: 5px; cursor:pointer">
+                            <div id="image" class="display-div-column">
+                                <img *ngIf="BusinessCardsItem.cardIcon; else imageCard"
+                                    [src]="BusinessCardsItem.cardIcon" class="image-little-target" />
+                                <ng-template #imageCard>
+                                    <span class="image-little-target"></span>
+                                </ng-template>
+
+                            </div>
+                        </div>
+                        <div class="cap-targets-list-home">
+                            <div class="body-list">
+                                <div class="titlePin message"> <span
+                                        class="display-div-column">{{BusinessCardsItem.cardNickName}}</span>
+                                </div>
+                                <div *ngIf="BusinessCardsItem.cardStatus" class="message" style="margin-top: 10px">
+                                    <span class="display-div-column navy-bold">{{BusinessCardsItem.cardNumber |
+                                        hiddenAccount:BusinessCardsItem.cardStatus}}
+                                        - {{BusinessCardsItem.creditCardType}}</span>
+                                </div>
+                                <div *ngIf="!BusinessCardsItem.cardStatus" class="message" style="margin-top: 10px">
+                                    <span class="display-div-column">{{BusinessCardsItem.cardNumber |
+                                        hiddenAccount:BusinessCardsItem.cardStatus}}</span>
+                                </div>
+                            </div>
+                            <div *ngIf="BusinessCardsItem.cardStatus;else activate" class="footer-list">
+                                <div class="progress-bar-ext">
+                                    <div [ngStyle]="{'width': BusinessCardsItem | cardBalancePercentage}"></div>
+                                </div>
+
+                                <div class="titlePin message">
+                                    <div class="body-list-details">
+                                        <div> <span class="text-legend">{{'commercialCards.25spent' | translate
+                                                }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="border-none">{{BusinessCardsItem.rewardPoints | amountCurrency
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="body-list-details line-separator">
+                                        <div> <span class="text-legend">{{'commercialCards.totalCredit' | translate
+                                                }}</span>
+                                        </div>
+
+                                        <div>
+                                            <span class="border-none navy-bold">{{BusinessCardsItem.totalAmt |
+                                                amountCurrency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #activate>
+                                <!-- activate cards functionality temporarily disabled -->
+                                <!-- <div class="footer-list">
+                                    <div class="center-button-active">
+                                        <button type=" button" class="button-card-active"
+                                            (click)="activateCard(BusinessCardsItem)">
+                                            {{ 'public.activate' | translate }}</button>
+                                    </div>
+                                </div> -->
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+    </div>
+    <ng-template #noData>
+        <div class="noTargetsData">
+            <span class="text-legend">{{'commercialCards.noTargetsData' | translate }}</span>
+        </div>
+    </ng-template>
+</div>

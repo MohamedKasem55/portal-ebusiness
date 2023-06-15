@@ -1,0 +1,23 @@
+<div>
+    <arb-panel *ngIf="success">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -check -success ticks-success"></div>
+                <h2>{{'mada-cards.successHeader' | translate}}</h2>
+                <br>
+                <p>{{'mada-cards.successLine' | translate}}</p>
+            </div>
+        </div>
+    </arb-panel>
+
+    <arb-panel *ngIf="!success">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -close icon-failure ticks-failure"></div>
+                <h2>{{'mada-cards.failureHeader' | translate}}</h2>
+                <br>
+                <p>{{'mada-cards.failureLine' | translate}}</p>
+            </div>
+        </div>
+    </arb-panel>
+</div>

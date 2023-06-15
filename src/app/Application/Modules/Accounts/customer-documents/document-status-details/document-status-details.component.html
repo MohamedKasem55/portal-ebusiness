@@ -1,0 +1,104 @@
+<arb-breadcrumb [routes]="[
+	['public.accounts'],
+	['customer-documents.customerDocs'],
+	['customer-documents.requestStatusDetails.requestStatusDetails']]">
+</arb-breadcrumb>
+
+<arb-panel-title [title]="'customer-documents.requestStatusDetails.requestStatusDetails' | translate"></arb-panel-title>
+
+<!--  Approved status  -->
+<arb-panel *ngIf="statusDetails.docReqStatus == '01'">
+    <div class="final-step-message-container">
+        <div class="final-step-message">
+            <div class="icon -check -success ticks-success"></div>
+            <h2>{{'customer-documents.requestStatusDetails.successHeader' | translate}}</h2>
+            <br>
+            <br>
+
+            <div class="result-container">
+                <div class="form-group">
+                    <label class="info-label">{{ 'customer-documents.requestStatusDetails.docType' | translate }}</label>
+                    <h4>{{ 'custDocs' | modelPipe: statusDetails.docType  }}</h4>
+                </div>
+                <div class="form-group">
+                    <label class="info-label">{{ 'customer-documents.requestStatusDetails.reqInitDate' | translate }}</label>
+                    <h4>{{ statusDetails.creationDate | date: 'yyyy/MM/dd - ' }}{{ statusDetails.creationDate | date: 'mediumTime' }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<!--  Failed or Rejected status -->
+<arb-panel *ngIf="statusDetails.docReqStatus == '02' || statusDetails.docReqStatus == '05'">
+    <div class="final-step-message-container">
+        <div class="final-step-message">
+            <div class="icon -close icon-failure ticks-failure"></div>
+            <h2>{{'customer-documents.requestStatusDetails.failureHeader' | translate}}</h2>
+            <br>
+            <p>{{'customer-documents.requestStatusDetails.failureLine' | translate}}</p>
+
+            <br>
+            <div class="result-container">
+                <div class="form-group">
+                    <label class="info-label">{{ 'customer-documents.requestStatusDetails.docType' | translate }}</label>
+                    <h4>{{ 'custDocs' | modelPipe: statusDetails.docType  }}</h4>
+                </div>
+                <div class="form-group">
+                    <label class="info-label">{{ 'customer-documents.requestStatusDetails.reqInitDate' | translate }}</label>
+                    <h4>{{ statusDetails.creationDate | date: 'yyyy/MM/dd - ' }}{{ statusDetails.creationDate | date: 'mediumTime' }}</h4>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</arb-panel>
+
+<!--  Pending status  -->
+<arb-panel *ngIf="statusDetails.docReqStatus == '03'">
+    <div class="final-step-message-container">
+        <div class="final-step-message">
+            <div class="ticks-warning">!</div>
+            <h2>{{'customer-documents.requestStatusDetails.pendingHeader' | translate}}</h2>
+            <h2>{{'customer-documents.requestStatusDetails.pendingHeader2' | translate}}</h2>
+            <br>
+            <p>{{'customer-documents.requestStatusDetails.pendingLine' | translate}}</p>
+
+            <br>
+            <div class="result-container">
+                <div class="form-group">
+                    <label class="info-label">{{ 'customer-documents.requestStatusDetails.docType' | translate }}</label>
+                    <h4>{{ 'custDocs' | modelPipe: statusDetails.docType  }}</h4>
+                </div>
+                <div class="form-group">
+                    <label class="info-label">{{ 'customer-documents.requestStatusDetails.reqInitDate' | translate }}</label>
+                    <h4>{{ statusDetails.creationDate | date: 'yyyy/MM/dd - ' }}{{ statusDetails.creationDate | date: 'mediumTime' }}</h4>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</arb-panel>
+
+
+<arb-buttons>
+
+    <div class="row" >
+        <div class="col-xs-12 col-sm-8" style="text-align: start">
+            <button style="margin-right: auto" class="btn btn-default btn-wide" type="button" (click)="goToStatus()">
+                {{ 'public.back' | translate}}
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <button *ngIf="statusDetails.docReqStatus == '01'" [disabled]="isDownloadDisabled()"
+                    (click)="downloadDocument(true)" class=" btn btn-default btn-wide">
+                {{ 'customer-documents.requestStatusDetails.viewPDF' | translate }}
+            </button>
+            <button *ngIf="statusDetails.docReqStatus == '01'" [disabled]="isDownloadDisabled()"
+                    (click)="downloadDocument(false)" class=" btn btn-primary btn-wide">
+                {{ 'customer-documents.requestStatusDetails.downloadPDF' | translate }}
+            </button>
+        </div>
+    </div>
+
+</arb-buttons>

@@ -1,0 +1,94 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="legend" class="title-legend">
+                                {{'commercialCards.previewTitle' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="cardNumber">{{
+                                            'commercialCards.cardNumber' | translate }}</label>
+                                        <div class="div-disabled-line">
+                                            <span class="span-disabled">{{account}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-xs-12 col-sm-3" *ngIf="operationType !== closureOpType && replaceOpType !== operationType"> -->
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="reasons">{{
+                                            'commercialCards.reasonTitle' | translate }}</label>
+
+                                        <ng-select [notFoundText]="'public.noData' | translate"
+                                            class="form-control select-disable" formControlName="reason">
+                                            <ng-option value="" disabled="disabled" selected="selected">
+                                                --{{ 'public.selectDropdown' | translate }}--
+                                            </ng-option>
+                                            <ng-option
+                                                *ngFor="let item of 'prepaidCardsLostStolen' | modelPipe:'__KEY_VALUE_LIST__' | orderBy:'value'"
+                                                [value]="item.key">{{toTitleCase(item.value) }}</ng-option>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <!-- Removed from the workflow -->
+                                <!-- <div *ngIf="replaceOpType === operationType" class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="account">{{
+                                            'commercialCards.selectedAccount' | translate }}</label>
+                                        <div>
+                                            <input id="account" class="form-control " formControlName="account"
+                                                [readonly]="true">
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="container-fluid" *ngIf="generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div style="margin-left: 15px;margin-bottom: 10px">
+                                    {{'prePaidCard.titleOnePass' | translate}}
+                                </div>
+                                <hr class="hr-title">
+                            </fieldset>
+                            <div>
+                                <div style="margin-bottom: 20px"><span style="margin-left: 15px"
+                                        class="card-message-margin">{{'prePaidCard.inputTokenCode' | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 15px;"></div>
+    </div>
+</div>

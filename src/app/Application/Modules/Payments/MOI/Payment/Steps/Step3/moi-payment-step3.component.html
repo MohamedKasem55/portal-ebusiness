@@ -1,0 +1,41 @@
+<div class="container-fluid docs-component" *ngIf="hasBatchListsContainerSPProcessed()">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+<!--                    <ng-container *ngIf="hasFileReference()">-->
+<!--                        <b [innerHTML]="('payments.moiPayments.pendingActions.processedFiles' | translate)"></b><br/>-->
+<!--                        <small>-->
+<!--                            {{confirmResponse['fileReference'] }}-->
+<!--                        </small><br/>-->
+<!--                        <br/>-->
+<!--                    </ng-container>-->
+
+                    <ng-container *ngIf="confirmResponse.BatchListsContainerSPProcessed.length >= 1">
+                        <app-moi-payment-confirmation-table
+                                *ngIf="confirmResponse.BatchListsContainerSPProcessed && confirmResponse.BatchListsContainerSPProcessed.length>0"
+                                [items]="confirmResponse.BatchListsContainerSPProcessed"
+                                [modal]="modalAuth"
+                                [showCitizenId]="true"
+                                [futureLevels]="true"
+                                [externalPagination]="false"
+                                [selectable]="false">
+                        </app-moi-payment-confirmation-table>
+
+                        <app-levels-popup #modalAuth></app-levels-popup>
+                    </ng-container>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<arb-confirm-panel
+        [pending]="isPending()"
+        [hasFinishAction]="false">
+</arb-confirm-panel>    
+ 

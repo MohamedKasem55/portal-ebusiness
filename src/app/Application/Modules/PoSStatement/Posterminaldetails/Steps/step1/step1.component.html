@@ -1,0 +1,157 @@
+<div class="container-fluid">
+    <div class="sme-form">
+        <div class="sme-form__content">
+            <div class="sme-form__body">
+                <div class="sme-form__title">
+                    <div class="col-xs-12 col-sm-6">{{ 'posStatement.posTerminal' | translate }}</div>
+                </div>
+
+                <form autocomplete="off" [formGroup]="form">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.terminal_id' | translate }}</label>
+                                <span class="form-control disabled">{{batch.terminalId}}</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{'posStatement.region' | translate }}</label>
+                                <div>
+                                    <span class="form-control disabled">{{ 'terminalRegion' | modelPipe: batch.region }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.account' | translate }}</label>
+                                <span class="form-control disabled">{{batch.account}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.terminal_name' | translate }} *</label>
+                                <input formControlName="name" type="text" class="form-control" id="name" maxlength="19"
+                                       required/>
+                            </div>
+                            <div *ngIf="form.controls.name.hasError('required') && form.controls.name.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.errors.terminalname' | translate }}</small>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.city' | translate }} *</label>
+                                <input formControlName="city" type="text" class="form-control" id="city" maxlength="19"
+                                       required/>
+                            </div>
+                            <div *ngIf="form.controls.city.hasError('required') && form.controls.city.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.errors.city' | translate }}</small>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.location' | translate }} *</label>
+                                <input formControlName="location" type="text" class="form-control" id="location"
+                                       maxlength="19" required/>
+                            </div>
+                            <div *ngIf="form.controls.location.hasError('required') && form.controls.location.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.errors.location' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.location2' | translate }} *</label>
+                                <input formControlName="location2" type="text" class="form-control" id="location2"
+                                       maxlength="10" required/>
+                            </div>
+                            <div *ngIf="form.controls.location2.hasError('required') && form.controls.location2.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.errors.pho' | translate }}</small>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.phone' | translate }} *</label>
+                                <input formControlName="telephone" type="text" class="form-control" id="visaFrom"
+                                       inputPattern="onlyDecimalNumbers" maxlength="10" required/>
+                            </div>
+                            <div *ngIf="form.controls.telephone.hasError('required') && form.controls.telephone.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.mobile_number' | translate }}</small>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.mobile_number' | translate }} *</label>
+                                <input formControlName="mobile" type="text" class="form-control" id="mobile"
+                                       inputPattern="onlyDecimalNumbers" maxlength="10" required/>
+                            </div>
+                            <div *ngIf="form.controls.mobile.hasError('required') && form.controls.mobile.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.mobile_number' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.fax_number' | translate }} *</label>
+                                <input formControlName="fax" type="text" class="form-control" id="fax"
+                                       inputPattern="onlyDecimalNumbers" maxlength="10" required/>
+                            </div>
+                            <div *ngIf="form.controls.fax.hasError('required') && form.controls.fax.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.errors.fax' | translate }}</small>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.email' | translate }} *</label>
+                                <input formControlName="email" type="text" class="form-control" id="email"
+                                       maxlength="20" required/>
+                            </div>
+                            <div *ngIf="form.controls.email.hasError('required') && form.controls.email.touched"
+                                 class="alert alert-danger">
+                                <small>{{'posStatement.errors.email' | translate }}</small>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.pobox' | translate }} </label>
+                                <input formControlName="pobox" type="text" class="form-control" id="pobox"
+                                       inputPattern="onlyDecimalNumbers" maxlength="10"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'posStatement.Zipcode' | translate }} </label>
+                                <input formControlName="zipCode" type="text" class="form-control" id="zipCode"
+                                       inputPattern="onlyDecimalNumbers" maxlength="10"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

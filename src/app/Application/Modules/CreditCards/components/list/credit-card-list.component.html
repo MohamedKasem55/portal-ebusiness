@@ -1,0 +1,117 @@
+<arb-breadcrumb [routes]="[
+	['accounts.creditCards.name'],
+	['accounts.creditCards.cardList']
+]">
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="this.authenticationService.activateOption('CreditCardsMenu',[],['CcGroup'])">
+    <a class="btn btn-primary btn-wide" [routerLink]="['/credit-cards/activate']">{{
+        'accounts.creditCards.activationName' | translate }}</a>
+</arb-panel-buttons>
+
+<arb-table-panel [title]="'accounts.creditCards.cardList'">
+    <table-export [dataTable]="elementsTable" [header]="'accounts.creditCards.cardList' | translate"
+                  [columns]="[
+                        {'title':'accounts.creditCards.cardAccount' | translate,'dataKey':'cardAccount'},
+                        {'title':'accounts.creditCards.cardNumber' | translate,'dataKey':'cardNumber'},
+                        {'title':'accounts.creditCards.cardType' | translate,'dataKey':'cardTypeName'},
+                        {'title':'accounts.creditCards.rewardPoints' | translate,'dataKey':'rewardPoints'}
+                        ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                   class="hidden"
+                   [rows]="getElementsDataForTableExport()"
+                   [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                   [externalPaging]="true" [externalSorting]="true" [count]="elementsPage.page.totalElements"
+                   [offset]="elementsPage.page.pageNumber-1" [limit]="elementsPage.page.pageSize"
+                   [selectionType]="defaultSelectionType" (page)='setPage($event)' (sort)="setSort($event)"
+                   [rowIdentity]="getIdFunction()" (select)='onSelect($event)'>
+
+    </ngx-datatable>
+
+</arb-table-panel>
+
+<arb-panel-buttons class="desktop-hidden">
+
+    <div class="container-fluid">
+        <div class="row desktop-hidden">
+            <div class="col-xs-4 text-left">
+                <a class="btn btn-default btn-carousel-step" (click)="previous()">
+                    {{'accounts.creditCards.previousCardColumn' | translate }}
+                </a>
+            </div>
+            <div class="col-xs-4 text-right col-xs-offset-4">
+                <a class="btn btn-default btn-carousel-step" (click)="next()">
+                    {{'accounts.creditCards.nextCardColumn' | translate }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+</arb-panel-buttons>
+
+<arb-panel>
+
+    <div class="row" style="position: relative; min-height: 300px;">
+
+        <div class="col-xs-12 col-sm-1"></div>
+        <div class="col-xs-12 col-sm-10">
+            <div *ngFor="let columnItems of carouselItems;"
+                 class="credit-cards-carousel-column col-xs-12 col-sm-4">
+
+                <div *ngFor="let item of columnItems" class="credit-cards-carousel-item"
+                     style="margin: 0 auto;">
+
+                    <div class="sme-credit-card-slider__item item active">
+
+                        <div class="sme-credit-card-slider__card">
+                            <div class="sme-credit-card-slider__item-media-list">
+                                <a (click)="goDetails(item)" class="human-selectable">
+                                    <img src="assets/img/405433.png">
+                                    <!--<img src="assets/img/{{item.cardNumber.substring(0,6)}}.jpg">-->
+                                </a>
+                            </div>
+
+                            <div class="sme-credit-card-slider__content">
+                                <div class="sme-credit-card-slider__name">
+                                    <a (click)="goDetails(item)" class="human-selectable">
+                                        {{item.cardNumberDisplay}} - {{ getCardType(item)}}
+                                    </a>
+                                </div>
+                                <div class="sme-credit-card-slider__balance">
+
+                                    <div class="sme-credit-card-slider__balance-info">
+                                        <dl class="sme-credit-card-slider__balance-spent">
+                                            <dt>{{'accounts.creditCards.rewardPoints' | translate }}</dt>
+                                            <dd>{{ item.rewardPoints | amountCurrency }}</dd>
+                                        </dl>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-1"></div>
+
+        <div class="hidden-xs mobile-hidden credit_cards_pagination_button_container credit_cards_pagination_button_container_previous">
+            <div class="col-xs-2 text-left ">
+                <a class="btn btn-default btn-carousel-step" (click)="previous()">
+                    {{'accounts.creditCards.previousCardColumn' | translate }}
+                </a>
+            </div>
+        </div>
+        <div class="hidden-xs mobile-hidden credit_cards_pagination_button_container credit_cards_pagination_button_container_next">
+            <div class="col-xs-2 text-right ">
+                <a class="btn btn-default btn-carousel-step" (click)="next()">
+                    {{'accounts.creditCards.nextCardColumn' | translate }}
+                </a>
+            </div>
+        </div>
+
+    </div>
+</arb-panel>

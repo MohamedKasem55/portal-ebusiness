@@ -1,0 +1,183 @@
+<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #accountBalanceTable
+    class="material  sme-table sme-table--responsive table" [rows]="accountBalancePage.data"
+    [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+    [count]="accountBalancePage.page.totalElements" [offset]="accountBalancePage.page.pageNumber - 1"
+    [limit]="accountBalancePage.page.pageSize" [externalPaging]="true" [externalSorting]="true" (sort)="setSort($event)"
+    (page)='setPage($event)'>
+
+    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow>
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <div class="row">
+                <fieldset>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>{{'public.account' | translate }}</label>
+                            <div>
+                                <span class="human-selectable"><a (click)="details(row.fullAccountNumber)">{{
+                                        row.fullAccountNumber }}</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label>{{'accounts.accountNickname' | translate }}</label>
+                            <div>
+                                <span class="human-selectable">{{ row.alias? row.alias: '-' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="row">
+                <fieldset>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label>{{'dashboard.balance' | translate }}</label>
+                            <div>
+                                <span
+                                    [ngStyle]="{'color': (row.availableBalance < 0 ? 'red':'green')}">{{row.availableBalance
+                                    | amountCurrency: row.currency}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label>{{'dashboard.unclearedBalance' | translate }}</label>
+                            <div>
+                                <span>{{row.unclearedBalance | amountCurrency: row.currency}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="row">
+                <fieldset>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label>{{'dashboard.currency' | translate }}</label>
+                            <div>
+                                <span>{{'currencyIso' | modelPipe: row.currency}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="row">
+                <fieldset>
+
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>{{'accounts.branchid' |translate }}</label>
+                            <div>
+                                <span class="human-selectable">{{ row.branchName }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </ng-template>
+    </ngx-datatable-row-detail>
+
+    <ngx-datatable-column prop="fullAccountNumber" [width]="290" [resizeable]="false" headerClass="text-align-center"
+        class="mobile-hidden">
+        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                {{'public.account' | translate }} </span>
+        </ng-template>
+        <ng-template let-value="value" ngx-datatable-cell-template>
+            <a class="human-selectable mobile-hidden" (click)="details(value)"> {{value}}</a>
+        </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="alias" cellClass="text-align-center">
+
+        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+            <span (click)="sort()" class="datatable-header-cell-wrapper"> {{'accounts.accountNickname' | translate }}
+            </span>
+        </ng-template>
+
+        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <span class="alias" title="{{ value? value: '-' }}">{{ value? value: '-' }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="availableBalance" [resizeable]="false" headerClass="text-align-center"
+        cellClass="text-align-center" class="mobile-hidden">
+        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                {{'dashboard.balance' | translate }} </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+            <span class="mobile-hidden" [ngStyle]="{'color': (value < 0 ? 'red':'green')}">{{ value | amountCurrency:
+                row.currency }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="unclearedBalance" [resizeable]="false" headerClass="text-align-center"
+        cellClass="text-align-center" class="mobile-hidden">
+        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                {{'dashboard.unclearedBalance' | translate }} </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+            <span class="mobile-hidden">{{ value | amountCurrency: row.currency }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="currency" [resizeable]="false" headerClass="text-align-center"
+        cellClass="text-align-center" class="mobile-hidden">
+        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+            <span class="mobile-hidden" (click)="sort()" class="datatable-header-cell-wrapper">
+                {{'dashboard.currency' | translate }} </span>
+        </ng-template>
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+            <span class="mobile-hidden">{{ 'currencyIso' | modelPipe:value }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column prop="branchid" cellClass="text-align-center">
+        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+            <span class="datatable-header-cell-wrapper">
+                {{'accounts.branchid' |translate }}
+            </span>
+        </ng-template>
+        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <span>{{ 'branchRbs5' | modelPipe:value }}</span>
+        </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-footer>
+        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+            <div class="sme-data-table__footer">
+                <app-datatable-pager
+                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                    [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                    [visiblePagesCount]="visiblePagesCount" (change)="accountBalanceTable.onFooterPage($event)">
+                </app-datatable-pager>
+
+                <div class="sme-data-table__actions form-inline">
+                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                        {{accountBalancePage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                    <span class="hidden-xs"> | </span>
+                    <span class="sme-data-table__action-group">
+                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                        <div class="sme-select form-control">
+                            <select class="form-control" [(ngModel)]="this.accountBalancePage.page.pageSize"
+                                (ngModelChange)="onChangeSize(accountBalancePage.page.pageSize)">
+                                <option [value]="5">5</option>
+                                <option [value]="10">10</option>
+                                <option [value]="20">20</option>
+                            </select>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+    </ngx-datatable-footer>
+
+</ngx-datatable>

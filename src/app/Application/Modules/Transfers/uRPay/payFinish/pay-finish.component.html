@@ -1,0 +1,84 @@
+<div class='container-fluid'>
+
+  <arb-panel>
+    <div class='sme-wizard__success'>
+      <span class=' icon -check'></span>
+      <span *ngIf='isAuthorize'
+            class='title'> {{'uRPay.success' | translate:{ Amount: formModel.controls['amount'].value } }} </span>
+      <span *ngIf='!isAuthorize' class='title'> {{'uRPay.successPendingRequest' | translate }} </span>
+    </div>
+  </arb-panel>
+
+  <arb-panel>
+    <form autocomplete='off' class='sme-form__form' novalidate>
+      <fieldset [formGroup]='formModel'>
+        <div class='legend'>{{ 'uRPay.toUp' | translate }}</div>
+        <div class='row'>
+
+          <!--Amount -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'uRPay.amount' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['amount'].value }} SAR</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Amount -->
+
+
+          <!--Purpose -->
+          <!--          <div class='col-xs-12 col-sm-4'>-->
+          <!--            <div class='form-group'>-->
+          <!--              <label>{{ 'uRPay.purpose' | translate }} </label>-->
+          <!--              <div class='input-group'>-->
+          <!--                  <span-->
+          <!--                    *ngIf='translate.currentLang=="ar"'>{{formModel.controls['purpose'].value.purposeDescriptionAr }}</span>-->
+          <!--                <span-->
+          <!--                  *ngIf='translate.currentLang!="ar"'>{{formModel.controls['purpose'].value.purposeDescriptionEn }}</span>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!-- /Purpose -->
+
+          <!--Date -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'uRPay.date' | translate }} </label>
+              <div class='input-group'>
+                <span>{{today | date: 'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Date -->
+
+        </div>
+        <div class='row'>
+          <!-- Account Number -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'uRPay.account' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['account'].value.fullAccountNumber }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- / Account Number -->
+
+          <!--To -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label *ngIf='formModel.controls["type"].value=="phone"'>{{ 'uRPay.phone' | translate }} </label>
+              <label *ngIf='formModel.controls["type"].value=="iban"'>{{ 'uRPay.iban' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['wallet'].value }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /To -->
+        </div>
+      </fieldset>
+    </form>
+  </arb-panel>
+
+</div>

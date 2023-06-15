@@ -1,0 +1,263 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="searchForm">
+                <div class="sme-form__content">
+                    <a class="sme-form__head collapsed" role="button"
+                       (click)="isCollapsedASearchContent = !isCollapsedASearchContent"> <span>{{
+                        'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse collapse" [collapse]="isCollapsedASearchContent">
+
+                        <div class="sme-form__body">
+                            <ng-container [formGroup]="searchForm">
+                                <div class="row">
+                                    <fieldset>
+                                        <app-dynamic-simple-extras-form-fields
+                                                [fieldsConfigs]="fieldsConfigForSearchForm"
+                                                [translate_prefix]="'lockbox.cdmReports'"
+                                                [combosData]="combosData"
+                                                [formModel]="searchForm"
+                                                (onAllFieldsCreated)="onAllFielsCreated($event)"
+                                                (onInit)="onInitForm($event)">
+                                        </app-dynamic-simple-extras-form-fields>
+                                    </fieldset>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                                'public.reset' | translate }}</button>
+                            <button class="btn btn-primary btn-wide" (click)="search()"
+                                    [disabled]="!searchForm.valid">{{
+                                'public.search' | translate }}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-7">
+    <div style="display: block">
+        <arb-table-panel [title]="'lockbox.cdmReports.machines'">
+
+            <table-export *ngIf="showExportButtons()"
+                          [dataTable]="elementsTable"
+                          [header]="getExportHeader()"
+                          [columns]="getExportColumns()"
+                          [rows]="tableSelectedRows && tableSelectedRows.length>0?tableSelectedRows:null">
+            </table-export>
+
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                           class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+                           [columnMode]="defaultColumnMode"
+                           [headerHeight]="defaultHeight"
+                           [footerHeight]="footerHeight"
+                           [rowHeight]="defaultHeight"
+                           [externalPaging]="true"
+                           [externalSorting]="true"
+                           [count]="elementsPage.page.totalElements"
+                           [offset]="elementsPage.page.pageNumber-1"
+                           [limit]="elementsPage.page.pageSize"
+                           [selectionType]="defaultSelectionType"
+                           (page)='setPage($event)'
+                           (sort)="setSort($event)"
+                           [rowIdentity]="getIdFunction()"
+                           (select)='onSelect($event)'>
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div class="row">
+                            <fieldset>
+                                <ng-container *ngFor="let fieldConfig of fieldsConfigForList; index as i">
+                                    <div class="{{ fieldConfig.parent_div_class ? fieldConfig.parent_div_class : 'col-xs-6'}}">
+                                        <div class="form-group">
+                                            <label>{{ ((translate_prefix && translate_prefix != '' ? translate_prefix + '.' : '') + fieldConfig.translate) | translate }}</label>
+                                            <div>
+                                        <span *ngIf="!fieldConfig.link_to_detail">
+                                            <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                                        </span>
+                                                <span *ngIf="fieldConfig.link_to_detail">
+                                            <a class="human-selectable" (click)="onClickRow(row, fieldConfig.propName)">
+                                                <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                                            </a>
+                                        </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </fieldset>
+                        </div>
+
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="status" [resizeable]="false" [width]="60">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <div *ngIf="row.machine.status=='1' || row.machine.status=='Online'"
+                             class="foo up mr-2 rounded"></div>
+                        <div *ngIf="row.machine.status=='3'" class="foo warning mr-2 rounded"></div>
+                        <div *ngIf="row.machine.status=='2'" class="foo error mr-2 rounded"></div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ng-container *ngFor="let fieldConfig of fieldsConfigForList; index as i">
+
+                    <ng-container *ngIf="fieldConfig['append_next_column'] === true">
+
+                        <ngx-datatable-column prop="{{fieldConfig.propName}}"
+                                              [width]="fieldConfig['column_width']?fieldConfig['column_width']:''"
+                                              [canAutoResize]="fieldConfig['column_width']?false:true">
+
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                <p [innerHTML]="((translate_prefix && translate_prefix!=''?translate_prefix+'.':'')+fieldsConfigForList[i].translate) | translate"></p>
+                                <p [innerHTML]="((translate_prefix && translate_prefix!=''?translate_prefix+'.':'')+fieldsConfigForList[i + 1].translate) | translate"></p>
+                            </span>
+                            </ng-template>
+
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span *ngIf="!fieldsConfigForList[i].link_to_detail">
+                            <p [innerHTML]="fieldsConfigForList[i].propValue(row, listService, combosData)"></p>
+                        </span>
+                                <span *ngIf="fieldsConfigForList[i].link_to_detail">
+                            <a class="human-selectable" (click)="onClickRow(row, fieldsConfigForList[i].propName)">
+                                <p [innerHtml]="fieldsConfigForList[i].propValue(row, listService, combosData)"></p>
+                            </a>
+                        </span>
+                                <span *ngIf="!fieldsConfigForList[i+1].link_to_detail">
+                            <p [innerHTML]="fieldsConfigForList[i + 1].propValue(row, listService, combosData)"></p>
+                        </span>
+                                <span *ngIf="fieldsConfigForList[i+1].link_to_detail">
+                            <a class="human-selectable" (click)="onClickRow(row, fieldsConfigForList[i+1].propName)">
+                                <p [innerHtml]="fieldsConfigForList[i + 1].propValue(row, listService, combosData)"></p>
+                            </a>
+                        </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ng-container>
+
+                    <ng-container
+                            *ngIf="fieldConfig['append_next_column'] !== true && (i==0 || fieldsConfigForList[i-1]['append_next_column'] !== true)">
+                        <ngx-datatable-column prop="{{fieldConfig.propName}}"
+                                              [width]="fieldConfig['column_width']?fieldConfig['column_width']:''"
+                                              [canAutoResize]="fieldConfig['column_width']?false:true">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                <p [innerHTML]="((translate_prefix && translate_prefix!=''?translate_prefix+'.':'')+fieldConfig.translate) | translate"></p>
+                            </span>
+                            </ng-template>
+
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span *ngIf="!fieldConfig.link_to_detail">
+                            <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                        </span>
+                                <span *ngIf="fieldConfig.link_to_detail">
+                            <a class="human-selectable"
+                               (click)="onClickRow(row, fieldConfig.propName)">
+                                <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                            </a>
+                        </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                    </ng-container>
+
+                </ng-container>
+
+                <ngx-datatable-column prop="name" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'lockbox.cdmReports.transactions' | translate }} </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span (click)="goTransactions($event, row)"
+                                          class="human-selectable glyphicon glyphicon-transfer text-align-center">
+                                    </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <!--ngx-datatable-column prop="name" [resizeable]="false">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'lockbox.cdmReports.cashOut' | translate }} </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span (click)="goCashOut($event, row)"
+                                          class="human-selectable glyphicon glyphicon-export text-align-center">
+                                    </span>
+                    </ng-template>
+                </ngx-datatable-column-->
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                    (change)="elementsTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                        (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+
+            </ngx-datatable>
+
+        </arb-table-panel>
+    </div>
+</div>
+
+<div class="col-md-5">
+    <arb-panel-title
+            [title]="('lockbox.cdmReports.menu' | translate)+ ' ' +('lockbox.cdmReports.status' | translate)"></arb-panel-title>
+    <div style="width:80%;display: block" class="chart">
+        <!--        <canvas *ngIf="true" baseChart width="50" height="50" [data]="chartDatasets" [colors]="chartColors"-->
+        <!--                [options]="chartOptions" [labels]="chartLabels" [chartType]="chartType" [legend]="true"-->
+        <!--                (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">-->
+        <!--        </canvas>-->
+        <!--        [datasets]="chartDatasets"-->
+        <!--        [data]="chartDatasets"-->
+        <canvas baseChart
+                [chartType]="'doughnut'"
+                [data]="chartDatasets"
+                [labels]="chartLabels"
+                [colors]="chartColors"
+                [options]="chartOptions"
+                [legend]="true"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)">
+        </canvas>
+    </div>
+
+    <div id="js-legend" class="chart-legend"></div>
+</div>

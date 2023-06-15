@@ -1,0 +1,85 @@
+<arb-breadcrumb [routes]="[
+    ['dashboard.payments'],
+    ['dashboard.cashManagement.cashManagement'],
+	['dashboard.cashManagement.pooling.menu', ['/cashManagement/pooling']],
+	['dashboard.cashManagement.pooling.detail'],
+	[structure.description?structure.description:'']
+]" class="print">
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="structure.structureId">
+    <span style="position: absolute; left: 20px;" *ngIf="structure.description && structure.structureId">
+        <b>{{structure.description}} - {{structure.structureId}}</b>
+    </span>
+</arb-panel-buttons>
+
+
+<arb-panel>
+
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="!structureAction">
+
+            <app-tree-view-configurator-utility [service]="service"
+                                                (onItemsUpdated)="onItemsUpdated($event)">
+            </app-tree-view-configurator-utility>
+
+        </div>
+
+
+        <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="structureActionRequested">
+
+
+            <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+                <div class="" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        </div>
+                        <div class="modal-body">
+                            <span class="icon -check icon-success"></span>
+                            <p>{{  'dashboard.cashManagement.pooling.confirmAction' + structureAction | translate }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default btn-wide" (click)="onCancelAction()">{{
+                                'dashboard.cashManagement.pooling.cancelAction' | translate }}
+                            </button>
+
+                            <button class="btn btn-default btn-wide" (click)="onConfirmAction();">{{
+                                'dashboard.cashManagement.pooling.confirmAction' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12" *ngIf="structureActionConfirmed">
+            <arb-confirm-panel
+                    (finishAction)="onFinish()"
+                    [pending]="false"
+                    [hasFinishAction]="true">
+            </arb-confirm-panel>
+        </div>
+
+    </div>
+
+
+</arb-panel>
+<arb-panel-buttons *ngIf="true">
+    <a class="btn btn-default btn-wide print" (click)="onFinish()">{{
+        'dashboard.cashManagement.pooling.backButton' | translate }}</a>
+    <button class="btn btn-danger btn-wide print" (click)="onRemoveStructure()"
+            [disabled]="structureAction">
+        {{ 'dashboard.cashManagement.pooling.removeStructure' | translate }}
+    </button>
+    <button class="btn btn-primary btn-wide print" (click)="onSaveStructure()"
+            [disabled]="structureAction || !structureModified">
+        {{'dashboard.cashManagement.pooling.saveStructure' | translate }}
+    </button>
+    <a class="btn btn-primary btn-wide print" (click)="printPdf($event)">
+        <span class="icon -print" ></span>
+        <span class="text">{{ 'public.print' | translate }}</span>
+    </a>
+</arb-panel-buttons>
+
+

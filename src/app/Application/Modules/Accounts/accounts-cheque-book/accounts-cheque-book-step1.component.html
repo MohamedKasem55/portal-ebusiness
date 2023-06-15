@@ -1,0 +1,96 @@
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'accounts.accounts'| translate }}</li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a>
+        </li>
+        <li class="active">{{ 'accounts.chequeBook.request' | translate }}</li>
+	</ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block sme-wizard-steps">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step current">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'accounts.chequeBook.details' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'accounts.chequeBook.confirmation' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'accounts.chequeBook.summary' | translate }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+
+
+    <form autocomplete="off" #detailAlrajhiBeneficiary="ngForm" (ngSubmit)="step2ChequeBook()" class="sme-form__form">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="legend">{{ 'chequebook.chequeBookDetails' | translate }}</div>
+                                   <div class="sme-data-table__advisory">
+                	{{ 'accounts.chequeBook.advisory'| translate }}
+                </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- ACCOUNTS -->
+                                        <div class="form-group">
+                                            <label class="required">{{ 'public.account' | translate }}</label>
+                                            <div  class="sme-select form-control dropdown" >
+                                                 <select class="form-control" name="acc" [(ngModel)]="formData.account" #acc="ngModel" required >
+                                                    <option selected="true" disabled="disabled" value>--{{ 'public.selectAccount' | translate }}--</option>
+                                                    <option *ngFor="let account of accountFrom" [ngValue]="account.value.fullAccountNumber">
+                                                        {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}} {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}} 
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="acc.hasError('required') && acc.touched" class="alert alert-danger">
+                                            <small>{{'chequebook.error.accountRequired' | translate }}</small>
+                                             </div> 
+                                            </div>
+                                        </div>  
+                                    <!-- /ACCOUNTS -->
+                                </div>
+                                 <div class="col-xs-12 col-sm-3">
+                                    <!-- CHEQUE BOOK DETAILS -->
+                                        <div class="form-group">
+                                            <label class="required">{{ 'chequebook.bookType' | translate }}</label>
+                                            <div  class="sme-select form-control dropdown">
+                                                <select class="form-control" name="page" [(ngModel)]="formData.chequeType" required #page="ngModel">
+                                               <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                        
+                                                    <option value="2" [selected]="formData.chequeType == '25 Pages'">
+                                                        {{ 'accounts.chequeBook.25Pages' | translate }}
+                                                    </option>
+                                                    <option value="3" [selected]="formData.chequeType == '50 Pages'" >
+                                                        {{ 'accounts.chequeBook.50Pages' | translate }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>  
+                                    <!-- /CHEQUE BOOK DETAILS -->
+                                </div>                                  
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <!-- Bottoms -->
+                    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                        <button type="submit" class=" btn btn-primary btn-wide"
+                            [disabled]="!page.valid || !acc.valid">{{ 'public.next' | translate }}</button>                        
+                    </div>
+            </div>
+        </div>
+    </form>
+</div>
+

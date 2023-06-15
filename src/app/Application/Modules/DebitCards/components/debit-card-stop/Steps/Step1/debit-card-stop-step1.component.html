@@ -1,0 +1,26 @@
+<arb-panel>
+    <h3>{{ 'accounts.debitCards.stopStep1Title' | translate }}</h3>
+    <hr>
+    <app-debit-card-stop-form
+            [formModel]="formModel"
+            [card]="card">
+    </app-debit-card-stop-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.debitCards.stopTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.debitCards.stopStep1HelpText0' | translate }}<br/>
+            <ul>
+                <li>{{ 'accounts.debitCards.stopStep1HelpText1' | translate }}</li>
+                <li>{{ 'accounts.debitCards.stopStep1HelpText2' | translate }}</li>
+                <li>{{ 'accounts.debitCards.stopStep1HelpText3' | translate }}</li>
+            </ul>
+            <br/>
+        </div>
+    </div>
+</arb-panel>

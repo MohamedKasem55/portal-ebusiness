@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid" *ngIf="!OTP">
+    <div class="sme-row">
+        <div class="sme-col-66">
+            <sme-card [startTitle]="productInfo?.title | translate" [headerIcon]="productInfo?.icon">
+                <div class="card-body">
+                    <img src="{{productInfo?.image}}" width="100%" class="sme-product-image">
+
+                    <div class="sme-info-success">
+                        <div><img src="assets/icons/info.svg"></div>
+                        <div>
+                            <p class="sme-card-msg">{{'financeProduct.canReqFinance' | translate}} <strong>{{productInfo?.maxAmount | number:'3.1-5'}} {{'financeProduct.sar' |translate}}</strong> {{'financeProduct.subTOEligibility' | translate}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <label class="desc desc1">{{productInfo?.desc | translate}}</label><br /><br />
+                </div>
+            </sme-card>
+        </div>
+        <div class="sme-col-33">
+            <sme-card class="sme-card" [startTitle]="'financeProduct.ReqDocs' | translate">
+                <div class="card-body">
+                    <ol class="sme-ordered-list">
+                        <li *ngFor="let element of requiredDocsList">{{element}}</li>
+                    </ol>
+                    <div class="TermsAndCond" *ngIf="productInfo?.title ==='financeProduct.fleetFinance'">
+                        <label class="sme-checkbox checkbox-inline">
+                            <input type="checkbox" [(ngModel)]="Terms"> <i aria-hidden="true"></i>
+                            <span class="checkboxText">{{'fleet.newRequest.iAgreeWith'|translate}} <a (click)="openTermsAndConditions()">{{'fleet.newRequest.termsConditions' |translate}}</a></span>
+                        </label>
+                    </div>
+                </div>
+            </sme-card>
+        </div>
+    </div>
+
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="submit" class=" btn btn-default btn-wide sme-back-btn" [routerLink]="['/financeProduct/newRequest']">
+            {{'public.back' | translate}}
+        </button>
+
+        <button (click)="proceed()" [disabled]="!Terms && productInfo?.title ==='financeProduct.fleetFinance'" type="button" class=" btn btn-primary btn-wide">
+            {{'public.proceed'|translate}}
+        </button>
+    </div>
+</div>
+<div class="container-fluid">
+    <div *ngIf="OTP">
+        <app-secured-authentication *ngIf='generateChallengeAndOTP' [generateChallengeAndOTP]='generateChallengeAndOTP' [requestValidate]='requestValidate'></app-secured-authentication>
+        <button class='btn btn-primary btn-wide' type='button' [disabled]='canProceed()' (click)='processOTP()'>
+            {{'public.proceed' |translate}}</button>
+    </div>
+</div>

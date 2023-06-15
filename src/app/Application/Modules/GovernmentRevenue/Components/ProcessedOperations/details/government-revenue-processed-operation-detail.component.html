@@ -1,0 +1,23 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-gov-revenue-payment-step1 *ngIf="wizardStep == 1" [accounts]="accountsList" [banks]="govRevenueBankCodeList"
+                               [revenueAccounts]="govRevenueAccountsList" [viewForm]="formModel"
+                               [beneficiaryOriginators]="companyDepositorsList" [filteredOriginators]="depositorsList"
+                               [pageErrorMessage]="pageErrorMessage" (onInit)="onInitStep(wizardStep,$event)"
+                               (addSubAccount)="addSubAccountAmount()"
+                               (removeSubAccount)="removeSubAccountAmount($event)"
+                               (beneficiaryChange)="onBeneficiaryOriginatorChange($event)"
+                               [securityLevelsDTOList]="securityLevelsDTOList"
+                               [revenueAccounteditView]="false"
+                               [detailsView]="true">
+</app-gov-revenue-payment-step1>
+
+<arb-buttons>
+    <button class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{'public.back' | translate}}</button>
+</arb-buttons>
+
+
+
+

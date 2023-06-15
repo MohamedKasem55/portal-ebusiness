@@ -1,0 +1,133 @@
+<arb-panel>
+  <form autocomplete='off' #posInitialOffer='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='legend'>{{ 'financeProduct.newRequest.initialOffer' | translate }}</div>
+      <div class='row'>
+        <p class='hint'>
+          <img src='img/infoIcon.svg' class='img-icon' alt='' />
+          {{'financeProduct.newRequest.financeLimit' | translate}}
+          <span>{{ maxFinanceAmount | amountCurrency}} {{'SAR'}}</span>
+        </p>
+      </div>
+      <div class='row'>
+        <!-- Initiation Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.initiationDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+                     bsDatepicker formControlName='initiationDate' [bsConfig]='bsConfig' [minDate]='today' />
+              <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+            </div>
+          </div>
+        </div>
+        <!-- /Initiation Date -->
+
+        <!-- Profit Rate -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.profitRate' | translate }} </label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='profitRate' />
+            </div>
+          </div>
+        </div>
+        <!-- Profit Rate -->
+
+        <!-- Fees -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.fees' | translate }} </label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='fees' />
+            </div>
+          </div>
+        </div>
+        <!-- Fees -->
+      </div>
+
+      <div class='legend'>{{ 'financeProduct.newRequest.amountDetails' | translate }}</div>
+      <div class='row'>
+
+        <!-- Financing Amount -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.financingAmount' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='financingAmount'  (change)="onChangeInput($event)"
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+            </div>
+          </div>
+          <div
+                  *ngIf="formModel.controls.financingAmount.hasError('max') && formModel.controls.financingAmount.touched"
+                  class='alert alert-danger'>
+            <small>   {{'financeProduct.newRequest.financeLimit' | translate}}
+              <span>{{ maxFinanceAmount | amountCurrency}} {{'SAR'}}</span>
+            </small>
+          </div>
+        </div>
+        <!-- /Financing Amount -->
+
+        <!-- Installment Amount -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.installmentAmt' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='installmentAmt'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+            </div>
+          </div>
+        </div>
+        <!-- /Installment Amount -->
+
+      </div>
+
+      <div class='legend'>{{ 'financeProduct.newRequest.repaymentDetails' | translate }}</div>
+      <div class='row'>
+        <!-- Repayment Period -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.repaymentPeriod' | translate }} </label>
+            <div class='form-control'>
+
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate" (change)="onChangeInput($event)"
+                         formControlName='repaymentPeriod'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor="let item of combosData['repaymentPeriod']" [value]='item'>
+                  {{item.value}}
+                </ng-option>
+              </ng-select>
+              <div
+                      *ngIf="formModel.controls.repaymentPeriod.hasError('required') && formModel.controls.repaymentPeriod.touched"
+                      class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.repaymentPeriod' | translate }} is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Repayment Period -->
+      </div>
+
+      <div class='legend'>{{ 'financeProduct.termsConditions.termsConditions' | translate }}</div>
+      <div class='row'>
+
+        <p class='margin-checBox'>
+          <label class='sme-checkbox checkbox-inline'>
+            <input type='checkbox' formControlName='termsAccept' />
+            <i aria-hidden='true'></i>
+            <span class='checkSpan'>{{ 'financeProduct.termsConditions.iAccept' | translate }}  </span>
+          </label>
+          <span class='link' (click)='openTermsConditions()'>{{
+            'financeProduct.termsConditions.termsConditions' | translate }}</span>
+        </p>
+        <p class='hint'>
+          {{'financeProduct.details.offerHint' | translate}}
+        </p>
+      </div>
+
+    </fieldset>
+  </form>
+</arb-panel>

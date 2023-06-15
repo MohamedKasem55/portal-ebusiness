@@ -1,0 +1,60 @@
+
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active">{{ 'dashboard.payrolls' | translate }}</li>
+		<li class="active">{{ 'dashboard.payrollCards' | translate }}</li>
+	</ol>
+</div>
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title"></div>
+
+			<div class="sme-form__content">
+				<form autocomplete="off" class="sme-form__form">
+					<div class="sme-form__body">
+						<div class="row">
+							<ul>
+								<li *ngIf="authenticationService.activateOption('PayrollCardsManage',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goCardInquiries()"> {{ 'payroll.cardInquiries' | translate }} </a>
+                                </li>
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsOperations',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goCardOperations()"> {{ 'payroll.cardOperations' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsPayments',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goCardPayments()"> {{ 'payroll.cardPayments' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsUpload',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goUploadFile()"> {{ 'payroll.uploadFile' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsView',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goSentFile()"> {{ 'payroll.viewSentFiles' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsFeedBackFiles',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goFeedbackFiles()"> {{ 'payroll.feedbackFiles' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsDownloadTemplates',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goDownloadTemplates()"> {{ 'payroll.downloadTemplates' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsCardListReports',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goListReport()"> {{ 'payroll.cardListReports' | translate }} </a>
+                                </li>	
+                                
+                                <li *ngIf="authenticationService.activateOption('PayrollCardsRequestStatus',['PAYROLLCARDS_PRIVILEGE'],['PayrollCardsGroup'])">
+                                    <a routerLinkActive="active" (click)="goRequestStatus()"> {{ 'payroll.requestStatus' | translate }} </a>
+                                </li>	
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

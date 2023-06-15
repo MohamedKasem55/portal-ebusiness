@@ -1,0 +1,907 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payments' | translate }}</li>
+        <li>{{ 'payments.bill-payments' | translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+
+    <ul class="sme-box sme-wizard__steps">
+        <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1}"><span>
+                <span class="num">1</span>
+                <span class="text">{{ 'public.selectDropdown' | translate }}</span>
+            </span></li>
+        <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2}"><span>
+                <span class="num">2</span>
+                <span class="text">{{ 'public.confirm' | translate }}</span>
+            </span></li>
+        <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3}"><span>
+                <span class="num">3</span>
+                <span class="text">{{ 'public.summary' | translate }}</span>
+            </span></li>
+    </ul>
+</div>
+
+
+<div class="container-fluid">
+
+    <div *ngIf="wizardStep==1">
+
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__actions">
+
+                        <!-- <button
+                            *ngIf="authenticationService.activateOption('BillFeedBackFiles',['BILLPAYMENTS_PRIVILEGE'],['BillPayGroup'])"
+                            type="submit" [routerLink]="['/payments/billPayments/feedbackfiles']"
+                            class="btn btn-default btn-wide">{{ 'payments.moiPayments.feedBack.name' | translate
+                            }}</button> -->
+                        <button
+                            *ngIf="authenticationService.activateOption('BillDashboard',['BILLPAYMENTS_PRIVILEGE'],['BillPayGroup'])"
+                            type="submit" [routerLink]="['/payments/billPayments/statistics']"
+                            class="btn btn-default btn-wide">{{ 'payments.monthly-stats' | translate }}</button>
+                        <button
+                            *ngIf="authenticationService.activateOption('BillRequestStatus',['BILLPAYMENTS_PRIVILEGE'],['BillPayGroup'])||authenticationService.activateOption('BillAdd',['BILLPAYMENTS_PRIVILEGE'],['BillPayAdders'])"
+                            [routerLink]="['/payments/billPayments/request']" type="submit"
+                            class="btn btn-primary btn-wide">+ {{ 'payments.requestStatus' | translate }} </button>
+                        <button
+                            *ngIf="authenticationService.activateOption('BillAdd',['BILLPAYMENTS_PRIVILEGE'],['BillPayAdders'])"
+                            [routerLink]="['/payments/billPayments/addBill']" type="submit"
+                            class="btn btn-primary btn-wide">+ {{ 'public.add' | translate }}
+                            {{ 'payments.bill' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 15px;"></div>
+
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <a (click)="isSearchCollapsed = !isSearchCollapsed" class="sme-form__head human-selectable"
+                        [ngClass]="{'collapsed': isSearchCollapsed}"> <span>{{ 'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse" id="sme-demo--form--search-criteria-"
+                        [collapse]="isSearchCollapsed">
+
+                        <form autocomplete="off" class="sme-form__form" (ngSubmit)="searchFilterSubmit()"
+                            [formGroup]="searchForm">
+                            <div class="sme-form__body">
+
+                                <div class="row">
+                                    <div class="col-xs-8" style="display: flex !important; align-items: center;">
+                                        <div class="col-xs-1" style="text-align: center;">
+                                            <input class="human-selectable" (ngModelChange)="searchTypeChange($event)"
+                                                type="radio" formControlName="searchType" value="billCode" />
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <div class="form-group">
+                                                <label>{{ 'payments.billers' | translate }}</label>
+                                                <!-- <div class="form-control"> -->
+                                                <div class="form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate"
+                                                        *ngIf="translate.currentLang!=='ar'"
+                                                        placeholder="{{searchForm.get('billCode').value=='' || searchForm.get('billCode').value==null?'--'+('public.selectDropdown' | translate)+'--':''}}"
+                                                        [items]="group" bindLabel="detailsDescriptionEn"
+                                                        [required]="true" formControlName="billCode">
+                                                    </ng-select>
+                                                    <ng-select [notFoundText]="'public.noData' | translate"
+                                                        *ngIf="translate.currentLang==='ar'"
+                                                        placeholder="{{searchForm.get('billCode').value=='' || searchForm.get('billCode').value==null?'--'+('public.selectDropdown' | translate)+'--':''}}"
+                                                        [items]="group" bindLabel="detailsDescriptionAr"
+                                                        [required]="true" formControlName="billCode">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2" style="display: flex !important; align-items: center;">
+                                        <div class="col-xs-1" style="text-align: center;">
+                                            <input class="human-selectable" (ngModelChange)="searchTypeChange($event)"
+                                                type="radio" formControlName="searchType" value="billRef" />
+                                        </div>
+
+                                        <div class="col-xs-10">
+                                            <div class="form-group">
+                                                <label>{{ 'payments.bill-ref' | translate }}</label>
+                                                <input type="text" name="billRef" class="form-control" [required]="true"
+                                                    formControlName="billRef" maxlength="30">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2" style="display: flex !important; align-items: center;">
+                                        <div class="col-xs-1" style="text-align: center;">
+                                            <input class="human-selectable" (ngModelChange)="searchTypeChange($event)"
+                                                type="radio" formControlName="searchType" value="nickName" />
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <div class="form-group">
+                                                <label>{{ 'payments.nick-name' | translate }}</label>
+                                                <input type="text" name="billNickName" class="form-control"
+                                                    [required]="true" formControlName="billNickName" maxlength="50">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-xs-8" style="display: flex !important; align-items: center;">
+                                        <div class="col-xs-1" style="text-align: center;">
+                                            <input class="human-selectable" (ngModelChange)="searchTypeChange($event)"
+                                                type="radio" formControlName="searchType" value="amount" />
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <div class="form-group">
+                                                <label>{{ 'public.amount' | translate }}
+                                                    {{ 'public.from' | translate }}</label>
+                                                <input placeholder="{{ 'accounts.amountfrom' | translate }}" type="text"
+                                                    step="0.01" name="billAmountFrom" class="form-control"
+                                                    [required]="true" maxlength="8" formControlName="billAmountFrom"
+                                                    [max]="billAmountTo" inputPattern="onlyDecimalNumbers">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <div class="form-group">
+                                                <label>{{ 'public.amount' | translate }}
+                                                    {{ 'public.to' | translate }}</label>
+                                                <input placeholder="{{ 'accounts.amountto' | translate }}" type="text"
+                                                    step="0.01" name="billAmountTo" class="form-control"
+                                                    [required]="true" maxlength="8" formControlName="billAmountTo"
+                                                    [min]="billAmountFrom" inputPattern="onlyDecimalNumbers">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4" style="display: flex !important; align-items: center;">
+                                        <div class="col-xs-1" style="text-align: center;">
+                                            <input class="human-selectable" (ngModelChange)="searchTypeChange($event)"
+                                                type="radio" formControlName="searchType" value="date" />
+                                        </div>
+
+                                        <div class="col-xs-4">
+                                            <div class="form-group">
+                                                <label>{{ 'payments.datefrom' | translate }} </label>
+                                                <input type="text" class="form-control" #billDateFromPop="bsDatepicker"
+                                                    bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                                    [(ngModel)]="billDateFrom"
+                                                    value="{{ searchForm.get('billDateFrom').disabled? '': (billDateFrom | date:'dd/MM/yyyy') }}"
+                                                    [disabled]="searchForm.get('billDateFrom').disabled"
+                                                    [required]="true" [maxDate]="billDateTo" name="billDateFrom"
+                                                    [ngModelOptions]="{standalone: true}" style="z-index:1000" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <span [attr.disabled]="searchForm.get('searchType').value!='date'"
+                                                (click)="(searchForm.get('searchType').value=='date'?billDateFromPop.show():null)"></span>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group">
+                                                <label>{{ 'payments.dateto' | translate }} </label>
+                                                <input type="text" class="form-control" #billDateToPop="bsDatepicker"
+                                                    bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                                    [(ngModel)]="billDateTo"
+                                                    value="{{ searchForm.get('billDateTo').disabled? '': (billDateTo | date:'dd/MM/yyyy') }}"
+                                                    [disabled]="searchForm.get('billDateTo').disabled"
+                                                    [minDate]="billDateFrom" [required]="true" name="billDateFrom"
+                                                    [ngModelOptions]="{standalone: true}" style="z-index:1000" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <span [attr.disabled]="searchForm.get('searchType').value!='date'"
+                                                (click)="(searchForm.get('searchType').value=='date'?billDateToPop.show():null)"></span>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div *ngIf="!amountValid()">
+                                    <p class="alert alert-danger">
+                                        {{ 'error.amountRangeInvalid' | translate }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="sme-form__actions">
+                                <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                                    'public.reset' | translate }}</button>
+                                <button type="submit" [disabled]="disabledSubmmit()" class="btn btn-primary btn-wide">{{
+                                    'public.search' | translate }}</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'public.account' | translate }}</label>
+                                    <div class="form-control">
+                                        <ng-select id="account" name="account" #account_sl
+                                            (ngModelChange)="accountChange($event)" [(ngModel)]="this.selectedAccount">
+                                            <ng-option [value]="null" disabled="disabled" selected="selected">
+                                                --{{ 'public.selectAccount' | translate }}--
+                                            </ng-option>
+                                            <ng-option *ngFor="let account of accounts" [value]="account">
+                                                {{account.fullAccountNumber}}{{(account.alias != '' ? ' - ' + account.alias : '')}}
+                                                {{(account.inquiry ? (' - ' + (account.availableBalance |amountCurrency:account.currency)) : '')}}
+                                                {{(account.inquiry ? ('currencyIso' | modelPipe:account.currency) :
+                                                '')}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" *ngIf="errors?.length > 0 ">
+            <div class="sme-page-block">
+                <div class="alert alert-danger" *ngFor="let err of errors">
+                    <small>{{err | translate }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="sme-page-block">
+            <!-- sme-data-table -->
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="table" [header]="'payments.bill-payments' | translate" [columns]="[
+	        			{'title':'payments.biller-name-table' | translate, 'dataKey':'billerName'},
+						{'title':'payments.bill-ref' | translate, 'dataKey':'billRef'},
+						{'title':'payments.nick-name' | translate, 'dataKey':'nickname'},
+						{'title':'payments.original-amount' | translate, 'dataKey':'amountPaid'},
+						{'title':'payments.updated-amount' | translate, 'dataKey':'amount'},
+						{'title':'payments.due-date' | translate, 'dataKey':'dueDate'},
+						{'title':'payments.status' | translate, 'dataKey':'statusTrans'}
+	        			]"></table-export>
+
+                    </div>
+                </div>
+
+                <div class="sme-table table headerDataTable">
+
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                        class="material sme-table sme-table--responsive table" [rows]="tablePage.data"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [rowHeight]="defaultHeight" [count]="tablePage.page.totalElements"
+                        [offset]="tablePage.page.pageNumber" [limit]="tablePage.page.pageSize" [externalPaging]="true"
+                        [externalSorting]="true" (page)='setPage($event)' [rowIdentity]="getIdFunction()"
+                        [selectionType]="defaultSelectionType" [selected]="tableSelected" (select)="onSelect($event)">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                            (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.biller-name-table' | translate }}</label>
+                                                <div>
+                                                    <span *ngIf="translate.currentLang === 'en'">{{ row.addDescriptionEn
+                                                        }}</span>
+                                                    <span *ngIf="translate.currentLang === 'ar'">{{ row.addDescriptionAr
+                                                        }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.bill-ref' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.billRef}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.nick-name' | translate }}</label>
+                                                <div>
+                                                    <input style="width: 80%;" type="text" [value]="row.nickName"> <span
+                                                        *ngIf="row.showSave" (click)="updateNickName($event, row)"
+                                                        class="human-selectable glyphicon glyphicon-floppy-disk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.original-amount' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.originalAmount}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.updated-amount' | translate }}</label>
+                                                <div>
+                                                    <input type="text" inputPattern="onlyDigits"
+                                                        [value]="row.updatedAmount"
+                                                        (blur)="updateTableValue($event, 'updatedAmount', row.updatedAmount, row,rowIndex)"
+                                                        style="width: 100%;" [disabled]="!row['partial']">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.due-date' | translate}}</label>
+                                                <div>
+                                                    <span>{{row.dueDate | date:'dd/MM/yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'payments.status' | translate}}</label>
+                                                <div>
+                                                    <span>{{'billStatus' | modelPipe:row.status }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+
+                        <!--custom checkbox- defaul select all resete preview item selected with extern pagination-->
+                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"
+                            [draggable]="false" [resizeable]="false">
+                            <ng-template ngx-datatable-header-template let-value="value">
+                                <label class="datatable-checkbox">
+                                    <input type="checkbox" [checked]="selectAllOnPage[tablePage.page.pageNumber]"
+                                        (change)="selectAll($event)" />
+                                </label>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+                                let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                                <label class="datatable-checkbox" [hidden]="row.status == 'P'">
+                                    <input type="checkbox" [checked]="isSelected"
+                                        (change)="onCheckboxChangeFn($event)" />
+                                </label>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <!--end custom checkbox-->
+
+                        <ngx-datatable-column prop="billerName" [resizeable]="false">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.biller-name-table' | translate }} </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span *ngIf="translate.currentLang === 'en'"
+                                    [innerHTML]="row.addDescriptionEn">row</span>
+                                <span *ngIf="translate.currentLang === 'ar'"
+                                    [innerHTML]="row.addDescriptionAr">row</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="billRef" [resizeable]="false">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.bill-ref' | translate }} </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="nickname" [resizeable]="false">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.nick-name' | translate }} </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span><input style="width: 80%;" type="text" [value]="value"><span *ngIf="row.save"
+                                        (click)="updateNickName($event, row)"
+                                        class="human-selectable glyphicon glyphicon-floppy-disk"></span></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="amountPaid" [resizeable]="false">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.original-amount' | translate }} </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="amount" [minWidth]="158" [resizeable]="false">
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row"
+                                let-rowIndex="rowIndex">
+                                <span><input type="text" maxlength="16" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$"
+                                        inputPattern="onlyPositiveDecimalNumbers" [value]="value"
+                                        (blur)="updateTableValue($event, 'amount', value, row,rowIndex)"
+                                        style="width: 100%;" [disabled]="!row['partial']"></span>
+                            </ng-template>
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.updated-amount' | translate }} </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="dueDate" [resizeable]="false">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.due-date' | translate}} </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{value | date:'dd/MM/yyyy'}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="status" [resizeable]="false">
+                            <ng-template let-value="name" let-row="row" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payments.status' | translate}} </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span> {{'billStatus' | modelPipe:row.status1}}</span>
+
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="this.tablePage.page.pageSize" [count]="rowCount"
+                                        [visiblePagesCount]="visiblePagesCount" (change)="table.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' |
+                                            translate}}
+                                            {{pageSize}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="this.tablePage.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                    <option [value]=15>15</option>
+                                                    <option [value]=20>20</option>
+                                                    <option [value]=50>50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+
+                </div>
+            </div>
+
+            <div class="sme-form__actions">
+                <button (click)="deleteBills()" type="submit" class="btn btn-default btn-wide"
+                    [disabled]="tableSelected.length === 0">{{ 'public.delete' | translate }}</button>
+                <button (click)="payBills()" type="submit" class="btn btn-primary btn-wide">{{ 'public.pay' | translate
+                    }}</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div *ngIf="wizardStep==2">
+
+        <div *ngFor="let bill of this.billsSelected; let i = index" class="sme-form">
+
+            <div class="sme-form__content">
+
+                <div class="sme-form__head" style="padding: 15px;padding-right:15px;">
+                    <span>{{ 'payments.bill-payment' | translate }} {{i + 1}}</span>
+                    <span (click)="removeSelectedBill(i)" class="pull-right human-selectable">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </span>
+                </div>
+
+                <div class="sme-form__collapse">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <legend>{{ 'payments.paymentDetails' | translate }}</legend>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>{{ 'payments.biller-name' | translate }}</label>
+                                    <span class="form-control" *ngIf="translate.currentLang === 'en'"
+                                        [innerHTML]="bill.addDescriptionEn"></span>
+                                    <span class="form-control" *ngIf="translate.currentLang === 'ar'"
+                                        [innerHTML]="bill.addDescriptionAr"></span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>{{ 'payments.bill-ref' | translate }}</label>
+                                    <span class="form-control">{{bill.billRef}}</span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>{{ 'payments.nick-name' | translate }}</label>
+                                    <span class="form-control">{{bill.nickName}}</span>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label>{{ 'payments.amount' | translate }}</label>
+                                    <span class="form-control">{{bill.updatedAmount | amountCurrency }}</span>
+                                </div>
+                                <div class="col-sm-2" *ngIf="bill.withOutVatAmount">
+                                    <label>{{ 'payments.without-vat-amount' | translate }}</label>
+                                    <span class="form-control">{{bill.withOutVatAmount | amountCurrency }}</span>
+                                </div>
+                                <div class="col-sm-1" *ngIf="bill.vatAmount">
+                                    <label>{{ 'payments.vat-amount' | translate }}</label>
+                                    <span class="form-control">{{bill.vatAmount | amountCurrency }}</span>
+                                </div>
+                                <div class="col-sm-1" *ngIf="bill.vatAmount">
+                                    <label>{{ 'payments.due-date' | translate }}</label>
+                                    <span class="form-control">{{bill.dueDate | date:'dd/MM/yyyy'}}</span>
+                                </div>
+                                <div class="col-sm-2" *ngIf="!bill.vatAmount">
+                                    <label>{{ 'payments.due-date' | translate }}</label>
+                                    <span class="form-control">{{bill.dueDate | date:'dd/MM/yyyy'}}</span>
+                                </div>
+                            </div>
+                            <!--                            <div class="row">-->
+                            <!--                                <app-levels-table-->
+                            <!--                                        [futureSecurityLevels]="bill.futureSecurityLevelsDTOList">-->
+                            <!--                                </app-levels-table>-->
+                            <!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 15px;"></div>
+        </div>
+
+        <div class="sme-form__collapse" >
+            <div class="sme-page-block">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body" style="padding: 15px;">
+                            <div class="sme-form__box sme-form__box--form">
+                                <div class="row" *ngIf="totalAmounts?.totalAmountToProcess > 0">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.without-vat-amount-to-process' | translate }} </label>
+                                            <span> {{ totalAmounts.totalAmountWithoutVatToProcess | amountCurrency }} </span>
+
+                                            <label> {{ 'payments.vat-amount-to-process' | translate }} </label>
+                                            <span>  {{ totalAmounts.totalVatAmountToProcess | amountCurrency }} </span>
+
+                                            <label>{{ 'myProfile.pending_actions.totalAmountToProcess' | translate }}</label>
+                                            <span style="margin-right: 5px">   {{ totalAmounts.totalAmountToProcess | amountCurrency }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="totalAmounts?.totalAmountToAuthorize > 0">
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.without-vat-amount-to-authorize' | translate }} </label>
+                                            <span>  {{ totalAmounts.totalAmountWithoutVatToAuthorize | amountCurrency }} </span>
+
+                                            <label> {{ 'payments.vat-amount-to-authorize' | translate }} </label>
+                                            <span>  {{ totalAmounts.totalVatAmountToAuthorize | amountCurrency }} </span>
+
+                                            <label>{{ 'myProfile.pending_actions.totalAmountToAuthorize' | translate }}</label>
+                                            <span style="margin-right: 5px">  {{ totalAmounts.totalAmountToAuthorize | amountCurrency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <app-levels-table [futureSecurityLevels]="billsSelected[0]?.futureSecurityLevelsDTOList">
+            </app-levels-table>
+        </div>
+        <div class="sme-form" *ngIf="payBillsView && generateChallengeAndOTP">
+            <div class="sme-form__content">
+                <div class="sme-form__collapse">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate" #authorization>
+                                        </app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 15px;"></div>
+        </div>
+
+        <div class="sme-form__actions" style="padding:15px;">
+            <button (click)="returnToBillList()" type="submit" class=" btn btn-default btn-wide">{{ 'public.back' |
+                translate }}</button>
+            <button *ngIf="payBillsView" (click)="finalizePayBills()" type="submit" class=" btn btn-primary btn-wide"
+                [disabled]="!valid()">{{ 'public.proceed' | translate }}</button>
+            <button *ngIf="!payBillsView" (click)="finalizeDeleteBills()" type="submit"
+                class=" btn btn-primary btn-wide" [disabled]="tableSelected.length == 0">{{ 'public.proceed' | translate
+                }}</button>
+        </div>
+
+    </div>
+    <div *ngIf="wizardStep==3">
+        <div class="sme-page-block">
+            <div class="sme-form__form sme-wizard__content">
+                <div class="sme-wizard__success" *ngIf="!isPending() && statusOk">
+                    <span class="icon -check"></span>
+                    {{ 'payments.successRequest' | translate }}
+                </div>
+                <div class="sme-wizard__success" *ngIf="isPending() && statusOk">
+                    <span class="icon -check"></span>
+                    {{ 'payments.sucessPendingRequest' | translate }}
+                </div>
+                <div *ngIf="!statusOk" class="sme-wizard__success">
+                    <span class="icon -close icon-failure" style="color:red"></span>
+                    {{ 'payments.failedRequest' | translate }}
+                </div>
+            </div>
+        </div>
+        <div class="sme-page-block">
+            <div class="sme-wizard__content" *ngIf="payBillsView && !isPending()">
+                <div class="sme-data-table">
+                    <div class="sme-data-table__head">
+                    </div>
+                    <div class="sme-table table headerDataTable">
+                        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #billPaymentTable
+                            class="material sme-table sme-table--responsive table" [rows]="data.billPayProcessList"
+                            [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                            [rowHeight]="defaultHeight" [externalPaging]="false" [externalSorting]="false"
+                            [count]="data.billPayProcessList.length" [limit]="data.billPayProcessList.length">
+
+                            <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                (toggle)="onDetailToggle($event)">
+                                <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                    ngx-datatable-row-detail-template>
+
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'payments.bill-ref' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.billReference}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'payments.nick-name' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.nickName}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'payments.original-amount' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.originalAmount}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'payments.updated-amount' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.amountPaid}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{ 'payments.without-vat-amount' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.amountWithoutVat}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{ 'payments.vat-amount' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.vatAmount}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{ 'payroll.operation' | translate }}</label>
+                                                    <div>
+                                                        <span
+                                                            *ngIf="row.paymentType != null && (row.paymentType == 'over' || row.paymentType == 'partial' || row.paymentType == 'advanced')">{{'billPaymentType'
+                                                            | modelPipe:row.paymentType}}</span>
+                                                        <span
+                                                            *ngIf="row.paymentType != null && (row.paymentType != 'over' && row.paymentType != 'partial' && row.paymentType != 'advanced')">{{'billPaymentType'
+                                                            | modelPipe:'payment'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6" *ngIf="data.billPayProcessList.length < 5">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label>{{'companyAdmin.alerts.result' | translate }}</label>
+                                                    <div>
+                                                        <span>{{'errors' | modelPipe:'errorTable.' +
+                                                            row.returnCode}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-row-detail>
+
+                            <ngx-datatable-column prop="billReference" [resizeable]="false">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.bill-ref' | translate }} </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="nickName" [resizeable]="false">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.nick-name' | translate }} </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="originalAmount" [resizeable]="false">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.original-amount' | translate }} </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="amountPaid" [resizeable]="false">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payments.updated-amount' | translate }} </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="amountWithoutVat" [resizeable]="false">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{ 'payments.without-vat-amount' | translate }} </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="vatAmount" [resizeable]="false">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{ 'payments.vat-amount' | translate }} </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="paymentType">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{ 'payroll.operation' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <span
+                                        *ngIf="value != null && (value == 'over' || value == 'partial' || value == 'advanced')">{{'billPaymentType'
+                                        | modelPipe:value}}</span>
+                                    <span
+                                        *ngIf="value != null && (value != 'over' && value != 'partial' && value != 'advanced')">{{'billPaymentType'
+                                        | modelPipe:'payment'}}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="returnCode" *ngIf="data.billPayProcessList.length < 5">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'companyAdmin.alerts.result' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <span>{{'errors' | modelPipe:'errorTable.' + value}}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-footer>
+                                <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                    let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                                    let-offset="offset">
+                                    <div class="sme-data-table__footer">
+                                        <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="billPaymentTable.onFooterPage($event)">
+                                        </app-datatable-pager>
+                                        <div [hidden]="!((rowCount / pageSize) > 1)"
+                                            class="sme-data-table__actions form-inline">
+                                            <span class="sme-data-table__action-group">{{ 'public.showingLabel' |
+                                                translate}}
+                                                {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount -
+                                                ((curPage - 1) * pageSize) : pageSize}}
+                                                {{ 'public.ofLabel' | translate}}
+                                                {{data.billPayProcessList.length}}</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-footer>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 15px;"></div>
+        <div class="sme-form__actions" style="padding:15px;">
+            <div class="sme-wizard__navigation sme-form__actions" style="padding:15px;">
+                <a (click)="resetPage()" class=" btn btn-primary btn-wide">{{ 'public.finish' | translate }}</a>
+            </div>
+        </div>
+    </div>
+</div>

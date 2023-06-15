@@ -1,0 +1,25 @@
+<arb-breadcrumb [routes]="[['termsConditions.name']]"> </arb-breadcrumb>
+<arb-panel>
+  <arb-panel-title [title]="'termsConditions.name' | translate">
+  </arb-panel-title>
+  <object
+          *ngIf="docURL && !showIframe()"
+          [data]="docURL"
+          type="application/pdf"
+          class="embed-responsive-item"
+          style="width:100%; height:  70vh ;"
+  >
+    <embed [src]="docURL" type="application/pdf" />
+  </object>
+  <iframe *ngIf="docURL && showIframe()" [src]="docURL"  style="width: 100%; height: 70vh ;"  class="embed-responsive-item" frameborder="0" scrolling="no">
+  </iframe>
+
+</arb-panel>
+<arb-buttons>
+  <button class="btn btn-default btn-wide" type="button" (click)="cancel()">
+    {{ 'login.noAcceptConditions' | translate }}
+  </button>
+  <button class="btn btn-primary btn-wide" (click)="sign()">
+    {{ 'login.acceptConditions' | translate }}
+  </button>
+</arb-buttons>

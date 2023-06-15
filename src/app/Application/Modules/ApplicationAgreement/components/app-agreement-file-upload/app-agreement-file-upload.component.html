@@ -1,0 +1,38 @@
+<arb-breadcrumb
+        [routes]="[['menu.app_and_agreement.menu'],
+        [ 'menu.app_and_agreement.upload-file']]">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep">
+</arb-steps>
+
+<ng-container *ngIf="isStepVisible(1) || isStepVisible(2)">
+    <arb-panel>
+        <fieldset [formGroup]="formModel">
+            <app-dynamic-simple-extras-form-fields
+                    [fieldsConfigs]="fieldsConfigs"
+                    [formModel]="formModel"
+                    [combosData]="combosData"
+                    [translate_prefix]="'app_and_agreement'">
+            </app-dynamic-simple-extras-form-fields>
+        </fieldset>
+    </arb-panel>
+</ng-container>
+
+<ng-container *ngIf="isStepVisible(3)">
+    <arb-confirm-panel
+            [pending]="false"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+</ng-container>
+
+<arb-buttons>
+    <button [disabled]="!isBackAllowed()" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+
+    <button *ngIf="!isFinishAllowed()" class="btn btn-primary btn-wide" (click)="next()"
+            [disabled]="!formModel.disabled && !formModel.valid">{{'public.proceed' | translate}}</button>
+
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

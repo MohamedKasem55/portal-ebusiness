@@ -1,0 +1,34 @@
+<assembly>
+  <id>dist</id>
+  <formats>
+
+	<format>tar.gz</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+	<fileSet>
+            <directory>dist</directory>
+		<outputDirectory>/</outputDirectory>
+			<includes>
+                <include>**.js</include>
+                <include>**.ico</include>
+               <include>**.png</include>
+               <include>**.jpg</include>
+               <include>index.html</include>   
+               <include>ngsw.json</include>
+                  <include>manifest.json</include>    
+   <include>robots.txt</include>				  
+              <include>assets/**</include>
+              <include>ckeditor/**</include>
+              <include>css/**</include>
+              <include>fonts/**</include>
+              <include>img/**</include>
+              <include>loginDocuments/**</include>
+			  <include>viewer/**</include>
+             <include>app/Config/**</include>
+            </includes>
+       
+           
+     </fileSet>
+  </fileSets>
+</assembly>

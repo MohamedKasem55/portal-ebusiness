@@ -1,0 +1,47 @@
+<app-cheque-create-table
+        *ngIf="authenticationService.activateOption('PendingActionChequeManagement',[],['RequestCheckBookGroup'])"
+        [items]="chequeListResults.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="chequeListResults.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selected]="this.sharedData.tableSelected"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (onSelect)="onSelect($event)"
+        (changeDisplaySize)="changeDisplaySize($event)">
+</app-cheque-create-table>
+
+<app-cheque-stop-table
+        *ngIf="authenticationService.activateOption('PendingActionChequeManagement',[],['StopCheckBookGroup'])"
+        [items]="stopchequeList.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySizeStop"
+        [totalSize]="stopchequeList.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selected]="this.sharedData.tableStopSelected"
+        [selectable]="true"
+        (setPage)="setPageStop($event)"
+        (onSelect)="onSelectStop($event)"
+        (changeDisplaySize)="changeDisplaySizeStop($event)">
+</app-cheque-stop-table>
+
+<app-cheque-positive-pay-table
+        *ngIf="authenticationService.activateOption('PendingActionChequeManagement',['POSITIVEPAYCHECK_PRIVILEGE'],['PositivePayCheckGroup'])"
+        [items]="positivePayList.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableDisplaySizePositivePay"
+        [totalSize]="positivePayList.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selected]="this.sharedData.tablePositivePaySelected"
+        [selectable]="true"
+        (setPage)="setPagePositivePay($event)"
+        (onSelect)="onSelectPositivePay($event)"
+        (changeDisplaySize)="changeDisplaySizePositivePay($event)">
+</app-cheque-positive-pay-table>
+
+
+<app-levels-popup #modalAuth></app-levels-popup>

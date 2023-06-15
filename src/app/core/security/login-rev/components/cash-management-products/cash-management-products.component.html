@@ -1,0 +1,516 @@
+<ng-container *ngIf="!currentUser">
+    <!-- sme-header -->
+    <div class="sme-header navbar navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="sme-header__brand" routerLinkActive="active" [routerLink]="['/dashboard']"> <img
+                        src="img/logo.svg" alt="{{ 'public.al-rajhi' | translate }}">
+                </a>
+            </div>
+            <p class="sme-header__switch navbar-text navbar-right">
+                <a *ngIf="translate.currentLang!=='en'" class="human-selectable"
+                   (click)="changeLang('en')">{{ 'public.english' | translate }}</a>
+                <a *ngIf="translate.currentLang!=='ar'" class="human-selectable"
+                   (click)="changeLang('ar')">{{ 'public.arabic' | translate }}</a>
+            </p>
+        </div>
+    </div>
+    <div class="sme-navigation">
+
+    </div>
+</ng-container>
+
+<div id="{{!currentUser ? 'sme-main' : ''}}">
+    <div [ngClass]="{'sme-dashboard': !currentUser}">
+
+        <arb-breadcrumb *ngIf="!showForm"
+                        [routes]="[['cash_management_products.cashManagement']]">
+        </arb-breadcrumb>
+
+        <arb-breadcrumb *ngIf="showForm"
+                        [routes]="[
+            ['cash_management_products.cashManagement'],
+            ['cash_management_products.form.contactReq']
+            ]">
+        </arb-breadcrumb>
+
+
+        <div class="container-fluid">
+
+            <ng-container *ngIf="!showForm">
+                <div class="container-fluid" style="margin: 1% 0.5% 0 0.5%">
+                    <h1>{{'cash_management_products.ourProducts' | translate}}</h1>
+                </div>
+
+                <div class="container-fluid" style="margin: 1% 0.5% 0 0.5%">
+                    <h3>{{'cash_management_products.businessSolutions' | translate}}</h3>
+                </div>
+                <br>
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img src="img/b2b_image.png" alt="">
+                            <h3 style="margin-top: 2rem" >{{'cash_management_products.products.b2b' | translate}}</h3>
+                            <div style="display: flex; flex-flow: row; margin-top: 3rem; margin-bottom: 3%">
+                                <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                <div>{{'cash_management_products.products.b2bDis' | translate}}</div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("B2B")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img src="img/ecommerce-image.png" alt="">
+                            <h3 style="margin-top: 2rem" >{{'cash_management_products.products.eCommerce' | translate}}</h3>
+                            <div style="display: flex; flex-flow: row; margin-top: 3rem; margin-bottom: 3%">
+                                <span class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                <div>{{'cash_management_products.products.eCommerceDis' | translate}}</div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("ECOMMERCE")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img src="img/payroll-image.png" alt="">
+                            <h3 style="margin-top: 2rem" >{{'cash_management_products.products.payroll' | translate}}</h3>
+                            <div style="display: flex; flex-flow: row; margin-top: 3rem; margin-bottom: 3%">
+                                <span class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                <div>{{'cash_management_products.products.payrollDis' | translate}}</div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("PAYROLL")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="container-fluid" style="margin: 1% 0.5% 0 0.5%">
+                    <h3>{{'cash_management_products.management' | translate}}</h3>
+                </div>
+                <br>
+
+
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img class="product-image" src="img/cash24-img.png" alt="">
+                            <h6 style="color: #fba265" >{{'cash_management_products.products.deposits' | translate}}</h6>
+                            <h3>{{'cash_management_products.products.cash24' | translate}}</h3>
+                            <p class="product-dis">{{'cash_management_products.products.cash24Dis' | translate}}</p>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("CASH24")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img class="product-image" src="img/cash-deposit-img.png" alt="">
+                            <h6 style="color: #fba265">{{'cash_management_products.products.deposits' | translate}}</h6>
+                            <h3>{{'cash_management_products.products.cashDeposit' | translate}}</h3>
+                            <p class="product-dis">{{'cash_management_products.products.cashDepositDis' | translate}}</p>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("CASH_DEPOSIT_MACHINES")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img class="product-image" src="img/cash-pickup-img.png" alt="">
+                            <h6 style="color: #fba265">{{'cash_management_products.products.cash' | translate}}</h6>
+                            <h3>{{'cash_management_products.products.cashPickup' | translate}}</h3>
+                            <p class="product-dis">{{'cash_management_products.products.cashPickupDis' | translate}}</p>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("CASH_PICK_UP")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img class="product-image" src="img/pos-img.png" alt="">
+                            <h6 style="color: #fba265">{{'cash_management_products.products.payments' | translate}}</h6>
+                            <h3>{{'cash_management_products.products.pos' | translate}}</h3>
+                            <p class="product-dis">{{'cash_management_products.products.posDis' | translate}}</p>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("POS")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-content">
+                            <img class="product-image" src="img/div-dis-img.png" alt="">
+                            <h6 style="color: #fba265">{{'cash_management_products.products.payments' | translate}}</h6>
+                            <h3>{{'cash_management_products.products.dividendDist' | translate}}</h3>
+                            <p class="product-dis">{{'cash_management_products.products.dividendDistDis1' | translate}}</p>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("DIVIDEND_DISTRIBUTION")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item"></li>
+                    <li class="list-item"></li>
+                    <li class="list-item"></li>
+                </ul>
+
+                <div class="container-fluid" style="margin: 1% 0.5% 0 0.5%">
+                    <h3>{{'cash_management_products.cardsAccounts' | translate}}</h3>
+                </div>
+                <br>
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-content">
+                            <h3>{{'cash_management_products.products.creditCard' | translate}}</h3>
+                            <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+                            <div>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.creditCardDis1' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.creditCardDis2' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.creditCardDis3' | translate}}</div>
+                                </div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("CREDIT_CARDS")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <h3>{{'cash_management_products.products.payrollCard' | translate}}</h3>
+                            <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+                            <div>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.payrollCardDis1' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.payrollCardDis2' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.payrollCardDis3' | translate}}</div>
+                                </div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("PAYROLL_CARDS")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <h3>{{'cash_management_products.products.virtualAccount' | translate}}</h3>
+                            <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+                            <div>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.virtualAccountDis1' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{   'cash_management_products.products.virtualAccountDis2' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{   'cash_management_products.products.virtualAccountDis3' | translate}}</div>
+                                </div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("VIRTUAL_ACCOUNT")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="list-content">
+                            <h3>{{'cash_management_products.products.escrowAccount' | translate}}</h3>
+                            <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+                            <div>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.escrowAccountDis1' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{   'cash_management_products.products.escrowAccountDis2' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{   'cash_management_products.products.escrowAccountDis3' | translate}}</div>
+                                </div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("ESCROW_ACCOUNT")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="list">
+                    <li class="list-item">
+                        <div class="list-content">
+                            <h3>{{'cash_management_products.products.ePrepaid' | translate}}</h3>
+                            <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+                            <div>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.ePrepaidDis1' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.ePrepaidDis2' | translate}}</div>
+                                </div>
+                                <br>
+                                <div style="display: flex; flex-flow: row">
+                                    <span  class="icon -check -success ticks" [ngClass]="{'ticks-rtl': translate.currentLang == 'ar'}"></span>
+                                    <div>{{'cash_management_products.products.ePrepaidDis3' | translate}}</div>
+                                </div>
+                            </div>
+                            <button style="margin-top: auto; width: 30%; align-self: self-end" type='button' (click)='applyForProduct("E_PREPAID_CARDS")'
+                                    class='btn btn-default btn-wide'>{{'cash_management_products.apply_now' | translate}}</button>
+                        </div>
+                    </li>
+                    <li class="list-item"></li>
+                    <li class="list-item"></li>
+                    <li class="list-item"></li>
+                </ul>
+                <br>
+            </ng-container>
+
+
+            <ng-container *ngIf="showForm" [formGroup]="form">
+
+                <arb-steps
+                        [currentStep]="wizardStep"
+                        [steps]="['public.completeDetails', 'public.summary', 'public.finish']">
+                </arb-steps>
+
+                <ng-container *ngIf="wizardStep < 3">
+
+                    <div style="margin: 2% 1.4% 2% 1.4%">
+                        <h3>{{'cash_management_products.form.contactReq' | translate}}</h3>
+                    </div>
+
+                    <arb-panel>
+                        <div class="legend title-legend">
+                            {{'cash_management_products.form.inqDetails' | translate}}
+                        </div>
+                        <hr class="hr-title" style="margin-bottom: 30px">
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{'cash_management_products.form.product' | translate }}</label>
+                                        <br>
+                                        <label class="labelInfo-summery"> {{getValueFromKey(statics['CashManagementProducts'], form.controls.product?.value)}} </label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </arb-panel>
+
+                    <br>
+
+                    <arb-panel>
+                        <div class="legend title-legend">
+                            {{'cash_management_products.form.orgInfo' | translate}}
+                        </div>
+                        <hr class="hr-title" style="margin-bottom: 30px">
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.region' | translate }}</label>
+                                        <ng-select id="region" class="form-control" name="region" formControlName="region">
+                                            <ng-option selected value=""> -- {{ 'public.selectDropdown' | translate}} --</ng-option>
+                                            <ng-option *ngFor="let region of statics['cashManagementRegions']" [value]="region.key">
+                                                {{ region.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="form.controls.region.invalid && form.controls.region.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.region' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.city' | translate }}</label>
+                                        <ng-select id="city" class="form-control" name="city" formControlName="city">
+                                            <ng-option selected value=""> -- {{ 'public.selectDropdown' | translate}} --</ng-option>
+                                            <ng-option *ngFor="let city of statics['cityType']" [value]="city.value">
+                                                {{ city.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="form.controls.city.invalid && form.controls.city.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.city' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.yearlyIncome' |translate }}</label>
+                                        <ng-select id="yearlyIncome" class="form-control" name="yearlyIncome" formControlName="yearlyIncome">
+                                            <ng-option selected value=""> -- {{ 'public.selectDropdown' | translate}} --</ng-option>
+                                            <ng-option *ngFor="let yearlyIncome of statics['yearlyIncome']" [value]="yearlyIncome.key">
+                                                {{ yearlyIncome.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="form.controls.yearlyIncome.invalid && form.controls.yearlyIncome.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.yearlyIncome' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!currentUser" class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.orgName' |translate }}</label>
+                                        <input type="text" formControlName="orgName" inputPattern='onlyAlphabetics' class="form-control"/>
+                                        <div *ngIf="form.controls.orgName.invalid && form.controls.orgName.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.orgName' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div *ngIf="!currentUser" class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.orgId' | translate }}</label>
+                                        <input type="text" inputPattern="onlyDigits" maxlength="10" minlength="10" formControlName="orgId" class="form-control"/>
+                                        <div *ngIf="form.controls.orgId.invalid && form.controls.orgId.touched && !form.controls.orgId.hasError('pattern')"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.orgId' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.orgId.hasError('pattern')
+                                        && form.controls.orgId.touched" class="alert alert-danger bottomAlert">
+                                            <small>
+                                                {{'cash_management_products.form.orgId' | translate }} {{'error.invalid' | translate }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </arb-panel>
+
+                    <br>
+
+                    <arb-panel>
+                        <div class="legend title-legend">
+                            {{'cash_management_products.form.contactInfo' | translate}}
+                        </div>
+                        <hr class="hr-title" style="margin-bottom: 30px">
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.contactName' |translate }}</label>
+                                        <input type="text" formControlName="contactName" inputPattern='onlyAlphabetics' class="form-control"/>
+                                        <div *ngIf="form.controls.contactName.invalid && form.controls.contactName.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.contactName' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.contactMobile' | translate }}</label>
+                                        <input type="text"  formControlName="contactMobile" class="form-control"/>
+                                        <div *ngIf="form.controls.contactMobile.invalid && form.controls.contactMobile.touched && !form.controls.contactMobile.hasError('pattern')"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.contactMobile' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.contactMobile.hasError('pattern') && form.controls.contactMobile.touched" class="alert alert-danger bottomAlert">
+                                            <small>
+                                                {{'cash_management_products.form.contactMobile' | translate }} {{'error.invalid' | translate }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.contactEmail' | translate }}</label>
+                                        <input type="text" formControlName="contactEmail" inputPattern="notArabic" class="form-control"/>
+                                        <div *ngIf="form.controls.contactEmail.invalid && form.controls.contactEmail.touched && !form.controls.contactEmail.hasError('pattern')"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.contactEmail' | translate }} {{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.contactEmail.hasError('pattern') && form.controls.contactEmail.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.contactEmail' | translate }} {{ 'error.invalid' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'cash_management_products.form.bestTimeToCall' | translate }}</label>
+                                        <ng-select id="bestTimeToCall" class="form-control" name="bestTimeToCall" formControlName="bestTimeToCall">
+                                            <ng-option selected value=""> -- {{ 'public.selectDropdown' | translate}} --</ng-option>
+                                            <ng-option *ngFor="let bestTimeToCall of statics['bestTimeToCall']" [value]="bestTimeToCall.key">
+                                                {{ bestTimeToCall.value }}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="form.controls.bestTimeToCall.invalid && form.controls.bestTimeToCall.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'cash_management_products.form.bestTimeToCall' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </arb-panel>
+                </ng-container>
+
+                <br>
+
+                <ng-container *ngIf="wizardStep == 3">
+                    <arb-panel>
+                        <div class="final-step-message-container">
+                            <div class="final-step-message">
+                                <div class="icon -check -success ticks-success"></div>
+                                <h2>{{'cash_management_products.form.successHeader' | translate}}</h2>
+                                <p>{{'cash_management_products.form.successMsg' | translate}}</p>
+                            </div>
+                        </div>
+                    </arb-panel>
+                </ng-container>
+
+                <div class="container-fluid">
+                    <div style="display: flex; flex-flow: row; justify-content: space-between">
+                        <button style="align-self: self-start" *ngIf="wizardStep >= 1 && wizardStep < 3" class="btn btn-default btn-wide" (click)="back()">
+                            {{ 'public.back' | translate }}
+                        </button>
+
+                        <button style="align-self: self-end" *ngIf="isNextAllowed()" class="btn btn-primary btn-wide" (click)="next()"
+                                [disabled]="!isNextAllowed() || (this.form.invalid)">
+                            {{'public.proceed' | translate}}</button>
+
+                        <div *ngIf="wizardStep == 3">
+
+                        </div>
+
+                        <button style="align-self: self-end" *ngIf="wizardStep == 3" class="btn btn-primary btn-wide" (click)="routeToRoot()">
+                            {{currentUser ? 'customer-documents.goToDashboard' : 'cash_management_products.goToLogin' | translate}}
+                        </button>
+                    </div>
+                    <br>
+                </div>
+
+            </ng-container>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,325 @@
+<app-custom-dropdown-menu [menuTitles]="menuTitles" (onSelectItem)="onSelectAccountMenuItem($event)">
+</app-custom-dropdown-menu>
+
+<!-- Modal -->
+<div class="modal fade modal-widget-wrapper" bsModal #accountsModal="bs-modal" tabindex="-1"
+    [config]="{ backdrop: 'static' }" role="dialog">
+    <div class="modal-dialog xl-dialog">
+        <!-- Modal content-->
+        <div class="modal-content modal-widget-content">
+            <div class="modal-header">
+                <!-- <h4 class="modal-title">{{ 'public.logout' | translate }}</h4> -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                    (click)="accountsModal.hide()">
+                    <span class="icon -close"></span>
+                </button>
+                <div class="col-xs-12 manage-accounts-title">
+                    {{'dashboard.manageAccountsWidgetTitle' | translate}}
+                </div>
+            </div>
+            <div class="modal-body manage-accounts-body">
+                <!-- SEARCH FORM   -->
+                <div class="container-fluid">
+                    <div class="sme-page-block">
+                        <div class="sme-form">
+                            <form autocomplete="off" class="sme-form__form" #accountsSearch="ngForm"
+                                (ngSubmit)="searchAccounts()" novalidate>
+                                <div class="sme-form__content">
+                                    <a class="sme-form__head collapsed" role="button"
+                                        (click)="isCollapsedContent = !isCollapsedContent">
+                                        <span>{{ 'public.search' | translate }}</span>
+                                    </a>
+                                    <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+                                        <div class="sme-form__body">
+                                            <!-- Form content -->
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-5">
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.account' | translate }}</label>
+                                                        <div class="form-control">
+                                                            <ng-select [notFoundText]="'public.noData' | translate"
+                                                                [(ngModel)]="accountNumberFilter" name="accountNumber">
+                                                                <ng-option *ngFor="let account of accounts"
+                                                                    [value]="account['fullAccountNumber']"
+                                                                    [innerHTML]="account['fullAccountNumber'] + ' - ' + (account['alias']? (account['alias']+' - '): '' )+ (account['availableBalance'] | amountCurrency) + ' ' +
+                                                                               service.transformComboValue('currencyIso', account['currency'])">
+                                                                </ng-option>
+                                                            </ng-select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-2">
+                                                    <!-- Nick Name FROM -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'accounts.accountNickname' | translate }} </label>
+                                                        <input type="text" name="accountNickname" class="form-control"
+                                                            [(ngModel)]="accountNicknameFilter">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-2">
+                                                    <!-- Currency  -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'accounts.currency' | translate }}</label>
+                                                        <div class="form-control">
+                                                            <ng-select [notFoundText]="'public.noData' | translate"
+                                                                name="fileType" [(ngModel)]="currencyFilter">
+                                                                <option value="" disabled="disabled"
+                                                                    selected="selected">
+                                                                    --{{ 'public.selectDropdown' | translate }}--
+                                                                </option>
+                                                                <ng-option
+                                                                    *ngFor="let currencyOpt of currencies | values"
+                                                                    [value]="currencyOpt">
+                                                                    {{ currencies[currencyOpt] }}
+                                                                </ng-option>
+                                                            </ng-select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- Branch -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'accounts.branchid' | translate }}</label>
+                                                        <div class="form-control">
+                                                            <ng-select [notFoundText]="'public.noData' | translate"
+                                                                name="fileType" [(ngModel)]="branchFilter">
+                                                                <option value="" disabled="disabled"
+                                                                    selected="selected">
+                                                                    --{{ 'public.selectDropdown' | translate }}--
+                                                                </option>
+                                                                <ng-option *ngFor="let branchOpt of branchs | values"
+                                                                    [value]="branchOpt">
+                                                                    {{ branchs[branchOpt] }}
+                                                                </ng-option>
+                                                            </ng-select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="sme-form__actions">
+                                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">
+                                                {{ 'public.reset' | translate }}
+                                            </button>
+                                            <button type="submit" class="btn btn-primary btn-wide">
+                                                {{ 'public.search' | translate }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /SEARCH FORM  -->
+
+                <!-- ACCOUNTS TABLE -->
+                <div class="container-fluid">
+                    <div class="sme-page-block">
+                        <div class="sme-data-table">
+                            <div class="sme-data-table__head table-within-dialog">
+                                <div class="sme-table table headerDataTable">
+                                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #pageTable
+                                        class="material sme-table sme-table--responsive table"
+                                        [rows]="accountBalancePage.data" [columnMode]="defaultColumnMode"
+                                        [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="'auto'"
+                                        [externalPaging]="true" [externalSorting]="true"
+                                        [count]="accountBalancePage.page.totalElements"
+                                        [offset]="accountBalancePage.page.pageNumber-1"
+                                        [limit]="accountBalancePage.page.pageSize"
+                                        [selectionType]="defaultSelectionType" [selected]="selectedAccounts"
+                                        (page)='setPage($event)' [rowIdentity]="rowIdentity">
+
+
+                                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                            (toggle)="onDetailToggle($event)">
+                                            <ng-template let-row="row" let-expanded="expanded"
+                                                ngx-datatable-row-detail-template>
+                                                <div class="row">
+                                                    <fieldset>
+                                                        <div class="col-xs-12">
+                                                            <div class="form-group">
+                                                                <label for="initiationDate">{{'public.account' |
+                                                                    translate }}</label>
+                                                                <div>
+                                                                    <span>{{row.fullAccountNumber}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <div class="form-group">
+                                                                <label for="requestId">{{
+                                                                    'myProfile.pending_actions.nick_name' | translate
+                                                                    }}</label>
+                                                                <div>
+                                                                    <span>{{ row.alias }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="row">
+                                                    <fieldset>
+                                                        <div class="col-xs-6">
+                                                            <div class="form-group">
+                                                                <label for="debitAccount">{{'dashboard.currency' |
+                                                                    translate }}</label>
+                                                                <div>
+                                                                    <span>{{ row.currency }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <div class="form-group">
+                                                                <label for="amount">
+                                                                    {{'accounts.branchid' |translate }}
+                                                                </label>
+                                                                <div>
+                                                                    <span>{{ row.branchid }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-row-detail>
+
+                                        <ngx-datatable-column *ngIf="selectable" [width]="50" [sortable]="false"
+                                            [canAutoResize]="false" [draggable]="false" [resizeable]="false"
+                                            [headerCheckboxable]="true" [checkboxable]="false">
+                                            <ng-template ngx-datatable-header-template let-value="value">
+                                                <label class="datatable-checkbox">
+                                                    <input type="checkbox" [checked]="allPageSelected()"
+                                                        (change)="selectAll($event)" />
+                                                </label>
+                                            </ng-template>
+                                            <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+                                                let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                                                <label class="datatable-checkbox">
+                                                    <input type="checkbox" [checked]="isSelected"
+                                                        (change)="onCheckboxChangeFn($event)" />
+                                                </label>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+
+                                        <ngx-datatable-column prop="fullAccountNumber" headerClass="text-align-center"
+                                            class="mobile-hidden">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{'public.account' | translate }} </span>
+                                            </ng-template>
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span class="mobile-hidden">
+                                                    {{value}}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column prop="alias" cellClass="text-align-center">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{ 'myProfile.pending_actions.nick_name' | translate }} </span>
+                                            </ng-template>
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                <span class="alias" title="{{ value? value: '-' }}">{{ value? value: '-'
+                                                    }}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column prop="currency" headerClass="text-align-center"
+                                            cellClass="text-align-center" class="mobile-hidden">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span class="mobile-hidden" (click)="sort()"
+                                                    class="datatable-header-cell-wrapper">
+                                                    {{'dashboard.currency' | translate }} </span>
+                                            </ng-template>
+                                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                                <span class="mobile-hidden">{{ 'currencyIso' | modelPipe:value }}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column prop="branchid" cellClass="text-align-center">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span class="datatable-header-cell-wrapper">
+                                                    {{'accounts.branchid' |translate }}
+                                                </span>
+                                            </ng-template>
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                <span>{{ 'branchRbs5' | modelPipe:value }}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+
+                                        <ngx-datatable-footer>
+                                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                                let-pageSize="pageSize" let-selectedCount="selectedCount"
+                                                let-curPage="curPage" let-offset="offset">
+                                                <div class="sme-data-table__footer">
+                                                    <app-datatable-pager
+                                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datable-icon-skip')"
+                                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                        [hidden]="!((rowCount / pageSize) > 1)"
+                                                        [visiblePagesCount]="visiblePagesCount"
+                                                        (change)="pageTable.onFooterPage($event)">
+                                                    </app-datatable-pager>
+                                                    <div class="sme-data-table__actions form-inline">
+                                                        <span class="sme-data-table__action-group">{{
+                                                            'public.showingLabel' | translate }}
+                                                            {{pageSize > rowCount ? rowCount : pageSize}}{{
+                                                            'public.ofLabel' |
+                                                            translate}}
+                                                            {{rowCount}}
+                                                        </span>
+                                                        <span class="hidden-xs">|</span>
+                                                        <span class="sme-data-table__action-group">
+                                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                            <div class="sme-select form-control">
+                                                                <select class="form-control"
+                                                                    [(ngModel)]="this.accountBalancePage.page.pageSize"
+                                                                    (ngModelChange)="onChangeSize(accountBalancePage.page.size)">
+                                                                    <option [value]="10">10</option>
+                                                                    <option [value]="20">20</option>
+                                                                    <option [value]="50">50</option>
+                                                                </select>
+                                                            </div>
+                                                            <!-- <a routerLinkActive="active"
+                                                                [routerLink]="['accounts/currentAccounts']"
+                                                                class="btn btn-link">
+                                                                <span class="text">{{ 'public.viewAll' | translate }}
+                                                                </span>
+                                                                <span class="icon -chevron-right viewAll-icon"></span>
+                                                            </a> -->
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-footer>
+                                    </ngx-datatable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ACCOUNTS TABLE -->
+            </div>
+            <div class="modal-footer">
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                    <button type="button" class="btn btn-default btn-wide ng-star-inserted cancelButton"
+                        data-dismiss="modal" (click)="accountsModal.hide()">
+                        {{ 'public.cancel' | translate }}
+                    </button>
+                    <button type="button" class="btn btn-primary btn-wide ng-star-inserted saveButton"
+                        data-dismiss="modal" (click)="saveUserAccounts()">
+                        {{ 'public.save' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

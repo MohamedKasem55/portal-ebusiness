@@ -1,0 +1,52 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['payments.bulk-payment']
+                    ]">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title"></div>
+
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <li
+                                        *ngIf="authenticationService.activateOption('BulkUploadFile', ['BULKPAYMENTS_PRIVILEGE'], ['BulkPaymentsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                       [routerLink]="['/bulk-payment/uploadFile']">
+                                        {{ 'payments.bulkpayments.upload' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                        *ngIf="authenticationService.activateOption('BulkProcessedFiles', ['BULKPAYMENTS_PRIVILEGE'], ['BulkPaymentsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                       [routerLink]="['/bulk-payment/processedFile']">
+                                        {{ 'payroll.management.name' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                        *ngIf="authenticationService.activateOption('BulkPaymentsRequestStatus', ['BULKPAYMENTS_PRIVILEGE'], ['BulkPaymentsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                       [routerLink]="['/bulk-payment/reqStatus']">
+                                        {{ 'payments.bulkpayments.reqstatus' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                        *ngIf="authenticationService.activateOption('BulkDownloadTemplates', ['BULKPAYMENTS_PRIVILEGE'], ['BulkPaymentsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                       [routerLink]="['/bulk-payment/downloadTemp']">
+                                        {{ 'payroll.downloadTemplates' | translate }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

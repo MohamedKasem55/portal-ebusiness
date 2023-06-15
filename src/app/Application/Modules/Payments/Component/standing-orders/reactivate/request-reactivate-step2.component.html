@@ -1,0 +1,196 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'companyAdmin.user.standingOrds' | translate}}</div>
+    </div>
+    <form autocomplete="off">
+    <div class="sme-page-block">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                             <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.accountFrom' | translate }}</label>
+                                    <span class="form-control">{{ batch.accountNumber }}</span>
+                                </div>
+                            </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>    
+                            <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'public.amountType' | translate }}</label>
+                                    <span class="form-control" *ngIf="batch.amountType==0">{{'payments.amount' | translate }}</span>
+                                    <span class="form-control" *ngIf="batch.amountType==1">{{'payments.minimumBalance' | translate }}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.accountTo' | translate }}</label>
+                                    <span class="form-control">{{batch.beneficiaryAccount}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.purpose' | translate }}</label>
+                                    <span class="form-control">{{'purposeType' | modelPipe: batch.purpose}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                            <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.monthfrecuency' | translate }}</label> 
+                                    <span class="form-control" *ngIf="batch.paymentType==1">{{ 'standingOrder.paymentType' | translate:{value:1} }}</span>
+                                    <span class="form-control" *ngIf="batch.paymentType==3">{{ 'standingOrder.paymentType' | translate:{value:3} }}</span>
+                                    <span class="form-control" *ngIf="batch.paymentType==6">{{ 'standingOrder.paymentType' | translate:{value:6} }}</span>
+                                    <span class="form-control" *ngIf="batch.paymentType==12">{{ 'standingOrder.paymentType' | translate:{value:12} }}</span>
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'payments.amount' | translate }}</label> 
+                                    <span class="form-control">{{ batch.amount | amountCurrency }}</span>
+                                    
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'standingOrder.dayOfMonth' | translate }}</label> 
+                                    <span class="form-control">{{batch.dayMonth}}</span>
+                                    
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                            </fieldset> 
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.dateFrom' | translate }}</label>
+                                        <span  class="form-control">{{batch.dateFrom | date}}</span>
+                                         
+                                    </div>  
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.dateTo' | translate }}</label>
+                                        <span  class="form-control">{{batch.dateTo}}</span>
+                                         
+                                    </div>  
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.remarks' | translate }}</label>
+                                        <span  class="form-control">{{batch.remarks}}</span>
+                                         
+                                    </div>  
+                                </div>
+                            </fieldset>
+                        </div>    
+                    </div>
+            </div>   
+            </div>
+        </div>
+    </div>
+    <div class="sme-page-block" *ngIf="option == InitiateOption">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.beneficiaryFee' | translate }}</label>
+                                        <span  class="form-control">{{batch.standingOrderPreview.beneficiaryFee  | amountCurrency}}</span>
+                                         
+                                    </div>  
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.orderFee' | translate }}</label>
+                                        <span  class="form-control">{{batch.standingOrderPreview.orderFee  | amountCurrency}}</span>
+                                         
+                                    </div>  
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.registrationFee' | translate }}</label>
+                                        <span  class="form-control">{{batch.standingOrderPreview.registrationFee  | amountCurrency}}</span>
+                                         
+                                    </div>  
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'standingOrder.remitterFee' | translate }}</label>
+                                        <span  class="form-control">{{batch.standingOrderPreview.remitterFee  | amountCurrency}}</span>
+                                         
+                                    </div>  
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+            </div>
+            </div>
+        </div>
+    </div>                              
+    </form>
+</div>  
+
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+
+    
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

@@ -1,0 +1,79 @@
+<div class="container-fluid">
+  <!-- breadCrump section -->
+  <sme-breadcrumb [list]="breadCrumbList"></sme-breadcrumb>
+  <!-- page title -->
+  <div class="sme-page-title-info">
+    <span class="sme-page-subtitle">{{
+      'fleet.offerAcceptance.fleetFinanceOfferApperance' | translate
+    }}</span>
+  </div>
+  <ng-container>
+    <!-- body section -->
+    <section>
+      <!-- contarct details -->
+      <sme-card
+        [startTitle]="'fleet.offerAcceptance.contractDetails' | translate"
+      >
+        <sme-pill [pill]="pillData" class="end-header"></sme-pill>
+        <div class="card-body pt-2">
+          <div class="sme-col">
+            <span class="sme-form-group-label">
+              {{ 'fleet.offerAcceptance.readContractText' | translate }}
+            </span>
+          </div>
+
+          <div class="sme-col mt-5">
+            <div class="d-flex align-items-start">
+              <input type="checkbox" id="terms" #termsChecked />
+              <span class="sme-form-group-txt m-1">
+                {{ 'fleet.offerAcceptance.readContractTextCheck' | translate }}
+                <a [href]="docRef" id="termsContract">{{
+                  'fleet.offerAcceptance.contract' | translate
+                }}</a></span
+              >
+            </div>
+          </div>
+        </div>
+      </sme-card>
+    </section>
+    <!-- info section -->
+    <section class="my-5">
+      <sme-card>
+        <section class="sme-col card-body">
+          <div>
+            <img
+              [src]="'assets/icons/info.svg'"
+              alt="info"
+              width="20"
+              height="20"
+              class="mx-2"
+            />
+            <span> {{ 'fleet.offerAcceptance.nearBranch' | translate }}</span>
+          </div>
+        </section>
+      </sme-card>
+    </section>
+  </ng-container>
+  <footer>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button
+        class="btn btn-default btn-wide sme-back-btn"
+        (click)="navigateTo('back')"
+      >
+        {{ 'fleet.btn.back' | translate }}
+      </button>
+      <ng-container>
+        <button class="btn btn-default btn-wide" (click)="navigateTo('financeProduct/fleet/request/branch-signature')">
+          {{ 'fleet.btn.signBranch' | translate }}
+        </button>
+        <button
+          class="btn btn-primary btn-wide"
+          (click)="navigateTo('back')"
+          [disabled]="termsChecked.checked !== true"
+        >
+          {{ 'fleet.btn.acceptAndProceed' | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </footer>
+</div>

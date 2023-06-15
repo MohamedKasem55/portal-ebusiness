@@ -1,0 +1,58 @@
+<arb-breadcrumb
+        [routes]="[
+['dashboard.payments'],
+['dashboard.governmentRevenue', ['/government-revenue']],
+['governmentRevenue.requestStatus',['/government-revenue/request-status']]
+]">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep">
+</arb-steps>
+
+<app-gov-revenue-payment-step1 *ngIf="wizardStep == 1" [accounts]="accountsList" [banks]="govRevenueBankCodeList"
+                               [revenueAccounts]="govRevenueAccountsList" [viewForm]="formModel"
+                               [beneficiaryOriginators]="companyDepositorsList" [filteredOriginators]="depositorsList"
+                               [pageErrorMessage]="pageErrorMessage" (onInit)="onInitStep(wizardStep,$event)"
+                               (addSubAccount)="addSubAccountAmount()"
+                               (removeSubAccount)="removeSubAccountAmount($event)"
+                               (beneficiaryChange)="onBeneficiaryOriginatorChange($event)"
+                               [securityLevelsDTOList]="securityLevelsDTOList"
+                               [revenueAccounteditView]="isRejected()">
+</app-gov-revenue-payment-step1>
+
+
+<app-gov-revenue-payment-step2 *ngIf="wizardStep == 2" [sharedForm]="formModel"
+                               [revenueAccounts]="govRevenueAccountsList"  [pageErrorMessage]="pageErrorMessage"
+                               (onInit)="onInitStep(wizardStep,$event)" [securityLevelsDTOList]="securityLevelsDTOList">
+</app-gov-revenue-payment-step2>
+
+<arb-panel *ngIf="validationResponse['generateChallengeAndOTP'] && wizardStep ==2">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <app-secured-authentication [generateChallengeAndOTP]="validationResponse['generateChallengeAndOTP']"
+                                            [requestValidate]="requestValidate"
+                                            #authorization></app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<app-gov-revenue-payment-step3 *ngIf="wizardStep == 3" [checkPending]="option == OptionType.REINITIATE"
+                               [generateChallengeAndOTP]="validationResponse.generateChallengeAndOTP">
+</app-gov-revenue-payment-step3>
+
+<arb-buttons>
+    <button *ngIf="wizardStep==1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{'public.cancel' | translate}}</button>
+    <button *ngIf="wizardStep > 1 && wizardStep < 3" type="button" class=" btn btn-default btn-wide"
+            (click)="previous()">{{'public.back' | translate }}</button>
+    <button *ngIf="wizardStep == 1 && isRejected()" type="submit" class=" btn btn-primary btn-wide"
+            (click)="delete()"> {{'public.delete' | translate}}</button>
+    <button *ngIf="wizardStep == 1 && isRejected()" type="submit" class=" btn btn-primary btn-wide" (click)="reInitiate()"
+            [disabled]="isDisabled()"> {{'public.initiate' | translate}}</button>
+    <button *ngIf="wizardStep == 2" type="submit" class=" btn btn-primary btn-wide" (click)="next()"
+            [disabled]="isDisabled()"> {{'public.proceed' | translate}}</button>
+    <button *ngIf="wizardStep == 3" type="submit" class=" btn btn-primary btn-wide"
+            (click)="finish()">{{'public.finish' | translate}}</button>
+</arb-buttons>

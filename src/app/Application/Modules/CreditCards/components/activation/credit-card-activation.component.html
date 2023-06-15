@@ -1,0 +1,37 @@
+<arb-breadcrumb [routes]="[
+	['accounts.creditCards.name'],
+	['accounts.creditCards.cardList',['/credit-cards/list']],
+	['accounts.creditCards.activationName']
+]" *ngIf="!selectedCard">
+</arb-breadcrumb>
+
+<!-- BREADCRUMB -->
+<arb-steps
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<app-credit-card-activation-step1 *ngIf="wizardStep == 1"
+                                  [formModel]="formModel"
+                                  [cards]="cards">
+</app-credit-card-activation-step1 >
+
+<app-credit-card-activation-step2 *ngIf="wizardStep == 2"
+                                  [formModel]="formModel"
+                                  [cards]="cards">
+</app-credit-card-activation-step2>
+
+<app-credit-card-activation-step3 *ngIf="wizardStep == 3">
+</app-credit-card-activation-step3>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed() && wizardStep!=1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()"
+            (click)="previous()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

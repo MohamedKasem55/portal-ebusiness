@@ -1,0 +1,77 @@
+<div class="container-fluid">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                  <div class="sme-form__body">
+                        <div class="sme-form__title">
+                            <div class="col-xs-12 col-sm-6">{{ 'payments.hajjumrahcards.cardallocation' | translate }}</div>
+                        </div>
+                   
+                    <form autocomplete="off" [formGroup]="form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ 'payments.hajjumrahcards.cardNum' | translate }} *</label>
+                                    <input formControlName="cardNumber" type="text"  class="form-control" id="cardNumber" inputPattern="onlyDecimalNumbers"  maxlength="19" required/>
+                                </div>
+                                <div *ngIf="form.controls.cardNumber.hasError('required') && form.controls.cardNumber.touched" class="alert alert-danger">
+                                        <small>{{'payments.hajjumrahcards.errors.cardnumerr' | translate }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                     <label>{{ 'payments.hajjumrahcards.visaNum' | translate }} *</label>
+                                        <input formControlName="visaNumber" type="text"  class="form-control" id="visaFrom" inputPattern="onlyDecimalNumbers" maxlength="10" />
+                                    </div>
+                                    <div *ngIf="form.controls.visaNumber.hasError('required') && form.controls.visaNumber.touched" class="alert alert-danger">
+                                            <small>{{'payments.hajjumrahcards.errors.visanumerr' | translate }}</small>
+                                    </div>
+                                </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-5">
+                                <div class="form-group">
+                                    <label>{{ 'payments.hajjumrahcards.vissadate' | translate }} *</label>
+                                    <input formControlName="visaDate" type="text" class="form-control" id="visaFrom" 
+                                    #vissadate="bsDatepicker" bsDatepicker [bsConfig]="bsConfig" />
+                                </div>
+                                <div *ngIf="form.controls.visaDate.hasError('required') && form.controls.visaDate.touched" class="alert alert-danger">
+                                        <small>{{'payments.hajjumrahcards.errors.visaissueerr' | translate }}</small>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                    <span class="icon -calendar"></span>
+                                    <span [attr.disabled]="null"  (click)="vissadate.show()"> {{ 'payments.hajjumrahcards.gredate' | translate }}</span>
+                            </div>
+                            <div class="col-xs-12 col-sm-5">
+                               
+                                 <div class="form-group"> 
+                                      <span class="icon -calendar"></span>
+                                         <span> {{ 'payments.hajjumrahcards.hijiradate' |
+                                            translate }}</span>
+                                        <input type="text" class="form-control" id="hijra-date-card"
+                                               formControlName="hijraDateCard">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                 <div class="form-group">
+                                    <label>{{ 'payments.hajjumrahcards.loadamou' | translate }} *</label>
+                                    <input formControlName="loadAmount" type="text" class="form-control" id="loadamou" inputPattern="onlyDecimalNumbers" maxlength="10" />
+                                </div>
+                                <div *ngIf="form.controls.loadAmount.hasError('required') && form.controls.loadAmount.touched" class="alert alert-danger">
+                                        <small>{{'payments.hajjumrahcards.errors.loadamoerr' | translate }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>

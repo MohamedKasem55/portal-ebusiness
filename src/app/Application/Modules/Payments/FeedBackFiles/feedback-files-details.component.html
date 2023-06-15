@@ -1,0 +1,42 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li>{{ 'dashboard.payments' | translate }}</li>
+		<li>
+			<a class="human-selectable" href="#" routerLinkActive="active" [routerLink]="['/payments/billPayments']"> {{ 'payments.bill-payments' | translate }} </a>
+		</li>
+		<li>
+			<a class="human-selectable" href="#" routerLinkActive="active" [routerLink]="['/payments/billPayments/feedbackfiles']"> {{ 'payments.moiPayments.feedBack.name' | translate }} </a>
+		</li>
+		<li>
+			{{ 'payments.moiPayments.feedBack.detail' | translate }}
+		</li>
+	</ol>
+</div>
+
+<arb-steps
+		[currentStep]="wizardStep" [steps]="['public.select', 'public.confirm', 'public.finish']">
+</arb-steps>
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		
+		<div class="sme-data-table">
+			<app-feedback-files-detail-step1 *ngIf="wizardStep === 1" [fileDetail]="fileDetail" [fileSelected]="fileSelected"></app-feedback-files-detail-step1>
+			<app-feedback-files-detail-step2 *ngIf="wizardStep === 2" [fileSelected]="fileSelected"></app-feedback-files-detail-step2>
+			<app-feedback-files-detail-step3 *ngIf="wizardStep === 3"></app-feedback-files-detail-step3>
+
+		<div class="sme-form__form" *ngIf="wizardStep < 3">
+            <div class="sme-wizard__navigation sme-form__actions" style="padding:15px;">
+                <button (click)="returnToFeedBack()" type="submit"
+                        class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+				<button (click)="deleteFeedBack()" type="submit"
+						class=" btn btn-danger btn-wide" *ngIf="wizardStep===1">{{ 'public.delete' | translate }}</button>
+				<button (click)="confirmDeleteFeedBack()" type="submit"
+						class=" btn btn-danger btn-wide" *ngIf="wizardStep===2">{{ 'public.confirm' | translate }}</button>
+            </div>
+        </div>
+
+
+		</div>
+	</div>
+</div>

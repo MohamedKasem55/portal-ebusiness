@@ -1,0 +1,298 @@
+<arb-panel *ngIf="this.operation">
+    <arb-steps [currentStep]="this.wizardStep" [steps]="getStepsDescriptions()">
+    </arb-steps>
+</arb-panel>
+
+<ng-container *ngIf="wizardStep == 0">
+
+    <ng-container *ngIf="!pendingActionsShowDetails && service.getCombosData()">
+        <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.step0)">
+            <app-pending-actions-utility-step0 [service]="service"
+                [fieldsConfigForSearchForm]="fieldsConfigForSearchForm" [fieldsConfigForList]="fieldsConfigForList"
+                [combosData]="combosData" [translate_prefix]="translate_prefix"
+                [custom_fields_templates]="custom_fields_templates"
+                [step0_table_externalPaging]="step0_table_externalPaging"
+                [step0_table_externalSorting]="step0_table_externalSorting" (onSelectPendingActions)="onSelect($event)"
+                (onClickPendingAction)="onClickItem($event)" [hasSearchFilters]="this.hasSearchFilters"
+                [search_form_collapsed]="search_form_collapsed"
+                [table_allow_link_to_detail]="table_allow_link_to_detail"
+                (onAllSearchFieldsCreated)="allSearchFieldsCreated($event)"
+                (onInitSearchFormFieldsUtility)="initSearchFieldsUtility($event)">
+            </app-pending-actions-utility-step0>
+        </ng-container>
+
+        <ng-container *ngIf="(custom_steps_templates && custom_steps_templates.step0)">
+            <ng-container [ngTemplateOutlet]="custom_steps_templates.step0" [ngTemplateOutletContext]="{
+                                service: service,
+                                fieldsConfigForSearchForm: fieldsConfigForSearchForm,
+                                fieldsConfigForList: fieldsConfigForList,
+                                translate_prefix: translate_prefix,
+                                custom_fields_templates: custom_fields_templates,
+                                custom_steps_templates: custom_steps_templates,
+                                combosKeys: combosKeys,
+                                combosData: combosData,
+                                hasSearchFilters: hasSearchFilters,
+                                operation: operation,
+                                formModel: formModel,
+                                pendingActionsShowDetails:pendingActionsShowDetails,
+                                pendingActionsShowDetailsData: pendingActionsShowDetailsData,
+                                pendingActionsSelected: pendingActionsSelected,
+                                pendingActionsSelectedFormModels: pendingActionsSelectedFormModels,
+                                pendingActionsSelectedFormConfigs: pendingActionsSelectedFormConfigs,
+                                rejectedReason: rejectedReason,
+                                wizardStep: wizardStep,
+                                editable: false,
+                                ap: this
+                                }">
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="pendingActionsShowDetails">
+        <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.step1)">
+            <app-pending-actions-utility-step1 *ngIf="pendingActionsShowDetails" [service]="service"
+                [operation]="operation" [combosData]="combosData" [translate_prefix]="translate_prefix"
+                [custom_fields_templates]="custom_fields_templates" [editable]="false"
+                [pendingActionsSelected]="pendingActionsSelected"
+                [pendingActionsSelectedFormConfigs]="pendingActionsSelectedFormConfigs"
+                [pendingActionsSelectedFormModels]="pendingActionsSelectedFormModels">
+            </app-pending-actions-utility-step1>
+        </ng-container>
+        <ng-container *ngIf="(custom_steps_templates && custom_steps_templates.step1)">
+            <ng-container [ngTemplateOutlet]="custom_steps_templates.step1" [ngTemplateOutletContext]="{
+                                service: service,
+                                fieldsConfigForSearchForm: fieldsConfigForSearchForm,
+                                fieldsConfigForList: fieldsConfigForList,
+                                translate_prefix: translate_prefix,
+                                custom_fields_templates: custom_fields_templates,
+                                custom_steps_templates: custom_steps_templates,
+                                combosKeys: combosKeys,
+                                combosData: combosData,
+                                hasSearchFilters: hasSearchFilters,
+                                operation: operation,
+                                formModel: formModel,
+                                pendingActionsShowDetails:pendingActionsShowDetails,
+                                pendingActionsShowDetailsData: pendingActionsShowDetailsData,
+                                pendingActionsSelected: pendingActionsSelected,
+                                pendingActionsSelectedFormModels: pendingActionsSelectedFormModels,
+                                pendingActionsSelectedFormConfigs: pendingActionsSelectedFormConfigs,
+                                rejectedReason: rejectedReason,
+                                wizardStep: wizardStep,
+                                editable: false,
+                                ap: this
+                                }">
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+</ng-container>
+
+<ng-container *ngIf="wizardStep!=0">
+
+    <ng-container *ngIf="(wizardStep == 1 || wizardStep==2) && isEditableOperation()">
+        <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.step1)">
+            <app-pending-actions-utility-step1 [service]="service" [operation]="operation" [combosData]="combosData"
+                [translate_prefix]="translate_prefix" [custom_fields_templates]="custom_fields_templates"
+                [editable]="wizardStep==1" [pendingActionsSelected]="pendingActionsSelected"
+                [pendingActionsSelectedFormConfigs]="pendingActionsSelectedFormConfigs"
+                [pendingActionsSelectedFormModels]="pendingActionsSelectedFormModels">
+            </app-pending-actions-utility-step1>
+        </ng-container>
+        <ng-container *ngIf="(custom_steps_templates && custom_steps_templates.step1)">
+            <ng-container [ngTemplateOutlet]="custom_steps_templates.step1" [ngTemplateOutletContext]="{
+                                service: service,
+                                fieldsConfigForSearchForm: fieldsConfigForSearchForm,
+                                fieldsConfigForList: fieldsConfigForList,
+                                translate_prefix: translate_prefix,
+                                custom_fields_templates: custom_fields_templates,
+                                custom_steps_templates: custom_steps_templates,
+                                combosKeys: combosKeys,
+                                combosData: combosData,
+                                hasSearchFilters: hasSearchFilters,
+                                operation: operation,
+                                formModel: formModel,
+                                pendingActionsShowDetails:pendingActionsShowDetails,
+                                pendingActionsShowDetailsData: pendingActionsShowDetailsData,
+                                pendingActionsSelected: pendingActionsSelected,
+                                pendingActionsSelectedFormModels: pendingActionsSelectedFormModels,
+                                pendingActionsSelectedFormConfigs: pendingActionsSelectedFormConfigs,
+                                rejectedReason: rejectedReason,
+                                wizardStep: wizardStep,
+                                editable: true,
+                                ap: this
+                                }">
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="(wizardStep == 1 || wizardStep==2) && !isEditableOperation()">
+        <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.step2)">
+
+            <app-pending-actions-utility-step2 [service]="service" [itemsSelected]="pendingActionsSelected"
+                [operation]="operation" [fieldsConfigForList]="fieldsConfigForList" [combosData]="combosData"
+                [translate_prefix]="translate_prefix" [editable]="wizardStep==1"
+                (onClickPendingAction)="onClickItem($event)">
+            </app-pending-actions-utility-step2>
+
+            <arb-panel *ngIf="wizardStep==2 && showRejectReason()">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                            <div>
+                                <textarea type="text" [maxlength]="150" [rows]="3" class="form-control"
+                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="rejectedReason"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </arb-panel>
+
+            <arb-panel *ngIf="this.wizardStep === 2 && this.generateChallengeAndOTP && !everyTypeMU()" >
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <app-secured-authentication #authorization
+                                [generateChallengeAndOTP]="this.generateChallengeAndOTP"
+                                [requestValidate]="this.requestValidate">
+                            </app-secured-authentication>
+                        </div>
+                    </div>
+                </div>
+            </arb-panel>
+
+        </ng-container>
+
+        <ng-container *ngIf="(custom_steps_templates && custom_steps_templates.step2)">
+            <ng-container [ngTemplateOutlet]="custom_steps_templates.step2" [ngTemplateOutletContext]="{
+                                service: service,
+                                fieldsConfigForSearchForm: fieldsConfigForSearchForm,
+                                fieldsConfigForList: fieldsConfigForList,
+                                translate_prefix: translate_prefix,
+                                custom_fields_templates: custom_fields_templates,
+                                custom_steps_templates: custom_steps_templates,
+                                combosKeys: combosKeys,
+                                combosData: combosData,
+                                hasSearchFilters: hasSearchFilters,
+                                operation: operation,
+                                formModel: formModel,
+                                pendingActionsShowDetails:pendingActionsShowDetails,
+                                pendingActionsShowDetailsData: pendingActionsShowDetailsData,
+                                pendingActionsSelected: pendingActionsSelected,
+                                pendingActionsSelectedFormModels: pendingActionsSelectedFormModels,
+                                pendingActionsSelectedFormConfigs: pendingActionsSelectedFormConfigs,
+                                rejectedReason: rejectedReason,
+                                wizardStep: wizardStep,
+                                editable: false,
+                                ap: this
+                                }">
+            </ng-container>
+        </ng-container>
+
+    </ng-container>
+
+    <ng-container *ngIf="wizardStep == 3">
+
+        <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.step3)">
+            <app-pending-actions-utility-step3 [pending]="isPendingAction()">
+            </app-pending-actions-utility-step3>
+        </ng-container>
+
+        <ng-container *ngIf="(custom_steps_templates && custom_steps_templates.step3)">
+            <ng-container [ngTemplateOutlet]="custom_steps_templates.step3" [ngTemplateOutletContext]="{
+                                service: service,
+                                fieldsConfigForSearchForm: fieldsConfigForSearchForm,
+                                fieldsConfigForList: fieldsConfigForList,
+                                translate_prefix: translate_prefix,
+                                custom_fields_templates: custom_fields_templates,
+                                custom_steps_templates: custom_steps_templates,
+                                combosKeys: combosKeys,
+                                combosData: combosData,
+                                hasSearchFilters: hasSearchFilters,
+                                operation: operation,
+                                formModel: formModel,
+                                pendingActionsShowDetails:pendingActionsShowDetails,
+                                pendingActionsShowDetailsData: pendingActionsShowDetailsData,
+                                pendingActionsSelected: pendingActionsSelected,
+                                pendingActionsSelectedFormModels: pendingActionsSelectedFormModels,
+                                pendingActionsSelectedFormConfigs: pendingActionsSelectedFormConfigs,
+                                rejectedReason: rejectedReason,
+                                wizardStep: wizardStep,
+                                editable: false,
+                                pending: isPendingAction(),
+                                ap: this
+                                }">
+            </ng-container>
+        </ng-container>
+
+    </ng-container>
+
+
+</ng-container>
+
+<arb-panel-buttons>
+
+    <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.buttons)">
+        <button *ngIf="this.pendingActionsShowDetails && wizardStep==0" (click)="closeDetailOfSelectedItems()"
+            class="btn btn-default btn-wide" type="button">
+            {{ 'public.back' | translate}}
+        </button>
+        <!--
+            <button *ngIf="isBackAllowed()" class="btn btn-default btn-wide" type="button"
+                (click)="back()">{{ 'public.back' | translate}}</button>
+        -->
+        <button *ngIf="isPreviousAllowed()" (click)="previous()" class="btn btn-default btn-wide">
+            {{ 'public.back' | translate }}
+        </button>
+
+        <button class="btn btn-default btn-wide" (click)="delete()"
+            *ngIf="isDeleteAllowed() && !isNextAllowed() && !isFinishAllowed()"
+            [disabled]="isDeleteDisabled()">{{'public.delete' | translate}}</button>
+
+        <button class="btn btn-primary btn-wide" (click)="reInitiate()"
+            *ngIf="isReInitateAllowed() && !isNextAllowed() && !isFinishAllowed()"
+            [disabled]="isReInitiateDisabled()">{{'public.reInitiate' | translate}}</button>
+
+        <button class="btn btn-default btn-wide" (click)="refuse()"
+            *ngIf="isRefuseAllowed() && !isNextAllowed() && !isFinishAllowed()"
+            [disabled]="isRefuseDisabled()">{{'public.reject' | translate}}</button>
+
+        <button class="btn btn-primary btn-wide" (click)="aprove()"
+            *ngIf="isApproveAllowed() && !isNextAllowed() && !isFinishAllowed()"
+            [disabled]="isApproveDisabled()">{{'public.approve' | translate}}</button>
+
+        <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="isNextAllowed()"
+            [disabled]="isNextDisabled()">{{ (wizardStep == 2 ? 'public.proceed' : getCurrentOperationLabel()) |
+            translate}}</button>
+
+        <button class="btn btn-primary btn-wide" (click)="finish()" *ngIf="isFinishAllowed()">{{'public.finish' |
+            translate}}</button>
+    </ng-container>
+
+    <ng-container *ngIf="!(custom_steps_templates && custom_steps_templates.buttons)">
+        <ng-container [ngTemplateOutlet]="custom_steps_templates.buttons" [ngTemplateOutletContext]="{
+                                service: service,
+                                fieldsConfigForSearchForm: fieldsConfigForSearchForm,
+                                fieldsConfigForList: fieldsConfigForList,
+                                translate_prefix: translate_prefix,
+                                custom_fields_templates: custom_fields_templates,
+                                custom_steps_templates: custom_steps_templates,
+                                combosKeys: combosKeys,
+                                combosData: combosData,
+                                hasSearchFilters: hasSearchFilters,
+                                operation: operation,
+                                formModel: formModel,
+                                pendingActionsShowDetails:pendingActionsShowDetails,
+                                pendingActionsShowDetailsData: pendingActionsShowDetailsData,
+                                pendingActionsSelected: pendingActionsSelected,
+                                pendingActionsSelectedFormModels: pendingActionsSelectedFormModels,
+                                pendingActionsSelectedFormConfigs: pendingActionsSelectedFormConfigs,
+                                rejectedReason: rejectedReason,
+                                wizardStep: wizardStep,
+                                editable: false,
+                                pending: isPendingAction(),
+                                ap: this
+                                }">
+        </ng-container>
+    </ng-container>
+</arb-panel-buttons>

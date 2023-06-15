@@ -1,0 +1,259 @@
+<!-- for tow or more elements -->
+<div class="sme-content-container container-fluid" *ngIf="items.length > 1">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">
+                {{ 'myProfile.pending_actions.moiPaymentsHeaderTitle' | translate }}
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                           class="material sme-table sme-table--responsive table" [rows]="items"
+                           [columnMode]="defaultColumnMode"
+                           [headerHeight]="30"
+                           [footerHeight]="footerHeight"
+                           [rowHeight]="defaultHeight"
+                           [count]="totalSize"
+                           [limit]="tableDisplaySize"
+                           [externalPaging]="false"
+                           [externalSorting]="false"
+                           (page)='setInnerPage($event)'>
+
+                <!-- Row Detail Template -->
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ (row.initiationDate ? row.initiationDate : getNowDate())  | date:'dd/MM/yyyy hh:mm' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.civilianID' | translate }}</label>
+                                        <div>
+                                            <span [innerHTML]="row.citizenId"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.type' | translate }}</label>
+                                        <div>
+                                            <span [innerHTML]="'eGovSadadType' | modelPipe: row.serviceType"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payments.moiPayments.payments.applicationType' | translate }}</label>
+                                        <div>
+                                            <span [innerHTML]="'eGovApplicationTypeAll' | modelPipe: row.applicationType"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.beneficiary_name' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.beneficiaryName }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.amount' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.amount | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="initiationDate" [width]="95">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{ 'myProfile.pending_actions.initiationDate' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ (row.initiationDate ? row.initiationDate : getNowDate())  | date:'dd/MM/yyyy hh:mm' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="citizenId">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.civilianID' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span [innerHTML]="row.citizenId"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="serviceType">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{ 'payments.moiPayments.payments.serviceType' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span [innerHTML]="'eGovSadadType' | modelPipe: value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="applicationType">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{ 'payments.moiPayments.payments.applicationType' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span [innerHTML]="'eGovApplicationTypeAll' | modelPipe: row.applicationType"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="beneficiaryName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span class="datatable-header-cell-wrapper">
+                            {{ 'myProfile.pending_actions.beneficiary_name' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span [innerHTML]="value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="amount" [width]="60">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">
+                            {{ 'myProfile.pending_actions.amount' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+
+<!-- for one element -->
+<div class="sme-content-container container-fluid" *ngIf="items.length == 1">
+    <div class="row">
+        <fieldset style="text-align: left">
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'payments.moiPayments.payments.serviceType' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="'eGovSadadType' | modelPipe: items[0].serviceType"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'payments.moiPayments.payments.transactionType' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="'eGovProcess' | modelPipe: 'P'"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'payments.moiPayments.payments.applicationType' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="'eGovApplicationTypeAll' | modelPipe: items[0].applicationType"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'payments.moiPayments.request.initiationBy' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="items[0].securityLevelsDTOList && items[0].securityLevelsDTOList[0]? items[0].securityLevelsDTOList[0].updater:getCurrentUser()"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                    </label>
+                    <div>
+                        <span>{{ (items[0].initiationDate ? items[0].initiationDate : getNowDate())  | date:'dd/MM/yyyy hh:mm' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'payments.moiPayments.request.referenceNumber' | translate }}</label>
+                    <div>
+                        <span>{{items[0].paymentId}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'myProfile.pending_actions.account' | translate }}</label>
+                    <div>
+                        <span>{{items[0].accountNumber}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4" *ngFor="let detail of items[0].details">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{getDetailLabel(items[0], detail) | translate }}</label>
+                    <div>
+                        <span [innerHTML]="getDetailValue(items[0], detail)"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'myProfile.pending_actions.amount' | translate }}</label>
+                    <div>
+                        <span>{{ items[0].amount | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'payments.moiPayments.unusedBalance' | translate }}</label>
+                    <div>
+                        <span>{{items[0].unusedBalance | amountCurrency}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

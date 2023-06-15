@@ -1,0 +1,88 @@
+
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="active">{{ 'dashboard.accounts' | translate }}</li>
+            <li class="active"><a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a></li>
+            <li class="active"><a href="#" [routerLink]="['/accounts/chequebook/positive-payment']">{{ 'chequebook.positivePayment'| translate }}</a></li>
+            <li class="active">{{ 'chequebook.addpositivePayment'| translate }}</li>
+            
+        </ol>
+    </div>
+    
+    <div class="container-fluid sme-content-container">
+        <div class="sme-page-block">
+                    <ul class="sme-box sme-wizard__steps">
+                        <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+                            <span>
+                                <span class="num">1</span>
+                                <span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+                            </span>
+                        </li>
+                        <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                            <span>
+                                <span class="num">2</span>
+                                <span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+                            </span>
+                        </li>
+                        <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                            <span>
+                                <span class="icon -check"></span>
+                                <span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+                            </span>
+                        </li>
+                    </ul>
+        </div>
+    </div>
+    
+    
+    
+    <app-positive-step1 *ngIf="step === 1"
+    [form]="this.form"
+    (onInit)="onInitStep1($event)">
+    
+        
+    </app-positive-step1>
+    
+    <app-positive-step2 *ngIf="step === 2"
+    [batch]="positivePayValidate['batch']"
+    [form]="this.form"
+    (onInit)="onInitStep2($event)">
+    
+    </app-positive-step2>
+    
+    <app-positive-step3 *ngIf="step === 3"
+    [positivePayResult]="positivePayConfirm"
+    [generateChallengeAndOTP]="positivePayValidate['generateChallengeAndOTP']">	
+    </app-positive-step3>
+
+    <div class="container-fluid" *ngIf="positivePayValidate['generateChallengeAndOTP'] && step == 2">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__collapse">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <app-secured-authentication [generateChallengeAndOTP]="positivePayValidate['generateChallengeAndOTP']" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 15px;"></div>
+        </div>
+    </div>
+</div>
+    
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+        <button class="btn btn-default btn-wide" [routerLink]="['/accounts/chequebook']" *ngIf="step == 1"> {{'public.cancel' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3" >{{'public.proceed' | translate}}</button>
+        <button class="btn btn-primary btn-wide"  (click)="finish()" *ngIf="step == 3">{{'public.finish' | translate}}</button>
+    </div>

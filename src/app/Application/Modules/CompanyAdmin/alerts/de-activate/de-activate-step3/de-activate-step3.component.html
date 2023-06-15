@@ -1,0 +1,68 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'companyAdmin.companyAdmin' |
+            translate }}</li>
+        <li><a class="human-selectable" href="#" routerLinkActive="active"
+               [routerLink]="['/companyadmin/alerts']">{{ 'companyAdmin.alerts.sms' |
+            translate }}</a></li>
+        <li class="active">{{'companyAdmin.alerts.smsDesactivate' | translate}}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div *ngIf="messageError?.code" class="alert alert-danger">
+            <small>{{messageError['code']}} {{messageError['description']}}</small>
+        </div>
+        <!-- sme-demo--form--user1 -->
+        <!-- sme-form -->
+
+
+        <ul class="sme-wizard__steps">
+            <li class="sme-wizard__step current"><span> <span
+                    class="num">1</span> <span
+                    class="text">{{'companyAdmin.alerts.entitle' | translate | uppercase }}</span>
+						</span></li>
+            <li class="sme-wizard__step current"><span> <span class="num">2</span>
+								<span class="text">{{'companyAdmin.alerts.confirmation' | translate | uppercase }}</span>
+						</span></li>
+            <li class="sme-wizard__step current"><span> <span
+                    class="icon -check"></span> <span
+                    class="text">{{'companyAdmin.alerts.summary' | translate | uppercase }}</span>
+						</span></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <!-- sme-demo--form--user1 -->
+        <!-- sme-form -->
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+                <div class="sme-form__title"></div>
+
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="sme-box sme-wizard__content">
+                            <div>
+                                <div class="sme-wizard__success">
+                                    <span class="icon -check"></span>
+                                    {{ 'companyAdmin.alerts.registerOk' | translate }}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sme-form__actions">
+                        <button class="btn btn-primary btn-wide" (click)="finish()"> {{
+                            'public.finish' | translate }} </button>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

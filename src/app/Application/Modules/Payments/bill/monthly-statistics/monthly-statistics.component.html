@@ -1,0 +1,65 @@
+
+<div class="sme-breadcrumb print">
+	<ol class="breadcrumb">
+		<li><a class="human-selectable" href="#" routerLinkActive="active"
+			[routerLink]="['billPayments']">{{ 'dashboard.payments'| translate }}</a></li>
+			<li class="human-selectable" [routerLink]="['/payments/billPayments']">{{ 'payments.bill-payments' | translate }}</li>
+		<li class="active">{{ 'payments.monthly-stats' | translate }}</li>
+	</ol>
+</div>
+
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'public.summary' | translate }}</div>
+	<div class="sme-head__export-actions sme-export-actions print">
+		<a class="btn btn-export btn-export--print" (click)="printPdf($event)">
+			<span class="icon -print" ></span>
+			<span class="text">{{ 'public.print' | translate }}</span>
+		</a>
+		<a class="btn btn-export btn-export--pdf" (click)="download($event)">
+			<span class="icon -pdf"></span>
+			<span class="text" >{{ 'public.pdf' | translate }}</span>
+		</a>
+	</div>
+</div>
+
+<div class="sme-panel__body">
+	
+		<div class="container-fluid">
+		<div class="sme-page-block">
+				<!-- sme-data-table -->
+				<div class="sme-data-table">
+					<div class="sme-data-table__head">
+					<div class="sme-data-table__title">
+						<span class="sme-header__user-name">{{ 'payments.monthly-stats' | translate }}</span>
+						</div>
+						<div class="sme-data-table__export">
+							
+						</div>
+					</div>
+				     <app-graficos (onChangeYearMotnh)="onChangeGraphic($event)"></app-graficos>
+
+				</div>
+      </div>
+
+		
+  </div>
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions print">
+            <a href="#" class="btn btn-default btn-wide" [routerLink]="['/payments/billPayments']"> 
+                        {{'public.back' | translate }}</a>
+        </div>
+</div>
+
+
+
+	
+        
+
+
+
+
+		
+
+
+
+
+

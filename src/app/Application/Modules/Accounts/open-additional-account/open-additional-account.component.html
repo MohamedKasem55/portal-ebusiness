@@ -1,0 +1,157 @@
+<arb-breadcrumb [routes]="[
+                        ['public.accounts'],
+                        ['accounts.openAdditionalAccount.openAccount']
+                        ]">
+</arb-breadcrumb>
+<h1 class='padding-title'>{{ 'accounts.openAdditionalAccount.openAccount'| translate }}</h1>
+<arb-steps
+  [currentStep]='wizardStep'
+  [steps]="['accounts.openAdditionalAccount.enterInfo','accounts.openAdditionalAccount.summary','accounts.openAdditionalAccount.confirm','public.finish']">
+</arb-steps>
+
+<arb-panel>
+  <form autocomplete='off' #posYear='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formGroup'>
+      <!-- Currency-->
+      <div class='row' *ngIf='wizardStep < 4'>
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'accounts.openAdditionalAccount.currency' | translate }}</label>
+            <div class='form-control'>
+              <ng-select
+                [items]='currencies | ArrayOfObjects'
+                bindLabel='value'
+                bindValue='key'
+                [notFoundText]="'public.noData' | translate"
+                formControlName='Currency'
+                [readonly]='wizardStep != 1'>
+              </ng-select>
+              <div *ngIf="formGroup.controls.Currency.hasError('required') && formGroup.controls.Currency.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'accounts.openAdditionalAccount.error.currency' | translate }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Branch-->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'accounts.openAdditionalAccount.selectBranch' | translate }}</label>
+            <div class='form-control'>
+              <ng-select
+                [items]='branches | ArrayOfObjects'
+                bindValue='key'
+                bindLabel='value'
+                [notFoundText]="'public.noData' | translate"
+                formControlName='Branch'
+                [readonly]='BranchExists|| wizardStep!= 1'
+              >
+              </ng-select>
+              <div *ngIf="formGroup.controls.Branch.hasError('required') && formGroup.controls.Branch.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'accounts.openAdditionalAccount.error.selectBranch' | translate }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <!-- Terms And Conditions-->
+      <div class='row' *ngIf='wizardStep ===1'>
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'accounts.openAdditionalAccount.termsAndConditions' | translate }}</label>
+            <div class='form-control' style='border-bottom-color:transparent;white-space: nowrap'>
+              <input type='checkbox' formControlName='TC' required />
+              <span> {{'accounts.openAdditionalAccount.accept1' | translate}}<a class='human-selectable'
+                                                                                (click)='termsAndConditions()'>{{ 'accounts.openAdditionalAccount.termsAndConditions' | translate }}</a>{{'accounts.openAdditionalAccount.accept2' | translate}}</span>
+              <div *ngIf="formGroup.controls.TC.hasError('required') && formGroup.controls.TC.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'accounts.openAdditionalAccount.error.termsAndConditions' | translate }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OTP-->
+
+      <div class='sme-content-container container-fluid' *ngIf='wizardStep===3'>
+        <div class='sme-page-block'>
+          <div class='sme-form__content'>
+            <div class='sme-form__form'>
+              <div class='sme-form__body' style='padding: 15px;'>
+                <div class='sme-form__box sme-form__box--form'>
+                  <div class='row'>
+                    <div class='col-xs-12 col-sm-3'>
+                      <div class='form-group'>
+                        <app-secured-authentication
+                          [generateChallengeAndOTP]="validationResponse['generateChallengeAndOTP']"
+                          [requestValidate]='requestValidate'
+                          #authorization></app-secured-authentication>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class='sme-box sme-wizard__content' *ngIf='wizardStep === 4'>
+        <arb-panel>
+          <div class='sme-wizard__success'>
+            <span class='icon -check'></span> {{ 'accounts.openAdditionalAccount.success' | translate }}
+              <div class='row'*ngIf='accountNO!=null'>
+                <label>{{ 'accounts.openAdditionalAccount.accountNo' | translate }}</label>
+                <p> {{accountNO}}</p>
+              </div>
+              <div class='row'*ngIf='accountIBAN!=null'>
+                <label>{{ 'accounts.openAdditionalAccount.accountIBAN' | translate }}</label>
+                <p>{{accountIBAN}}</p>
+              </div>
+
+
+          </div>
+        </arb-panel>
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>
+<arb-buttons>
+  <button class='btn btn-default btn-wide' type='button' (click)='cancel()'
+          *ngIf='wizardStep!=4'>{{ 'public.cancel' | translate}}</button>
+  <button class='btn btn-default btn-wide' type='button' (click)='back()'
+          *ngIf='wizardStep!=1 && wizardStep<4'>{{ 'public.back' | translate}}</button>
+  <button class='btn btn-primary btn-wide' type='button' [disabled]='canProceed()' (click)='next()'
+          *ngIf='wizardStep!=4'>{{ 'public.proceed' | translate}}</button>
+  <button class='btn btn-primary btn-wide' type='button' (click)='cancel()'
+          *ngIf='wizardStep===4'>{{ 'public.finish' | translate}}</button>
+</arb-buttons>
+
+
+<div class='modal fade' bsModal #accountModal='bs-modal' [config]="{backdrop: 'static'}" role='dialog'>
+  <div class='modal-dialog'>
+    <div class='modal-content modal-content__stretched'>
+      <div class='modal-header'>
+        <div class='modal-font-header'>
+          {{'transfer.ips.modal.messageHeader' | translate}}
+        </div>
+      </div>
+      <div class='modal-body modal-side-align-text'>
+        <p>{{ 'accounts.openAdditionalAccount.message1' | translate }}</p>
+        <p>{{ 'accounts.openAdditionalAccount.message2' | translate }}</p>
+
+      </div>
+      <div class='modal-footer modal-side-align-button'>
+        <button type='button' (click)='close()' class='btn btn-default'
+                data-dismiss='modal'>{{ 'public.back' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

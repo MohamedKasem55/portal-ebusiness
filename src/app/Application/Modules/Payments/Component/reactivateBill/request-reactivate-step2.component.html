@@ -1,0 +1,70 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'public.add' | translate }} {{ 'payments.bill' | translate }}</div>
+    </div>
+    <form autocomplete="off">
+    <div class="sme-page-block">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'payments.unity-service-provider' | translate }}</label>
+                                        <p *ngIf="sharedData.selectedBill && translate.currentLang==='ar'" style="color: #999999;"><span [innerHTML]="sharedData.selectedBill.detailsDescriptionAr"></span></p>
+                                        <p *ngIf="sharedData.selectedBill && translate.currentLang!=='ar'" style="color: #999999;"><span [innerHTML]="sharedData.selectedBill.detailsDescriptionEn"></span></p>                 
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'payments.subscriber-number' | translate }}</label>
+                                        <p style="color: #999999;">{{batch.billRef}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'payments.nick-name' | translate }}</label>
+                                        <p style="color: #999999;">{{batch.nickname}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                       
+                    </div>
+            </div>      
+            </div>
+        </div>
+    </div>
+    </form>
+</div>  
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+    
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

@@ -1,0 +1,185 @@
+<ng-container [formGroup]="mainForm">
+    <div class="sme-page-block">
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-table table headerDataTable">
+
+                <ngx-datatable #table formArrayName="subAccountAmounts"
+                    [messages]="{emptyMessage: 'public.noData' | translate}" [rows]="subAccountAmounts.value"
+                    [columnMode]="defaultColumnMode" class="material sme-table sme-table--responsive table"
+                    [rowHeight]="defaultHeight" [headerHeight]="30" [footerHeight]="defaultHeight"
+                    style="overflow: visible">
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" (toggle)="onDetailToggle($event)">
+                        <ng-template ngx-datatable-row-detail-template let-row="row" let-rowIndex="rowIndex"
+                            let-expanded="expanded">
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label class="required">{{ 'governmentRevenue.revenueSubAccount' | translate
+                                                }}</label>
+                                            <div [formGroupName]="rowIndex">
+                                                <div class="sme-select form-control mobile-hidden">
+                                                    <select class="form-control" formControlName="revenueAccountPk"
+                                                        (ngModelChange)="onSelectRevenueAccount(rowIndex,$event)">
+                                                        <option value disabled>
+                                                            -- {{ 'governmentRevenue.selectRevenueAccount' | translate
+                                                            }} --
+                                                        </option>
+                                                        <option *ngFor="let revenueAccount of revenueAccounts"
+                                                            [value]="revenueAccount.govRevenueAccountPk">
+                                                            {{ revenueAccount.accountNumber }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div *ngIf="(getArrayControl(rowIndex,'revenueAccountPk').touched|| getArrayControl(rowIndex,'revenueAccountPk').dirty) && getArrayControl(rowIndex,'revenueAccountPk').hasError('required')"
+                                                    class="alert alert-danger">
+                                                    <small>{{ 'governmentRevenue.revenueSubAccount' | translate }} {{
+                                                        'governmentRevenue.error.required' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'governmentRevenue.revenueDetail' | translate }}</label>
+                                            <div>
+                                                <span>{{row.detail}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label class="required">{{ 'public.amount' | translate }}</label>
+                                            <div [formGroupName]="rowIndex">
+                                                <input type="text" class="form-control" formControlName="amount"
+                                                    inputPattern="onlyPositiveDecimalNumbers">
+                                                <div *ngIf="(getArrayControl(rowIndex,'amount').touched || getArrayControl(rowIndex,'amount').dirty) && getArrayControl(rowIndex,'amount').hasError('required')"
+                                                    class="alert alert-danger">
+                                                    <small>{{'transfer.amount' | translate }}{{ 'error.required' |
+                                                        translate }} </small>
+                                                </div>
+                                                <div *ngIf="(getArrayControl(rowIndex,'amount').touched || getArrayControl(rowIndex,'amount').dirty) && getArrayControl(rowIndex,'amount').hasError('min')"
+                                                    class="alert alert-danger">
+                                                    <small>{{'transfer.amount' | translate }}{{ 'error.minValue' |
+                                                        translate: {value: 0} }} </small>
+                                                </div>
+                                                <div *ngIf="(getArrayControl(rowIndex,'amount').touched || getArrayControl(rowIndex,'amount').dirty) && getArrayControl(rowIndex,'amount').hasError('pattern')"
+                                                    class="alert alert-danger">
+                                                    <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric'
+                                                        | translate }} </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+                    <ngx-datatable-column prop="revenueAccountPk" [sortable]="false">
+                        <ng-template ngx-datatable-header-template>
+                            <span class="datatable-header-cell-wrapper">{{ 'governmentRevenue.revenueSubAccount' |
+                                translate }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                            let-row="row">
+                            <div *ngIf="editView" class="form-group mobile-hidden" [formGroupName]="rowIndex">
+                                <ng-select class="form-control" formControlName="revenueAccountPk" style="width: 300px"
+                                    (ngModelChange)="onSelectRevenueAccount(rowIndex,$event)">
+                                    <ng-option value disabled>
+                                        -- {{ 'governmentRevenue.selectRevenueAccount' | translate }} --
+                                    </ng-option>
+                                    <ng-container *ngFor='let revenueAccount of revenueAccounts'>
+                                        <ng-option [value]="revenueAccount.govRevenueAccountPk"
+                                            *ngIf='isRevenueAccountsAvailable(rowIndex, revenueAccount.govRevenueAccountPk)'>
+                                            {{ revenueAccount.accountNumber }}
+                                        </ng-option>
+                                    </ng-container>
+                                </ng-select>
+                                <div *ngIf="(getArrayControl(rowIndex,'revenueAccountPk').touched|| getArrayControl(rowIndex,'revenueAccountPk').dirty) && getArrayControl(rowIndex,'revenueAccountPk').hasError('required')"
+                                    class="alert alert-danger" style="margin-top: 50px">
+                                    <small>{{ 'governmentRevenue.revenueSubAccount' | translate }} {{
+                                        'governmentRevenue.error.required' | translate }}</small>
+                                </div>
+                            </div>
+                            <span *ngIf="!editView" class="text">{{getRevenueAccountName(value)}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="detail" [sortable]="false">
+                        <ng-template ngx-datatable-header-template>
+                            <span class="datatable-header-cell-wrapper">{{ 'governmentRevenue.revenueDetail' | translate
+                                }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                            let-row="row">
+                            <span style="white-space: pre-line">{{ getTrustedHtml(value) }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="amount" [sortable]="false">
+                        <ng-template ngx-datatable-header-template>
+                            <span class="datatable-header-cell-wrapper">{{ 'public.amount' | translate }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                            let-row="row">
+                            <div *ngIf="editView" class="mobile-hidden" [formGroupName]="rowIndex">
+                                <input type="text" class="form-control" formControlName="amount"
+                                    inputPattern="onlyPositiveDecimalNumbers">
+                                <div *ngIf="(getArrayControl(rowIndex,'amount').touched || getArrayControl(rowIndex,'amount').dirty) && getArrayControl(rowIndex,'amount').hasError('required')"
+                                    class="alert alert-danger">
+                                    <small>{{'transfer.amount' | translate }}{{ 'error.required' | translate }} </small>
+                                </div>
+                                <div *ngIf="(getArrayControl(rowIndex,'amount').touched || getArrayControl(rowIndex,'amount').dirty) && getArrayControl(rowIndex,'amount').hasError('min')"
+                                    class="alert alert-danger">
+                                    <small>{{'transfer.amount' | translate }}{{ 'error.minValue' | translate: {value: 0}
+                                        }} </small>
+                                </div>
+                                <div *ngIf="(getArrayControl(rowIndex,'amount').touched || getArrayControl(rowIndex,'amount').dirty) && getArrayControl(rowIndex,'amount').hasError('pattern')"
+                                    class="alert alert-danger">
+                                    <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric' | translate }}
+                                    </small>
+                                </div>
+                            </div>
+                            <span *ngIf="!editView" class="text">{{value }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column *ngIf="editView" [width]="70" [sortable]="false" [canAutoResize]="false"
+                        [draggable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template>
+                            <span class="datatable-header-cell-wrapper">{{ 'public.remove' | translate }}</span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex">
+                            <button type="button" class="btn btn-link mobile-hidden" (click)="clickRemoveRow(rowIndex)">
+                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                            </button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                        <ng-template *ngIf="editView" ngx-datatable-footer-template>
+                            <div class="sme-data-table__footer">
+                                <div class="sme-data-table__pagination">
+                                    <button type="button" class="btn btn-link" [disabled]="subAccountAmounts.invalid"
+                                        (click)="clickAddRow()">
+                                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                        {{ 'public.add' | translate }}
+                                    </button>
+                                </div>
+                                <div class="sme-data-table__actions form-inline">
+                                    <div class="form-group">
+                                        <div *ngIf="mainForm.hasError('amountNotMatch')" class="alert alert-danger">
+                                            <small>{{'governmentRevenue.error.totalAmount' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</ng-container>

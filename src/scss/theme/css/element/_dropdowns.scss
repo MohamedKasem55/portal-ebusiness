@@ -1,0 +1,218 @@
+// The dropdown menu (ul)
+.dropdown-menu {
+  @include font($font-size-14);
+  @media screen and (max-width: $max-width) {
+    @include font($font-size-14 * $factor);
+  }
+  @media screen and (max-width: $max-width2) {
+    @include font($font-size-14 * $factor2);
+  }
+  line-height: $line-height-base;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+
+  > li {
+    & + li {
+      border-top: 1px solid #f0f0f0;
+    }
+
+    &.dropdown-title,
+    > a {
+      display: block;
+      /*padding: 14px 23px;*/
+      padding: 12px 14px;
+      clear: both;
+      font-weight: normal;
+      line-height: $line-height-base;
+      color: $dropdown-link-color;
+      white-space: nowrap; // prevent links from randomly breaking onto new lines
+
+      .icon {
+        float: $left;
+        @include icon-size(18px);
+        margin-top: 1px;
+      }
+
+      .icon + .text {
+        margin-#{$left}: 10px;
+      }
+    }
+  }
+}
+
+.dropdown-menu {
+  @include font($font-size-14);
+  @media screen and (max-width: $max-width) {
+    @include font($font-size-14 * $factor);
+  }
+  @media screen and (max-width: $max-width2) {
+    @include font($font-size-14 * $factor2);
+  }
+  line-height: $line-height-base;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+
+  .ps-content {
+    @include font($font-size-14);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-14 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-14 * $factor2);
+    }
+    line-height: $line-height-base;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    > li {
+      & + li {
+        border-top: 1px solid #f0f0f0;
+      }
+
+      &.dropdown-title,
+      > a {
+        text-decoration: none;
+        display: block;
+        /*padding: 14px 23px;*/
+        padding: 12px 14px;
+        clear: both;
+        font-weight: normal;
+        line-height: $line-height-base;
+        color: $dropdown-link-color;
+        white-space: nowrap; // prevent links from randomly breaking onto new lines
+
+        .icon {
+          float: $left;
+          @include icon-size(18px);
+          margin-top: 1px;
+        }
+
+        .icon + .text {
+          margin-#{$left}: 10px;
+        }
+      }
+      > a:hover,
+      a:focus {
+        z-index: 3;
+        color: $brand-primary;
+        background-color: #fff;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+        cursor: default;
+      }
+    }
+  }
+
+  .dropdown-menu--messages {
+    width: 274px;
+
+    .dropdown-item {
+      .from,
+      .excerpt {
+        display: block;
+        @include font($font-size-12);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-12 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-12 * $factor2);
+        }
+        white-space: normal;
+      }
+
+      .from {
+        color: $brand-grey-dark;
+      }
+      .excerpt {
+        color: $brand-grey-light;
+      }
+    }
+  }
+
+  .dropdown-menu--notifications {
+    width: 224px;
+
+    .dropdown-item {
+      @include clearfix;
+
+      .text {
+        @include font($font-size-14);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-14 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-14 * $factor2);
+        }
+        color: $brand-grey-dark;
+        margin-#{$right}: 30px;
+      }
+
+      .badge {
+        float: $right;
+        @include font($font-size-14);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-14 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-14 * $factor2);
+        }
+        color: $brand-primary;
+      }
+    }
+  }
+}
+
+.dropdown-menu--notifications {
+  width: 224px;
+  .ps-content {
+    .dropdown-item {
+      @include clearfix;
+
+      .text {
+        @include font($font-size-14);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-14 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-14 * $factor2);
+        }
+        color: $brand-grey-dark;
+        margin-#{$right}: 30px;
+      }
+
+      .badge {
+        float: $right;
+        @include font($font-size-14);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-14 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-14 * $factor2);
+        }
+        color: $brand-primary;
+      }
+    }
+  }
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 400px;
+  overflow-x: hidden;
+}
+
+.dropdown-menu--notifications-ff {
+  position: relative;
+  display: contents;
+}
+
+.dropdown-menu--notifications-ie-safari {
+  position: relative;
+  display: table-column;
+
+  //display: normal;
+  //display:inline
+  //display:revert
+  //display:''
+}

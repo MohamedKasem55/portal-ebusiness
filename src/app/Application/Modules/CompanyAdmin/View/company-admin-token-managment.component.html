@@ -1,0 +1,201 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li> {{ 'companyAdmin.companyAdmin' | translate }} </li>
+		<li class="active">{{ 'companyAdmin.token.tokenManagment' | translate }}</li>
+	</ol>
+</div>
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+
+				<div class="col-xs-12 col-sm-6">
+					{{ 'public.summary' | translate}}
+				</div>
+				<div class="col-xs-12 col-sm-6 sme-form__actions" style="padding: 0px 0px">
+
+					<a class="btn btn-primary btn-wide" (click)="goNewToken()">{{
+						'companyAdmin.token.orderNewToken' | translate }}</a>
+
+				</div>
+
+			</div>
+
+		<br/>
+
+			<div class="sme-account-status">
+				<div class="row">
+					<div class="col-sm-4 col-xs-12">
+						<label>
+							<strong>{{ 'companyAdmin.token.numberOrgUsers' | translate }}: </strong>
+							{{ organizationUsers }}
+						</label>
+					</div>
+					<div class="col-sm-4 col-xs-12">
+						<label>
+							<strong>{{ 'companyAdmin.token.numberOrgUsersToken' | translate }}: </strong>
+							{{ organizationUserTokens }}
+						</label>
+					</div>
+					<div class="col-sm-4 col-xs-12">
+						<label>
+							<strong>{{ 'companyAdmin.token.numberUnnasignedTokens' | translate }}: </strong>
+							{{ unnasignedTokens }}
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+				<div class="sme-data-table__title">{{'companyAdmin.token.usersList' | translate }}</div>
+				<div class="sme-data-table__export">
+					<table-export [dataTable]="tokenTable" [header]="'companyAdmin.token.usersList' | translate"
+						[columns]="[
+							{'title': 'companyAdmin.token.tokenSerialNumber' | translate, 'dataKey': 'tokenSerialNumber'},
+							{'title': 'public.userId' | translate, 'dataKey': 'userId'},
+							{'title': 'public.userName' | translate, 'dataKey': 'userName'},
+							{'title': 'public.status' | translate, 'dataKey': 'tokenStatus'}
+							]">
+					</table-export>
+				</div>
+			</div>
+			<div>
+				<div class="sme-table table headerDataTable">
+					<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+						class="material  sme-table sme-table--responsive table" #tokenTable [rows]="pagedData.data"
+						[columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+						[rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+						[count]="pagedData.page.totalElements" [offset]="pagedData.page.pageNumber-1"
+						[limit]="pagedData.page.pageSize"  (page)='setPage($event)'
+						(sort)="setSort($event)" (select)='onSelect($event)'>
+						<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+							<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+								
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<div class="form-group">
+												<label>
+													{{'companyAdmin.token.tokenSerialNumber' | translate }} </label>
+												<div>
+													<span>
+														<a [routerLink]="['/companyadmin/token/managment/edit', row.tokenSerialNumber ]"> {{ row.tokenSerialNumber }}</a>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-xs-6">
+											<div class="form-group">
+												<label>{{'companyAdmin.token.tokenType' | translate }}</label>
+												<div>
+													<span>{{ row.tokenType }}</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-xs-6">
+											<div class="form-group">
+												<label> {{'public.userId' | translate }} </label>
+												<div>
+													<span>{{ row.userId }}</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-xs-6">
+											<div class="form-group">
+												<label>{{'public.userName' | translate }}</label>
+												<div>
+													<span>{{row.userName}}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</ng-template>
+						</ngx-datatable-row-detail>
+
+						<ngx-datatable-column prop="tokenSerialNumber">
+							<ng-template let-value="name" ngx-datatable-header-template>
+								<span class="datatable-header-cell-wrapper"> {{'companyAdmin.token.tokenSerialNumber' | translate }} </span>
+							</ng-template>
+							<ng-template let-value="value" ngx-datatable-cell-template>
+								<span>
+									<a [routerLink]="['/companyadmin/token/managment/edit',value]"> {{value}}</a>
+								</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="tokenType">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper"> {{'companyAdmin.token.tokenType' | translate }} </span>
+							</ng-template>
+							<ng-template let-value="value" ngx-datatable-cell-template>
+								<span> {{ 'tokenType' | modelPipe: value }} </span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="userId">
+							<ng-template let-value="name" ngx-datatable-header-template>
+								<span class="datatable-header-cell-wrapper"> {{'public.userId' | translate }} </span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="userName">
+							<ng-template let-value="name" ngx-datatable-header-template>
+								<span class="datatable-header-cell-wrapper"> {{'public.userName' | translate }} </span>
+							</ng-template>
+						</ngx-datatable-column>				
+
+						<ngx-datatable-footer>
+							<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+								let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+								<div class="sme-data-table__footer">
+									<app-datatable-pager
+										[pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+					go					[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+										[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+										[page]="curPage" [size]="pageSize" [count]="rowCount"
+										[hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+										(change)="tokenTable.onFooterPage($event)">
+									</app-datatable-pager>
+
+									<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">
+											{{ 'public.showingLabel' | translate}}
+											{{this.pagedData.page.size}} {{ 'public.ofLabel' | translate}}
+											{{rowCount}}
+										</span>
+										<span class="hidden-xs"> | </span>
+										<span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="this.pagedData.page.pageSize" (change)="this.setPage(null)">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+													<option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+												</select>
+											</div>
+										</span>
+									</div>
+
+								</div>
+							</ng-template>
+						</ngx-datatable-footer>
+
+					</ngx-datatable>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

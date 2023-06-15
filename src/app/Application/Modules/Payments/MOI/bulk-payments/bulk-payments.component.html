@@ -1,0 +1,131 @@
+<arb-breadcrumb [routes]="[
+                        ['dashboard.payments'], ['menu.sadad.government_payment.bulk-payments']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps *ngIf="wizardStep" [currentStep]="wizardStep"
+           [steps]="['MOIBulkPayment.upload', 'MOIBulkPayment.paymentDetails', 'public.confirm','public.summary']">
+</arb-steps>
+
+<div class="title">
+    <h2>{{'MOIBulkPayment.new' | translate}}</h2>
+</div>
+
+<arb-panel *ngIf="wizardStep==1">
+
+    <div class='padding legend'>{{ 'MOIBulkPayment.paymentOptions' | translate }}</div>
+
+    <p class='step'><span class='num'>1</span>   {{'MOIBulkPayment.issueIqama' |    translate }}  </p>
+    <p class='step'><span class='num'>2</span>   {{'MOIBulkPayment.renewIqama' |    translate }}  </p>
+    <p class='step'><span class='num'>3</span>   {{'MOIBulkPayment.existSingle' |    translate }}  </p>
+    <p class='step'><span class='num'>4</span>   {{'MOIBulkPayment.existMultiple' |    translate }}  </p>
+
+</arb-panel>
+
+<arb-panel *ngIf="wizardStep==1">
+
+    <div class="row padding">
+        <app-select-account
+                [selectedFullAccountNumber]="selectedAccount? selectedAccount.fullAccountNumber?selectedAccount.fullAccountNumber :null:null"
+                [accounts]="accounts" [useOldDesign]="true" (onAccountChange)="onAccountChange($event)">
+        </app-select-account>
+    </div>
+    <div class="sme-form__title">
+        <div class="col-xs-12 col-sm-9 text-left">
+
+        </div>
+        <div class="col-xs-12 col-sm-3 text-right">
+            <button class="btn btn-info btn-wide" (click)="download()">
+                <span class="glyphicon glyphicon-download-alt"></span>&nbsp;&nbsp;
+                <span>{{'MOIBulkPayment.download' | translate }}</span>
+            </button>
+        </div>
+    </div>
+
+
+    <sheet-import #sheetImporterComponent
+                  [label]="'MOIBulkPayment.upload'"
+                  [file]="file"
+                  (fileUploaded)="fileUploaded($event)"
+                  [columns]="columns">
+    </sheet-import>
+    <span class="note">{{'MOIBulkPayment.upload-note' | translate}}</span>
+</arb-panel>
+
+<div class="row padding" *ngIf="wizardStep==2 ">
+    <arb-bulk-list-payments [bills]="bills" [showLevels]="false"></arb-bulk-list-payments>
+</div>
+
+<div class="row padding" *ngIf="wizardStep==3 ">
+    <div class="row padding" *ngIf="billsBatchValidate.notAllowed.length>0">
+        <div class='padding legend'>{{ 'MOIBulkPayment.notAllowed' | translate }}</div>
+        <arb-bulk-list-payments [bills]="billsBatchValidate.notAllowed" [showLevels]="false"></arb-bulk-list-payments>
+    </div>
+
+    <div class="row padding" *ngIf="billsBatchValidate.toAuthorize.length>0">
+        <div class='padding legend'>{{ 'MOIBulkPayment.toAuthorize' | translate }}</div>
+        <arb-bulk-list-payments [bills]="billsBatchValidate.toAuthorize" [showLevels]="true"></arb-bulk-list-payments>
+    </div>
+
+    <div class="row padding" *ngIf="billsBatchValidate.toProcess.length>0">
+        <div class='padding legend'>{{ 'MOIBulkPayment.toProcess' | translate }}</div>
+        <arb-bulk-list-payments [bills]="billsBatchValidate.toProcess" [showLevels]="true"></arb-bulk-list-payments>
+    </div>
+</div>
+
+
+<div *ngIf="wizardStep==3">
+
+    <arb-panel *ngIf="generateChallengeAndOTP  ">
+        <div class="row padding">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                                [requestValidate]="requestValidate" #authorization>
+                    </app-secured-authentication>
+                </div>
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep==4 ">
+    <arb-panel>
+        <div class='sme-form__body'>
+            <div>
+                <div class='sme-wizard__success'>
+                    <span class=' icon -check'></span>
+                    <div></div>
+                    <div>
+                        <p *ngIf="isAuthorized">{{'MOIBulkPayment.success' | translate }} </p>
+                        <p *ngIf="!isAuthorized">{{'MOIBulkPayment.pending-authorization' | translate }} </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<arb-buttons class="start">
+    <button *ngIf="wizardStep<4" class="btn btn-default btn-wide" (click)="back()">
+        {{ 'public.back' | translate}}</button>
+
+    <button *ngIf="wizardStep<4" class="btn btn-default btn-wide" (click)="finish()">
+        {{ 'public.cancel' | translate}}</button>
+
+    <button *ngIf="wizardStep<4" class="btn btn-primary btn-wide" [disabled]="!isValid()"
+            (click)="next()">{{ 'public.next' | translate}}</button>
+
+    <button *ngIf="wizardStep==4" class="btn btn-primary btn-wide"
+            (click)="finish()">{{ 'MOIBulkPayment.goToDashboard' | translate}}</button>
+
+    <button *ngIf="wizardStep==4" class="btn btn-primary btn-wide"
+            (click)="goToPay()">{{ 'MOIBulkPayment.payAnotherBills' | translate}}</button>
+
+</arb-buttons>
+
+
+<!--##################################Error Modal#################################-->
+
+<arb-bulk--error-payments #errorModal [errorList]="errorList" (closeModal)="closeModal()"></arb-bulk--error-payments>

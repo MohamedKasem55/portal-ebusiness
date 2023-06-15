@@ -1,0 +1,176 @@
+<div class='sme-breadcrumb'>
+    <ol class='breadcrumb'>
+        <li>{{ 'dashboard.transfers' | translate }}</li>
+        <li class='active'>{{ 'rtp.rtp' | translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">
+            {{ 'rtp.rtp' | translate }}
+        </div>
+        <div class="end">
+            <button class="btn btn-primary btn-wide" type="button" (click)="sendNewRequest()">{{
+                'rtp.sendNewRequest' | translate}}</button>
+        </div>
+    </div>
+
+    <arb-panel>
+        <ul class="nav nav-pills">
+            <li [class.active]="tabNumber===1">
+                <a data-toggle="tab" class="human-selectable" (click)="tabChanged(1)">
+                    {{ 'rtp.sentRequest' | translate }}
+                </a>
+            </li>
+            <li [class.active]="tabNumber===2">
+                <a data-toggle="tab" class="human-selectable" (click)="tabChanged(2)">
+                    {{ 'rtp.receivedRequest' | translate }}
+                </a>
+            </li>
+        </ul>
+    </arb-panel>
+
+    <div class="sme-head__title">
+        {{ 'rtp.requests' | translate }}
+    </div>
+
+<div class="gridContainer">
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #RequestTable
+                   class='material sme-table sme-table--responsive table'
+                   [rows]="elementsPage.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="defaultHeight"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="true"
+                   [externalSorting]="false"
+                   [count]="elementsPage.page.totalElements"
+                   [offset]="elementsPage.page.pageNumber-1"
+                   [limit]="elementsPage.page.pageSize"
+                   [selectionType]="defaultSelectionType"
+                   (page)='setPage($event)'
+                   [rowIdentity]="getIdFunction()"
+                   (select)='onSelect($event)'>
+
+        <ngx-datatable-column [width]='350' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper addPadding'>
+                                 {{'rtp.referenceNumber' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                 <span (click)="toDetails(row.rtpid)">
+                    <a class="human-selectable" >
+                        <p class="addPadding" innerHTML="{{ row.rtpid | translate}}"></p>
+                     </a>
+                 </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]='300' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'rtp.name' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{ (tabNumber == 1) ? row.debtorName : row.creditorName}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]='150' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'rtp.amount' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{row.rtpAmt | amountCurrency }} {{'SAR'}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]='150' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'rtp.requestDate' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{row.creationTimestamp | date:'dd/MM/yyyy'}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]='150' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'rtp.expiryDate' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                {{row.rtpExpiryDt | date:'dd/MM/yyyy'}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]='150' [resizeable]='false'
+                              headerClass='text-align-center'>
+            <ng-template ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'rtp.status' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row='row'>
+                   <span class='statusSpan'
+                         [ngClass]=" getStatusClass(row.rtpStatus)">
+                       {{row.rtpStatus}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                            (change)="footerChanged($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{elementsPage.page.size}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control"
+                                                [value]="this.elementsPage.page.pageSize"
+                                                (change)="setPageSize($event)">
+                                            <option [value]="10">10</option>
+                                             <option [value]="20">20</option>
+                                             <option [value]="50">50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</div>
+
+    <arb-buttons class="start">
+        <button class="btn btn-default btn-wide" type="button" (click)="back()">
+            {{ 'public.back' | translate}}</button>
+    </arb-buttons>
+
+</div>

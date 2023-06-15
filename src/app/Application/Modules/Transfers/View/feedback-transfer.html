@@ -1,0 +1,732 @@
+<div class="sme-breadcrumb" [hidden]="this.currentFile != null">
+	<ol class="breadcrumb">
+		<li>{{ 'transfer.feedback.payments' | translate }}</li>
+		<li>
+				{{ 'transfer.feedback.transfers' | translate }}
+		</li>
+		<li>{{ 'transfer.feedback.feedbackFiles' | translate }}</li>
+	</ol>
+</div>
+
+<div class="container-fluid"  [hidden]="this.currentFile != null">
+	<div class="sme-page-block">
+		<!--downloadedFiles TABLE-->
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+				<div class="sme-data-table__title">
+					{{ 'transfer.feedback.downloadableFiles'| translate }}
+				</div>
+				<div class="sme-data-table__export">
+					<table-export [dataTable]="downloadedFiles" [header]="'transfer.feedback.downloadableFiles' | translate"
+								  [columns]="[
+									{'title':'transfer.feedback.fileReference' |translate ,'dataKey':'fileReference'},
+									{'title':'transfer.feedback.created' | translate,'dataKey':'requestDate'},
+									{'title':'transfer.feedback.transferDate' | translate,'dataKey':'transfaerDate'},
+									{'title':'public.status' | translate,'dataKey':'fileStatus'}
+									]"
+					></table-export>
+				</div>
+			</div>
+			<div class="sme-table table headerDataTable">
+					<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #downloadedFiles
+						class="material sme-table sme-table--responsive table"
+								   [rows]="downloadableFiles?.items"
+								   [columnMode]="defaultColumnMode"
+								   [headerHeight]="30"
+								   [footerHeight]="footerHeight"
+								   [rowHeight]="defaultHeight"
+								   [externalPaging]="true"
+								   [externalSorting]="true"
+								   [count]="downloadableFiles?.size"
+								   [offset]="downloadableFiles?.size"
+								   [limit]="downloadableFiles?.total"
+								   
+								   (page)='setPage($event)'
+								   (sort)="setSort($event)">
+
+						<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+							<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.fileName' | translate }}</label>
+												<div>
+													<span  class="human-selectable"><a style="cursor:pointer;" (click)="details(row)"> {{row.fileName}}</a></span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.createdDate' | translate }}</label>
+												<div>
+													<span>{{row.requestDate | date }}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.transfaerDate' | translate }}</label>
+												<div>
+													<span>{{ row.transfaerDate | date }}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</ng-template>
+						</ngx-datatable-row-detail>
+
+
+						<ngx-datatable-column prop="fileReference" [resizeable]="true">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.fileReference' | translate }}
+                                    </span>
+							</ng-template>
+							<ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+								<span><a style="cursor:pointer;" (click)="details(row)"> {{value}}</a></span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="requestDate">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.created' | translate }}
+                                    </span>
+							</ng-template>
+							<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+								<span>{{ value | date: "yyyy-MM-dd" }}</span>
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column prop="transfaerDate" [width]="200">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.transferDate' | translate }}
+                                    </span>
+							</ng-template>
+							<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+								<span>{{ value | date : "yyyy-MM-dd"}}</span>
+							</ng-template>
+						</ngx-datatable-column>
+						<ngx-datatable-column prop="fileStatus" [width]="200">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.status' | translate }}
+                                    </span>
+							</ng-template>
+							<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+								<span>{{ value  }}</span>
+								<span>{{'fileStatus' | modelPipe: value }}</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+
+						<ngx-datatable-footer>
+							<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+								let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+								<div class="sme-data-table__footer">
+									<app-datatable-pager
+										[pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+										[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+										[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+										[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+										[page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+										[visiblePagesCount]="visiblePagesCount" (change)="downloadedFiles.onFooterPage($event)">
+									</app-datatable-pager>
+
+									<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+											{{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+										<span class="hidden-xs"> | </span>
+										<span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="this.downloadedFiles.page.pageSize"
+													(change)="this.setPage(null)">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+													<option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+												</select>
+											</div>
+										</span>
+									</div>
+								</div>
+							</ng-template>
+						</ngx-datatable-footer>
+
+					</ngx-datatable>
+				</div>
+		</div>
+
+		<!--updatableUnderProcessingFiles TABLE-->
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+				<div class="sme-data-table__title">
+					{{ 'transfer.feedback.updatableUnderProcessingFiles'| translate }}
+				</div>
+				<div class="sme-data-table__export">
+					<table-export [dataTable]="underProcessUpdatableFileTable" [header]="'transfer.feedback.updatableUnderProcessingFiles' | translate"
+								  [columns]="[
+									{'title':'transfer.feedback.fileReference' |translate ,'dataKey':'fileReference'},
+									{'title':'transfer.feedback.created' | translate,'dataKey':'requestDate'},
+									{'title':'transfer.feedback.transferDate' | translate,'dataKey':'transfaerDate'},
+									{'title':'public.status' | translate,'dataKey':'fileStatus'}
+									]"
+					></table-export>
+				</div>
+			</div>
+			<div class="sme-table table headerDataTable">
+				<ngx-datatable [messages]="{emptyMessage: 'transfer.feedback.noFileUpdatable' | translate}" #underProcessUpdatableFileTable
+							   class="material sme-table sme-table--responsive table"
+							   [rows]="underProcessUpdatableFile?.items"
+							   [columnMode]="defaultColumnMode"
+							   [headerHeight]="30"
+							   [footerHeight]="footerHeight"
+							   [rowHeight]="defaultHeight"
+							   [externalPaging]="true"
+							   [externalSorting]="true"
+							   [count]="underProcessUpdatableFile?.size"
+							   [offset]="underProcessUpdatableFile?.size"
+							   [limit]="underProcessUpdatableFile?.total"
+							   
+							   (page)='setPage($event)'
+							   (sort)="setSort($event)">
+
+					<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+						<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+							<div class="row">
+								<fieldset>
+									<div class="col-xs-6">
+										<!-- sme-form-group -->
+										<div class="form-group">
+											<label>{{'payments.moiPayments.feedBack.fileName' | translate }}</label>
+											<div>
+												<span  class="human-selectable"><a style="cursor:pointer;" (click)="details(row)"> {{row.fileName}}</a></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<!-- sme-form-group -->
+										<div class="form-group">
+											<label>{{'payments.moiPayments.feedBack.createdDate' | translate }}</label>
+											<div>
+												<span>{{row.requestDate | date }}</span>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="row">
+								<fieldset>
+									<div class="col-xs-6">
+										<!-- sme-form-group -->
+										<div class="form-group">
+											<label>{{'payments.moiPayments.feedBack.transfaerDate' | translate }}</label>
+											<div>
+												<span>{{ row.transfaerDate | date }}</span>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</ng-template>
+					</ngx-datatable-row-detail>
+
+
+					<ngx-datatable-column prop="fileReference" [resizeable]="true">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.fileReference' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+							<span><a style="cursor:pointer;" (click)="details(row)"> {{value}}</a></span>
+						</ng-template>
+					</ngx-datatable-column>
+
+					<ngx-datatable-column prop="requestDate">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.created' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+							<span>{{ value | date : "yyyy-MM-dd"}}</span>
+						</ng-template>
+					</ngx-datatable-column>
+					<ngx-datatable-column prop="transfaerDate" [width]="200">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.transferDate' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+							<span>{{ value | date: "yyyy-MM-dd" }}</span>
+						</ng-template>
+					</ngx-datatable-column>
+					<ngx-datatable-column prop="fileStatus" [width]="200">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.status' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+							<span>{{'fileStatus' | modelPipe: value }}</span>
+						</ng-template>
+					</ngx-datatable-column>
+
+
+					<ngx-datatable-footer>
+						<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+									 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+							<div class="sme-data-table__footer">
+								<app-datatable-pager
+										[pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+										[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+										[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+										[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+										[page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+										[visiblePagesCount]="visiblePagesCount" (change)="underProcessUpdatableFileTable.onFooterPage($event)">
+								</app-datatable-pager>
+
+								<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+											{{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+									<span class="hidden-xs"> | </span>
+									<span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="displaySize"
+														(change)="this.setPage(null)">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+													<option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+												</select>
+											</div>
+										</span>
+								</div>
+							</div>
+						</ng-template>
+					</ngx-datatable-footer>
+
+				</ngx-datatable>
+			</div>
+		</div>
+
+		<!--filesInProcess TABLE-->
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+				<div class="sme-data-table__title">
+					{{ 'transfer.feedback.filesInProcess'| translate }}
+				</div>
+				<div class="sme-data-table__export">
+					<table-export [dataTable]="inProgressFilesTable" [header]="'transfer.feedback.filesInProcess' | translate"
+								  [columns]="[
+									{'title':'transfer.feedback.fileReference' |translate ,'dataKey':'fileReference'},
+									{'title':'transfer.feedback.created' | translate,'dataKey':'requestDate'},
+									{'title':'transfer.feedback.transferDate' | translate,'dataKey':'transfaerDate'},
+									{'title':'public.status' | translate,'dataKey':'fileStatus'}
+									]"
+					></table-export>
+				</div>
+			</div>
+			<div class="sme-table table headerDataTable">
+				<ngx-datatable [messages]="{emptyMessage: 'transfer.feedback.noFileProcess' | translate}" #inProgressFilesTable
+							   class="material sme-table sme-table--responsive table"
+							   [rows]="inProgressFiles?.items"
+							   [columnMode]="defaultColumnMode"
+							   [headerHeight]="30"
+							   [footerHeight]="footerHeight"
+							   [rowHeight]="defaultHeight"
+							   [externalPaging]="true"
+							   [externalSorting]="true"
+							   [count]="inProgressFiles?.size"
+							   [offset]="inProgressFiles?.size"
+							   [limit]="inProgressFiles?.total"
+							   
+							   (page)='setPage($event)'
+							   (sort)="setSort($event)">
+
+					<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+						<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+							<div class="row">
+								<fieldset>
+									<div class="col-xs-6">
+										<!-- sme-form-group -->
+										<div class="form-group">
+											<label>{{'payments.moiPayments.feedBack.fileName' | translate }}</label>
+											<div>
+												<span  class="human-selectable"><a style="cursor:pointer;" (click)="details(row)"> {{row.fileName}}</a></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<!-- sme-form-group -->
+										<div class="form-group">
+											<label>{{'payments.moiPayments.feedBack.createdDate' | translate }}</label>
+											<div>
+												<span>{{row.requestDate | date }}</span>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="row">
+								<fieldset>
+									<div class="col-xs-6">
+										<!-- sme-form-group -->
+										<div class="form-group">
+											<label>{{'payments.moiPayments.feedBack.transfaerDate' | translate }}</label>
+											<div>
+												<span>{{ row.transfaerDate | date }}</span>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</ng-template>
+					</ngx-datatable-row-detail>
+
+
+					<ngx-datatable-column prop="fileReference" [resizeable]="true">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.fileReference' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+							<span><a style="cursor:pointer;" (click)="details(row)"> {{value}}</a></span>
+						</ng-template>
+					</ngx-datatable-column>
+
+					<ngx-datatable-column prop="requestDate">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.created' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+							<span>{{ value | date:  "yyyy-MM-dd"}}</span>
+						</ng-template>
+					</ngx-datatable-column>
+					<ngx-datatable-column prop="transfaerDate" [width]="200">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'transfer.feedback.transferDate' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+							<span>{{ value | date: "yyyy-MM-dd" }}</span>
+						</ng-template>
+					</ngx-datatable-column>
+					<ngx-datatable-column prop="fileStatus" [width]="200">
+						<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.status' | translate }}
+                                    </span>
+						</ng-template>
+						<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+							<span>{{'fileStatus' | modelPipe: value }}</span>
+						</ng-template>
+					</ngx-datatable-column>
+
+
+					<ngx-datatable-footer>
+						<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+									 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+							<div class="sme-data-table__footer">
+								<app-datatable-pager
+										[pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+										[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+										[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+										[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+										[page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+										[visiblePagesCount]="visiblePagesCount" (change)="inProgressFilesTable.onFooterPage($event)">
+								</app-datatable-pager>
+
+								<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+											{{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+									<span class="hidden-xs"> | </span>
+									<span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control" [(ngModel)]="displaySize"
+														(change)="this.setPage(null)">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+													<option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+												</select>
+											</div>
+										</span>
+								</div>
+							</div>
+						</ng-template>
+					</ngx-datatable-footer>
+
+				</ngx-datatable>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Detail Files VIEW-->
+<div class="sme-breadcrumb" *ngIf="this.currentFile != null">
+	<ol class="breadcrumb">
+		<li>{{ 'transfer.feedback.payments'| translate }}</li>
+		<li>{{ 'transfer.feedback.transfers'| translate }}</li>
+		<li class="active">{{ 'transfer.feedback.detailFeedbackFile'| translate }}</li>
+	</ol>
+</div>
+
+<div class="container-fluid" *ngIf="this.currentFile != null">
+	<div class="sme-head">
+		<div class="sme-head__title" >{{ 'transfer.feedback.detailFeedbackFile' | translate}}</div>
+		<div class="sme-data-table__export">
+			<export-feedback-files  [header]="'transfer.feedback.detailFeedbackFile' | translate">
+			</export-feedback-files>
+
+		</div>
+	</div>
+
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__content">
+				<form autocomplete="off" autocomplete="off" class="sme-form__form">
+					<div class="sme-form__body">
+						<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<div class="form-group">
+										<label>
+											{{ 'transfer.feedback.fileReference' | translate }}
+										</label>
+										<div class="form-control">
+												<span>
+													   {{ this.currentFileReference }}
+												</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="sme-page-block">
+		<div class="sme-data-table">
+			<div class="sme-data-table__head">
+				<div class="sme-data-table__title">
+					{{ 'transfer.feedback.transfers' | translate }}
+				</div>
+				<div class="sme-data-table__export">
+					<table-export [dataTable]="detailFileTable" [header]="getHeaderDetail()"
+								  [columns]="[
+		{'title':'transfer.accountFrom' |translate ,'dataKey':'accountFrom'},
+		{'title':'transfer.accountTo' | translate,'dataKey':'accountTo'},
+		{'title':'transfer.feedback.beneficiaryName' | translate,'dataKey':'beneficiaryName'},
+		{'title':'transfer.amount' |translate ,'dataKey':'amount'},
+		{'title':'transfer.remarks' |translate ,'dataKey':'remarks'},
+		{'title':'transfer.feedback.result' |translate ,'dataKey':'returnCode'}
+		]"></table-export>
+				</div>
+			</div>
+			<div>
+				<div class="sme-table table headerDataTable">
+					<!-- EXPORT TYPES -->
+
+
+					<ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #detailFileTable
+								   class="material sme-table sme-table--responsive table"
+								   [rows]="currentFile?.list"
+								   [columnMode]="defaultColumnMode"
+								   [headerHeight]="30"
+								   [footerHeight]="footerHeight"
+								   [rowHeight]="defaultHeight"
+								   [count]="currentFile.list.length"
+								   [externalPaging]="false"
+								   [externalSorting]="false">
+
+						<ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+							<ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.billName' | translate }}</label>
+												<div>
+													<span  class="human-selectable">{{row.billName}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.accountFrom' | translate }}</label>
+												<div>
+													<span>{{row.accountFrom }}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.billReference' | translate }}</label>
+												<div>
+													<span>{{ row.billReference }}</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.amount' | translate }}</label>
+												<div>
+													<span>{{ row.amount | amountCurrency }}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+								<div class="row">
+									<fieldset>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label> {{'payments.moiPayments.feedBack.process' | translate }}</label>
+												<div>
+													<span>{{ row.billProcess }}</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<!-- sme-form-group -->
+											<div class="form-group">
+												<label>{{'payments.moiPayments.feedBack.status' | translate }}</label>
+												<div>
+													<span>{{ row.returnCode | modelPipe:'errorTable.'+value }}</span>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</ng-template>
+						</ngx-datatable-row-detail>
+
+						<ngx-datatable-column prop="accountFrom">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'transfer.accountFrom' | translate }}
+							</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="accountTo">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'transfer.accountTo' | translate }}
+							</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="beneficiaryName" [resizeable]="true">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'transfer.feedback.beneficiaryName' | translate }}
+							</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="amount" [resizeable]="true">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'transfer.amount' | translate }}
+							</span>
+							</ng-template>
+							<ng-template ngx-datatable-cell-template let-value="value">
+								<span>{{value | amountCurrency}}</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="remarks">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'transfer.remarks' | translate }}
+							</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-column prop="returnCode">
+							<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+							<span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'transfer.feedback.result' | translate }}
+							</span>
+							</ng-template>
+							<ng-template ngx-datatable-cell-template let-value="value">
+								<span>{{'errors' | modelPipe:'errorTable.'+value}}</span>
+							</ng-template>
+						</ngx-datatable-column>
+
+						<ngx-datatable-footer>
+							<ng-template
+									ngx-datatable-footer-template
+									let-rowCount="rowCount"
+									let-pageSize="pageSize"
+									let-selectedCount="selectedCount"
+									let-curPage="curPage"
+									let-offset="offset"
+							>
+								<div class="sme-data-table__footer">
+									<app-datatable-pager
+											[pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+											[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+											[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+											[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+											[page]="curPage"
+											[size]="pageSize"
+											[count]="rowCount"
+											[hidden]="!((rowCount / pageSize) > 1)"
+											(change)="detailFileTable.onFooterPage($event)">
+									</app-datatable-pager>
+
+									<div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+									</div>
+								</div>
+							</ng-template>
+						</ngx-datatable-footer>
+					</ngx-datatable>
+
+				</div>
+			</div>
+		</div><!-- ./sme-data-table -->
+		<!-- /DOWNLOADABLE FILES -->
+
+	</div>
+</div>
+<arb-buttons *ngIf="this.currentFile">
+	<button class="btn btn-default btn-wide" type="button"
+			(click)="closeItem()">{{ 'public.back' | translate}}</button>
+</arb-buttons>

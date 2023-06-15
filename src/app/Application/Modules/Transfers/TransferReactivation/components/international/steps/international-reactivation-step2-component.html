@@ -1,0 +1,46 @@
+<ng-container *ngIf="this.currentAction === 'DELETE'">
+    <international-reactivation-data
+            [batches]="this.batches"
+            [accounts]="this.accounts"
+            [beneficiaries]="this.beneficiaries"
+            [forms]="forms"
+            [formsFieldsConfigs]="formsFieldsConfigs"
+            [transferReasons]="transferReasons"
+            [disabled]="true">
+    </international-reactivation-data>
+</ng-container>
+
+<ng-container *ngIf="this.currentAction !== 'DELETE'">
+
+    <ng-container *ngIf="this.validateResponse['checkAndSeparateInitiatitionPermission']['notAllowed'].length > 0">
+        <international-reactivation-data
+                [batches]="this.validateResponse['checkAndSeparateInitiatitionPermission']['notAllowed']"
+                [beneficiaries]="this.beneficiaries"
+                [accounts]="this.accounts"
+                [transferReasons]="transferReasons"
+                [disabled]="true">
+        </international-reactivation-data>
+    </ng-container>
+
+    <ng-container *ngIf="this.validateResponse['checkAndSeparateInitiatitionPermission']['toAuthorize'].length > 0">
+        <international-reactivation-data
+                [batches]="this.validateResponse['checkAndSeparateInitiatitionPermission']['toAuthorize']"
+                [beneficiaries]="this.beneficiaries"
+                [accounts]="this.accounts"
+                [transferReasons]="transferReasons"
+                [disabled]="true">
+        </international-reactivation-data>
+    </ng-container>
+
+    <ng-container *ngIf="this.validateResponse['checkAndSeparateInitiatitionPermission']['toProcess'].length > 0">
+        <international-reactivation-data
+                [batches]="this.validateResponse['checkAndSeparateInitiatitionPermission']['toProcess']"
+                [beneficiaries]="this.beneficiaries"
+                [accounts]="this.accounts"
+                [transferReasons]="transferReasons"
+                [disabled]="true">
+        </international-reactivation-data>
+    </ng-container>
+
+</ng-container>
+

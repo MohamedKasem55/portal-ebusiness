@@ -1,0 +1,133 @@
+<!--<div class="sme-breadcrumb">-->
+<!--	<ol class="breadcrumb">-->
+<!--		<li class="active">{{ 'dividendDistribution.menu' | translate }}</li>-->
+<!--		<li class="active">{{ 'dividendDistribution.requestReports.menu' | translate }}</li>-->
+<!--	</ol>-->
+<!--</div>-->
+<arb-breadcrumb [routes]="[
+	['dividendDistribution.menu',['/dividend-distribution/reports']],
+	['dividendDistribution.requestReports.menu']]">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="step" [steps]="['public.completeDetails','public.confirm','public.summary']"></arb-steps>
+
+<form autocomplete="off" [formGroup]="form" (submit)="requestFile()" *ngIf="step===1 || step===2">
+	<arb-panel>
+		<fieldset [disabled]="step !== 1">
+			<div class="row">
+				<div class="col-xs-12 col-sm-3">
+					<div class="form-group">
+						<label style="margin-bottom:15px;"> {{ 'dividendDistribution.requestReports.fileType' | translate }} </label>
+						<br/>
+						<label class="radio-inline"> 
+							<input type="radio" name="fileType" formControlName="fileType" [value]="'T'">
+							{{ 'dividendDistribution.requestReports.tawadulLayout' | translate }}
+						</label>
+						<label class="radio-inline"> 
+							<input type="radio" name="fileType" formControlName="fileType" [value]="'P'"> 
+							{{ 'dividendDistribution.requestReports.paid' | translate }} 
+						</label>
+						<label class="radio-inline"> 
+							<input type="radio" name="fileType" formControlName="fileType" [value]="'U'"> 
+							{{ 'dividendDistribution.requestReports.unpaid' | translate }} 
+						</label>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-3">
+					<div class="form-group">
+						<label class="required"> {{ 'dividendDistribution.reports.year' | translate }} </label>
+						<div class="form-control">
+							<ng-select [notFoundText]="'public.noData' | translate" name="year" formControlName="year" (change)="onYearChange($event)">
+								<ng-option *ngFor="let year of years" [value]="year"> {{ year }} </ng-option>
+							</ng-select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-3">
+					<div class="form-group">
+						<label class="required"> {{ 'dividendDistribution.reports.quarter' | translate }} </label>
+						<div class="form-control">
+							<ng-select [notFoundText]="'public.noData' | translate" name="quarter" formControlName="quarter">
+								<ng-option *ngFor="let quarter of selectedPeriod.quarters" [value]="quarter"> {{ quarter | quarter }} </ng-option>
+							</ng-select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-3">
+					<div class="form-group">
+						<label class="required"> {{ 'dividendDistribution.inquiry.recordType' | translate }} </label>
+						<div class="form-control">
+							<ng-select [notFoundText]="'public.noData' | translate" name="recordType" formControlName="recordType">
+								<ng-option [value]="'A'"> {{ 'dividendDistribution.requestReports.all' | translate }} </ng-option>
+								<ng-option [value]="'D'"> {{ 'dividendDistribution.requestReports.dividend' | translate }} </ng-option>
+								<ng-option [value]="'F'"> {{ 'dividendDistribution.requestReports.fraction' | translate }} </ng-option>
+							</ng-select>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<div class="form-group">
+						<label class="required">
+							{{ 'dividendDistribution.requestReports.dateFrom' | translate }}
+						</label>
+						<input type="text" #fromDate="bsDatepicker" bsDatepicker placement="bottom" class="form-control" name="dateFrom"
+							   [bsConfig]="bsConfig"  formControlName="dateFrom" [maxDate]="dateTo">
+					</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-4">
+					<div class="form-group">
+						<label class="required">
+							{{ 'dividendDistribution.requestReports.dateTo' | translate }}
+						</label>
+						<input type="text" #toDate="bsDatepicker" bsDatepicker placement="bottom" class="form-control" name="dateTo"
+							   [bsConfig]="bsConfig"  formControlName="dateTo" [minDate]="dateFrom">
+					</div>
+				</div>
+	
+			</div>
+	
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<div class="form-group">
+						<label> {{ 'dividendDistribution.requestReports.language' | translate }} </label>
+						<div class="form-control">
+							<ng-select [notFoundText]="'public.noData' | translate" name="language" formControlName="language">
+								<ng-option [value]="'en'"> {{ 'public.english' | translate }} </ng-option>
+								<ng-option [value]="'ar'"> {{ 'public.arabic' | translate }} </ng-option>
+							</ng-select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</arb-panel>
+	<arb-panel>
+		<div class="sme-wizard__navigation sme-form__actions" style="padding-bottom:0 !important;">
+			<button type="button" *ngIf="step===1" (click)="goToStep2()" [disabled]="!form.valid" class="btn btn-primary btn-wide">
+				{{ 'accounts.requestFile' | translate }}
+			</button>
+			<button type="button" *ngIf="step===2" (click)="goBack()" class="btn btn-default btn-wide"> {{ 'public.back' | translate }} </button>
+			<button type="submit" *ngIf="step===2" class="btn btn-primary btn-wide"> {{ 'public.proceed' | translate }} </button>
+		</div>
+	</arb-panel>
+</form>
+
+<arb-confirm-panel *ngIf="step===3"
+		(finishAction)="finish()"
+		[pending]="false"
+		[hasFinishAction]="true">
+</arb-confirm-panel>
+
+<!--	<div *ngIf="step===3">-->
+<!--		<div class="text-center">-->
+<!--			<h3> {{ 'public.requestOk' | translate }} </h3>-->
+<!--		</div>-->
+<!--		<button type="button" (click)="finish()" class="btn btn-secondary btn-wide"> {{ 'public.finish' | translate }} </button>-->
+<!--	</div>-->

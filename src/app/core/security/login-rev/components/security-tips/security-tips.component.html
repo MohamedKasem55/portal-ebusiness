@@ -1,0 +1,25 @@
+<div class="container-security" style="width: 96.5%;">
+    <div class="container-security-title">
+        <div class="title">{{ 'login.resources.securityTipsTitle' | translate }}</div>
+
+    </div>
+    <div class="container-security-content" [class.container-security-content-show]="showContent">
+        <div *ngIf="messages && messages.length>0; else noMessages" class="security-message-login">
+            <div *ngFor="let message of messages; let i=index">
+                <div class="msg-color" *ngIf="translate.currentLang === 'en' && message.externalClosable"
+                    [innerHTML]="getSanitizedUnescapedStr(message['englishMessage'])"></div>
+                <div class="msg-color" *ngIf="translate.currentLang === 'ar'&& message.externalClosable"
+                    [innerHTML]="getSanitizedUnescapedStr(message['arabicMessage'])"></div>
+            </div>
+        </div>
+        <ng-template #noMessages><span [innerHTML]="'login.resources.securityTipsInfo' | translate"></span>
+        </ng-template>
+    </div>
+    <div [ngClass]="translate.currentLang === 'en' ?
+        'container-security-show-text-en' : 'container-security-show-text-ar'">
+        <div (click)="showContent = !showContent">
+            <span style="color: #221afb" *ngIf="showContent">{{ 'public.viewLess' | translate }}</span>
+            <span style="color: #221afb" *ngIf="!showContent">{{ 'public.viewMore' | translate }}</span>
+        </div>
+    </div>
+</div>

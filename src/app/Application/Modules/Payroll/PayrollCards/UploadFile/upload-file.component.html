@@ -1,0 +1,243 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li class="active">{{ 'payroll.uploadFile'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid docs-component">
+    <div class="sme-panel">
+        <div class="sme-panel__body">
+            <div class="sme-wizard">
+                <ul class="sme-wizard__steps">
+                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+						<span>
+							<span class="num">1</span>
+							<span class="text">{{ 'payroll.uploadFile' | translate | uppercase }}</span>
+						</span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+						<span>
+							<span class="num">2</span>
+							<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+						</span>
+                    </li>
+                    <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+						<span>
+							<span class="icon -check"></span>
+							<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+						</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-upload-file-step1 *ngIf="step === 1" (onInit)="onInitStep1($event)"></app-upload-file-step1>
+<app-upload-file-step2 *ngIf="step === 2" [initPayment]="initPayment" [rol]="rol" (onInit)="onInitStep2($event)">
+</app-upload-file-step2>
+<app-upload-file-step3 *ngIf="step === 3" [generateChallengeAndOTP]="initPayment.generateChallengeAndOTP">
+</app-upload-file-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" [routerLink]="['/payroll/payroll-cards']"
+            *ngIf="step == 1 ">{{'public.back' | translate }}</button>
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()"
+            *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3"
+            [disabled]="isDisabled()">{{'public.next' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="step == 3">{{'public.finish' | translate}}</button>
+</div>
+
+<div class="modal fade" bsModal #reportModal="bs-modal">
+    <div class="modal-dialog large" role="document" style="overflow:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title col-sm-10">{{ 'accounts.popupTitle' | translate }}</h4>
+                <button type="button" class="close" (click)="reportModal.hide()">
+                    <span aria-hidden="true" class="icon -close"></span>
+                </button>
+            </div>
+            <div class="modal-body defaultAlign">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'payroll.fileName' |
+                                    translate }}</label>
+                                <div class="form-control">
+                                    <span>{{datos['fileName']}}</span>
+                                </div>
+                            </div>
+                            <!-- ./sme-form-group -->
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="totalErros-input">{{ 'wpspayroll.totalErrors' |
+                                    translate }}</label>
+                                <div class="form-control">
+                                    <span id="totalErros-input">{{datos['numberLinesWithErrors']}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="" *ngIf="datos['uploadPayrollCardsErrorsList']">
+                    <div class="">
+                        <!-- sme-data-table -->
+                        <div class="sme-data-table">
+                            <div class="sme-data-table__export" style="display:block">
+                                <table-export [dataTable]="reportErrorTable"
+                                              [header]="'accounts.popupTitle' | translate" [columns]="[
+  {'title':'payroll.rowNumber' | translate, 'dataKey': 'lineNumber'},
+  {'title':'payroll.errorDescription' |translate , 'dataKey': 'errorCode'},
+  {'title':'payroll.fieldName' | translate, 'dataKey': 'fieldName'},
+  {'title':'payroll.fieldData' | translate, 'dataKey': 'fieldData'}
+]"></table-export>
+
+                            </div>
+                            <div class="sme-table table headerDataTable">
+                                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                                               #reportErrorTable class="material sme-table sme-table--responsive table"
+                                               [rows]="datos?.uploadPayrollCardsErrorsList"
+                                               [columnMode]="defaultColumnMode"
+                                               [headerHeight]="30" [footerHeight]="footerHeight"
+                                               [rowHeight]="defaultHeight"
+                                               [externalPaging]="false"
+                                               [count]="datos?.uploadPayrollCardsErrorsList?.length"
+                                               [limit]="5">
+
+                                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                                              (toggle)="onDetailToggle($event)">
+                                        <ng-template let-row="row" let-expanded="expanded"
+                                                     ngx-datatable-row-detail-template>
+
+                                            <div class="row">
+                                                <fieldset>
+                                                    <div class="col-xs-6">
+                                                        <!-- sme-form-group -->
+                                                        <div class="form-group">
+                                                            <label>{{'payroll.rowNumber' | translate }}</label>
+                                                            <div>
+                                                                <span>{{ row.lineNumber }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <!-- sme-form-group -->
+                                                        <div class="form-group">
+                                                            <label>{{'payroll.errorDescription' |translate }}</label>
+                                                            <div>
+                                                                <span>{{ 'errors' | modelPipe:'errorTable.' + row.errorCode }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="row">
+                                                <fieldset>
+                                                    <div class="col-xs-6">
+                                                        <!-- sme-form-group -->
+                                                        <div class="form-group">
+                                                            <label>{{'payroll.fieldName' | translate}}</label>
+                                                            <div>
+                                                                <span>{{ row.fieldName }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <!-- sme-form-group -->
+                                                        <div class="form-group">
+                                                            <label>{{'payroll.fieldData' | translate}}</label>
+                                                            <div>
+                                                                <span>{{ row.fieldData }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-row-detail>
+
+                                    <ngx-datatable-column prop="lineNumber">
+                                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+											<span (click)="sort()" class="datatable-header-cell-wrapper">
+												{{'payroll.rowNumber' | translate }}
+											</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+
+                                    <ngx-datatable-column prop="errorCode">
+                                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+											<span (click)="sort()" class="datatable-header-cell-wrapper">
+												{{'payroll.errorDescription' |translate }}
+											</span>
+                                        </ng-template>
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+
+                                            <span>{{'errors' | modelPipe:'errorTable.' + value}}</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column prop="fieldName">
+                                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+											<span (click)="sort()" class="datatable-header-cell-wrapper">
+												{{'payroll.fieldName' | translate}}
+											</span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+
+                                    <ngx-datatable-column prop="fieldData">
+                                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+											<span (click)="sort()" class="datatable-header-cell-wrapper">
+												{{'payroll.fieldData' | translate}} </span>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-footer>
+                                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                                     let-pageSize="pageSize" let-selectedCount="selectedCount"
+                                                     let-curPage="curPage" let-offset="offset">
+                                            <div class="sme-data-table__footer">
+                                                <app-datatable-pager
+                                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                        [hidden]="!((rowCount / pageSize) > 1)"
+                                                        [visiblePagesCount]="visiblePagesCount"
+                                                        (change)="reportErrorTable.onFooterPage($event)">
+                                                </app-datatable-pager>
+
+                                                <div class="sme-data-table__actions form-inline">
+													<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                                        {{rowCount > datos?.uploadPayrollCardsErrorsList?.length ? datos?.uploadPayrollCardsErrorsList?.length : rowCount}}
+                                                        {{ 'public.ofLabel' | translate}}
+                                                        {{datos?.uploadPayrollCardsErrorsList?.length}}</span>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-footer>
+
+                                </ngx-datatable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+
+                    <button type="button" class="btn btn-primary"
+                            (click)="reportModal.hide()">{{'public.accept' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>

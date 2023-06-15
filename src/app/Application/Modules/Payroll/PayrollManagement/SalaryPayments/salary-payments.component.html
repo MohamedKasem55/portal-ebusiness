@@ -1,0 +1,68 @@
+
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-management']">{{ 'dashboard.payrollManagment'| translate }}</a></li>
+        <li class="active">{{ 'payroll.salaryPayments'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+	<div class="sme-page-block">
+				<ul class="sme-box sme-wizard__steps">
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+						<span>
+							<span class="num">1</span>
+							<span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+						</span>
+					</li>
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+						<span>
+							<span class="num">2</span>
+							<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+						</span>
+					</li>
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+						<span>
+							<span class="icon -check"></span>
+							<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+						</span>
+					</li>
+				</ul>
+	</div>
+</div>
+
+<app-salary-payments-step1 [hidden]="step !== 1"
+[formSalary]="formSalary"
+[accounts]="accounts"
+[tableSelectedRows]="tableSelectedRows"
+[bank]="bank"
+(onInit)="onInitStep1($event)">
+
+	
+</app-salary-payments-step1>
+
+<app-salary-payments-step2 *ngIf="step === 2"
+[initSalaryPayment]="initSalaryPayment"	
+[tableSelectedRows]="tableSelectedRows"
+[formSalary]="formSalary"
+[accounts]="accounts"
+[bank]="bank"
+[generateChallengeAndOTP]="generateChallengeAndOTP"
+[requestValidate]="requestValidate"
+(onInit)="onInitStep2($event)">
+
+</app-salary-payments-step2>
+
+<app-salary-payments-step3 *ngIf="step === 3"
+[generateChallengeAndOTP]="generateChallengeAndOTP"
+>
+	
+</app-salary-payments-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide"  (click)="next()" *ngIf="step < 3" [disabled]="isValidForm()"> {{'public.next' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="next()" *ngIf="step == 3" [disabled]="isValidForm()">{{'public.finish' | translate}}</button>
+</div>

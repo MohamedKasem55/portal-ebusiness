@@ -1,0 +1,75 @@
+<form>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="legend" class="title-legend">
+                                    {{'menu.company_admin.alias-management.confirmationDetails' | translate}}
+                                </div>
+                                <hr class="hr-title">
+                                <div class="payment-options-group">
+                                    <div class="form-field-25" *ngIf="aliasDetails.proxyAction!='DELINK_ALL'">
+                                        <div class="form-control input-flex-width">
+                                            <label *ngIf="aliasDetails.proxyType=='UNN'">{{
+                                                'menu.company_admin.alias-management.crNumber' | translate
+                                                }}</label>
+                                            <label *ngIf="aliasDetails.proxyType=='MOBILE'">{{
+                                                'menu.company_admin.alias-management.mobile' | translate
+                                                }}</label>
+                                            <label *ngIf="aliasDetails.proxyType=='EMAIL'">{{
+                                                'menu.company_admin.alias-management.email' | translate
+                                                }}</label>
+                                            <div class="titlePin message" style="margin-top: 10px">
+                                                <span class="border-none">{{aliasDetails.proxyValue }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-field-35">
+                                        <div class="form-control input-flex-width">
+                                            <label>{{
+                                                'menu.company_admin.alias-management.account' | translate
+                                                }}</label>
+                                            <div class="titlePin message" style="margin-top: 10px">
+                                                <span class="border-none">{{aliasDetails.iban }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="form-field-25">
+                                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                    [requestValidate]="requestValidate" #authorization>
+                                </app-secured-authentication>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container-fluid">
+        <div class="sme-form__actions">
+            <a class="btn btn-default btn-wide" routerlinkactive="active" (click)="cancel()">{{
+                'menu.company_admin.alias-management.cancel' |
+                translate }}</a>
+            <button class="btn btn-primary btn-wide" [disabled]="!isDisabled()" routerlinkactive="active"
+                (click)="next()">{{
+                'menu.company_admin.alias-management.confirm' |
+                translate }}</button>
+        </div>
+    </div>
+
+
+</form>

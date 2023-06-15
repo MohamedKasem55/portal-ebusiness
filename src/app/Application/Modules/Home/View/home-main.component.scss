@@ -1,0 +1,150 @@
+@import "../../../../../scss/theme/css/own-variables.scss";
+@import "../../../../../scss/theme/css/vendor/_directional.scss";
+
+@media screen and (max-width: 800px) {
+    .desktop-hidden {
+        display: initial;
+    }
+
+    .mobile-hidden {
+        display: none;
+        width: 0%;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .desktop-hidden {
+        display: none;
+    }
+
+    .mobile-hidden {
+        display: initial;
+    }
+}
+
+.pad {
+    padding: 20px;
+}
+
+.title-parent {
+    display: flex;
+}
+
+.panel-title-text {
+    align-items: center;
+    font-size: 14px;
+    display: flex;
+}
+
+.info-icon {
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    display: flex;
+    opacity: 0.4;
+    margin-left: 10px;
+}
+
+.img-icon {
+    width: inherit;
+    height: inherit;
+}
+
+.home-dropdown-menu-en {
+    margin-left: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 10px;
+}
+.home-dropdown-menu-ar {
+    margin-right: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-bottom: 10px;
+}
+.icon-center {
+    align-items: center;
+}
+.color {
+    color: $brand-grey-light;
+    font-family: 'noto-sans-en',"noto-sans-ar";
+    @if $dir != ltr {
+        font-family: "noto-sans-ar",'noto-sans-en';
+    }
+    opacity: 0.7;
+}
+
+.paddign-total {
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 800px) {
+    .big-font {
+        font-size: 10px;
+        padding-left: 15px;
+    }
+}
+@media screen and (min-width: 800px) {
+    .big-font {
+        font-size: 24px;
+    }
+}
+
+.sme-panel__title{
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    color: #172328 !important;
+}
+
+.panel-title-text {
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    color: #172328 !important;
+}
+
+.bfm-pos{
+    margin-left: 1%;
+    margin-top: 2%;
+    text-decoration: underline;
+    font-size: 18px;
+    color: #221afb;
+    cursor: pointer;
+
+}
+
+.bfm-en {
+  margin-top: 2%;
+  text-align: left;
+}
+
+.bfm-ar {
+  margin-top: 2%;
+  text-align: right;
+}
+
+.balance-section-en {
+  margin-bottom: 0px !important;
+  float: right;
+
+}
+
+.balance-section-ar {
+  margin-bottom: 0px !important;
+  float: left;
+}
+.balance-bfm-section{
+    margin-top: 1%;
+}
+.bfm-img{
+    width: 30px;
+    vertical-align: bottom;
+}
+sme-page-block sme-wizard__navigation sme-form__actions{
+    padding-top: 0px !important;
+}

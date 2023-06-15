@@ -1,0 +1,73 @@
+<!-- sme-header -->
+<div class="sme-header navbar navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="sme-header__brand" routerLinkActive="active" [routerLink]="['/dashboard']">
+				<img src="img/logo.svg" alt="{{ 'public.al-rajhi' | translate }}">
+			</a>
+		</div>
+		<p class="sme-header__switch navbar-text navbar-right">
+            <a  *ngIf="translate.currentLang!=='en'" class="human-selectable" (click)="changeEnglish()">{{ 'public.english' | translate }}</a>
+            <a  *ngIf="translate.currentLang!=='ar'" class="human-selectable" (click)="changeArabic()">{{ 'public.arabic' | translate }}</a>
+        </p>
+	</div>
+</div>
+<div class="sme-navigation print" ></div>
+
+<div id="sme-main">
+	<div class="sme-content-container container-fluid">
+
+		<div class="sme-page-block print">
+			<ul class="sme-box sme-wizard__steps">
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+						<span class="num">1</span>
+					<span class="text">{{ 'public.step' | translate }} 1</span>
+					</span>
+				</li>
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+						<span class="num">2</span>
+					<span class="text">{{ 'public.step' | translate }} 2</span>
+					</span>
+				</li>
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3}"><span>
+						<span class="num">3</span>
+					<span class="text">{{ 'public.step' | translate }} 3</span>
+					</span>
+				</li>
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==4, 'completed' : wizardStep>4}"><span>
+						<span class="num">4</span>
+					<span class="text">{{ 'public.step' | translate }} 4</span>
+					</span>
+				</li>
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==5, 'completed' : wizardStep>5}"><span>
+						<span class="num">5</span>
+					<span class="text">{{ 'public.step' | translate }} 5</span>
+					</span>
+				</li>
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==6, 'completed' : wizardStep>6}"><span>
+						<span class="num">6</span>
+					<span class="text">{{ 'public.step' | translate }} 6</span>
+					</span>
+				</li>
+				<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==7}"><span>
+						<span class="num">7</span>
+					<span class="text">{{ 'public.step' | translate }} 7</span>
+					</span>
+				</li>
+			</ul>
+		</div>
+
+		<div>
+			<router-outlet (activate)="componentAdded($event)" (deactivate)="componentRemoved($event)"></router-outlet>
+		</div>
+
+		<div class="sme-page-block sme-wizard__navigation sme-form__actions print">
+			<button *ngIf="wizardStep==1" (click)="cancelFirstButton()" class=" btn btn-default btn-wide">{{ 'public.cancel' | translate }}</button>
+			<button *ngIf="wizardStep!=1 && wizardStep!=7" (click)="backButton()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+			<button *ngIf="wizardStep==7" class=" btn btn-primary btn-wide"[routerLink]="['/login']">{{ 'public.accept' | translate }}</button>
+			<button *ngIf="wizardStep!=7" [disabled]="!validForm()" (click)="proceedButton()" class=" btn btn-primary btn-wide">{{ 'public.proceed' | translate }}</button>
+			
+		</div>
+
+	</div>
+</div>

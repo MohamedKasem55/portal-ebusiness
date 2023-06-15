@@ -1,0 +1,19 @@
+.arrow-back {
+  height: 24px;
+}
+.arrow-back > svg {
+  width: auto;
+  height: 24px;
+  fill: white;
+}
+.human-selectable {
+  cursor: pointer;
+}
+
+@supports (-ms-ime-align: auto) {
+  .sme-header .navbar-header::before,
+  .sme-header .navbar-header::after {
+    content: ' ';
+    display: inline !important;
+  }
+}

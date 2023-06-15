@@ -1,0 +1,61 @@
+<app-dynamic-searchable-table
+        [showSearchForm]="false"
+        [searchForm_checkValid]="true"
+        [searchForm]="searchForm"
+        [service]="service"
+        [fieldsConfigForSearchForm]="fieldsConfigForSearchForm"
+        [fieldsConfigForList]="fieldsConfigForList"
+        [combosData]="combosData"
+        [search_form_combosData]="combosData"
+        [search_form_translate_prefix]="translate_prefix"
+        [table_title]="('pendingActions.general.wizardStep2TitleText' + operation)"
+        [table_translate_prefix]="translate_prefix"
+        [table_export_pdf_size]="getPdfPageSize()"
+
+        (onSubmitSearchForm)="search()"
+        (onResetSearchForm)="reset()"
+        [table_export_show_buttons]="showExportButtons()"
+        [table_export_header]="getExportHeader()"
+        [table_export_columns]="getExportColumns()"
+        (onTablePage)="setPage($event)"
+        (onTableSort)="setSort($event)"
+        [table_rowIdentity]="getIdFunction()"
+        (onTableSelect)="onSelect($event)"
+        (onTableDetailToggle)="onDetailToggle($event)"
+        (onTableClickRowDetail)="onClickRow($event.row, $event.propName)"
+
+        [table_allow_link_to_detail]="false"
+        [table_export_selected_rows]="tableSelectedRows"
+        [table_externalPaging]="false"
+        [table_externalSorting]="false"
+
+        [table_selectionType]="false"
+        [table_elements_rows]="elementsPage.data"
+        [table_columnMode]="defaultColumnMode"
+        [table_headerHeight]="defaultHeight"
+        [table_footerHeight]="0"
+        [table_rowHeight]="defaultHeight"
+        [table_elements_count]="elementsPage.page.totalElements"
+        [table_elements_offset]="elementsPage.page.pageNumber-1"
+        [table_elements_limit]="elementsPage.page.pageSize"
+        [table_hasFixedColumns]="true"
+
+        [table_footer_show_buttons]="false"
+        [table_footer_visiblePagesCount]="visiblePagesCount"
+        [table_footer_pageSize]="elementsPage.page.pageSize"
+        (onTableFooterChangePageSize)="elementsPage.page.pageSize = $event.pageSize">
+
+</app-dynamic-searchable-table>
+
+<arb-panel *ngIf="operation && !editable">
+    <div>
+        <div>
+            <label><span
+                    class="icon -help"></span> {{ 'pendingActions.general.wizardStep2HelpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ ('pendingActions.general.wizardStep2HelpText' + operation) | translate }}
+        </div>
+    </div>
+</arb-panel>

@@ -1,0 +1,209 @@
+<arb-table-panel [title]="title">
+    <table-export [dataTable]="depositorBeneficiariesTabularTable"
+                  [rows]="treeData.length>0 ? treeData : null"
+                  [header]="title  | translate"
+                  [columns]="[
+                      {'title':'governmentRevenue.bulkUploadFile.depositor' | translate , 'dataKey': 'depositorToPrint', width:'*'},
+                      {'title':'governmentRevenue.bulkUploadFile.beneficiary' | translate , 'dataKey': 'beneficiaryToPrint', width:'*'},
+                      {'title':'governmentRevenue.bulkUploadFile.subAccount' | translate , 'dataKey': 'subAccountToPrint', width:'*'},
+                      {'title':'governmentRevenue.bulkUploadFile.account' | translate , 'dataKey': 'account', width: 120},
+                      {'title':'governmentRevenue.bulkUploadFile.amount' | translate , 'dataKey': 'amount', width:60},
+                      {'title':'governmentRevenue.bulkUploadFile.counts' | translate, 'dataKey': 'counts', width:40}
+                ]">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                   #depositorBeneficiariesTabularTable
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="depositorBeneficiariesPageData.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="30"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="false"
+                   [externalSorting]="true"
+                   [count]="treeData.length"
+                   [limit]="depositorBeneficiariesPageData.page.totalElements">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight"
+                                  #myDetailRow
+                                  (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                         ngx-datatable-row-detail-template>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'governmentRevenue.bulkUploadFile.beneficiaryName' | translate }}</label>
+                                <div>
+                                    <span *ngIf="row.type === 'depositor'" style="padding-left: 15px;"
+                                          (click)="onTreeAction(row)">
+                                        <i *ngIf="row.treeStatus === 'collapsed'"
+                                           class="glyphicon glyphicon-plus">
+                                        </i>
+                                        <i *ngIf="row.treeStatus === 'expanded'"
+                                           class="glyphicon glyphicon-minus">
+                                        </i>
+                                    </span>
+                                    <span *ngIf="row.type === 'depositor'"
+                                          style="cursor: pointer;"
+                                          (click)="onTreeAction(row)">
+                                        {{ row['name'] }}
+                                    </span>
+                                    <span *ngIf="row.type === 'beneficiary'"
+                                          style="cursor: pointer;"
+                                          (click)="onTreeAction(row)">
+                                        <i *ngIf="row.treeStatus === 'collapsed'"
+                                           class="glyphicon glyphicon-plus">
+                                        </i>
+                                        <i *ngIf="row.treeStatus === 'expanded'"
+                                           class="glyphicon glyphicon-minus">
+                                        </i>
+                                        <span style="padding-left: 15px;">
+                                                        {{ row['name'] }}
+                                         </span>
+                                    </span>
+                                    <span *ngIf="row.type === 'subAccount'" style="padding-left: 45px">
+                                        {{ row['name'] }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'governmentRevenue.bulkUploadFile.account' | translate }}</label>
+                                <div>
+                                    <span>{{row['account']}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'governmentRevenue.bulkUploadFile.amount' | translate }}</label>
+                                <div>
+                                    <span>{{ row['amount'] | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'governmentRevenue.bulkUploadFile.counts' | translate }}</label>
+                                <div>
+                                    <span>{{ row['counts'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="id" [width]="40" [resizeable]="false" [canAutoResize]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template let-tree="cellContext">
+                <span *ngIf="row.type === 'depositor'" style="padding-left: 15px;"
+                      (click)="onTreeAction(row)">
+                    <i *ngIf="row.treeStatus === 'collapsed'" class="glyphicon glyphicon-plus">
+                    </i>
+                    <i *ngIf="row.treeStatus === 'expanded'" class="glyphicon glyphicon-minus">
+                    </i>
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="name" [width]="300">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'governmentRevenue.bulkUploadFile.beneficiaryName' | translate }}
+                            </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template let-tree="cellContext">
+                <p *ngIf="row.type === 'depositor'"
+                   style="cursor: pointer;"
+                   (click)="onTreeAction(row)">
+                    <span>{{ row['name'] }}</span>
+                </p>
+                <p *ngIf="row.type === 'beneficiary'"
+                   style="cursor: pointer;"
+                   (click)="onTreeAction(row)">
+                    <i *ngIf="row.treeStatus === 'collapsed'" class="glyphicon glyphicon-plus">
+                    </i>
+                    <i *ngIf="row.treeStatus === 'expanded'" class="glyphicon glyphicon-minus">
+                    </i>
+                    <span style="padding-left: 15px;">
+                                    {{ row['name'] }}
+                                </span>
+                </p>
+                <p *ngIf="row.type === 'subAccount'" style="padding-left: 45px">
+                    {{ row['name'] }}
+                </p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="account" [width]="160" [resizeable]="true" [canAutoResize]="true">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'governmentRevenue.bulkUploadFile.account' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{ row['account'] }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amount" [width]="120" [resizeable]="true" [canAutoResize]="true">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'governmentRevenue.bulkUploadFile.amount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{ row['amount'] | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="counts" [width]="80" [resizeable]="true" [canAutoResize]="true">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'governmentRevenue.bulkUploadFile.counts' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{ row['counts'] }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <!--
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)"
+                            (change)="depositorBeneficiariesTabularTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    -->
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{this.depositorBeneficiariesPageData.page.size}} {{ 'public.ofLabel' | translate}}
+                            {{treeData.length}}
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

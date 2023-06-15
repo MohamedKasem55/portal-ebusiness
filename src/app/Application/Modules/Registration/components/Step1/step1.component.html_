@@ -1,0 +1,55 @@
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'registration.companyIdentification' | translate }}</div>
+</div>
+<div class="sme-page-block">
+	<div class="sme-form">
+		<div class="sme-form__content">
+			<form class="sme-form__form" #stepForm="ngForm">
+				<div class="sme-form__body">
+					<div class="sme-form__group-title">{{ 'registration.enterYourCrAndCic' | translate }}</div>
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group form-group-help">
+									<label for="search-criteria--input-registration-cr">{{ 'registration.CR' | translate }}</label>
+									<div class="form-group__input">
+										<input type="text" autocomplete="off" class="form-control" id="search-criteria--input-registration-cr" placeholder="{{ 'registration.pleaseEnterCrStep1' | translate }}"
+										 [(ngModel)]="formData.cr" name="cr" required pattern="^\d*$" maxlength="19" inputPattern="onlyDigits">
+									</div>
+								</div>
+								<p *ngIf="stepForm.controls.cr && stepForm.controls.cr.hasError('pattern')" class="alert alert-danger">
+									{{'registration.validationNumber' | translate }}
+								</p>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label for="search-criteria--input-registration-cic">{{ 'registration.CIC' | translate }}</label>
+									<input type="text" autocomplete="off" class="form-control" id="search-criteria--input-registration-cic" placeholder="{{ 'registration.pleaseEnterCicStep1' | translate }}"
+									 [(ngModel)]="formData.cic" name="cic" required maxlength="10" (blur)="onCicChange($event)" inputPattern="onlyDigits">
+								</div>
+								<p *ngIf="stepForm.controls.cic && stepForm.controls.cic.hasError('pattern')" class="alert alert-danger">
+									{{'registration.validation10DigitsNumber' | translate }}
+								</p>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label>{{ 'registration.typeOfCompany' | translate }}</label>
+									<div class="sme-radio radio">
+										<label>
+											<input type="radio" name="typeOfCompany" value="company" [(ngModel)]="formData.typeOfCompany"> <i aria-hidden="true"></i> <span>{{ 'registration.company' | translate }}</span>
+										</label>
+									</div>
+									<div class="sme-radio radio">
+										<label>
+											<input type="radio" name="typeOfCompany" value="establishment" [(ngModel)]="formData.typeOfCompany"> <i aria-hidden="true"></i> <span>{{ 'registration.establishment' | translate }}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

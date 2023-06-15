@@ -1,0 +1,519 @@
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'directDebits.directDebits' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'directDebits.customerCIC' | translate }}</label>
+                                        <span class="form-control"
+                                             >{{this.form.controls['customerCIC'].value}}
+										</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'directDebits.organizationName' | translate }}</label>
+                                        <span class="form-control">
+											{{this.form.controls['organizationName'].value}}
+										</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'directDebits.batchName' |
+                                            translate }}</label>
+                                        <span class="form-control">
+											{{this.form.controls['batchName'].value}}
+										</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'directDebits.dueDate' |
+                                            translate }}</label>
+                                        <span class="form-control">
+											{{this.form.controls['valueDate'].value | date:'dd/MM/yyyy'}}
+										</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'directDebits.customerReference' | translate }}
+                                            </label>
+                                            <span type="text" class="form-control">{{form.value.customerReference}}
+											</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'payroll.authorizationLevelInformation' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="authorizationPageTable"
+                                  [header]="'payroll.authorizationLevelInformation' | translate"
+                                  [columns]="[
+                                {'title':'payroll.level' | translate,'dataKey':'level'},
+                                {'title':'public.status' | translate,'dataKey':'status'},
+                                {'title':'public.userName' | translate,'dataKey':'updater'},
+                                {'title':'public.date' | translate,'dataKey':'updateDate'}
+                                ]">
+                    </table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #authorizationPageTable
+                                   class="material"
+                                   [rows]="authorizationPage.data"
+                                   [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30"
+                                   [footerHeight]="50"
+                                   [rowHeight]="defaultHeight"
+                                   [externalPaging]="false"
+                                   [count]="authorizationPage.page.totalElements"
+                                   [limit]="authorizationPage.page.pageSize">
+
+                        <ngx-datatable-column prop="level">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.level' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="status">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.status' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <span>{{value | statusPipe}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="updater">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.userName' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="updateDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.date' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template
+                                    ngx-datatable-footer-template
+                                    let-rowCount="rowCount"
+                                    let-pageSize="pageSize"
+                                    let-selectedCount="selectedCount"
+                                    let-curPage="curPage"
+                                    let-offset="offset">
+                                <div class="sme-datatable-footer">
+                                    <datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage"
+                                            [size]="pageSize"
+                                            [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            (change)="authorizationPageTable.onFooterPage($event)">
+                                    </datatable-pager>
+
+                                    <div class="page-count">
+                                        <span>{{ 'public.showingLabel' | translate}}  {{this.authorizationPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        |
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <select [(ngModel)]="this.authorizationPage.page.pageSize">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'directDebits.payerList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="elementPageTable" [header]="'wpspayroll.employeeList' | translate"
+                                  [columns]="[
+                                            {'title':'directDebits.mandateReference' | translate,'dataKey':'mandate'},
+                                                    {'title':'directDebits.personalName' |translate ,'dataKey':'personalName'},
+                                                    {'title':'directDebits.bank' | translate,'dataKey':'bank'},
+                                                    {'title':'directDebits.payerAccount' | translate,'dataKey':'account'},
+                                                    {'title':'directDebits.amount' | translate,'dataKey':'salary'}
+                                            ]">
+                    </table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementPageTable
+                                   class="material sme-table sme-table--responsive table" [rows]="elementPage.data"
+                                   [columnMode]="defaultColumnMode" [headerHeight]="30"
+                                   [footerHeight]="footerHeight"
+                                   [rowHeight]="defaultHeight" [externalPaging]="false" [externalSorting]="false"
+                                   [count]="elementPage.page.totalElements" [limit]="elementPage.page.pageSize"
+                                   [offset]="elementPage.page.pageNumber-1">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                                  (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>
+                                                    {{'directDebits.mandateReference' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mandate }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.personalName' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.personalName }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.bank' | translate }}</label>
+                                                <div>
+                                                    <span>{{ 'payrollBankCode' | modelPipe:row.bank }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.payerAccount' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.account }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.amount' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.amount | amountCurrency }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="mandate" [width]="160">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'directDebits.mandateReference' | translate }}
+								</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="personalName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'directDebits.personalName' | translate }}
+								</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="bank">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'directDebits.bank' | translate }}
+								</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span [innerHTML]="'payrollBankCode' | modelPipe:value"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="account" [width]="290">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'directDebits.payerAccount' | translate }}
+								</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+								<span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'directDebits.amount' | translate }}
+								</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value  | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="elementPageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+										<span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                            {{(pageSize > rowCount ? rowCount : pageSize)}} {{ 'public.ofLabel' | translate}}
+                                            {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+											<span>{{ 'public.showRowsLabel' | translate}}</span>
+											<div class="sme-select form-control">
+												<select class="form-control"
+                                                        [(ngModel)]="this.elementPage.page.pageSize">
+													<option [value]="10">10</option>
+													<option [value]="20">20</option>
+													<option [value]="50">50</option>
+													<option [value]="100">100</option>
+												</select>
+											</div>
+										</span>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'directDebits.summaryAndFees' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberOfPayer' | translate }}</label>
+                                        <span class="form-control">{{validData.directDebitFeesOutput.numEmployees}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control"
+                                             >{{validData.directDebitFeesOutput.numRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberNonRajhiTransfer' | translate }}</label>
+                                        <span class="form-control"
+                                             >{{validData.directDebitFeesOutput.numNonRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.feesRajhiTransfers' | translate }}</label>
+                                        <span type="text" class="form-control" id="fee-rajhi-transfer-input">
+											{{validData.directDebitFeesOutput.alRajhiCustomersFeeSuccess| amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.feesNonRajhiTransfers' | translate }}</label>
+                                        <span class="form-control" id="fee-non-rajhi-transfer-input">
+											{{validData.directDebitFeesOutput.nonAlRajhiCustomersFeeSuccess| amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-amount-input">{{ 'directDebits.totalAmount' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-amount-input">
+											{{validData.directDebitFeesOutput.totalAmount  | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-rajhi-transfer-input"
+                                               class="required">{{ 'directDebits.totalRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-rajhi-transfer-input">
+											{{validData.directDebitFeesOutput.totalNumRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-non-rajhi-transfer-input"
+                                               class="required">{{ 'directDebits.totalNonRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-non-rajhi-transfer-input">
+											{{validData.directDebitFeesOutput.totalNumNonRajhi | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+										</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.totalFeesRajhi' | translate }}</label>
+                                        <span class="form-control" id="fee-rajhi-input">
+											{{validData.directDebitFeesOutput.totalFeesRajhi| amountCurrency }} {{'currencyIso' | modelPipe: '608'}}
+										</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.totalFeesNonRajhi' | translate }}</label>
+                                        <span class="form-control"
+                                              id="fee-non-rajhi-input">{{validData.directDebitFeesOutput.totalFeesNonRajhi| amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}
+										</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-estimated-amount-input"
+                                               class="required">
+                                            {{ 'directDebits.totalEstimatedAmount' | translate }}</label>
+                                        <span class="form-control" id="total-estimated-amount-input">
+											{{validData.directDebitFeesOutput.totalEstimated  | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+										</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset *ngIf="generateChallengeAndOTP">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                                                    [requestValidate]="requestValidate" #authorization>
+                                        </app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  

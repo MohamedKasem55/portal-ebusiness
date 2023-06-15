@@ -1,0 +1,42 @@
+<!-- breadcrumb -->
+<arb-breadcrumb [routes]="[
+	['companyAdmin.companyAdmin'],
+	['companyAdmin.user.management',['/companyadmin/manage/user']],
+    ['companyAdmin.user.requestStatus']
+]">
+</arb-breadcrumb>
+
+<arb-steps
+        [steps]="['public.completeDetails','public.confirm','public.summary']"
+        [currentStep]="step">
+</arb-steps>
+
+<app-request-reactivate-step1 *ngIf="step === 1" [formModel]="formModel" [userData]="userData" [combosData]="combosData"
+	[user]="selectedUser" (onInit)="onInitStep1($event)">
+</app-request-reactivate-step1>
+
+<app-request-reactivate-step2 *ngIf="step === 2" [batch]="this.initiateBatch" [formModel]="formModel" [userData]="userData" [combosData]="combosData"
+	[user]="selectedUser"
+	[option]="option" [DeleteOption]="DeleteOption" [InitiateOption]="InitiateOption"
+	[generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate"
+	(onInit)="onInitStep2($event)">
+</app-request-reactivate-step2>
+
+<app-request-reactivate-step3 *ngIf="step === 3" [generateChallengeAndOTP]="generateChallengeAndOTP" [option]="option"
+	[DeleteOption]="DeleteOption" [InitiateOption]="InitiateOption">
+</app-request-reactivate-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	<button type="button" class=" btn btn-default btn-wide" (click)="previous()"
+		*ngIf="step >= 1 && step < 3">{{'public.back' | translate }}</button>
+	<button type="submit" class=" btn btn-default btn-wide" [routerLink]="['/companyadmin/user/requeststatus']"
+		*ngIf="step == 2"> {{'public.cancel' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="delete()" *ngIf="step == 1">
+		{{'public.delete' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="initiate()" *ngIf="step == 1"
+		[disabled]="!isValidStep1Form()"> {{'public.reInitiate' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="next()" *ngIf="step == 2"
+		[disabled]="!isValidForm()"> {{'public.confirm' | translate}}</button>
+	<button type="submit" class=" btn btn-primary btn-wide" (click)="finish()" *ngIf="step == 3">{{'public.finish' |
+		translate}}</button>
+</div>

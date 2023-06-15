@@ -1,0 +1,416 @@
+<arb-table-panel [title]="'dashboard.bulkPayments'">
+    <table-export [dataTable]="table" [header]="'dashboard.bulkPayments' | translate"
+                  [columns]="[
+                        {'title': 'Batch Name' | translate, 'dataKey':'batchName'},
+                        {'title': 'customer Reference' | translate, 'dataKey':'customerReference'},
+                        {'title': 'account' | translate, 'dataKey':'accountNumber'},
+                        {'title': 'value Date' | translate, 'dataKey':'valueDate'},
+                        {'title': 'Total Amount' | translate, 'dataKey':'totalAmount'},
+                        {'title': 'Records Count' | translate, 'dataKey':'totalRecordCount'},
+                        {'title': 'Rajhi Amount' | translate, 'dataKey':'rajhiRecordAmount'},
+                        {'title': 'Rajhi Count' | translate, 'dataKey':'rajhiRecordCount'},
+                        {'title': 'Local Amount' | translate, 'dataKey':'localRecordAmount'},
+                        {'title': 'Local Count' | translate, 'dataKey':'localRecordCount'},               
+                        {'title': 'InitiatedBy' | translate, 'dataKey':'initiatedBy'},
+                        {'title': 'initiation Date' | translate, 'dataKey':'initiationDate'},
+                        {'title': 'Currentstatus' | translate, 'dataKey':'status'},
+                        {'title': 'Nextlevels' | translate, 'dataKey':'levelStatusList'}    
+                        ]"></table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                   class="material sme-table sme-table--responsive table" [rows]="items"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="50"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [count]="items.length"
+                   [limit]="tableDisplaySize"
+                   [externalPaging]="externalPagination"
+                   [externalSorting]="externalPagination"
+                   [rowIdentity]="getIdFunction()"
+                   [selectionType]="defaultSelectionType"
+                   [selected]="itemsSelected"
+                   (page)='setInnerPage($event)'
+                   (select)='onInnerSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.batchName' | translate }}</label>
+                                <div>
+                                    <span *ngIf="showDetailLink">
+                                        <a (click)="detailLinkClicked(row)"
+                                           href="javascript:void(0)">
+                                            {{row.batchName}}
+                                        </a>
+                                    </span>
+                                    <span *ngIf="!showDetailLink">
+                                        {{row.batchName}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.customerReference' | translate }}</label>
+                                <div>
+                                    <span>{{row.customerReference}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.account' | translate }}</label>
+                                <div>
+                                    <span>{{row.accountNumber}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.valueDate' | translate }}</label>
+                                <div>
+                                    <span>{{row.valueDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.totalAmount' | translate }}</label>
+                                <div>
+                                    <span>{{row.totalAmount|amountCurrency}}</span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.totalRecordCount' | translate }}</label>
+                                <div>
+                                    <span>{{row.count}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.rajhiRecordAmount' | translate }}</label>
+                                <div>
+                                    <span>{{row.rajhiRecordAmount|amountCurrency}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.rajhiRecordCount' | translate }}</label>
+                                <div>
+                                    <span>{{row.totalRecordCount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.localRecordAmount' | translate }}</label>
+                                <div>
+                                    <span>{{row.localRecordAmount|amountCurrency}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.count' | translate }}</label>
+                                <div>
+                                    <span>{{row.localRecordCount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.initiatedBy' | translate }}</label>
+                                <div>
+                                    <span>{{row.initiatedBy}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{'bulkPayments.initiationDate' | translate }}</label>
+                                <div>
+                                    <span>{{row.initiationDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6" *ngIf="!futureLevels">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label *ngIf="!futureLevels">{{ 'public.status' | translate }}</label>
+                                <div>
+                                    <span>{{ row.securityLevelsDTOList | levels:'status' }}</span>
+                                    <span class=" human-selectable icon -info"
+                                          (click)="openModal(row,modal)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" *ngIf="futureLevels">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'public.statusIf' | translate }}</label>
+                                <div>
+                                    <span>{{ row.futureSecurityLevelsDTOList | levels:'status' }}</span>
+                                    <span class=" human-selectable icon -info"
+                                          (click)="openModal(row,modal)"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6" *ngIf="!futureLevels">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label *ngIf="!futureLevels">{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                <div>
+                                    <span>{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" *ngIf="futureLevels">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                <div>
+                                    <span>{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column *ngIf="selectable" [width]="50" [sortable]="false" [canAutoResize]="false"
+                              [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"
+                              [checkboxable]="true">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="batchName">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.batchName' | translate }}
+                        </span>
+                <br/>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.customerReference' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span *ngIf="showDetailLink">
+                    <a (click)="detailLinkClicked(row)"
+                       href="javascript:void(0)">
+                        {{row.batchName}}
+                    </a>
+                </span>
+                <span *ngIf="!showDetailLink">
+                    {{row.batchName}}
+                </span>
+                <br/>
+                <span>{{row.fileReference}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="accountNumber">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.account' | translate }}
+                        </span>
+                <br/>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.valueDate' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+                <br/>
+                <span>{{row.paymentDate}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="totalAmount">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.totalAmount' | translate }}
+                        </span>
+                <br/>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.totalRecordCount' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{value|amountCurrency}}</span>
+                <br/>
+                <span>{{row.count}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="rajhiRecordAmount">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.rajhiRecordAmount' | translate }}
+                        </span>
+                <br/>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.rajhiRecordCount' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.rajhiRecordAmount|amountCurrency}}</span>
+                <br/>
+                <span>{{row.rajhiRecordCount}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="localRecordAmount">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.localRecordAmount' | translate }}
+                        </span>
+                <br/>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.count' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{value|amountCurrency}}</span>
+                <br/>
+                <span>{{row.localRecordCount}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="initiatedBy">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.initiatedBy' | translate }}
+                        </span>
+                <br/>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payments.bulkpayments.initiationDate' | translate }}
+                        </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+                <br/>
+                <span>{{row.initiationDate  | date:'dd/MM/yyyy HH:mm'}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" *ngIf="!futureLevels">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value | levels:'status' }}</span>
+                <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+              
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span (click)="sort()"
+                                  class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{ value | levels:'nextStatus' }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="50" *ngIf="futureLevels">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value | levels:'status' }}</span>
+                <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+              
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{ value | levels:'nextStatus' }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [visiblePagesCount]="visiblePagesCount" (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(items.length > pageSize ? pageSize : items.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [ngModel]="tableDisplaySize"
+                                                (ngModelChange)="onChangeSize($event)">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

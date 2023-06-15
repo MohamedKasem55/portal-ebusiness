@@ -1,0 +1,86 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'commercialCards.name' | translate }}</li>
+        <!-- <li class="active">{{ 'dashboard.chequebook' | translate }}</li> -->
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title"></div>
+            <div class="sme-form__content">
+                <form class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <!-- <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsActivate'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goActivateCards()">
+                                        {{ 'commercialCards.activateCards' | translate }}
+                                    </a>
+                                </li> -->
+                                <li
+                                    *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsDisplay','BusinessCardsPayments','BusinessCardsActivate','BusinessCardsManagementPIN','BusinessCardsBlock','BusinessCardsBlockReplace'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goViewQueryCards()">
+                                        {{ 'menu.commercial_cards.creditCardListName' | translate }}
+                                    </a>
+                                </li>
+                                <!-- <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsDisplay'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goViewQueryCards()">
+                                        {{ 'commercialCards.viewQueryCards' | translate }}
+                                    </a>
+                                </li> -->
+                                <!-- <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsManagementPIN'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goSetResetPin()">
+                                        {{ 'commercialCards.setResetPin' | translate }}
+                                    </a>
+                                </li> -->
+                                <!-- <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsManagementPIN'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goCardPayment()">
+                                        {{ 'commercialCards.billpayCardPayment' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsBlock'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goBlockCard()">
+                                        {{ 'commercialCards.blockCards' | translate }}
+                                    </a>
+                                </li> -->
+                                <!-- <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsBlockReplace'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goBlockReplCard()">
+                                        {{ 'commercialCards.blockReplCard' | translate }}
+                                    </a>
+                                </li> -->
+                                <li *ngIf="authenticationService.activateOption
+                                    ('BusinessCardsMenu',['BUSINESS_CARDS_PRIVILEGE'],
+                                    ['BusinessCardsDisplay',
+                                    'BusinessCardsPayments',
+                                    'BusinessCardsActivate',
+                                    'BusinessCardsManagementPIN',
+                                    'BusinessCardsBlock',
+                                    'BusinessCardsBlockReplace'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goRequestStatus()">
+                                        {{ 'menu.commercial_cards.request_status' | translate }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

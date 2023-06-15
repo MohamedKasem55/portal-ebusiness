@@ -1,0 +1,168 @@
+<arb-panel>
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="search-month">{{ 'accounts.creditCards.showBills' | translate }}</label>
+                    <select id="search-month" class="form-control" name="month" formControlName="month"
+                        (change)="search()">
+                        <option value="" disabled="disabled" selected="selected">
+                            -- {{ 'public.selectOption' | translate }} --
+                        </option>
+                        <option *ngFor="let item of months" [value]="item['stmtDate']" [innerHTML]="item['value']">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-offset-6 col-sm-3">
+                <div class="form-group">
+                    <label for="search-amount">{{'accounts.creditCards.totalAmount' | translate }}</label>
+                    <span id="search-amount" class="form-control" name="search-amount">
+                        {{ getStatementsItemsTotalAmount() | amountCurrency}}  SAR
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+    </ng-container>
+</arb-panel>
+
+<arb-table-panel [title]="'accounts.creditCards.statementList'">
+    <table-export [dataTable]="elementsTable" [header]="'accounts.creditCards.statementList' | translate" [columns]="[
+                        {'title':'accounts.creditCards.postingDate' | translate,'dataKey':'postDate'},
+                        {'title':'accounts.creditCards.postingAmount' | translate,'dataKey':'amountCurrencyItem'},
+                        {'title':'accounts.creditCards.merchantDescription' | translate,'dataKey':'merchantName'}
+                        ]">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+        [externalPaging]="true" [externalSorting]="true" [count]="elementsPage.page.totalElements"
+        [offset]="elementsPage.page.pageNumber-1" [limit]="elementsPage.page.pageSize"
+        [selectionType]="defaultSelectionType" (page)='setPage($event)' (sort)="setSort($event)"
+        [rowIdentity]="getIdFunction()" (select)='onSelect($event)'>
+
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>
+                                    {{'accounts.creditCards.postingDate' | translate }}
+                                </label>
+                                <div>
+                                    <span [innerHTML]="row.postDate | date"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>
+                                    {{'accounts.creditCards.postingAmount' | translate }}
+                                </label>
+                                <div>
+                                    <span>{{row.amountCurrencyItem}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="col-xs-12">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>
+                                    {{'accounts.creditCards.merchantDescription' | translate }}
+                                </label>
+                                <div>
+                                    <span [innerHTML]="row.merchantName"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!-- <ngx-datatable-column [width]="50"
+                              [sortable]="false"
+                              [canAutoResize]="false"
+                              [draggable]="false"
+                              [resizeable]="false"
+                              [headerCheckboxable]="true"
+                              [checkboxable]="true">
+        </ngx-datatable-column> -->
+
+        <ngx-datatable-column prop="postDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'accounts.creditCards.postingDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span [innerHTML]="row.postDate | date:'dd/MM/yyyy'"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amountCurrencyItem">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'accounts.creditCards.amount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.amountCurrencyItem}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="merchantName">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'accounts.creditCards.merchantDescription' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span [innerHTML]="row.merchantName"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

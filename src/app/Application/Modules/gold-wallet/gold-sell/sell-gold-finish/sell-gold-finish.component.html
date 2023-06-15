@@ -1,0 +1,74 @@
+<div *ngIf="isSuccessOnBoarding">
+    <arb-panel>
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -check -success ticks-success"></div>
+                <h2>{{'gold-wallet.successHeader' | translate}}</h2>
+                <br>
+                <p>{{'gold-wallet.buySuccessLine' | translate}}</p>
+            </div>
+        </div>
+    </arb-panel>
+    <arb-panel>
+        <arb-panel-title [title]="'gold-wallet.summary' | translate">
+        </arb-panel-title>
+        <fieldset style="font-size: 18px;margin-left: 2%;margin-bottom: 1%;">
+            <div class="col-xs-6 col-sm-4 ">
+                <div class="form-group-information">
+                    <div class="label-data">
+                        <label>
+                            {{'gold-wallet.referenceNumber'| translate}}
+                        </label>
+                    </div>
+                    <div>
+                        <span class="text-color">
+                            {{sellRequestDTO?.sellGoldValidateRes?.referenceNumber}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4 ">
+                <div class="form-group-information">
+                    <div class="label-data">
+                        <label>
+                            {{'gold-wallet.trx-amount'| translate}}
+                        </label>
+                    </div>
+                    <div>
+                        <span class="text-color">
+                        {{sellRequestDTO?.sellGoldValidateRes?.totalCost}}
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4 ">
+                <div class="form-group-information">
+                    <div class="label-data">
+                        <label>
+                            {{'gold-wallet.price-per-gm'| translate}}
+                        </label>
+                    </div>
+                    <div>
+                        <span class="text-color">
+                            {{sellRequestDTO?.sellGoldValidateRes?.rate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+
+    </arb-panel>
+</div>
+<div *ngIf="!isSuccessOnBoarding">
+    <arb-panel>
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -close icon-failure ticks-failure"></div>
+                <h2>{{'gold-wallet.failureHeader' | translate}}</h2>
+                <br>
+                <p>{{'gold-wallet.failureLine' | translate}}</p>
+            </div>
+        </div>
+    </arb-panel>
+</div>

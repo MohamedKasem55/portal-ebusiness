@@ -1,0 +1,34 @@
+
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active">{{ 'dashboard.payrolls' | translate }}</li>
+		<li class="active">{{ 'dashboard.payrollManagment' | translate }}</li>
+	</ol>
+</div>
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title"></div>
+
+			<div class="sme-form__content">
+				<form autocomplete="off" class="sme-form__form">
+					<div class="sme-form__body">
+						<div class="row">
+							<ul>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goDashboard()"> {{ 'payroll.dashboard' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goManageEmployees()"> {{ 'payroll.manageEmployees' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goUploadFile()"> {{ 'payroll.employeeUploadFile' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goSalaryPayments()"> {{ 'payroll.salaryPayments' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goSalaryPaymentUploadFile()"> {{ 'payroll.salaryPaymentUploadFile' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goProcessedFiles()"> {{ 'payroll.viewProcessedFiles' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goRequestStatus()"> {{ 'payroll.requestStatus' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" (click)="goDownloadTemplates()"> {{ 'payroll.downloadTemplates' | translate }} </a></li>
+							</ul>
+							
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

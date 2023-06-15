@@ -1,0 +1,150 @@
+<arb-breadcrumb [routes]="[
+['companyAdmin.companyAdmin'],
+['companyAdmin.beneficiaryOriginator.title', '/companyadmin/accounts/beneficiary-originators'],
+['companyAdmin.beneficiaryOriginator.confirm']
+]">
+</arb-breadcrumb>
+<arb-steps [currentStep]="wizardStep" [steps]="['public.confirm','public.summary']">
+</arb-steps>
+
+<arb-table-panel *ngIf="wizardStep == 1" [title]="'companyAdmin.beneficiaryOriginator.confirmTitle'">
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table [rows]="modifyBeneficiaries"
+        [columnMode]="defaultColumnMode" class="material sme-table sme-table--responsive table"
+        [rowHeight]="defaultHeight" [headerHeight]="30">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label
+                                    for="depositorOriginatorName">{{'companyAdmin.beneficiaryOriginator.depositorOriginatorName'
+                                    | translate }}</label>
+                                <div>
+                                    <span id="depositorOriginatorName">{{ row.depositorOriginatorName }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="chapter">{{'companyAdmin.beneficiaryOriginator.chapter' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="chapter">{{ row.chapter }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="branch">{{'companyAdmin.beneficiaryOriginator.branch' | translate }}</label>
+                                <div>
+                                    <span id="branch">{{row.branch}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="division">{{'companyAdmin.beneficiaryOriginator.division' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="division">{{row.division}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="serial">{{'companyAdmin.beneficiaryOriginator.serial' | translate }}</label>
+                                <div>
+                                    <span id="serial">{{ row.serial }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="headOffice">{{'companyAdmin.beneficiaryOriginator.headOffice' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="headOffice">{{ row.headOffice }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="depositorOriginatorName" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span
+                    class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.depositorOriginatorName'
+                    | translate }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="chapter" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{'companyAdmin.beneficiaryOriginator.chapter' | translate }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="branch" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.branch' | translate
+                    }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="division" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.division' | translate
+                    }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="serial" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.serial' | translate
+                    }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="headOffice" [sortable]="false">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">{{'companyAdmin.beneficiaryOriginator.headOffice' |
+                    translate }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="200" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value">
+                <span class="datatable-header-cell-wrapper">
+                    {{'companyAdmin.beneficiaryOriginator.selected' | translate }}
+                </span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" >
+                <label class="datatable-checkbox">
+                    <input type="checkbox" [checked]="row.checked" [disabled]="true" />
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer></ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+<arb-confirm-panel *ngIf="wizardStep == 2">
+
+</arb-confirm-panel>
+<arb-buttons>
+    <button *ngIf="wizardStep == 1" type="button" class="btn btn-default btn-wide"
+        (click)="navToListView()">{{'public.cancel' | translate }}</button>
+    <button *ngIf="wizardStep == 1" type="button" class="btn btn-primary btn-wide"
+        [disabled]="modifyBeneficiaries.length == 0" (click)="confirm()">{{'public.confirm' | translate }}</button>
+    <button *ngIf="wizardStep == 2" type="button" class="btn btn-primary btn-wide"
+        (click)="navToListView()">{{'public.back' | translate }}</button>
+</arb-buttons>

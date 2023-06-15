@@ -1,0 +1,16 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-initiator-wizard-modify
+        [combosData]="this.combosData"
+        [combosKeys]="this.combosKeys"
+        [entityProperties]="this.entityProperties"
+        [entityName]="'user'"
+        [service]="this.service"
+        [translate_prefix]="'lockbox.cdmUsers'"
+        [pending]="true"
+        [title]="'lockbox.cdmUsers.add.menu' | translate"
+        [currentItem]="this.service.initResponse.user"
+        [backUrl]="getBackUrl()"
+>
+</app-initiator-wizard-modify>

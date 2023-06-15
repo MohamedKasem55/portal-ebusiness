@@ -1,0 +1,79 @@
+<div class="sme-head">
+    <div class="sme-head__title">{{'chequebook.stopChequebook' | translate}}</div>	
+</div>
+
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="account">{{'chequebook.account' | translate }}</label>
+                                        <div class="form-control">
+                                            <span id="account" class="form-control" readonly>{{form.controls['account'].value}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="chequeNumber">{{'chequebook.chequeNumber' | translate }} </label>
+                                        <div class="form-control">
+                                            <span id="chequeNumber" class="form-control" readonly>{{form.controls['chequeNumber'].value}}</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="chequeType">{{'chequebook.stopChequeWarningType' | translate }}</label>
+                                        <!-- <div class="form-control">
+                                                <span id="chequeType" class="form-control" readonly>{{form.controls['chequeType'].value}}</span>
+                                            </div> -->
+                                        <div class="form-control" *ngIf="form.controls['chequeType'].value == 01">
+                                            <span>{{ 'chequebook.stopChequeBookSingleCheque' | translate }}
+                                            </span>
+                                        </div>
+                                        <div class="form-control" *ngIf="form.controls['chequeType'].value == 02">
+                                            <span>{{ 'chequebook.stopChequeBookAllChequeBook' | translate }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table [futureSecurityLevels]="viewRequest.futureSecurityLevelsDTOList"></app-levels-table>
+
+<div class="sme-content-container container-fluid" *ngIf="generateChallengeAndOTP">
+	<div class="sme-page-block">
+		<div class="sme-form__content">
+			<div class="sme-form__form">
+				<div class="sme-form__body" style="padding: 15px;">
+					<div class="sme-form__box sme-form__box--form">
+						<div class="row">
+							<div class="form-group">
+								<app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+									[requestValidate]="requestValidate" #authorization>
+								</app-secured-authentication>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+									
+

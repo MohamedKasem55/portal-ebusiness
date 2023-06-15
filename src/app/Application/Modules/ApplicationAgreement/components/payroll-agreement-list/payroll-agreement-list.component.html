@@ -1,0 +1,175 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="canExecuteAction('file-upload')">
+    <a class="btn btn-primary btn-wide" [routerLink]="['/app_and_agreement/payroll-agreement/file-upload']">{{
+        'letter_guarantee.fileUpload' | translate }}
+    </a>
+</arb-panel-buttons>
+
+<br>
+<br>
+<div class="sme-panel instructions_panal">
+    <div class="sme-panel__head">
+
+        <div class="sme-panel__title">
+            {{'payroll-agreement.instructions'| translate}}
+        </div>
+
+    </div>
+    <div class="sme-panel__body">
+        <div class="sme-panel__body">
+            <div class="row instructions_row">
+                <div class="col col-sm-12 ">
+                    <span class="instructions_body">{{'payroll-agreement.instructions-1' | translate}}</span>
+                </div>
+            </div>
+            <div class="row instructions_row">
+                <div class="col col-sm-12 ">
+                    <span class="instructions_body">{{'payroll-agreement.instructions-2' | translate}}</span>
+                </div>
+            </div>
+            <div class="row instructions_row">
+                <div class="col col-sm-12 ">
+                    <span class="instructions_body">{{'payroll-agreement.instructions-3' | translate}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row instructions_row">
+            <div class="col col-sm-12 ">
+            </div>
+        </div>
+    </div>
+</div>
+
+<arb-table-panel [title]="'letter_guarantee.download-templates'">
+
+    <table-export *ngIf="showExportButtons()" [dataTable]="elementsTable" [header]="getExportHeader()"
+        [columns]="getExportColumns()">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+        [columnMode]="defaultColumnMode" [headerHeight]="defaultHeight" [footerHeight]="footerHeight"
+        [rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+        [count]="elementsPage.page.totalElements" [offset]="elementsPage.page.pageNumber-1"
+        [limit]="elementsPage.page.pageSize" [selectionType]="defaultSelectionType" (page)='setPage($event)'
+        (sort)="setSort($event)" [rowIdentity]="getIdFunction()" (select)='onSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <ng-container *ngFor="let fieldConfig of fieldsConfigForList; index as i">
+                            <div class="{{ fieldConfig.parent_div_class ? fieldConfig.parent_div_class : 'col-xs-6'}}">
+                                <div class="form-group">
+                                    <label>{{ ((translate_prefix && translate_prefix != '' ? translate_prefix + '.' :
+                                        '') + fieldConfig.translate) | translate }}</label>
+                                    <div>
+                                        <span *ngIf="!fieldConfig.link_to_detail">
+                                            <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                                        </span>
+                                        <span *ngIf="fieldConfig.link_to_detail">
+                                            <a class="human-selectable" (click)="onClickRow(row, fieldConfig.propName)">
+                                                <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)">
+                                                </p>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </fieldset>
+                </div>
+
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!--
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                              [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true"
+                              *ngIf="listService.isSelectItemsAllowed()">
+        </ngx-datatable-column>
+        -->
+
+        <ng-container *ngFor="let fieldConfig of fieldsConfigForList; index as i">
+
+            <ng-container *ngIf="fieldConfig['append_next_column'] === true">
+
+                <ngx-datatable-column prop="{{fieldConfig.propName}}"
+                    [width]="fieldConfig['column_width']?fieldConfig['column_width']:''"
+                    [canAutoResize]="fieldConfig['column_width']?false:true">
+
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            <p
+                                [innerHTML]="((translate_prefix && translate_prefix!=''?translate_prefix+'.':'')+fieldsConfigForList[i].translate) | translate">
+                            </p>
+                            <p
+                                [innerHTML]="((translate_prefix && translate_prefix!=''?translate_prefix+'.':'')+fieldsConfigForList[i + 1].translate) | translate">
+                            </p>
+                        </span>
+                    </ng-template>
+
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span *ngIf="!fieldsConfigForList[i].link_to_detail">
+                            <p [innerHTML]="fieldsConfigForList[i].propValue(row, listService, combosData)"></p>
+                        </span>
+                        <span *ngIf="fieldsConfigForList[i].link_to_detail">
+                            <a class="human-selectable" (click)="onClickRow(row, fieldsConfigForList[i].propName)">
+                                <p [innerHTML]="fieldsConfigForList[i].propValue(row, listService, combosData)"></p>
+                            </a>
+                        </span>
+                        <span *ngIf="!fieldsConfigForList[i+1].link_to_detail">
+                            <p [innerHTML]="fieldsConfigForList[i + 1].propValue(row, listService, combosData)"></p>
+                        </span>
+                        <span *ngIf="fieldsConfigForList[i+1].link_to_detail">
+                            <a class="human-selectable" (click)="onClickRow(row, fieldsConfigForList[i+1].propName)">
+                                <p [innerHTML]="fieldsConfigForList[i + 1].propValue(row, listService, combosData)"></p>
+                            </a>
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+            </ng-container>
+
+            <ng-container
+                *ngIf="fieldConfig['append_next_column'] !== true && (i==0 || fieldsConfigForList[i-1]['append_next_column'] !== true)">
+                <ngx-datatable-column prop="{{fieldConfig.propName}}"
+                    [width]="fieldConfig['column_width']?fieldConfig['column_width']:''"
+                    [canAutoResize]="fieldConfig['column_width']?false:true">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            <p
+                                [innerHTML]="((translate_prefix && translate_prefix!=''?translate_prefix+'.':'')+fieldConfig.translate) | translate">
+                            </p>
+                        </span>
+                    </ng-template>
+
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span *ngIf="!fieldConfig.link_to_detail">
+                            <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                        </span>
+                        <span *ngIf="fieldConfig.link_to_detail">
+                            <a class="human-selectable" (click)="onClickRow(row, fieldConfig.propName)">
+                                <p [innerHTML]="fieldConfig.propValue(row, listService, combosData)"></p>
+                            </a>
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ng-container>
+
+        </ng-container>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+
+
+
+
+</arb-table-panel>

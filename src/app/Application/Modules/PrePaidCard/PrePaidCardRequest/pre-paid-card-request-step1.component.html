@@ -1,0 +1,296 @@
+
+
+<arb-panel>
+    <h3 style="margin-bottom: 1%">{{'prePaidCard.applyForPrePaid' | translate}}</h3>
+    <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+
+    <label style="color: black">{{'prePaidCard.prepaidCardDetails' | translate}}</label>
+    <hr class="hr-no-margin">
+
+    <div class="row">
+        <div class="col-xs-3 col-sm-3">
+            <app-select-account [useOldDesign]="true"
+                                [clearable]="false"
+                                [accounts]="accounts"
+                                [(selectedFullAccountNumber)]="selectedFullAccountNumber"
+                                (onAccountChange)="selectAccount($event)">
+            </app-select-account>
+        </div>
+    </div>
+
+    <h3 style="margin-bottom: 1%; margin-left: 0.2%">{{'prePaidCard.applyAs' | translate}}</h3>
+    <div style="display: flex; flex-flow: column">
+        <div class="sme-radio radio" style="margin-bottom: 5px; margin-top: 0">
+            <label>
+                <input
+                        type="radio"
+                        [(ngModel)]="selectedUserJourney"
+                        [value]="UserJourney.OWNER"
+                        (change)="switchForm($event)"
+                        name="owner"/>
+                <i aria-hidden="true"></i>
+                <span>{{ 'prePaidCard.applyAsOwner' | translate}}</span>
+            </label>
+        </div>
+        <div class="sme-radio radio" style="margin-bottom: 5px; margin-top: 0">
+            <label>
+                <input
+                        type="radio"
+                        [(ngModel)]="selectedUserJourney"
+                        [value]="UserJourney.EMPLOYEE"
+                        (change)="switchForm($event)"
+                        name="employee"/>
+                <i aria-hidden="true"></i>
+                <span>{{ 'prePaidCard.applyAsEmp' | translate}}</span>
+            </label>
+        </div>
+    </div>
+
+</arb-panel>
+
+<arb-panel *ngIf="selectedUserJourney == UserJourney.OWNER">
+    <h3 style="margin-bottom: 1%">{{'prePaidCard.applyForPrePaid' | translate}}</h3>
+    <hr [ngClass]="{'hr-break': translate.currentLang == 'en', 'hr-break-rtl':  translate.currentLang == 'ar'}">
+    <div id="image" class="display-div-column" style="align-items: start !important;">
+        <span class="image-target-prepaid"></span>
+    </div>
+    <br>
+    <br>
+
+    <ng-container [formGroup]="form">
+
+        <div class="row" *ngIf="ownerData?.ownerEmbossingName?.length > 0">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <h3 style="margin-bottom: 1%; margin-left: 0.2%">{{'prePaidCard.embossingName' | translate}}</h3>
+                    <div *ngFor="let embossingName of ownerData?.ownerEmbossingName; index as i" class="sme-radio radio" style="margin-bottom: 5px; margin-top: 0">
+                        <label>
+                            <input
+                                (ngModelChange)="markOwnerEmbossingAsTouched()"
+                                type="radio"
+                                formControlName="ownerEmbossingName"
+                                [value]="i"/>
+                            <i aria-hidden="true"></i>
+                            <span>{{ embossingName }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="!ownerData?.companyEmbossingName">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-form-group">
+                        <label >
+                            {{'prePaidCard.companyName' | translate}}
+                        </label>
+                        <input name="companyName" formControlName="companyEmbossingName" type="text" inputPattern="notArabic"
+                               class="form-control prepaid-card-form"/>
+                        <div *ngIf="form.controls.companyEmbossingName.hasError('required')
+                            &&form.controls.companyEmbossingName.touched" class="alert alert-danger bottomAlert">
+                            <small>{{'error.required' | translate}}</small>
+                        </div>
+                        <div *ngIf="form.controls.companyEmbossingName.hasError('pattern')
+                        && form.controls.companyEmbossingName.touched" class="alert alert-danger bottomAlert">
+                            <small>
+                                {{'prePaidCard.companyName' | translate }} {{'error.invalid' | translate }}
+                            </small>
+                        </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-form-group">
+                        <label >{{ 'prePaidCard.companyCR'| translate  }}</label>
+                        <div class='input-group'>
+                            <input formControlName='companyCR' [attr.disabled]="true" type='text' class='form-control' placeholder='Upload file' >
+                            <span class='input-group-btn'>
+                                <div class='fileUpload btn'>
+                                    <span>{{'public.upload' | translate | uppercase}}</span>
+                                    <input type='file'
+                                           (change)='companyRegistrationChange($event)'
+                                           accept='.jpeg,.pdf,.gif,.jpg,.png'
+                                           class='upload'>
+                                </div>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <div *ngIf="!ownerData?.nationalId" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.national_id' | translate }}
+                </label>
+                <input name="national_id" formControlName="national_id"
+                       class="form-control prepaid-card-form" maxlength="10" inputPattern="onlyDigits">
+                <div *ngIf="form.controls.national_id.hasError('required')
+                        && form.controls.national_id.touched" class="alert alert-danger bottomAlert">
+                    <small>{{'error.required' | translate}}</small>
+                </div>
+                <div *ngIf="(form.controls.national_id.hasError('pattern')
+                        || form.controls.national_id.hasError('incorrecId-Iqama') )
+                        && form.controls.national_id.touched" class="alert alert-danger bottomAlert">
+                    <small>
+                        {{'prePaidCard.national_id' | translate }} {{'error.invalid' | translate }}
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div  *ngIf="!ownerData?.firstName" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.holderFirstName' | translate }}
+                </label>
+                <input name="holderFirstName" formControlName="holderFirstName" type="text"
+                       class="form-control prepaid-card-form" maxlength="15" inputPattern="notArabic">
+                <div *ngIf="form.controls.holderFirstName.hasError('required')
+                        && form.controls.holderFirstName.touched" class="alert alert-danger bottomAlert">
+                    <small>{{'error.required' | translate}}</small>
+                </div>
+                <div *ngIf="form.controls.holderFirstName.hasError('pattern')
+                         && form.controls.holderFirstName.touched" class="alert alert-danger bottomAlert">
+                    <small>
+                        {{'prePaidCard.holderFirstName' | translate }} {{'error.invalid' | translate }}
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!ownerData?.lastName" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.holderLastName' | translate}}
+                </label>
+                <input name="holderLastName" formControlName="holderLastName" type="text"
+                       class="form-control prepaid-card-form" required maxlength="14" inputPattern="notArabic">
+                <div *ngIf="form.controls.holderLastName.hasError('required')
+                    && form.controls.holderLastName.touched" class="alert alert-danger bottomAlert">
+                    <small>{{'error.required' | translate}}</small>
+                </div>
+                <div *ngIf="form.controls.holderLastName.hasError('pattern') &&
+                        form.controls.holderLastName.touched" class="alert alert-danger bottomAlert">
+                    <small>
+                        {{'prePaidCard.holderLastName' | translate}} {{'error.invalid' | translate }}
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!ownerData?.birthDate" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.dataOfBirth' | translate}}
+                </label>
+                <div class="input-group">
+                    <input type="text" #dateBirth="bsDatepicker"
+                           bsDatepicker placement="top" [bsConfig]="bsConfig"
+                           name="dateBirth" class="form-control"
+                           formControlName="dataOfBirth"
+                           required/>
+                    <span class=" input-group-addon icon -calendar"
+                          (click)="dateBirth.show()"></span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!ownerData?.gender" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.gender' | translate }}
+                </label>
+                <ng-select
+                        [notFoundText]="'public.noData' | translate"
+                        [items]="gender"
+                        formControlName="gender"
+                        required
+                        [virtualScroll]="false"
+                        bindLabel="value"
+                        bindValue="key">
+                </ng-select>
+            </div>
+        </div>
+
+        <div *ngIf="!ownerData?.nationality" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.nationality' | translate }}
+                </label>
+                <ng-select
+                        [notFoundText]="'public.noData' | translate"
+                        [items]="nationalities"
+                        formControlName="nationality"
+                        required
+                        [virtualScroll]="false"
+                        bindLabel="value">
+                </ng-select>
+            </div>
+        </div>
+
+        <div *ngIf="!ownerData?.city" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.city' | translate}}
+                </label>
+                <ng-select
+                        [notFoundText]="'public.noData' | translate"
+                        [items]="cities"
+                        formControlName="city"
+                        required
+                        bindValue="key"
+                        [virtualScroll]="false"
+                        bindLabel="value">
+                </ng-select>
+                <div *ngIf="form.controls.city.hasError('required')
+                        && form.controls.city.touched"
+                     class="alert alert-danger bottomAlert">
+                    <small>{{'error.required' | translate}}</small>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!ownerData?.mobileNumber" class="row">
+            <div class="col-xs-12 col-sm-6 col-form-group">
+                <label >
+                    {{'prePaidCard.memberPhoneNumber' | translate}}
+                </label>
+                <input name="memberPhoneNumber" formControlName="memberPhoneNumber" type="text"
+                       class="form-control prepaid-card-form"
+                       required
+                       inputPattern="onlyMobileNumbers"
+                       maxlength="15"/>
+                <div *ngIf="form.controls.memberPhoneNumber.hasError('required')
+                && form.controls.memberPhoneNumber.touched" class="alert alert-danger bottomAlert">
+                    <small>{{'error.required' | translate}}</small>
+                </div>
+                <div *ngIf="form.controls.memberPhoneNumber.hasError('pattern')
+                && form.controls.memberPhoneNumber.touched" class="alert alert-danger bottomAlert">
+                    <small>
+                        {{ 'error.format' | translate:{format: commonValidators.mobileNumberTextPattern} }}
+                    </small>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="form-group">
+                    <label class="sme-checkbox checkbox-inline">
+                        <input type="checkbox" formControlName="termsAndConditions"> <i aria-hidden="true"></i>
+                        <a routerLinkActive="router-link-active" target="_blank" class="center-horizontal"
+                           [href]="service.termsConditions">
+                            {{ 'public.termsConditions' | translate }}
+                        </a>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+</arb-panel>
+
+

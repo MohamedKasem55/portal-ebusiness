@@ -1,0 +1,198 @@
+/// carousel-own-styles init
+
+.carousel-own-styles {
+  padding-bottom: 20px;
+  outline: none;
+}
+.carousel-own-styles > ol > li {
+  margin-left: 4px !important;
+  margin-right: 4px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.carousel-own-styles > a.carousel-control-prev-icon,
+.carousel-own-styles > a.carousel-control-next-icon {
+  display: inline-block;
+  width: 25px;
+  height: 20px;
+  background: no-repeat 50% / 100% 100%;
+}
+@media screen and (max-width: 800px) {
+  .btn-adapt {
+    min-width: 115px !important;
+  }
+  .carousel-details {
+    width: 100%;
+    display: flex;
+    padding: 1em;
+    flex-direction: column;
+  }
+  .carousel-own-styles > a.carousel-control-next > span.carousel-control-next-icon,
+  .carousel-own-styles > a.carousel-control-prev > span.sr-only {
+    position: absolute !important;
+    margin-right: 0px;
+    top: 50% !important;
+    width: 3vmin !important;
+    height: 3vmin !important;
+    background: transparent !important;
+    border-top: 1vmin solid #2b4499 !important;
+    border-right: 1vmin solid #2b4499 !important;
+    box-shadow: 0 0 0 lightgray !important;
+    transition: all 200ms ease !important;
+    right: 0 !important;
+    transform: translate3d(0, -50%, 0) rotate(45deg) !important;
+  }
+
+  .carousel-own-styles > a.carousel-control-prev > span.carousel-control-prev-icon,
+  .carousel-own-styles > a.carousel-control-prev > span.sr-only {
+    position: absolute !important;
+    margin-left: 0px;
+    top: 50% !important;
+    width: 3vmin !important;
+    height: 3vmin !important;
+    background: transparent !important;
+    border-top: 1vmin solid #2b4499 !important;
+    border-right: 1vmin solid #2b4499 !important;
+    box-shadow: 0 0 0 lightgray !important;
+    transition: all 200ms ease !important;
+    left: 0 !important;
+    transform: translate3d(0, -50%, 0) rotate(-135deg) !important;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .btn-adapt {
+    min-width: 145px !important;
+  }
+  .carousel-details {
+    width: 100%;
+    display: flex;
+    padding: 1em;
+  }
+  .carousel-own-styles > a.carousel-control-next > span.carousel-control-next-icon,
+  .carousel-own-styles > a.carousel-control-prev > span.sr-only {
+    position: absolute !important;
+    margin-right: 20px;
+    top: 50% !important;
+    width: 3vmin !important;
+    height: 3vmin !important;
+    background: transparent !important;
+    border-top: 1vmin solid #2b4499 !important;
+    border-right: 1vmin solid #2b4499 !important;
+    box-shadow: 0 0 0 lightgray !important;
+    transition: all 200ms ease !important;
+    right: 0 !important;
+    transform: translate3d(0, -50%, 0) rotate(45deg) !important;
+  }
+
+  .carousel-own-styles > a.carousel-control-prev > span.carousel-control-prev-icon,
+  .carousel-own-styles > a.carousel-control-prev > span.sr-only {
+    position: absolute !important;
+    margin-left: 20px;
+    top: 50% !important;
+    width: 3vmin !important;
+    height: 3vmin !important;
+    background: transparent !important;
+    border-top: 1vmin solid #2b4499 !important;
+    border-right: 1vmin solid #2b4499 !important;
+    box-shadow: 0 0 0 lightgray !important;
+    transition: all 200ms ease !important;
+    left: 0 !important;
+    transform: translate3d(0, -50%, 0) rotate(-135deg) !important;
+  }
+}
+
+.carousel-own-styles > ol.carousel-indicators > li {
+  width: 20px;
+  height: 6px;
+  border: 1px solid #f2f2f2;
+  background-color: #f2f2f2;
+}
+.carousel-own-styles > ol.carousel-indicators > li.active {
+  background-color: #2b4499;
+  border: 1px solid #2b4499;
+}
+
+.carousel-inner {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+
+  > .carousel-item {
+    display: none;
+    margin-left: 8px;
+    position: relative;
+    @include transition(0.6s ease-in-out $left);
+    transform: translateY(100%);
+    transition: all 1s;
+    // Account for jankitude on images
+    > img,
+    > a > img {
+      @include img-responsive;
+      line-height: 1;
+    }
+
+    // WebKit CSS3 transforms for supported devices
+    @media all and (transform-3d), (-webkit-transform-3d) {
+      @include transition-transform(0.6s ease-in-out);
+      @include backface-visibility(hidden);
+      @include perspective(1000px);
+
+      &.next,
+      &.active.#{$right} {
+        @include translate3d(if-ltr(100%, -100%), 0, 0);
+        #{$left}: 0;
+      }
+      &.prev,
+      &.active.#{$left} {
+        @include translate3d(if-ltr(-100%, 100%), 0, 0);
+        #{$left}: 0;
+      }
+      &.next.#{$left},
+      &.prev.#{$right},
+      &.active {
+        @include translate3d(0, 0, 0);
+        #{$left}: 0;
+        transform: translateY(0);
+        top: 0;
+      }
+    }
+  }
+
+  > .active,
+  > .next,
+  > .prev {
+    display: block;
+  }
+
+  > .active {
+    #{$left}: 0;
+  }
+
+  > .next,
+  > .prev {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  > .next {
+    #{$left}: 100%;
+  }
+  > .prev {
+    #{$left}: -100%;
+  }
+  > .next.#{$left},
+  > .prev.#{$right} {
+    #{$left}: 0;
+  }
+
+  > .active.#{$left} {
+    #{$left}: -100%;
+  }
+  > .active.#{$right} {
+    #{$left}: 100%;
+  }
+}
+
+/// carousel-own-styles Fin

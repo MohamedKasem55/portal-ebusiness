@@ -1,0 +1,18 @@
+<div class='modal fade' bsModal #DeleteConfirm='bs-modal' [config]="{ backdrop: 'static' }" role='dialog'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-body'>
+        <p>{{ 'represented.dear' | translate }}</p>
+        <p class='rejectMsg'>{{ 'represented.deleteMsg' | translate }}</p>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' (click)='closeModal(false)' class='btn btn-default btn-wide' data-dismiss='modal'>
+          {{ 'public.cancel' | translate }}
+        </button>
+        <button type='button' (click)='closeModal(true)' class='btn btn-primary btn-wide' data-dismiss='modal'>
+          {{ 'represented.delete' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

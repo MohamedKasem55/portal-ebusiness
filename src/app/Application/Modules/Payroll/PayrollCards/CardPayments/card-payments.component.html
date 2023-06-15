@@ -1,0 +1,28 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li class="active">{{ 'payroll.cardPayments'| translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title"></div>
+
+			<div class="sme-form__content">
+				<form autocomplete="off" class="sme-form__form">
+					<div class="sme-form__body">
+						<div class="row">
+							<ul>
+								<li><a class="human-selectable" routerLinkActive="active" [routerLink]="['/payroll/payroll-cards/card-payments/addCardPayments']"> {{ 'payroll.addNewPaymentPayrollCard' | translate }} </a></li>
+								<li><a class="human-selectable" routerLinkActive="active" [routerLink]="['/payroll/payroll-cards/card-payments/listCardPayments']"> {{ 'payroll.loadPreviousPayrollCard' | translate }} </a></li>	
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</div>

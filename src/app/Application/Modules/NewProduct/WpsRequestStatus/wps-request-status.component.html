@@ -1,0 +1,305 @@
+<arb-breadcrumb [routes]="[['public.newProduct'],['newProduct.requests']]">
+</arb-breadcrumb>
+
+
+<div class="container-fluid">
+
+    <div class="sme-page-block">
+
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                    class="sme-form__head human-selectable sme-form__title"
+                    [ngClass]="{'collapsed': isSearchCollapsed}"> <span>{{ 'public.search' | translate }}</span>
+                </a>
+                <div class="sme-form__collapse" id="sme-demo--form--search-criteria-" [collapse]="isSearchCollapsed">
+
+
+                    <form autocomplete="off" #wpsRequest="ngForm" (ngSubmit)="search()" class="sme-form__form"
+                        novalidate>
+
+                        <div class="sme-form__body">
+
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- Account -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.account' | translate }}
+                                        </label>
+                                        <!-- Accounts dropdown -->
+                                        <ng-select id="account" class="form-control" [(ngModel)]="model.account"
+                                            #account="ngModel" name="account"
+                                            [placeholder]="canShowSelectPlaceHolder(model.account) ? ('-- '+('public.selectDropdown' | translate )+' --'):''">
+                                            <ng-option selected value disabled>
+                                                -- {{ 'public.selectDropdown' | translate }} --
+                                            </ng-option>
+                                            <ng-option *ngFor="let account of accounts" [value]="account">
+                                                {{ account }}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <!-- /Account -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- Request Number -->
+                                    <div class="form-group">
+                                        <label for="search-criteria-collapsed-input-date">{{
+                                            'newProduct.requestStatus.requestNumber' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" [(ngModel)]="model.requestNumber" name="requestNumber"
+                                                #requestNumber="ngModel" id="requestNumber" class="form-control" />
+                                        </div>
+
+                                    </div>
+                                    <!-- /Request Number -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- Request User -->
+                                    <div class="form-group">
+                                        <label for="search-criteria-collapsed-input-date">{{
+                                            'newProduct.requestStatus.requestUser' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" [(ngModel)]="model.requestUser" name="requestUser"
+                                                #requestUser="ngModel" id="requestUser" class="form-control" />
+                                        </div>
+
+                                    </div>
+                                    <!-- /Request User -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- Request User -->
+                                    <div class="form-group">
+                                        <label for="search-criteria-collapsed-input-date">{{
+                                            'newProduct.requestStatus.requestStatus' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" [(ngModel)]="model.requestStatus" name="requestStatus"
+                                                   #requestStatus="ngModel" id="requestStatus" class="form-control" />
+                                        </div>
+
+                                    </div>
+                                    <!-- /Request User -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sme-form__actions">
+
+                            <button class="btn btn-default btn-wide" [routerLink]="['./']" (click)="reset()">
+                                {{ 'public.reset' | translate }}</button>
+
+                            <button class="btn btn-primary btn-wide" (click)="search()">{{
+                                'public.search' | translate }} </button>
+                        </div>
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ///////// Grid -->
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <div class="sme-data-table">
+
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'newProduct.requests'| translate }}
+                </div>
+                <div class="sme-data-table__export">
+
+                    <table-export [dataTable]="wpsRequestSearchPanelTable" [header]="'newProduct.requests' | translate  " [columns]="[{'title':'public.account' | translate | uppercase,'dataKey':'account'},
+                                            {'title':'newProduct.requestStatus.requestNumber' | translate | uppercase,'dataKey':'agreementId'},
+                                            {'title':'newProduct.requestStatus.startDate' | translate | uppercase,'dataKey':'startDate'},
+                                            {'title':'newProduct.requestStatus.requestUser' | translate | uppercase,'dataKey':'initiatedBy'},
+                                            {'title':'newProduct.requestStatus.requestStatus' | translate | uppercase,'dataKey':'status '}
+                                            ]">
+                    </table-export>
+                </div>
+            </div>
+
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #wpsRequestSearchPanelTable
+                class="material sme-table sme-table--responsive table" [rows]="requestsPage.data" [headerHeight]="30"
+                [footerHeight]="footerHeight" [columnMode]="defaultColumnMode" [rowHeight]="defaultHeight"
+                [externalPaging]="true" [count]="requestsPage.page.totalElements" [offset]="requestsPage.page.pageNumber"
+                [limit]="requestsPage.page.size" (page)='setPage()' [externalPaging]="true" [externalSorting]="true">
+ 
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                     
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'newProduct.requestStatus.requestNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.agreementId}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'public.account' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.account }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'newProduct.requestStatus.startDate' | translate }}</label>
+                                        <div>
+                                            <span>{{row.startDate}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'newProduct.requestStatus.requestUser' | translate }}</label>
+                                        <div>
+                                            <span>{{row.initiatedBy}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'newProduct.requestStatus.requestStatus' | translate }}</label>
+                                        <div>
+                                            <span>{{row.status}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="agreementId">
+                    <ng-template let-value="agreementId" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'newProduct.requestStatus.requestNumber' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <a class="human-selectable mobile-hidden" (click)="getDetails(row)"> {{value}}</a>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="account">
+                    <ng-template let-value="account" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.account' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column prop="startDate">
+                    <ng-template let-value="startDate" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'newProduct.requestStatus.startDate' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="initiatedBy">
+                    <ng-template let-value="initiatedBy" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'newProduct.requestStatus.requestUser' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="status">
+                    <ng-template let-value="status" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'newProduct.requestStatus.requestStatus' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                (change)="wpsRequestSearchPanelTable.onFooterPage($event)">
+                            </app-datatable-pager>
+
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{pageSize}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="requestsPage.page.pageSize">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </ng-template>
+                </ngx-datatable-footer>
+
+            </ngx-datatable>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal content -->
+<div class="modal fade" bsModal  #wpsStatusModal="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ '' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'newProduct.wps-new.notEligibleToRegister' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="close()" class="btn btn-default" data-dismiss="modal">
+                    {{ 'public.close' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

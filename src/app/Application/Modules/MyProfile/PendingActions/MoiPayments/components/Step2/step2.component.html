@@ -1,0 +1,154 @@
+<app-moi-payment-table *ngIf="sharedData.paymentsSelected.length > 0 
+&& !sharedData.approveFlow"
+                       [items]="sharedData.paymentsSelected"
+                       [modal]="modalAuth"
+                       [showCitizenId]="true"
+                       [futureLevels]="false"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-moi-payment-table>
+
+<app-moi-refund-table *ngIf="sharedData.refundsSelected.length > 0
+&& !sharedData.approveFlow"
+                      [items]="sharedData.refundsSelected"
+                      [modal]="modalAuth"
+                      [showCitizenId]="true"
+                      [futureLevels]="false"
+                      [externalPagination]="false"
+                      [selectable]="false">
+</app-moi-refund-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.approveFlow
+&& sharedData.paymentsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP['toAuthorize'].length>0)
+||
+(sharedData.approveFlow
+&& sharedData.refundsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR['toAuthorize'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-moi-payment-table *ngIf="sharedData.approveFlow
+&& sharedData.paymentsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP['toAuthorize'].length>0"
+                       [items]="sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP.toAuthorize"
+                       [modal]="modalAuth"
+                       [showCitizenId]="true"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-moi-payment-table>
+
+<app-moi-refund-table *ngIf="sharedData.approveFlow
+&& sharedData.refundsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR['toAuthorize'].length>0"
+                      [items]="sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR.toAuthorize"
+                      [modal]="modalAuth"
+                      [showCitizenId]="true"
+                      [futureLevels]="true"
+                      [externalPagination]="false"
+                      [selectable]="false">
+</app-moi-refund-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.approveFlow
+&& sharedData.paymentsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP['toProcess'].length>0)
+||
+(sharedData.approveFlow
+&& sharedData.refundsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR['toProcess'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-moi-payment-table *ngIf="sharedData.approveFlow
+&& sharedData.paymentsSelected.length > 0 
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP 
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP['toProcess'].length>0"
+                       [items]="sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP.toProcess"
+                       [modal]="modalAuth"
+                       [showCitizenId]="true"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-moi-payment-table>
+
+<div class="container-fluid" *ngIf="(sharedData.approveFlow
+&& sharedData.paymentsSelected.length > 0
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSP['toProcess'].length>0)
+">
+    <div class="sme-form__content">
+        <div class="sme-form__form">
+            <div class="sme-form__body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <label>{{'transfer.totalAmount' | translate }}</label>
+                            <span class="form-control">{{paymentsTotalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-moi-refund-table *ngIf="sharedData.approveFlow
+&& sharedData.refundsSelected.length > 0 
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR 
+&& sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR['toProcess'].length>0"
+                      [items]="sharedData.showBatchList.checkAndSeparateAuthorizationPermissionSR.toProcess"
+                      [modal]="modalAuth"
+                      [showCitizenId]="true"
+                      [futureLevels]="true"
+                      [externalPagination]="false"
+                      [selectable]="false">
+</app-moi-refund-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div class="sme-content-container container-fluid"
+     *ngIf="sharedData.approveFlow && sharedData.showBatchList && sharedData.showBatchList.generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.showBatchList.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

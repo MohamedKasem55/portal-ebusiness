@@ -1,0 +1,103 @@
+<arb-breadcrumb [routes]="[
+['dashboard.preferences'],
+['dashboard.updateUser']
+]">
+</arb-breadcrumb>
+
+
+<ul class="nav nav-pills">
+    <li [class.active]="isActiveTab(1)">
+        <a data-toggle="tab" (click)="setActiveTab(1)" class="pointer-link">
+            {{'preferences.updateUser.title' | translate}}
+        </a>
+    </li>
+    <li [class.active]="isActiveTab(2)">
+        <a data-toggle="tab" (click)="setActiveTab(2)" class="pointer-link">
+            {{'preferences.updateChallengeQuestions.title' | translate}}
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+<!-- TAB to update User Email   -->
+<!--    <div id="tab1" class="tab-pane fade" [class.active]="isActiveTab(1)" [class.in]="isActiveTab(1)">-->
+<!--        <div class="container-fluid sme-content-container">-->
+<!--            <div class="sme-page-block">-->
+<!--                <ul class="sme-box sme-wizard__steps">-->
+<!--                    <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1}">-->
+<!--					<span>-->
+<!--						<span class="num">1</span>-->
+<!--						<span class="text">{{ 'preferences.step1' | translate }}</span>-->
+<!--					</span>-->
+<!--                    </li>-->
+<!--                    <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2}">-->
+<!--					<span>-->
+<!--						<span class="num">2</span>-->
+<!--						<span class="text">{{ 'preferences.step2' | translate }}</span>-->
+<!--					</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="sme-head">-->
+<!--            <div class="sme-head__title">{{'preferences.updateMail.title' | translate}}</div>-->
+<!--        </div>-->
+
+<!--        <app-mail-step1 *ngIf="wizardStep === 1"-->
+<!--                        [form]="this.form"-->
+<!--                        (onInit)="onInitStep1($event)">-->
+<!--        </app-mail-step1>-->
+
+<!--        <app-mail-step2 *ngIf="wizardStep === 2">-->
+<!--        </app-mail-step2>-->
+
+<!--        <div class="sme-page-block sme-wizard__navigation sme-form__actions">-->
+<!--            <button type="button" class=" btn btn-default btn-wide" (click)="previous()"-->
+<!--                    *ngIf="wizardStep > 1">{{'public.back' | translate }}</button>-->
+<!--            <button class="btn btn-primary btn-wide" (click)="updateMail()"-->
+<!--                    [disabled]="isDisabled()"-->
+<!--                    *ngIf="wizardStep == 1"> {{ 'public.proceed' | translate }}</button>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div id="tab1" class="tab-pane fade" [class.active]="isActiveTab(1)" [class.in]="isActiveTab(1)">
+
+        <app-initiator-wizard-modify
+                [title]="'preferences.updateUser.title'"
+                [currentItem]="userDataItem"
+                [entityName]="null"
+                [markAllFormFieldAsTouched]="false"
+                [entityProperties]="userEntityProperties"
+                [service]="userUpdateService"
+                [translate_prefix]="'preferences.updateUser'"
+                [backUrl]="getBackUrl()"
+                [combosKeys]="[]"
+                [combosData]="[]"
+                [pending]="false"
+                (onSuccess)="handleOnSuccess($event)">
+        </app-initiator-wizard-modify>
+    </div>
+
+    <!-- TAB to update USer Chellenge Questions    -->
+    <div id="tab2" class="tab-pane fade" [class.active]="isActiveTab(2)" [class.in]="isActiveTab(2)">
+        <app-initiator-wizard-modify
+                [title]="'login.answerChallenge.title'"
+                [currentItem]="questionDataItem"
+                [entityName]="null"
+                [markAllFormFieldAsTouched]="false"
+                [entityProperties]="questionsEntityProperties"
+                [service]="challengeQuestionService"
+                [translate_prefix]="'login.answerChallenge'"
+                [backUrl]="getBackUrl()"
+                [combosKeys]="[]"
+                [combosData]="[]"
+                [pending]="false">
+        </app-initiator-wizard-modify>
+    </div>
+</div>
+
+
+
+
+

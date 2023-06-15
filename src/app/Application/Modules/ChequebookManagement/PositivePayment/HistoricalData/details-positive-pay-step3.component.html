@@ -1,0 +1,150 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+
+                            <div class="sme-wizard__success" *ngIf="isPending()">
+
+                                <span class="icon -check"></span>
+                                {{'chequebook.sucessPendingRequest' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+                            <div class="sme-wizard__success" *ngIf="!isPending()">
+
+                                <span class="icon -check"></span>
+                                {{'public.requestOk' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" 
+                #table class="material" 
+                [rows]="positivePayDetails?.positivePayCheckAccountsOutDTO"
+                [columnMode]="defaultColumnMode" 
+                [headerHeight]="30" 
+                [footerHeight]="0" 
+                [rowHeight]="defaultHeight" 
+                [count]="positivePayDetails?.positivePayCheckAccountsOutDTO?.length">
+                 <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)" >
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.account' | translate }}</label>
+                                            <div>
+                                                <span>{{row.account.fullAccountNumber}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.chequeNumber' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.chequeNumber }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                   <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.amount' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.amount  | amountCurrency }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.result' | translate }}</label>
+                                            <div>
+                                                 <span>{{ 'errors' | modelPipe:'errorTable.'+row.returnCode }}</span>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </fieldset>
+                            </div>
+                           
+                            
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                <ngx-datatable-column prop="account">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'chequebook.account' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="checkNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'chequebook.chequeNumber' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="amount">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'chequebook.amount' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="returnCode">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'chequebook.result' | translate }}
+                        </span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{'errors' | modelPipe:'errorTable.'+value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <!-- <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+                                        let-curPage="curPage" let-offset="offset">
+                                        <div class="sme-datatable-footer">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td width="25%">
+                                                        <span></span>
+                                                    </td>
+                                                    <td width="25%">
+                                                        <span></span>
+                                                    </td>
+                                                    <td width="25%">
+                                                        <span>{{sumaryAlerts['mobile']}}</span>
+                                                    </td>
+                                                    <td width="25%">
+                                                        <span>{{sumaryAlerts['fee'] | number: '1.2-2'}}</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </ng-template> -->
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

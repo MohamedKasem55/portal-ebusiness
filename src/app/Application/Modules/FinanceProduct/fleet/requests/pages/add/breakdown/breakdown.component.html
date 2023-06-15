@@ -1,0 +1,96 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">{{'fleet.requests.initialOfferBreakDown' | translate}}</p>
+    <p class="sme-page-info">
+      {{'fleet.requests.quotationReview' | translate}}
+    </p>
+  </div>
+</div>
+<div class="container-fluid" *ngFor="let item of custOfferVehicleGroupLstItemTypes" >
+  <div class="sme-card">
+    <div class="sme-card-header">
+      <div class="sme-card-header-start"> {{item?.product}} </div>
+      <div class="sme-card-header-end">{{item?.vehiclesNum}} {{'fleet.requests.cars' | translate}}</div>
+    </div>
+    <div class="sme-card-body">
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.brandName' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.brandName || '0'}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.model' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.modelName || '0'}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.variant' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.vehicleVariant || '0'}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.segment' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.vehicleSegment || '0'}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.productFinanceAmt' | translate}}</label>
+            <p class="sme-form-group-txt">{{(item?.vehiclePrice * item?.vehiclesNum) | number : '1.2-2'  || '0'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.profitRate' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.profitRate || '0'}}%</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.insurancePremium' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.insurancePer || '0'}}%</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.adminFees' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.adminFeeAmt | number : '1.2-2'  || '0'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.tenure' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.tenure || '0'}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.downPaymentAmount' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.minDownPmt || '0'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.monthlyPmtAmt' | translate}}</label>
+            <p class="sme-form-group-txt">{{item?.firstInstallmentAmt || '0'}} {{'financeProduct.sar' | translate}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class=" btn btn-default btn-wide sme-back-btn" (click)="back()">
+      {{'fleet.btn.back' | translate}}
+    </button>
+  </div>
+</div>

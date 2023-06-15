@@ -1,0 +1,117 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'invoiceHUB.payerId' | translate }}</label>
+                                    <input type="text" class="form-control" id="payer-id" [(ngModel)]="sharedData.payerId" required inputPattern="onlyDigits" maxlength="12" minlength="12" #payerId="ngModel" name="payerId"/>
+                                    <div *ngIf="payerId.hasError('required') && payerId.touched" class="alert alert-danger">
+                                                    <small>{{'invoiceHUB.payerId' | translate }}{{ 'error.required' | translate }} </small>
+                                    </div>  
+                                    <div *ngIf="payerId.hasError('minlength') && payerId.touched" class="alert alert-danger">
+                                                    <small>{{'invoiceHUB.payerId' | translate }}{{ 'error.minlength' | translate:{size:12} }} </small>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <a (click)="isSearchCollapsed = !isSearchCollapsed" class="sme-form__head human-selectable"
+                   [ngClass]="{'collapsed': isSearchCollapsed}">
+                    <span>{{ 'public.search' | translate }}</span>
+                </a>
+                <div class="sme-form__collapse" id="sme-demo--form--search-criteria-" [collapse]="isSearchCollapsed">
+
+                    <form autocomplete="off" class="sme-form__form" >
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-xs-3" style="display: flex !important; align-items: center;">
+
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>{{ 'invoiceHUB.supplierName' | translate }}</label>
+                                            <input type="text" name="supplierName" class="form-control"
+                                                   [(ngModel)]="sharedData.searchCriteria.supplierName"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="display: flex !important; align-items: center;">
+                                    <div class="col-xs-5">
+                                        <div class="form-group">
+                                            <label>{{ 'payments.datefrom' | translate }} </label>
+                                            <div class="form-control">
+                                                <input type="text" id="dateFrom"
+                                                       [(ngModel)]="sharedData.searchCriteria.dateFrom"
+                                                       #paymentDateFromPop="bsDatepicker" bsDatepicker
+                                                       placement="top" [bsConfig]="bsConfig" [maxDate]="sharedData.searchCriteria.dateTo"
+                                                       style="border:0px;z-index:1000" name="dateFrom" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <div class="form-group">
+                                            <label>{{ 'payments.dateto' | translate }} </label>
+                                            <div class="form-control">
+                                                <input type="text" id="dateTo"
+                                                       [(ngModel)]="sharedData.searchCriteria.dateTo"
+                                                       #paymentDateToPop="bsDatepicker" bsDatepicker
+                                                       placement="top" [bsConfig]="bsConfig"
+                                                       style="border:0px;z-index:1000" name="dateTo" [minDate]="sharedData.searchCriteria.dateFrom"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="display: flex !important; align-items: center;">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'public.amount' | translate }} {{ 'public.from' | translate }}</label>
+                                            <input type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" name="amountFrom" class="form-control"
+                                                   [(ngModel)]="sharedData.searchCriteria.amountFrom"
+                                                  inputPattern="onlyPositiveDecimalNumbers">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'public.amount' | translate }} {{ 'public.to' | translate }}</label>
+                                            <input type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" name="amountTo" class="form-control"
+                                                   [(ngModel)]="sharedData.searchCriteria.amountTo"  inputPattern="onlyPositiveDecimalNumbers">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-10 ">
+                                    <div *ngIf="sharedData['isSearchError']">
+                                        <p class="alert alert-danger">
+                                            {{ 'error.amountRangeInvalid' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide"
+                                    (click)="reset()">{{ 'public.reset' | translate }}</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,168 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="legend" class="title-legend">
+                                {{'commercialCards.commercialCardDetails' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="cardHoldername">{{
+                                            'commercialCards.cardHolderName' | translate }}</label>
+                                        <!-- <div>
+                                            <input id="transfer-amount" class="form-control "
+                                                formControlName="cardHolderName" [readonly]="true">
+                                        </div> -->
+                                        <div *ngIf="sharedData" class="titlePin message" style="margin-top: 10px">
+                                            <span class="border-none">{{businessCardItem?.embossingName  }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="cardNumber">{{
+                                                'commercialCards.cardNumber' | translate }}</label>
+                                        <div *ngIf="businessCardItem" class="titlePin message" style="margin-top: 10px">
+                                            <!-- <input id="reasons" class="form-control" formControlName="cardNumber"
+                                                [value]="form.get('cardNumber').value | hiddenCardNumber"
+                                                [readonly]="true"> -->
+                                            <span
+                                                class="border-none">{{businessCardItem.cardNumber | hiddenCardNumber:'7to12' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="relatedAccount">{{
+                                                'commercialCards.relatedAccount' | translate }}</label>
+                                        <div *ngIf="sharedData" class="titlePin message" style="margin-top: 10px">
+                                            <!-- <input id="reasons" class="form-control" formControlName="relatedAccount"
+                                                [readonly]="true"> -->
+                                            <span class="border-none">{{businessCardItem.sibAccountNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset style="margin-bottom: 20px">
+                            <div class="legend" class="title-legend">
+                                {{'commercialCards.paymentOptionDetails' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-35">
+                                    <div class="form-group" style="margin-bottom: 50px">
+                                        <label for="search-criteria--input-account-from"
+                                            class="required">{{'commercialCards.accountSelection' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="sme-select form-control select-flex-width">
+                                            <select id="payment-options-accountFrom" class="form-control"
+                                                formControlName="accountFrom">
+                                                <option selected value disabled>
+                                                    --{{ 'public.selectAccount' | translate }}--</option>
+                                                <option *ngFor="let account of comboAccounts"
+                                                    [value]="account.value.fullAccountNumber">
+                                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}}
+                                                    {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}}
+                                                    {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="form.controls.accountFrom.hasError('required') && form.controls.accountFrom.touched"
+                                                class="alert alert-danger">
+                                                <small>{{'transfer.error.requiredAccount' | translate }} </small>
+                                            </div>
+                                            <div *ngIf="form.controls.accountFrom.hasError('errorEmptyAccount')"
+                                                class="alert alert-danger">
+                                                <small>{{'commercialCards.errorEmptyAccount' | translate }} </small>
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-select -->
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group">
+                                        <label
+                                            for="search-criteria-collapsed-input-operations">{{ 'commercialCards.amount' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="form-control" style="border-bottom:0px;margin-bottom:70px">
+                                            <div class="sme-radio radio">
+                                                <label>
+                                                    <input type="radio" formControlName="paymentType" [value]=0
+                                                        (change)="resetAmount()">
+                                                    <i aria-hidden="true"></i>
+                                                    <span>{{'commercialCards.dueAmount' | translate }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="sme-radio radio">
+                                                <label>
+                                                    <input type="radio" formControlName="paymentType" [value]=1
+                                                        (change)="resetAmount()">
+                                                    <i aria-hidden="true"></i>
+                                                    <span>{{'commercialCards.outstandingAmount' | translate }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="sme-radio radio">
+                                                <label>
+                                                    <input type="radio" formControlName="paymentType" [value]=2
+                                                        (change)="resetAmount()">
+                                                    <i aria-hidden="true"></i>
+                                                    <span>{{'commercialCards.custom' | translate }}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-select -->
+                                    </div>
+                                    <div class="form-group" style="margin-left: 50px;">
+                                        <!-- *ngIf="form.controls.paymentType.value===2"> -->
+                                        <div>
+                                            <label for="relatedAccount">{{
+                                                    'commercialCards.amount' | translate }}</label>
+                                        </div>
+                                        <div>
+                                            <input type="number" min="0.01" max="999000000" id="reasons"
+                                                class="form-control" formControlName="amount"
+                                                placeholder="{{'commercialCards.amountInSar' | translate}}"
+                                                inputPattern="onlyPositiveDecimalNumbers">
+                                        </div>
+                                        <div *ngIf="form.hasError('invalidCustomAmount') || form.hasError('invalidDueAmount') || form.hasError('invalidOutstandingAmount')"
+                                            class="alert alert-danger">
+                                            <small>{{'commercialCards.minAmount' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.hasError('exceedsCustomAmount')" class="alert alert-danger">
+                                            <small>{{'commercialCards.maxAmount' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.get('amount').hasError('required') && form.get('amount').touched"
+                                            class="alert alert-danger">
+                                            <small>{{'commercialCards.requiredAmount' | translate }}</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- <pre>{{ form.value | json }}</pre>
+<pre>Account Error{{ form.get('accountFrom').errors | json }}</pre> -->
+<!-- <pre>Form Error{{ form.errors | json }}</pre> -->

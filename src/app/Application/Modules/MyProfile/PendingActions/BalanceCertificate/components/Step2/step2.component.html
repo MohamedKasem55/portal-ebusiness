@@ -1,0 +1,74 @@
+<app-balance-table *ngIf="sharedData.tableSelected.length > 0
+    && !sharedData.aproveFlow"
+                   [items]="sharedData.tableSelected"
+                   [modal]="modalAuth"
+                   [futureLevels]="false"
+                   [externalPagination]="false"
+                   [selectable]="false"
+                   [selected]="sharedData.tableSelected">
+</app-balance-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-balance-table *ngIf="sharedData.aproveFlow
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0"
+                   [items]="sharedData.validate.toAuthorize"
+                   [modal]="modalAuth"
+                   [futureLevels]="true"
+                   [externalPagination]="false"
+                   [selectable]="false"
+                   [selected]="sharedData.tableSelected">
+</app-balance-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-balance-table *ngIf="sharedData.aproveFlow
+    && sharedData.validate 
+    && sharedData.validate.toProcess.length>0"
+                   [items]="sharedData.validate.toProcess"
+                   [modal]="modalAuth"
+                   [futureLevels]="true"
+                   [externalPagination]="false"
+                   [selectable]="false"
+                   [selected]="sharedData.tableSelected">
+</app-balance-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<arb-panel *ngIf="sharedData.aproveFlow">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group" *ngIf="sharedData.generateChallengeAndOTP">
+                <app-secured-authentication
+                        [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                        [requestValidate]="sharedData.requestValidate" #authorization>
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>

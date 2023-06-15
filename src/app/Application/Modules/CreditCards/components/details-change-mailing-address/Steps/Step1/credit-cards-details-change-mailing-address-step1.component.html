@@ -1,0 +1,22 @@
+<arb-panel>
+    <h3>{{ 'accounts.creditCards.cmaStep1Title' | translate }}</h3>
+    <hr>
+    <app-credit-cards-details-change-mailing-address-form
+            [formModel]="formModel"
+            [card]="card"
+            [inquiryMailingData]="inquiryMailingData"
+            [combosData]="combosData">
+    </app-credit-cards-details-change-mailing-address-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.creditCards.cmaStep1HelpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.creditCards.cmaStep1HelpText' | translate }}
+        </div>
+    </div>
+</arb-panel>

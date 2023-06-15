@@ -1,0 +1,46 @@
+<app-direct-debits-table *ngIf="sharedData?.singleSelected.length > 0
+    && !sharedData.aproveFlow"
+                         [items]="sharedData?.singleSelected"
+                         [modal]="modal"
+                         [futureLevels]="false"
+                         [externalPagination]="false"
+                         [selectable]="false">
+</app-direct-debits-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="false">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData?.singleSelected.length > 0
+    && sharedData.aproveFlow)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-direct-debits-table *ngIf="sharedData?.singleSelected.length > 0
+    && sharedData.aproveFlow"
+                         [items]="items"
+                         [modal]="modal"
+                         [futureLevels]="false"
+                         [externalPagination]="false"
+                         [selectable]="false">
+</app-direct-debits-table>
+
+<app-levels-popup #modal></app-levels-popup>
+

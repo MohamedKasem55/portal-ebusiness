@@ -1,0 +1,53 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+  <ol class="breadcrumb">
+    <li>{{ 'accounts.accounts'| translate }}</li>
+
+    <li class="active">{{ 'accounts.requestStatement' | translate }}</li>
+  </ol>
+</div>
+
+<arb-panel-buttons *ngIf="wizardStep == 1">
+    <a class="btn btn-primary btn-wide" [routerLink]="'/accounts/downloadStatement'">{{
+        'accounts.downloadStatement.downloadStatement' | translate }}</a>
+</arb-panel-buttons>
+
+<div class="container-fluid">
+  <div class="sme-page-block">
+    <div class="sme-form">
+
+      <div class="sme-form__content">
+        <div class="sme-form__body">
+
+          <div class="sme-form__title">
+            <div class="col-xs-12 col-sm-6">{{ 'accounts.requestStatement' | translate }}</div>
+		  </div>
+      <app-request-statement-step1 *ngIf="wizardStep == 1" (onInit)="onInitStep1($event)"></app-request-statement-step1>
+      <app-request-statement-step2 *ngIf="wizardStep == 2" (onInit)="onInitStep2($event)"></app-request-statement-step2>
+      <app-request-statement-step3 *ngIf="wizardStep == 3 && showFinalMsg" [fileName]="existingFile"></app-request-statement-step3>
+			<div class="row" style="margin-top:2%">
+				<div class="col-xs-12 col-sm-12 text-right">
+					<arb-buttons>
+            <button *ngIf="wizardStep==1" type="submit" class="btn btn-primary btn-wide" (click)="requestFile()" [disabled]="checkValidForm()"> {{ 'accounts.requestFile' | translate }} </button>
+            <button *ngIf="wizardStep == 2" type="button" class=" btn btn-primary btn-wide" (click)="back()" >{{'public.back' | translate}}</button>
+            <button *ngIf="wizardStep == 2" type="button" class=" btn btn-primary btn-wide" (click)="deleteExistingFile()" >{{'public.confirm' | translate}}</button>
+						<button *ngIf="wizardStep == 3" type="button" class=" btn btn-primary btn-wide" (click)="finish()" >{{'public.finish' | translate}}</button>
+					</arb-buttons>
+				</div>
+			</div>
+
+<!--		  <div class="row" *ngIf="showFinalMsg || showFinalMsgErr">-->
+<!--			<div class="col-xs-12">-->
+<!--				<h3 *ngIf="!showFinalMsgErr"> {{ 'workflow.succesRequest' | translate }} </h3>-->
+<!--				<h3 *ngIf="showFinalMsgErr"> {{ 'workflow.noRecords' | translate }} </h3>-->
+<!--			</div>-->
+
+<!--			<div class="col-xs-12">-->
+<!--				<button class="btn btn-default btn-wide" (click)="back()"> {{ 'public.back' | translate }} </button>-->
+<!--			</div>-->
+<!--		  </div>-->
+
+        </div>
+      </div>
+    </div>
+  </div>

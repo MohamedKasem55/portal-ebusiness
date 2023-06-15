@@ -1,0 +1,247 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"> </sme-breadcrumb>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">
+      {{ 'financeProduct.details.finalOffer' | translate }}
+    </p>
+  </div>
+</div>
+<!--Finance Details-->
+<div class="container-fluid">
+  <sme-card [startTitle]="'fleet.requests.financeDetails'|translate">
+    <div class="card-body">
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'financeProduct.details.accountNumber'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">SA 5000 0000 000 0000</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'financeProduct.details.contractNumber'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">12545656TYT</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.fleetDossierID'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.financeAmount'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.downPayment'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">SA 5000 0000 000 0000</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.firstInstallmentDate'| translate}}</label>
+            <p class="sme-form-group-txt font-bold">12545656TYT</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.endInstallmentDate'| translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.financingtenure'| translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.firstInstallmentAmount'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">SA 5000 0000 000 0000</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.monthlyInstallmentAmount' | translate}}</label>
+            <p class="sme-form-group-txt font-bold">12545656TYT</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.finalInstallmentAmount'| translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.balloonPayment'| translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.installmentFrequency'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">SA 5000 0000 000 0000</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.insurancePremium'|translate}} (%)</label>
+            <p class="sme-form-group-txt font-bold">12545656TYT</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.adminFee'| translate}} (%)</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{'fleet.requests.totalPayment'|translate}}</label>
+            <p class="sme-form-group-txt font-bold">15,0000 SAR</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>
+
+<!--Internal Quotation Details-->
+<div class="container-fluid">
+  <sme-card
+    [startTitle]="'fleet.requests.internalQuotationDetails' | translate"
+  >
+    <div class="card-body">
+      <div class="sme-row-2-col">
+        <div class="sme-col">
+          <sme-card-media>
+            <div class="media-start p-4">
+              <img src="assets/img/car.png" />
+            </div>
+            <div class="media-content">
+              <p class="sme-txt-black-md mb-3">BAIC BJ40 (Saleh cars)</p>
+              <p class="item-left mb-4">{{'fleet.requests.only'|translate}} 2 {{'fleet.requests.left'|translate}}</p>
+              <p class="sme-txt-black-md mb-3">140,000.00 SAR</p>
+              <p class="sme-txt-muted-sm mb-3">
+                {{ 'fleet.requests.distributedBy' | translate }}: Saleh cars
+              </p>
+              <p
+                class="view-more"
+                [routerLink]="[
+                  '/financeProduct/fleet/request/internal-summary'
+                ]"
+              >
+                {{ 'fleet.requests.viewMore' | translate }}
+              </p>
+            </div>
+          </sme-card-media>
+        </div>
+        <div class="sme-col">
+            <sme-card-media>
+                <div class="media-start p-4">
+                  <img src="assets/img/car.png" />
+                </div>
+                <div class="media-content">
+                  <p class="sme-txt-black-md mb-3">BAIC BJ40 (Saleh cars)</p>
+                  <p class="item-left mb-4">{{'fleet.requests.only'|translate}} 2 {{'fleet.requests.left'|translate}}</p>
+                  <p class="sme-txt-black-md mb-3">140,000.00 SAR</p>
+                  <p class="sme-txt-muted-sm mb-3">
+                    {{ 'fleet.requests.distributedBy' | translate }}: Saleh cars
+                  </p>
+                  <p
+                    class="view-more"
+                    [routerLink]="[
+                      '/financeProduct/fleet/request/internal-summary'
+                    ]"
+                  >
+                    {{ 'fleet.requests.viewMore' | translate }}
+                  </p>
+                </div>
+              </sme-card-media>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>
+<!---External Quotation-->
+<div class="container-fluid">
+  <sme-card
+    [startTitle]="'fleet.requests.externalQuotation' | translate"
+    [headerFontSize]="'md'"
+  >
+    <div class="card-body">
+      <div class="sme-row-4-col">
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{
+              'fleet.requests.quotationDocument' | translate
+            }}</label>
+            <p class="sme-form-group-txt">
+              <span class="pr-2"> <img src="assets/icons/doc.svg" /></span>
+              Document1.doc
+              <span class="float-right"
+                ><img src="assets/icons/purpose.svg"
+              /></span>
+            </p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{
+              'fleet.requests.purposeUse' | translate
+            }}</label>
+            <p class="sme-form-group-txt">12545656TYT</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{
+              'fleet.requests.quantity' | translate
+            }}</label>
+            <p class="sme-form-group-txt">15,0000 SAR</p>
+          </div>
+        </div>
+        <div class="sme-col">
+          <div class="sme-form-group">
+            <label class="sme-form-group-label">{{
+              'fleet.requests.purposeofUseValue' | translate
+            }}</label>
+            <p class="sme-form-group-txt">15,0000 SAR</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button class="btn btn-default btn-wide sme-back-btn">
+        {{ 'fleet.btn.back' | translate }}
+      </button>
+      <button class="btn btn-default btn-wide" (click)="openModal()">
+        {{'fleet.btn.reject'|translate}}
+      </button>
+      <button type="submit" class="btn btn-primary btn-wide">
+       {{'fleet.btn.acceptOffer'|translate}}
+      </button>
+    </div>
+  </div>
+

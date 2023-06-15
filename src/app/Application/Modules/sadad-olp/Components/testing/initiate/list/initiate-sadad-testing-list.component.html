@@ -1,0 +1,97 @@
+<arb-table-panel [title]="'sadadOLP.testing.menuInitiate'">
+    <table-export [dataTable]="elementsTable" [header]="'sadadOLP.testing.menuInitiate' | translate" [columns]="[
+                        {'title':'sadadOLP.testing.version' | translate ,'dataKey':'version'},
+                        {'title':'sadadOLP.testing.details' | translate,'dataKey':'details'}
+                        ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table sme-table--responsive table" [rows]="elementsPage.data" [columnMode]="defaultColumnMode"
+        [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [externalPaging]="true"
+        [externalSorting]="true" [count]="elementsPage.page.totalElements" [offset]="elementsPage.page.pageNumber-1"
+        [limit]="elementsPage.page.pageSize" [selectionType]="defaultSelectionTypeSingle" [selected]="tableSelectedRows"
+        (page)='setPage($event)' (sort)="setSort($event)" (select)='onSelect($event)' [displayCheck]="displayCheck">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="version-id">{{'sadadOLP.testing.version' | translate }}</label>
+                                <div>
+                                    <span id="version-id">{{row.version}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="details-id">{{'sadadOLP.testing.details' | translate }}</label>
+                                <div>
+                                    <span id="details-id">{{row.details}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="version" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.version' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="details" [width]="200" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.testing.details' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

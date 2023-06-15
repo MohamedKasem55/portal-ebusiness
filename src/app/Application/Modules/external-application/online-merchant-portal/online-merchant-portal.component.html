@@ -1,0 +1,35 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'emcrey.pos'| translate }}</li>
+        <li class="active">{{ 'emcrey.merchant-portal'| translate }}</li>
+    </ol>
+</div>
+<arb-panel>
+    <h1 style="margin-bottom: 1% ;margin-top: 0.5%;">{{'emcrey.merchant-portal' | translate}}</h1>
+    <hr [ngClass]="{'hr-break': lang == 'en', 'hr-break-rtl':  lang == 'ar'}">
+    <div class="row">
+        <div class="col-lg-4 col-md-offset-4">
+            <img src="img/emcrey.png" class="center-img">
+        </div>
+    </div>
+    <div style="text-align: center;color: #1b3696;">
+        <h3>
+            {{'emcrey.redirect-message'|translate}}
+        </h3>
+    </div>
+    <div style="text-align: center;color: #1b3696;">
+        {{'emcrey.proceed-message'|translate}}
+    </div>
+    <arb-panel-buttons>
+        <arb-buttons>
+
+
+            <button class="btn btn-default btn-wide" type="button" [ngStyle]="{'float': (lang==='en')?'left':'right'}"
+                    (click)="back()">
+                {{ 'public.back' | translate}}</button>
+            <button class="btn btn-primary btn-wide" type="button" [ngStyle]="{'float': (lang==='en')?'right':'left'}"
+                    (click)="proceed()">
+                {{ 'public.proceed' | translate}}</button>
+        </arb-buttons>
+    </arb-panel-buttons>
+</arb-panel>

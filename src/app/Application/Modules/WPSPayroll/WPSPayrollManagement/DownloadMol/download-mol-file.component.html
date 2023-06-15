@@ -1,0 +1,399 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a href="#"
+               [routerLink]="['/wpspayroll/wpspayroll-management']">{{ 'dashboard.wpspayrollManagment'| translate }}</a>
+        </li>
+        <li class="active">{{ 'wpspayroll.management.downloadMol'| translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div>
+        <div class="sme-data-table">
+            <div class="sme-form">
+                <div class="sme-form__title">
+                    {{ 'wpspayroll.organizationData' | translate}}
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.organizationName' | translate }}</label>
+                                        <div>
+                                            <span [innerHTML]="organizationName"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.feedBackFiles.cic' | translate }} </label>
+                                        <div>
+                                            <span [innerHTML]="cic" class="disabled"> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div>
+        <div class="sme-data-table">
+            <!-- FILTROS BUSQUEDA -->
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                       class="sme-form__head human-selectable sme-form__title"
+                       [ngClass]="{'collapsed': isSearchCollapsed}"> <span>{{ 'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse" id="sme-demo--form--search-criteria-"
+                         [collapse]="isSearchCollapsed">
+                        <form autocomplete="off" #wpspayRollProcessedFiles="ngForm" (ngSubmit)="searchProcessedFiles()"
+                              class="sme-form__form" novalidate>
+                            <div class="sme-form__body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- BATCH NAME -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.batchNameTable' | translate }}</label>
+                                            <div>
+                                                <input type="text" name="batchName" [(ngModel)]="batchName"
+                                                       class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- DEBIT ACCOUNT NUMBER -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.debitAccountNumber' | translate }}</label>
+                                            <div>
+                                                <ng-select class="form-control" name="debitAccountNumber"
+                                                        [(ngModel)]="debitAccount" [placeholder]="canShowSelectPlaceHolder(debitAccount) ? ('-- '+('public.selectAccount' | translate )+' --'):''">
+                                                    <ng-option selected value="">
+                                                        --{{ 'public.selectAccount' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option *ngFor="let debitAccountNumber of debitAccountNumbers"
+                                                            [value]="debitAccountNumber['fullAccountNumber']">
+                                                        {{ debitAccountNumber['fullAccountNumber'] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- AMOUNT FROM -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.amount' | translate }}
+                                                {{ 'public.from' | translate }}</label>
+                                            <input type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" name="amountFrom" class="form-control"
+                                                   [(ngModel)]="amountFrom">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- AMOUNT TO -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.amount' | translate }}
+                                                {{ 'public.to' | translate }}</label>
+                                            <input type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" name="amountTo" class="form-control"
+                                                   [(ngModel)]="amountTo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- DATE FROM -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.dateFrom' | translate }}</label>
+                                            <div>
+                                                <input type="text" style="z-index: auto;" class="form-control"
+                                                       placement="bottom" bsDatepicker [bsConfig]="bsConfig"
+                                                       [(ngModel)]="initiateDateFrom" name="initiationDateFrom"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- DATE TO -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.dateTo' | translate }}</label>
+                                            <div>
+                                                <input type="text" style="z-index: auto;" class="form-control"
+                                                       placement="bottom" bsDatepicker [bsConfig]="bsConfig"
+                                                       [(ngModel)]="initiateDateTo" name="initiationDateTo"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- PAYMENT DATE FROM -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.paymentDateFrom' | translate }}</label>
+                                            <div>
+                                                <input type="text" style="z-index: auto;" class="form-control"
+                                                        bsDatepicker [bsConfig]="bsConfig"
+                                                       [(ngModel)]="paymentDateFrom" name="paymentDateFrom"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- PAYMENT DATE TO -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.paymentDateTo' | translate }}</label>
+                                            <div>
+                                                <input type="text" style="z-index: auto;" class="form-control"
+                                                        bsDatepicker [bsConfig]="bsConfig"
+                                                       [(ngModel)]="paymentDateTo" name="paymentDateTo"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- SYSTEM FILE NAME -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.systemFileName' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" [(ngModel)]="systemFileName"
+                                                       name="systemFileName"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- CUSTOMER REFERENCE -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.customerReference' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" [(ngModel)]="customerReference"
+                                                       name="customerReference"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sme-form__actions">
+                                <button type="reset" class="btn btn-default btn-wide" (click)="reset()">
+                                    {{ 'public.reset' | translate }}
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-wide">
+                                    {{ 'public.search' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'wpspayroll.management.molFiles' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="viewMolFilesTable" [header]="'wpspayroll.management.name' | translate"
+                                  [columns]="[
+                                    {'title':'wpspayroll.management.systemFileName' | translate, 'dataKey': 'fileName'},
+                                    {'title':'wpspayroll.batchNameTable' | translate, 'dataKey': 'batchName'},
+                                    {'title':'wpspayroll.management.valueDate' | translate, 'dataKey': 'paymentDate'},
+                                    {'title':'wpspayroll.management.totalAmount' | translate, 'dataKey': 'totalAmount'},
+                                    {'title':'wpspayroll.debitAccount' | translate, 'dataKey': 'accountFrom'},
+                                    {'title':'wpspayroll.management.initiatedDate' | translate, 'dataKey': 'initiationDate'}
+
+                                    ]">
+                    </table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                </div>
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #viewMolFilesTable
+                               class="material sme-table sme-table--responsive table" [rows]="viewMolFilesPage.data"
+                               [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                               [rowHeight]="defaultHeight"
+                               [externalPaging]="true"
+                               [rowIdentity]="getIdFunction()"
+                               [selectionType]="defaultSelectionType"
+                               [count]="viewMolFilesPage.page.totalElements"
+                               [offset]="viewMolFilesPage.page.pageNumber-1"
+                               [limit]="viewMolFilesPage.page.pageSize"
+                               (page)='setPage($event)'
+                               (sort)="setSort($event)"
+                               [externalPaging]="true"
+                               [externalSorting]="true"
+                               (select)='onSelect($event)'>
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.systemFileName' | translate }}</label>
+                                            <div>
+                                                <span class="human-selectable"><a (click)="downloadFile(row)">
+                                                        {{row.fileName}}</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.management.batchName' | translate }}</label>
+                                            <div>
+                                                <span>{{row.batchName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.paymentDate' | translate }}</label>
+                                            <div>
+                                                <span>{{row.paymentDate | date:'dd/MM/yyyy'}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.totalAmount' | translate }}</label>
+                                            <div>
+                                                <span>{{row.totalAmount | amountCurrency }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.debitAccount' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.accountFrom }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'wpspayroll.management.initiatedDate' | translate }}</label>
+                                            <div>
+                                                <span>{{row.initiationDate | date:'dd/MM/yyyy HH:mm'}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+                    <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                                          [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column [width]="290" prop="fileName" [resizeable]="false">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'wpspayroll.management.systemFileName' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span class="human-selectable"><a (click)="downloadFile(row)"> {{value}}</a></span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="batchName">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'wpspayroll.batchNameTable' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="paymentDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'wpspayroll.paymentDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | date:'dd/MM/yyyy'}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="totalAmount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'wpspayroll.management.totalAmount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>{{ value  | amountCurrency }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [width]="250" prop="accountFrom">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'wpspayroll.debitAccount' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="initiationDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'wpspayroll.management.initiatedDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | date:'dd/MM/yyyy'}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                     [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                     [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                     [pagerNextIcon]="'datatable-icon-skip'"
+                                                     [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                     [hidden]="!((rowCount / pageSize) > 1)"
+                                                     [visiblePagesCount]="visiblePagesCount"
+                                                     (change)="viewMolFilesTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}}
+                                        {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control"
+                                                    [(ngModel)]="this.viewMolFilesPage.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                    <button type="button" class=" btn btn-primary btn-wide" [disabled]="!(tableSelected.length > 0)"
+                            (click)="downloadAllFile()">{{'public.download' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

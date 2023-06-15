@@ -1,0 +1,92 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'payments.bill-payments' | translate}}</div>
+    </div>
+    <form autocomplete="off">
+    <div class="sme-page-block">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>    
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.biller-name' | translate }}</label>
+                                   <span class="form-control" *ngIf="translate.currentLang === 'en'">{{ batch.addDescriptionEn  }}</span>
+                                     <span class="form-control" *ngIf="translate.currentLang != 'en'">{{ batch.addDescriptionAr  }}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.bill-ref' | translate }}</label>
+                                    <span class="form-control">{{batch.billRef}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12" [ngClass]="{'col-sm-2': option == DeleteOption, 'col-sm-3': option == InitiateOption}">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.nick-name' | translate }}</label>
+                                    <span class="form-control">{{batch.nickname}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12" [ngClass]="{'col-sm-2': option == DeleteOption, 'col-sm-3': option == InitiateOption}">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.amount' | translate }}</label>
+                                    <span class="form-control">{{batch.newAmount | amountCurrency }}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-2" *ngIf="option == DeleteOption">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'payments.due-date' | translate }}</label>
+                                    <span class="form-control">{{batch.initiationDate | date:'dd/MM/yyyy'}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            </fieldset>
+                        </div>
+                       
+                    </div>
+            </div>      
+            </div>
+        </div>
+    </div>
+    </form>
+</div>  
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="getSecurityLevels()">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption && generateChallengeAndOTP" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

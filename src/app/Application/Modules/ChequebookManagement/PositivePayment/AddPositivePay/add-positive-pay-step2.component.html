@@ -1,0 +1,76 @@
+<div class="sme-head">
+    <div class="sme-head__title">{{'chequebook.newPositivePay' | translate}}</div>
+</div>
+
+
+<!-- <div class="legend">{{'chequebook.addpositivePayment' | translate}}</div> -->
+
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div>
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <fieldset>
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">{{ 'chequebook.account' | translate }}</label>
+                                                <span class="form-control disabled">{{form.controls.account?.value}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">{{ 'chequebook.amount' | translate }}</label>
+                                                <span class="form-control disabled">{{form.controls.amount?.value}}</span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">{{ 'chequebook.chequeNumber' | translate }}</label>
+
+                                                <span class="form-control disabled">{{form.controls.chequeNumber?.value}}</span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label class="required">
+                                                    {{ 'transfer.feesAmount' | translate:{value: ('SAR')} }}
+                                                </label>
+                                                <span class="form-control disabled">
+                                                        {{batch.feesAmount}}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <app-vat-calculator [fee]="batch.feesAmount"></app-vat-calculator>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.futureSecurityLevelsDTOList">
+</app-levels-table>

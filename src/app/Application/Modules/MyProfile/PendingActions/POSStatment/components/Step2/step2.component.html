@@ -1,0 +1,205 @@
+<app-new-request-table *ngIf="sharedData.newRequestSelected.length > 0 
+        && !sharedData.aproveFlow"
+                       [items]="sharedData.newRequestSelected"
+                       [modal]="modalAuth"
+                       [futureLevels]="false"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-new-request-table>
+
+<app-management-table *ngIf="sharedData.posManagementSelected.length > 0
+        && !sharedData.aproveFlow"
+                      [items]="sharedData.posManagementSelected"
+                      [modal]="modalAuth"
+                      [futureLevels]="false"
+                      [externalPagination]="false"
+                      [selectable]="false">
+</app-management-table>
+
+<app-maintenance-table *ngIf="sharedData.posMaintenanceSelected.length > 0
+        && !sharedData.aproveFlow"
+                       [items]="sharedData.posMaintenanceSelected"
+                       [modal]="modalAuth"
+                       [futureLevels]="false"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-maintenance-table>
+
+<app-claim-table *ngIf="sharedData.claimSelected.length > 0
+        && !sharedData.aproveFlow"
+                 [items]="sharedData.claimSelected"
+                 [modal]="modalAuth"
+                 [futureLevels]="false"
+                 [externalPagination]="false"
+                 [selectable]="false">
+</app-claim-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosRequestList
+        && sharedData.responseValidate.batchPosRequestList.toAuthorize.length>0)
+||
+(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosManagementList
+        && sharedData.responseValidate.batchPosManagementList.toAuthorize.length>0)
+||
+(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosMaintenanceList
+        && sharedData.responseValidate.batchPosMaintenanceList.toAuthorize.length>0)
+||
+(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosClaimList
+        && sharedData.responseValidate.batchPosClaimList.toAuthorize.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-new-request-table *ngIf="sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosRequestList
+        && sharedData.responseValidate.batchPosRequestList.toAuthorize.length>0"
+                       [items]="sharedData.responseValidate.batchPosRequestList.toAuthorize"
+                       [modal]="modalAuth"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-new-request-table>
+
+<app-management-table *ngIf="sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosManagementList
+        && sharedData.responseValidate.batchPosManagementList.toAuthorize.length>0"
+                      [items]="sharedData.responseValidate.batchPosManagementList.toAuthorize"
+                      [modal]="modalAuth"
+                      [futureLevels]="true"
+                      [externalPagination]="false"
+                      [selectable]="false">
+</app-management-table>
+
+<app-maintenance-table *ngIf="sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosMaintenanceList
+        && sharedData.responseValidate.batchPosMaintenanceList.toAuthorize.length>0"
+                       [items]="sharedData.responseValidate.batchPosMaintenanceList.toAuthorize"
+                       [modal]="modalAuth"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-maintenance-table>
+
+<app-claim-table *ngIf="sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosClaimList
+        && sharedData.responseValidate.batchPosClaimList.toAuthorize.length>0"
+                 [items]="sharedData.responseValidate.batchPosClaimList.toAuthorize"
+                 [modal]="modalAuth"
+                 [futureLevels]="true"
+                 [externalPagination]="false"
+                 [selectable]="false">
+</app-claim-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosRequestList
+        && sharedData.responseValidate.batchPosRequestList.toProcess.length>0)
+||
+(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosManagementList
+        && sharedData.responseValidate.batchPosManagementList.toProcess.length>0)
+||
+(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosMaintenanceList
+        && sharedData.responseValidate.batchPosMaintenanceList.toProcess.length>0)
+||
+(sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosClaimList
+        && sharedData.responseValidate.batchPosClaimList.toProcess.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-new-request-table *ngIf="sharedData.aproveFlow 
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosRequestList 
+        && sharedData.responseValidate.batchPosRequestList.toProcess.length>0"
+                       [items]="sharedData.responseValidate.batchPosRequestList.toProcess" [modal]="modalAuth"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-new-request-table>
+
+<app-management-table *ngIf="sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosManagementList 
+        && sharedData.responseValidate.batchPosManagementList.toProcess.length>0"
+                      [items]="sharedData.responseValidate.batchPosManagementList.toProcess" [modal]="modalAuth"
+                      [futureLevels]="true"
+                      [externalPagination]="false"
+                      [selectable]="false">
+</app-management-table>
+
+<app-maintenance-table *ngIf="sharedData.aproveFlow 
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosMaintenanceList 
+        && sharedData.responseValidate.batchPosMaintenanceList.toProcess.length>0"
+                       [items]="sharedData.responseValidate.batchPosMaintenanceList.toProcess" [modal]="modalAuth"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false">
+</app-maintenance-table>
+
+<app-claim-table *ngIf="sharedData.aproveFlow
+        && sharedData.responseValidate
+        && sharedData.responseValidate.batchPosClaimList 
+        && sharedData.responseValidate.batchPosClaimList.toProcess.length>0"
+                 [items]="sharedData.responseValidate.batchPosClaimList.toProcess" [modal]="modalAuth"
+                 [futureLevels]="true"
+                 [externalPagination]="false"
+                 [selectable]="false">
+</app-claim-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="sharedData.aproveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group"
+                                     *ngIf="sharedData.responseValidate && sharedData.responseValidate.generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.responseValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

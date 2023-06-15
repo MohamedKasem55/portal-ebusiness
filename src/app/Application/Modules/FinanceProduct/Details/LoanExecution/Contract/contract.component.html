@@ -1,0 +1,101 @@
+<div class='sme-head'>
+  <div class='sme-head__title'>
+    <P>{{ 'financeProduct.details.contract' | translate }}</P>
+  </div>
+</div>
+
+<arb-panel>
+  <form autocomplete='off' #posDetails='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='legend'>{{ 'financeProduct.details.information' | translate }}</div>
+      <span class='bold'>{{formModel.controls['financeAmount'].value | amountCurrency}}
+        {{formModel.controls['currency'].value}}</span>
+      <span>{{ 'financeProduct.details.palladium-text' | translate }}</span>
+    </fieldset>
+  </form>
+</arb-panel>
+
+<arb-panel>
+  <form autocomplete='off' #posRequest='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='legend'>{{ 'financeProduct.details.purchasedCommoditiesDetails' | translate }}
+      </div>
+      <div class='row'>
+        <!-- Referace Number -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.referaceNumber' | translate }} </label>
+            <div class='input-group'>
+              <span>{{formModel.controls['financeID'].value }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Referace Number -->
+        <!-- Commodity -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.commodity' | translate }} </label>
+            <div class='input-group'>
+              <span>{{'financeProduct.details.palladium' | translate}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Commodity -->
+        <!-- Commodity Value -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.commodityValue' | translate }} </label>
+            <div class='input-group'>
+                            <span>{{formModel.controls['commodityValue'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- /Commodity Value  -->
+        <!-- Date Of Purchase -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.dateOfPurchase' | translate }} </label>
+            <div class='input-group'>
+              <span>{{formModel.controls['dateOfPurchase'].value | date: 'dd/MM/yyyy'}} </span>
+            </div>
+          </div>
+        </div>
+        <!-- /Date Of Purchase -->
+      </div>
+      <div class='row'>
+        <!-- Commodity Amout -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.details.commodityAmount' | translate }} </label>
+            <div class='input-group'>
+              <span>{{formModel.controls['commodityAmount'].value}} </span>
+            </div>
+          </div>
+        </div>
+        <!-- /Commodity Amout -->
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>
+
+
+<arb-panel>
+  <form autocomplete='off' #posTerms='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <span>{{ 'financeProduct.details.pleaseRead' | translate }}</span>
+
+      <p class='margin-checBox'>
+        <label class='sme-checkbox checkbox-inline'>
+          <input type='checkbox' formControlName='acceptContract' />
+          <i aria-hidden='true'></i>
+          <span class='checkSpan'>{{ 'financeProduct.details.iAccept' | translate }}
+                    </span>
+        </label>
+        <span class='link' (click)='getContract()'>{{
+          'financeProduct.details.contractofCommodity' | translate }}</span>
+      </p>
+
+    </fieldset>
+  </form>
+</arb-panel>

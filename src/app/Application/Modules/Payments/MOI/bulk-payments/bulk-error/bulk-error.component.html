@@ -1,0 +1,77 @@
+
+<div class="modal fade" bsModal #errorModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ 'MOIBulkPayment.errorMsg' | translate }}</h4>
+            </div>
+            <div class="modal-body" *ngIf="errorList.length>0">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #ErrorTable
+                               class='scrollable-grid material sme-table sme-table--responsive table' [rows]='errorList'
+                               [headerHeight]='30'
+                               [footerHeight]='0' [columnMode]="'force'" [rowHeight]='defaultHeight'
+                               [externalPaging]='false' [externalSorting]='false'>
+
+
+                    <ngx-datatable-column prop='recordNumber' [width]='150' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='recordNumber' ngx-datatable-header-template>
+                            <span class='padding datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.recordNumber' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template class="padding" let-value='recordNumber' ngx-datatable-cell-template let-row='row'>
+                            <span class="padding"> {{ row.row}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop='errorDesc' [width]='300' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='errorDesc' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.errorDesc' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='errorDesc' ngx-datatable-cell-template let-row='row'>
+                            {{ row.message | translate }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop='filedName' [width]='300' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='filedName' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.filedName' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='filedName' ngx-datatable-cell-template let-row='row'>
+                            {{ row.filedName | translate }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop='filedData' [width]='300' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='filedData' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'MOIBulkPayment.filedData' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='filedData' ngx-datatable-cell-template let-row='row'>
+                            {{ row.filedData | translate }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 totalError">
+                    {{'MOIBulkPayment.totalError' | translate }} {{errorList.length}}
+                </div>
+                <div class="col-xs-12 col-sm-9">
+                    <arb-buttons class="start">
+                        <button type="button" (click)="hideModal()" class="btn btn-primary btn-wide"
+                                data-dismiss="modal">{{
+                            'public.finish' | translate }}</button>
+                    </arb-buttons>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li class="active">{{ 'payroll.downloadTemplates'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+            <div class="sme-form__title">
+                {{ 'menu.payroll.payroll_cards.template_title'| translate }}
+                <!--Botón de ayuda-->
+                <!--<button type="button" class="btn btn-default btn-wide btn pull-right"><span class="icon -help"></span>{{'public.help' | translate }}</button>-->
+            </div>
+        </div>
+    </div>
+    <!--Botón template-->
+    <div class="sme-page-block sme-wizard-choices">
+            <div>
+                <ul class="sme-radio-buttons">
+                    <li class="col-md-4">
+                        <div class="sme-radio radio">
+                            <label>
+                            <span class="glyphicon mouseoverblue">&#xe166; <a (click)="emitFile()"> {{'menu.payroll.payroll_cards.template_file' | translate }}</a></span>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+<div class="sme-page-block sme-wizard__navigation sme-form__actions" >
+    <button type="button" class=" btn btn-default btn-wide" [routerLink]="['/payroll/payroll-cards']">{{'public.back' | translate }}</button>
+    
+</div>
+
+<div class="modal fade" bsModal #errorFileModal="bs-modal" role="dialog">
+    <div class="modal-dialog loading-position">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button (click)="errorFileModal.hide()" type="button" class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p [innerHTML]="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="errorFileModal.hide()" class="btn btn-primary btn-wide">{{ 'public.close' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

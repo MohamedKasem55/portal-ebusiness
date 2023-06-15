@@ -1,0 +1,181 @@
+<div class="container-fluid">
+    <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-title-info">
+        <p class="sme-page-title">{{'fleet.requests.requestQuotation' | translate}}</p>
+    </div>
+    <sme-card>
+        <div class="card-body">
+            <div class="sme-row">
+                <img src="assets/icons/info.svg"/>
+                <p class="sme-card-msg">
+                    {{'fleet.requests.eligibleAmount' | translate}} {{eligibleAmount}} {{'fleet.requests.internalQuotationNote' | translate}}
+                </p>
+            </div>
+        </div>
+    </sme-card>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-table table headerDataTable">
+        <ngx-datatable
+                [messages]="{ emptyMessage: 'public.noData' | translate }"
+                #externalQuotationTable
+                class="material sme-table sme-table--responsive table"
+                [rows]="internalPage.data"
+                [columnMode]="defaultColumnMode"
+                [headerHeight]="30"
+                [rowHeight]="defaultHeight"
+                [externalPaging]="false"
+                [count]="internalPage.page.totalElements"
+                [reorderable]="false"
+        >
+            <ngx-datatable-row-detail
+                    [rowHeight]="defaultHeight"
+                    (toggle)="onDetailToggle($event)"
+            >
+                <ng-template
+                    let-row="row"
+                    let-expanded="expanded"
+                    ngx-datatable-row-detail-template
+                >
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{
+                                        'fleet.requests.vehicleDescription' | transalte
+                                        }}</label>
+                                    <div>
+                    <span class="human-selectable">{{
+                        row.vehicleDescription
+                        }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'fleet.requests.dealershipName' | transalte }}</label>
+                                    <div>
+                                        <span>{{ row.dealershipName }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'fleet.requests.pricePerVehicle' | transalte}}</label>
+                                    <div>
+                                        <span>{{ row.pricePerVehicle }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{
+                                        'fleet.requests.totalValue ' | transalte
+                                        }}</label>
+                                    <div>
+                                        <span>{{ row.totalValue }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'fleet.requests.carQuantity' | transalte }}</label>
+                                    <div>
+                                        <span>{{ row.carQuantity }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </ng-template>
+            </ngx-datatable-row-detail>
+            <ngx-datatable-column prop="vehicleDescription">
+                <ng-template
+                    let-value="value"
+                    let-row="row"
+                    ngx-datatable-cell-template
+                >
+                    <span class="human-selectable"> {{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="dealershipName">
+                <ng-template
+                    let-value="value"
+                    let-row="row"
+                    ngx-datatable-cell-template
+                >
+                    <span class="human-selectable"> {{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="pricePerVehicle">
+                <ng-template
+                    let-value="value"
+                    let-row="row"
+                    ngx-datatable-cell-template
+                >
+                    <span class="human-selectable">{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column prop="totalValue">
+                <ng-template
+                    let-value="value"
+                    let-row="row"
+                    ngx-datatable-cell-template
+                >
+                    <span class="human-selectable">{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="carQuantity">
+                <ng-template
+                    let-value="value"
+                    let-row="row"
+                    ngx-datatable-cell-template
+                >
+                    <span class="human-selectable"> {{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="">
+                <ng-template
+                    let-value="value"
+                    let-row="row"
+                    let-rowIndex="rowIndex"
+                    ngx-datatable-cell-template
+                >
+          <span class="human-selectable"
+          ><a (click)="goDetails(row,rowIndex)"
+          ><img
+                  class="action-icon-width"
+                  src="assets/icons/delete.svg"/></a
+          ></span>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
+
+<!--Buttons-->
+<div class="container-fluid">
+    <div class="sme-page-block sme-form__actions">
+        <button (click)="navigateTo()" type="submit" class="btn btn-default btn-wide sme-back-btn">
+            {{'fleet.btn.back'|translate}}
+        </button>
+        <button [routerLink]="'/financeProduct/fleet/request/internal-product-select'"
+                class="btn btn-primary btn-wide padding-left-8"><img class="padding-right-8" width="22px"
+                                                                     src="assets//icons/plus_btn.svg">{{'fleet.btn.addAnotherVehicleType' | translate}}
+        </button>
+        <button (click)="navigateTo()" class="btn btn-primary btn-wide"
+                [disabled]="internalPage['data'].length == 0">{{'fleet.btn.next' |translate}}</button>
+    </div>
+</div>

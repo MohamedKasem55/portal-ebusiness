@@ -1,0 +1,1330 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payments'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/direct-debits']">{{ 'dashboard.directDebits'| translate }}</a></li>
+        <li class="active">{{ 'directDebits.viewProcessedFiles'| translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid sme-content-container" *ngIf="step == 'cancel' || step == 'finish'">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : true, 'completed' : true}">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : true, 'completed' : step == 'finish'}">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step == 'finish'}">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div *ngIf="step == 'list' ">
+        <div class="sme-data-table">
+            <div class="sme-page-block">
+                <!-- FILTROS BUSQUEDA -->
+                <div class="sme-form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                               >{{'accounts.accountAlias' | translate }}</label>
+                                            <div>
+                                                <span>{{accountFrom}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FILTROS BUSQUEDA -->
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__content">
+                        <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                            class="sme-form__head human-selectable sme-form__title"
+                            [ngClass]="{'collapsed': isSearchCollapsed}"> <span>{{ 'public.search' | translate }}</span>
+                        </a>
+                        <div class="sme-form__collapse" id="sme-demo--form--search-criteria-"
+                            [collapse]="isSearchCollapsed">
+                            <form autocomplete="off" #wpspayRollProcessedFiles="ngForm" (ngSubmit)="searchProcessedFiles()"
+                                class="sme-form__form" novalidate>
+                                <div class="sme-form__body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- BATCH NAME -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.batchName' | translate }}</label>
+                                                <div>
+                                                    <input type="text" name="batchName" [(ngModel)]="batchName"
+                                                        class="form-control" inputPattern="noSpecials"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- AMOUNT FROM -->
+                                            <div class="form-group">
+                                                <label>{{ 'public.amount' | translate }}
+                                                    {{ 'public.from' | translate }}</label>
+                                                <input type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" name="amountFrom" class="form-control"
+                                                    [(ngModel)]="amountFrom">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- AMOUNT TO -->
+                                            <div class="form-group">
+                                                <label>{{ 'public.amount' | translate }}
+                                                    {{ 'public.to' | translate }}</label>
+                                                <input type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" name="amountTo" class="form-control"
+                                                    [(ngModel)]="amountTo">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- DATE FROM -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.initiationDateFrom' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="z-index: auto;" class="form-control"
+                                                        placement="bottom" bsDatepicker [bsConfig]="bsConfig"
+                                                        [(ngModel)]="initiationDateFrom" name="initiationDateFrom" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- DATE TO -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.initiationDateTo' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="z-index: auto;" class="form-control"
+                                                        placement="bottom" bsDatepicker [bsConfig]="bsConfig"
+                                                        [(ngModel)]="initiationDateTo" name="initiationDateTo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- SYSTEM FILE NAME -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.systemFileName' | translate }}</label>
+                                                <div>
+                                                    <input type="text" class="form-control" [(ngModel)]="systemFileName"
+                                                        name="systemFileName" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- PAYMENT DATE FROM -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.value_date_from' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="z-index: auto;" class="form-control"
+                                                         bsDatepicker [bsConfig]="bsConfig"
+                                                        [(ngModel)]="paymentDateFrom" name="paymentDateFrom" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- PAYMENT DATE TO -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.value_date_to' | translate }}</label>
+                                                <div>
+                                                    <input type="text" style="z-index: auto;" class="form-control"
+                                                         bsDatepicker [bsConfig]="bsConfig"
+                                                        [(ngModel)]="paymentDateTo" name="paymentDateTo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- CUSTOMER REFERENCE -->
+                                            <div class="form-group">
+                                                <label
+                                                    for="search-criteria-collapsed-input-date">{{ 'directDebits.customerReference' | translate }}</label>
+                                                <div>
+                                                    <input type="text" class="form-control"
+                                                        [(ngModel)]="customerReference" name="customerReference" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="sme-form__actions">
+                                    <button type="reset" class="btn btn-default btn-wide" (click)="reset()">
+                                        {{ 'public.reset' | translate }}
+                                    </button>
+                                    <button type="submit" class="btn btn-primary btn-wide">
+                                        {{ 'public.search' | translate }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FILTROS BUSQUEDA -->
+            <!-- EXPORT TYPES -->
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'directDebits.viewProcessedFiles' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="viewProcessedFilesTable"
+                        [header]="'directDebits.viewProcessedFiles' | translate" [columns]="[
+{'title':'directDebits.systemFileName' | translate, 'dataKey': 'fileName'},
+{'title':('directDebits.batchName' | translate) +'\n'+ ('directDebits.customerReference' | translate), 'dataKey': 'batchNameReference'},
+{'title':('directDebits.account' | translate) +'\n'+ ('directDebits.paymentDate' | translate), 'dataKey': 'accountD'},
+{'title':('directDebits.totalAmount' | translate) +'\n'+ ('directDebits.records_count' | translate), 'dataKey': 'total'},
+{'title':('directDebits.rajhiAmount' | translate) +'\n'+ ('directDebits.rajhiCount' | translate), 'dataKey': 'rajhiRecord'},
+{'title':('directDebits.localAmount' | translate) +'\n'+ ('directDebits.localCount' | translate), 'dataKey': 'local'},
+{'title':('directDebits.initiatedBy' | translate) +'\n'+ ('directDebits.initiationDate' | translate), 'dataKey': 'initDBy'},
+{'title':('directDebits.approvedBy' | translate) +'\n'+ ('directDebits.approvedDate' | translate), 'dataKey': 'approvedDBy'}
+
+
+]"></table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                </div>
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #viewProcessedFilesTable
+                    class="material sme-table sme-table--responsive table" [rows]="viewProcessedFilesPage.data"
+                    [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                    [externalPaging]="true" [selected]="tableSelected"
+                    [count]="viewProcessedFilesPage.page.totalElements"
+                    [offset]="viewProcessedFilesPage.page.pageNumber-1" [limit]="viewProcessedFilesPage.page.pageSize"
+                    (page)='setPage($event)' (sort)="setSort($event)" [externalPaging]="true" [externalSorting]="true">
+                    <!-- Row Detail Template -->
+                    <ngx-datatable-row-detail #myDetailRow [rowHeight]="defaultHeight">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                            <div class="desktop-hidden">
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'directDebits.systemFileName' | translate }}</label>
+                                                <div>
+                                                    <span class="human-selectable"><a
+                                                            (click)="toggleExpandRowMobile(row)">{{row.fileName}}</a></span>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ 'directDebits.customerReference' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.customerReference}}</span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'directDebits.initiationDate' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.initiationDate  | date:'dd/MM/yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ 'directDebits.batchName' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.batchName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ 'directDebits.paymentDate' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.paymentDate | date:'dd/MM/yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'directDebits.totalAmount' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.totalAmount | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'directDebits.initiatedBy' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.initiatedBy}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'directDebits.approvedBy' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.approvedBy}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+
+                                                <div>
+                                                    <div *ngIf="rowDetail == row">
+                                                        <div class="sme-form__title">
+                                                            <div class="col-xs-10 col-sm-10">
+                                                                <!-- {{'accounts.popupTitle' | translate }} -->
+                                                            </div>
+                                                            <a class="sme-form__close btn"
+                                                                (click)="toggleExpandRowMobile(row)"><span
+                                                                    class="icon -close"></span></a>
+                                                        </div>
+                                                        <div *ngFor="let file of viewProcessedFilesGetFiles.data">
+                                                            <div class="row">
+                                                                <fieldset>
+                                                                    <div class="col-xs-6">
+                                                                        <!-- sme-form-group -->
+                                                                        <div class="form-group">
+                                                                            <label
+                                                                               >{{ 'wpspayroll.management.fileType' | translate }}</label>
+                                                                            <div>
+                                                                                <span
+                                                                                    [innerHTML]="(file.fileType ? fileTypes[file.fileType] : '')"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-6">
+                                                                        <!-- sme-form-group -->
+                                                                        <div class="form-group">
+                                                                            <label
+                                                                               >{{ 'wpspayroll.management.fileName' | translate }}</label>
+                                                                            <div>
+                                                                                <a class="human-selectable"
+                                                                                    (click)="goToDetails(row)"
+                                                                                    style="cursor:pointer;"
+                                                                                    DIR="ltr">{{file.fileName}}</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </fieldset>
+                                                            </div>
+                                                            <div class="row">
+                                                                <fieldset>
+                                                                    <div class="col-xs-6">
+                                                                        <!-- sme-form-group -->
+                                                                        <div class="form-group">
+                                                                            <label>{{ 'payroll.dataReceived' | translate }}</label>
+                                                                            <div>
+                                                                                <span>{{file.dataReceived | date:'dd/MM/yyyy'}}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                            <div class="sme-data-table mobile-hidden">
+                                <div *ngIf="viewProcessedFilesGetFiles.data?.length > 0" style="display:block">
+                                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                                        #filesGetFiles class="material sme-table sme-table--responsive table"
+                                        [rows]="viewProcessedFilesGetFiles.data" [columnMode]="defaultColumnMode"
+                                        [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                                        [count]="viewProcessedFilesGetFiles.page.totalElements"
+                                        [offset]="viewProcessedFilesGetFiles.page.pageNumber"
+                                        [limit]="viewProcessedFilesGetFiles.page.size" [externalPaging]="false"
+                                        [externalSorting]="false">
+                                        <ngx-datatable-column prop="fileType" [width]="150">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{ 'directDebits.fileType' | translate }}
+                                                </span>
+                                            </ng-template>
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span [innerHTML]="(value ? fileTypes[value] : '')"></span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column prop="fileName" [width]="350">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{ 'directDebits.fileName' | translate }}
+                                                </span>
+                                            </ng-template>
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                <a (click)="goToDetails(row)" style="cursor:pointer;" DIR="ltr">
+                                                    {{value}}</a>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column prop="dataReceived" [width]="150">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                ngx-datatable-header-template>
+                                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                                    {{ 'payroll.dataReceived' | translate }}
+                                                </span>
+                                            </ng-template>
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span>{{value | date:'dd/MM/yyyy'}}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-footer>
+                                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                                let-pageSize="pageSize" let-selectedCount="selectedCount"
+                                                let-curPage="curPage" let-offset="offset">
+                                                <div class="sme-data-table__footer">
+                                                    <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                        [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                        [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                        [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage"
+                                                        [size]="pageSize" [count]="rowCount"
+                                                        [hidden]="!((rowCount / pageSize) > 1)"
+                                                        [visiblePagesCount]="visiblePagesCount"
+                                                        (change)="filesGetFiles.onFooterPage($event)">
+                                                    </app-datatable-pager>
+                                                    <div class="sme-data-table__actions form-inline">
+                                                        <span
+                                                            class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                                            {{pageSize}}
+                                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                                        <span class="hidden-xs"> | </span>
+                                                        <span class="sme-data-table__action-group">
+                                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                            <div class="sme-select form-control">
+                                                                <select class="form-control"
+                                                                    [(ngModel)]="this.viewProcessedFilesGetFiles.page.pageSize">
+                                                                    <option [value]="10">10</option>
+                                                                    <option [value]="20">20</option>
+                                                                    <option [value]="50">50</option>
+                                                                    <option [value]="100">100</option>
+                                                                </select>
+                                                            </div>
+                                                        </span>
+
+
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-footer>
+                                    </ngx-datatable>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+                    <!-- Column Templates -->
+                    <ngx-datatable-column [width]="18" [resizeable]="false" [sortable]="false" [draggable]="false"
+                        [canAutoResize]="false">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                            <span><a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
+                                [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                                (click)="toggleExpandRow(row)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a></span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [width]="300" prop="fileName" [resizeable]="false">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.systemFileName' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span DIR="ltr">{{value}}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="customerReference" [resizeable]="false">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                             <div><span>
+                              {{ 'directDebits.batchName' | translate }}
+                            </span></div>
+                            <span>
+                                {{ 'directDebits.customerReference' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                            <div>
+                                <div> {{row.batchName }} </div>
+                                <div> {{row.customerReference }} </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="accountFrom" [width]="230">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <div (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.account' | translate }}
+                            </div>
+                            <span>
+                                {{ 'directDebits.paymentDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <div>
+                                <div> {{this.accountFrom }} </div>
+                                <div> {{ row.paymentDate | date:'dd/MM/yyyy'}} </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="totalAmount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <div (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.totalAmount' | translate }}
+                            </div>
+                            <span>
+                                {{ 'directDebits.records_count' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <div>
+                                <div> {{row.totalAmount | amountCurrency}} </div>
+                                <div> {{ row.rajhiRecordCount +  row.localRecordCount}} </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="rajhiRecordAmount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <div (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.rajhiAmount' | translate }}
+                            </div>
+                            <span>
+                                {{ 'directDebits.rajhiCount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <div>
+                                <div> {{row.rajhiRecordAmount | amountCurrency}} </div>
+                                <div> {{ row.rajhiRecordCount }} </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="localRecordAmount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <div (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.localAmount' | translate }}
+                            </div>
+                            <span>
+                                {{ 'directDebits.localCount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <div>
+                                <div> {{ row.localRecordAmount | amountCurrency}} </div>
+                                <div> {{ row.localRecordCount }} </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="initiationDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                             <div (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.initiatedBy' | translate }}
+                            </div>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.initiationDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                            <div>{{ row.initiatedBy }}</div>
+                            <div>{{ row.initiationDate | date:'dd/MM/yyyy'}}</div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="approvedBy">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <div (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.approvedBy' | translate }}
+                            </div>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.approvedDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                            <div>{{ row.approvedBy }}</div>
+                            <div>{{ row.approvedDate | date:'dd/MM/yyyy'}}</div>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                    [pagerRightArrowIcon]="'datatable-icon-right'"
+                                    [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                    (change)="viewProcessedFilesTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{(pageSize > rowCount ?rowCount : pageSize)}} {{ 'public.ofLabel' | translate}}
+                                        {{rowCount}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control"
+                                                [(ngModel)]="this.viewProcessedFilesPage.page.pageSize"
+                                                (change)="this.setPage(null)">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                                <option [value]="100">100</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="step == 'detail' || step == 'cancel' ">
+    <div class="container-fluid">
+        <div class="sme-data-table">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.customerCIC' | translate }} </label>
+                                        <span class="form-control">{{cic}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.batchName' | translate }} </label>
+                                        <span
+                                            class="form-control">{{currentRow.batchName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.customerReference' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatHeader.customerReference }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.systemFileName' | translate }} </label>
+                                        <span class="form-control"><a class="human-selectable"
+                                                (click)="downloadFile()">{{currentFileDetail.fileName }}</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                 <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'accounts.accountAlias' | translate }} </label>
+                                        <span
+                                            class="form-control">{{accountFrom }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.originatorId' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatHeader.originatorCode}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.sponsorBank' | translate }} </label>
+                                        <span
+                                            class="form-control">{{'directDebitBankCode'  | modelPipe:viewFileDetails.fileFormat.formatHeader.sponsoringBankCode}}</span>
+                                    </div>
+                                </div>
+                                 <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{'directDebits.paymentDate' | translate}} </label>
+                                        <span
+                                            class="form-control">{{currentRow.paymentDate | date:'dd/MM/yyyy' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                 <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.initiatedBy' | translate }} </label>
+                                        <span
+                                            class="form-control">{{currentRow.initiatedBy }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.initiatedDate' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatHeader.createDate | date:'dd/MM/yyyy' }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.approvedBy' | translate }} </label>
+                                        <span
+                                            class="form-control">{{currentRow.approvedBy }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.approvedDate' | translate }} </label>
+                                        <span
+                                            class="form-control">{{currentRow.approvedDate| date:'dd/MM/yyyy HH:mm' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" *ngIf="currentFileDetail.fileType != 's'">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.paid' | translate }} </label>
+                                        <span class="form-control">{{viewFileDetails.fileFormat.formatFooter.numberClaimsPaid}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.paidAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{(viewFileDetails.fileFormat.formatFooter.totalAmountClaimsPaid ? viewFileDetails.fileFormat.formatFooter.totalAmountClaimsPaid : 0) | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="currentFileDetail.fileType != 's'">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.unPaid' | translate }} </label>
+                                        <span class="form-control">{{viewFileDetails.fileFormat.formatFooter.numberClaimsUnpaid}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.unPaidAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{(viewFileDetails.fileFormat.formatFooter.totalAmountClaimsUnpaid ? viewFileDetails.fileFormat.formatFooter.totalAmountClaimsUnpaid : 0) | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-data-table">
+            <!-- EXPORT TYPES -->
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'directDebits.detailsFile' | translate }} {{ currentFileDetail.fileName }}
+                </div>
+                <div class="sme-data-table__export" *ngIf="currentFileDetail.fileType != 's'">
+                    <table-export [dataTable]="viewFileDetail" [header]="'directDebits.detailsFile' | translate"
+                        [columns]="[
+            {'title':'directDebits.mandateReference' | translate,'dataKey':'payerCodeMandate'},
+        {'title':'directDebits.personalName' |translate ,'dataKey':'payerHeading'},
+        {'title':'directDebits.bank' | translate,'dataKey':'payerBankCode'},
+        {'title':'directDebits.payerAccount' | translate,'dataKey':'payerAccount'},
+        {'title':'directDebits.amount' | translate,'dataKey':'amount'},
+        {'title':'directDebits.dueDate' | translate,'dataKey':'dueDate'},
+        {'title':'directDebits.status' | translate,'dataKey':'rejectReasonText'}]">
+                    </table-export>
+                </div>
+                <div class="sme-data-table__export" *ngIf="currentFileDetail.fileType === 's'">
+                    <table-export [dataTable]="viewFileDetail"
+                        [header]="'directDebits.detailsFile' | translate" [columns]="[
+            {'title':'directDebits.mandateReference' | translate,'dataKey':'payerCodeMandate'},
+        {'title':'directDebits.personalName' |translate ,'dataKey':'payerHeading'},
+        {'title':'directDebits.bank' | translate,'dataKey':'payerBankCode'},
+        {'title':'directDebits.payerAccount' | translate,'dataKey':'payerAccount'},
+        {'title':'directDebits.amount' | translate,'dataKey':'amount'}]">
+                    </table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                </div>
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #viewFileDetail
+                    class="material sme-table sme-table--responsive table"
+                    [rows]="(viewFileDetails.fileFormat.formatClaimList  ? viewFileDetails.fileFormat.formatClaimList : [])"
+                    [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                    [externalPaging]="false"
+                    [count]="(viewFileDetails.fileFormat.formatClaimList ? viewFileDetails.fileFormat.formatClaimList.length : 0)"
+                    [limit]="sizePage" [externalPaging]="false" [externalSorting]="false">
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                               >{{'directDebits.mandateReference' | translate }}</label>
+                                            <div>
+                                                <span>{{row.payerCodeMandate}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                               >{{'directDebits.personalName' | translate }}</label>
+                                            <div>
+                                                <span>{{row.payerHeading}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'directDebits.bank' | translate }}</label>
+                                            <div>
+                                                <span
+                                                    *ngIf="row.payerBankCode">{{ 'payrollBankCode'  | modelPipe:row.payerBankCode }}</span>
+                                                <span *ngIf="!row.payerBankCode">{{ row.payerBankCode }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                               >{{'directDebits.payerAccount' | translate }}</label>
+                                            <div>
+                                                <span>{{row.payerAccount}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'directDebits.amount' | translate }}</label>
+                                            <div>
+                                                <span>{{row.amount | amountCurrency}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'directDebits.dueDate' | translate }}</label>
+                                            <div>
+                                                <span>{{row.dueDate | date:'dd/MM/yyyy' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row" *ngIf="fileType != 's'">
+                                <fieldset>
+                                    <div class="col-xs-6" *ngIf="currentFileDetail.fileType != 's'">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'directDebits.status' | translate }}</label>
+                                            <div>
+                                                <span>{{'claimFeedbackErrorCodes'  | modelPipe:row.rejectReasonText.trim() }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+
+                    <ngx-datatable-column prop="payerCodeMandate" [width]="160">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'directDebits.mandateReference' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="payerHeading">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'directDebits.personalName' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+
+
+                    <ngx-datatable-column prop="payerBankCode">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{ 'directDebits.bank' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span *ngIf="value">{{ 'directDebitBankCode'  | modelPipe:value }}</span>
+                            <span *ngIf="!value">{{ value }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+
+                    <ngx-datatable-column prop="payerAccount" [width]="290">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'directDebits.payerAccount' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="amount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'directDebits.amount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span>{{ value  | amountCurrency }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop="dueDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'directDebits.dueDate' | translate }}
+                            </span>
+                        </ng-template>
+                         <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span>{{ value  | date:'dd/MM/yyyy' }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column *ngIf="fileType != 's'" prop="rejectReasonText">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'directDebits.status' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <span>{{ 'claimFeedbackErrorCodes'  | modelPipe:value.trim()  }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                    [pagerRightArrowIcon]="'datatable-icon-right'"
+                                    [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                    (change)="viewProcessedFilesTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{rowCount}}
+                                        {{ 'public.ofLabel' | translate}}
+                                        {{(viewFileDetails.fileFormat.formatClaimList ? viewFileDetails.fileFormat.formatClaimList.length : 0)}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" [(ngModel)]="sizePage">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-data-table">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body" *ngIf="fileType == 's'">
+                            <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberOfDirectDebits' |
+											translate }}</label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.directDebitFeesOutput?.numEmployees}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-amount-input">{{ 'directDebits.totalAmount' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-amount-input">
+                                            {{viewFileDetails.directDebitFeesOutput?.totalAmount  | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.rajhiRecordCount' |
+											translate }}</label>
+                                        <span class="form-control"
+                                           >{{viewFileDetails.directDebitFeesOutput.numRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label for="total-rajhi-transfer-input" class="required">{{ 'directDebits.rajhiRecordAmount' |
+                                                translate }}</label>
+                                        <span class="form-control" id="total-rajhi-transfer-input">
+                                            {{viewFileDetails.directDebitFeesOutput.totalNumRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.nonRajhiRecordCount' |
+											translate }}</label>
+                                        <span class="form-control"
+                                           >{{viewFileDetails.directDebitFeesOutput.numNonRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label for="total-non-rajhi-transfer-input" class="required">{{ 'directDebits.nonRajhiRecordAmount' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-non-rajhi-transfer-input">
+                                            {{viewFileDetails.directDebitFeesOutput.totalNumNonRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-rajhi-transfer-name-input">{{ 'directDebits.feesRajhiTransfers' |
+											translate }}</label>
+                                        <span type="text" class="form-control" id="fee-rajhi-transfer-input">
+                                            {{viewFileDetails.directDebitFeesOutput.alRajhiCustomersFeeSuccess | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-non-rajhi-transfer-name-input">{{ 'directDebits.totalFeesRajhi' |
+                                            translate }}</label>
+                                        <span class="form-control" id="fee-non-rajhi-transfer-input">
+                                            {{viewFileDetails.directDebitFeesOutput.totalFeesRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-non-rajhi-transfer-name-input">{{ 'directDebits.feesNonRajhiTransfers' |
+											translate }}</label>
+                                        <span class="form-control" id="fee-non-rajhi-transfer-input">
+                                            {{viewFileDetails.directDebitFeesOutput.nonAlRajhiCustomersFeeSuccess | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="fee-non-rajhi-name-input">{{ 'directDebits.totalFeesNonRajhi' |
+                                            translate }}</label>
+                                        <span class="form-control"
+                                            id="fee-non-rajhi-input">{{viewFileDetails.directDebitFeesOutput.totalFeesNonRajhi | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-estimated-amount-input" class="required">{{ 'directDebits.totalEstimatedAmount' |
+											translate }}</label>
+                                        <span class="form-control" id="total-estimated-amount-input">
+                                            {{viewFileDetails.directDebitFeesOutput.totalEstimated  | amountCurrency}}
+                                            {{'currencyIso' | modelPipe: '608'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group" *ngIf="step == 'cancel'">
+                                        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate" #authorization>
+                                        </app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                         </fieldset>   
+                        </div>
+                          <div class="sme-form__body" *ngIf="fileType != 's'">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.numberOfDirectDebits' | translate }} </label>
+                                        <span
+                                            class="form-control">{{ viewFileDetails.fileFormat.formatFooter.numberClaims }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.totalAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.totalDebitAmount | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.tobePerformedCount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.toBePerformedCount  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.tobePerformedAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.toBePerformedTotalAmount | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.sentOtherBanksCount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.sentOtherBanksCount  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.sentOtherBanksAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.sentOtherBanksTotalAmount | amountCurrency   }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.rejectedCount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.rejectedCount  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.rejectedAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.rejectedTotalAmount | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.successfulCount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.successfulCount  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.successfulAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.successfulTotalAmount | amountCurrency   }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'directDebits.totalEstimatedAmount' | translate }} </label>
+                                        <span
+                                            class="form-control">{{viewFileDetails.fileFormat.formatFooter.totalDebitAmount | amountCurrency }}
+                                            {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group" *ngIf="step == 'cancel'">
+                                        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate" #authorization>
+                                        </app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sme-form__form">
+            <div class="sme-wizard__navigation sme-form__actions">
+                <button (click)="returnList()" class=" btn btn-default btn-wide"
+                    style="margin-right: 15px;">{{ 'public.back' | translate }}</button>
+                <button *ngIf="allowCancel() && step != 'cancel'" (click)="step = 'cancel'"
+                    class=" btn btn-danger btn-wide"
+                    style="margin-right: 15px;">{{ 'public.cancel' | translate }}</button>
+                <button *ngIf="step == 'cancel'" (click)="cancelFile()" class=" btn btn-primary btn-wide"
+                    style="margin-right: 15px;" [disabled]="!valid()">{{ 'public.proceed' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="step == 'finish' ">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div>
+                                <div class="sme-wizard__success">
+                                    <span class="icon -check"></span> {{'public.requestOk' | translate}}
+                                    <small>{{'public.thanks' | translate }}</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button (click)="returnList()" class=" btn btn-primary btn-wide"
+            style="margin-right: 15px;">{{ 'public.finish' | translate }}</button>
+    </div>
+</div>

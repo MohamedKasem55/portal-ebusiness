@@ -1,0 +1,45 @@
+   <div class="sme-breadcrumb">
+       <ol class="breadcrumb">
+           <li class="active">{{ 'dashboard.payments' | translate }}</li>
+           <li class="active">{{ 'dashboard.aramcoPayments' | translate }}</li>
+       </ol>
+   </div>
+   	
+	<div class="container-fluid">	
+      <div class="sme-page-block">
+           <div class="sme-form">
+			<div class="sme-form__title"></div>
+
+                <div class="sme-form__content">
+					<form autocomplete="off" class="sme-form__form">
+						<div class="sme-form__body">
+						  <div class="row">
+                <ul>
+                    <!-- <li *ngIf="authenticationService.activateOption('AramcoPaymentAddBeneficiary',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoBeneficiariesGroup'])">
+                        <a routerLinkActive="active" (click)="goAddBeneficiary()">
+                            {{ 'aramcoPayments.addBeneficiary' | translate }}
+                        </a>
+                    </li> -->
+                    <!--<li  *ngIf="authenticationService.activateOption('AramcoPayment',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoPaymentsGroup'])">
+                        <a routerLinkActive="active" (click)="goBeneficiaryList()">
+                            {{ 'aramcoPayments.beneficiaryList' | translate }}
+                        </a>
+                    </li> -->
+                    <li *ngIf="authenticationService.activateOption('AramcoPayment',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoPaymentsGroup'])">
+                        <a routerLinkActive="active" (click)="goNewPayment()">
+                            {{ 'aramcoPayments.newPayment' | translate }}
+                        </a>
+                    </li>
+                     <li *ngIf="authenticationService.activateOption('AramcoPaymentRequestStatus',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoPaymentsGroup'])">
+                        <a routerLinkActive="active" (click)="goRequestStatus()">
+                            {{ 'aramcoPayments.requestStatus' | translate }}
+                        </a>
+                    </li>
+                </ul> 
+              </div>
+            </div>	
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

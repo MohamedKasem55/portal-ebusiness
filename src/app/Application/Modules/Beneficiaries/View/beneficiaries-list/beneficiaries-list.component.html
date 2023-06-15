@@ -1,0 +1,2306 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>
+            {{ 'public.transfers' | translate }}
+        </li>
+        <li><a class="human-selectable" href="#" routerLinkActive="active"
+                [routerLink]="['/beneficiaries/beneficiariesOptions']">
+                {{ 'public.beneficiaries'| translate }}
+            </a>
+        </li>
+        <li class="active">
+            {{ 'beneficiaries.beneficiaryList'| translate }}
+        </li>
+    </ol>
+</div>
+
+<arb-panel-buttons *ngIf="wizardStep==1">
+    <a class="btn btn-primary btn-wide" routerlinkactive="active" [routerLink]="['/beneficiaries/AddBeneficiaries']">
+        {{ 'beneficiaries.addBeneficiary' | translate }}
+    </a>
+</arb-panel-buttons>
+
+<div class="container-fluid">
+
+    <div class="sme-page-block">
+        <div *ngIf="wizardStep==1">
+            <!-- FILTROS BUSQUEDA -->
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                        class="sme-form__head human-selectable sme-form__title"
+                        [ngClass]="{'collapsed': isSearchCollapsed}"> <span>{{ 'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse" id="sme-demo--form--search-criteria-"
+                        [collapse]="isSearchCollapsed">
+                        <form autocomplete="off" #beneficiariesList="ngForm" (ngSubmit)="searchBeneficiariesList(true)"
+                            class="sme-form__form" novalidate>
+
+                            <div class="sme-form__body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryType' | translate
+                                                }}</label>
+
+                                            <!-- BENEFICIARY TYPE -->
+                                            <ng-select class="form-control" name="beneficiaryType" [clearable]=false
+                                                [(ngModel)]="beneficiaryType"
+                                                (change)="onChangeBeneficiaryType($event.target)">
+                                                <ng-option [value]="'00'" [selected]="beneficiaryType === '00'">{{
+                                                    'beneficiaries.beneficiaryTypes.AllBeneficiary' | translate }}
+                                                </ng-option>
+                                                <ng-option
+                                                    *ngIf="authenticationService.activateOption('BeneficiaryList',['TRANSFER_PRIVILEGE'],['TfGroup'])"
+                                                    [value]="'01'" [selected]="beneficiaryType === '01'">{{
+                                                    'beneficiaries.beneficiaryTypes.AlRajhiBeneficiary' | translate }}
+                                                </ng-option>
+                                                <ng-option
+                                                    *ngIf="authenticationService.activateOption('BeneficiaryList',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])"
+                                                    [value]="'02'" [selected]="beneficiaryType === '02'">{{
+                                                    'beneficiaries.beneficiaryTypes.LocalBeneficiary' | translate }}
+                                                </ng-option>
+                                                <ng-option
+                                                    *ngIf="authenticationService.activateOption('BeneficiaryList',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup'])"
+                                                    [value]="'03'" [selected]="beneficiaryType === '03'">{{
+                                                    'beneficiaries.beneficiaryTypes.InternationalBeneficiary' |
+                                                    translate }}</ng-option>
+                                            </ng-select>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- BENEFICIARY NAME -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate
+                                                }}</label>
+                                            <div class="form-inline">
+                                                <input type="radio" [(ngModel)]="filterCriteria"
+                                                    style="margin-right: 10px;"
+                                                    (change)="onCriteriaChange($event.target)" name="filterCriteria"
+                                                    value="beneficiary">
+                                                <input type="text" name="beneficiaryName" class="form-control"
+                                                    style="width: 80%" [(ngModel)]="beneficiaryName"
+                                                    [disabled]="filterCriteria != 'beneficiary'" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-5"
+                                        *ngIf="beneficiaryType === '02' || beneficiaryType == '2'">
+                                        <!-- BANK NAME -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate
+                                                }}</label>
+                                            <div class="form-inline">
+                                                <input type="radio" [(ngModel)]="filterCriteria"
+                                                    style="margin-right: 10px;"
+                                                    (change)="onCriteriaChange($event.target)" name="filterCriteria"
+                                                    value="bankCode">
+                                                <ng-select [notFoundText]="'public.noData' | translate"
+                                                    id="search-criteria-input-bank-name" name="bankCode"
+                                                    style="width: 80%" class="form-control" [(ngModel)]="bankCode"
+                                                    [disabled]="filterCriteria != 'bankCode'">
+                                                    <ng-option value>{{'public.all' | translate}}</ng-option>
+                                                    <ng-option
+                                                        *ngFor="let bank of 'bankCode' | modelPipe:'__KEY_VALUE_LIST__' | orderBy:'value'"
+                                                        [value]="bank.key">
+                                                        {{bank.value}}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /BANK NAME -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                        *ngIf="beneficiaryType === '03' || beneficiaryType == '3'">
+                                        <!-- BANK NAME -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate
+                                                }}</label>
+                                            <div class="form-inline">
+                                                <input type="radio" [(ngModel)]="filterCriteria"
+                                                    style="margin-right: 10px;"
+                                                    (change)="onCriteriaChange($event.target)" name="filterCriteria"
+                                                    value="bank">
+                                                <input type="text" name="bankName" class="form-control"
+                                                    style="width: 80%" [(ngModel)]="bankName"
+                                                    [disabled]="filterCriteria != 'bank'" maxlength="30" />
+                                            </div>
+                                        </div>
+                                        <!-- /BANK NAME -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                        *ngIf="beneficiaryType === '03' || beneficiaryType == '3'">
+                                        <!-- CURRENCY -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.currency' | translate }}</label>
+                                            <div class="form-inline">
+                                                <input type="radio" [(ngModel)]="filterCriteria"
+                                                    style="margin-right: 10px;"
+                                                    (change)="onCriteriaChange($event.target)" name="filterCriteria"
+                                                    value="currency">
+                                                <ng-select [notFoundText]="'public.noData' | translate"
+                                                    class="form-control" name="currency" [(ngModel)]="currency"
+                                                    style="width: 80%" [disabled]="filterCriteria != 'currency'">
+                                                    <ng-option selected value disabled>
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option *ngFor="let currency of currencies | values"
+                                                        [value]="currency">
+                                                        {{ currencies[currency] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /CURRENCY -->
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="sme-form__actions">
+                                <button type="button" (click)="resetValues()" class="btn btn-default btn-wide">
+                                    {{ 'public.reset' | translate }}
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-wide">
+                                    {{ 'public.search' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- FILTROS BUSQUEDA -->
+
+            <div class="sme-data-table">
+
+                <!-- EXPORT TYPES -->
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__title">
+                        {{ 'beneficiaries.beneficiaryList'| translate }}
+                    </div>
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="beneficiaryListTable"
+                            [header]="'beneficiaries.beneficiaryList' | translate" [columns]="[
+                                                {'title':'beneficiaries.beneficiaryListFields.beneficiaryName' | translate,'dataKey':'beneficiaryName'},
+                                                {'title':'beneficiaries.beneficiaryListFields.beneficiaryType' |translate ,'dataKey':'beneficiaryType'},
+                                                {'title':'beneficiaries.beneficiaryListFields.bankName' | translate,'dataKey':'bankName'},
+                                                {'title':'public.account' | translate,'dataKey':'account'},
+                                                {'title':'public.country' | translate,'dataKey':'country'},
+                                                {'title':'beneficiaries.currency' | translate,'dataKey':'currency'}]">
+                        </table-export>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="sme-table table headerDataTable">
+
+                        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #beneficiaryListTable
+                            class="material  sme-table sme-table--responsive table" [rows]="beneficiaryListPage.data"
+                            [columnMode]="defaultColumnMode" [footerHeight]="footerHeight" [externalPaging]="true"
+                            [rowIdentity]="getIdFunction()" [count]="beneficiaryListPage.page.totalElements"
+                            [offset]="beneficiaryListPage.page.pageNumber-1" [limit]="beneficiaryListPage.page.pageSize"
+                            (page)='setPage($event)' (sort)="setSort($event)" [externalPaging]="true"
+                            [externalSorting]="true" [selectionType]="defaultSelectionType" [selected]="tableSelected"
+                            (select)="onSelect($event)">
+
+                            <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                (toggle)="onDetailToggle($event)">
+                                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                        for="beneficiaryNameRowDetail">{{'beneficiaries.beneficiaryListFields.beneficiaryName'
+                                                        | translate }} </label>
+                                                    <div>
+                                                        <span id="beneficiaryNameRowDetail">
+                                                            {{ row.beneficiaryName }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                        for="beneficiaryType">{{'beneficiaries.beneficiaryListFields.beneficiaryType'
+                                                        | translate }}</label>
+                                                    <div>
+                                                        <span id="beneficiaryType">{{row.beneficiaryType}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                        for="bankName">{{'beneficiaries.beneficiaryListFields.bankName'
+                                                        | translate }}</label>
+                                                    <div>
+                                                        <span id="bankName">{{row.bankName}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="account">{{'public.account' | translate }}</label>
+                                                    <div>
+                                                        <span id="account">{{row.account}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="country">{{'public.country' | translate }}</label>
+                                                    <div>
+                                                        <span id="country">{{'backEndCountryCode' |
+                                                            modelPipe:row.country}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="currency">{{'beneficiaries.currency' | translate
+                                                        }}</label>
+                                                    <div>
+                                                        <span id="currency">{{'currencyIso' |
+                                                            modelPipe:row.currency}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                </ng-template>
+                            </ngx-datatable-row-detail>
+
+                            <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"
+                                [draggable]="false" [resizeable]="false">
+                                <ng-template ngx-datatable-header-template let-value="value">
+                                    <label class="datatable-checkbox">
+                                        <input type="checkbox"
+                                            [checked]="selectAllOnPage[beneficiaryListPage.page.pageNumber]"
+                                            (change)="selectAll($event)" />
+                                    </label>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+                                    let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                                    <label class="datatable-checkbox">
+                                        <input type="checkbox" [checked]="isSelected"
+                                            (change)="onCheckboxChangeFn($event)" />
+                                    </label>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="beneficiaryName" [width]="200" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    <span class="human-selectable">
+                                        <a (click)="editBeneficiary(row)">{{ value }}</a>
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column prop="nickName" [width]="200" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'accounts.accountNickname' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <span class="mobile-hidden">
+                                        {{ value }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column prop="beneficiaryType" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'beneficiaries.beneficiaryListFields.beneficiaryType' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <span class="mobile-hidden">
+                                        {{'beneficiaryType' | modelPipe:value }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="bankName" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'beneficiaries.beneficiaryListFields.bankName' | translate }}
+                                    </span>
+                                </ng-template>
+                                <!--     TRANSFORM VALUE -> id -> BANK NAME        -->
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span class="mobile-hidden"
+                                        *ngIf="beneficiaryTypeSearch == '02' || beneficiaryTypeSearch == '2'"
+                                        [innerHTML]="'bankCode' | modelPipe:sanitize(row['bankCode'])"></span>
+                                    <span class="mobile-hidden"
+                                          *ngIf="beneficiaryTypeSearch !== '02' && beneficiaryTypeSearch !== '2'"
+                                          [innerHTML]="isEmptyOrSpaces(row['bankCode'])?
+                                          value : ('bankCode' | modelPipe:row['bankCode'])"></span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="account" [width]="200" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.account' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <span class="mobile-hidden">
+                                        {{ value }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="country" [width]="150" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.country' | translate }}
+                                    </span>
+                                </ng-template>
+                                <!--     TRANSFORM VALUE -> id -> COUNTRY NAME        -->
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span class="mobile-hidden"
+                                        [innerHTML]="'backEndCountryCode' | modelPipe:value "></span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="currency" [width]="100" class="mobile-hidden">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'beneficiaries.currency' | translate }}
+                                    </span>
+                                </ng-template>
+                                <!--     TRANSFORM VALUE -> id -> CURRENCY NAME NAME        -->
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span class="mobile-hidden" [innerHTML]="'currencyIso' | modelPipe:value"></span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-footer>
+                                <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                    let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                                    let-offset="offset">
+                                    <div class="sme-data-table__footer">
+                                        <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="beneficiaryListTable.onFooterPage($event)">
+                                        </app-datatable-pager>
+
+                                        <div class="sme-data-table__actions form-inline">
+                                            <span class="sme-data-table__action-group">{{ 'public.showingLabel' |
+                                                translate}} {{beneficiaryListPage.page.size}} {{ 'public.ofLabel' |
+                                                translate}} {{rowCount}}</span>
+                                            <span class="hidden-xs"> | </span>
+                                            <span class="sme-data-table__action-group">
+                                                <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                <div class="sme-select form-control">
+                                                    <select class="form-control"
+                                                        [(ngModel)]="this.beneficiaryListPage.page.pageSize"
+                                                        (change)="this.setPage(null)">
+                                                        <option [value]="10">10</option>
+                                                        <option [value]="15">15</option>
+                                                        <!--
+                                                        <option [value]="20">20</option>
+                                                        <option [value]="50">50</option>
+                                                        <option [value]="100">100</option>
+                                                        -->
+                                                    </select>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-footer>
+
+                        </ngx-datatable>
+
+                    </div>
+
+                    <div class="sme-form__actions">
+                        <!--
+                        <a href="#" class="btn btn-default btn-wide" routerLinkActive="active"
+                           [routerLink]="['/beneficiaries/beneficiariesOptions']">
+                            {{'public.back' | translate }}</a>
+                        -->
+                        <button (click)="deleteBeneficiaries()" type="submit" class="btn btn-default btn-wide"
+                            [disabled]="tableSelected.length == 0">{{ 'public.delete' | translate }}</button>
+                        <button (click)="editBeneficiaries()" type="submit" class="btn btn-primary btn-wide"
+                            [disabled]="tableSelected.length == 0">{{ 'public.edit' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <!-- ./sme-data-table -->
+        </div><!-- ./"wizardStep==1 -->
+
+        <div *ngIf="wizardStep==2 && !this.deleteBeneficiariesView">
+            <form autocomplete="off" (ngSubmit)="modifyBeneficiary()" class="sme-form__form" #formEdit="ngForm">
+                <div *ngFor="let beneficiary of this.tableSelected; let i = index" class="sme-form">
+                    <arb-closeable-panel index="index" (removeElementAction)="removeBeneficiary(i)"
+                        *ngIf="beneficiary.beneficiaryType==='01'">
+
+                        <div [title]="beneficiary.name+' - ' +beneficiary.account">
+                            <div class="sme-form__content">
+                                <div class="">
+                                    <div class="sme-form__form">
+                                        <div class="sme-form__body">
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'accounts.accountNumber' | translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.account}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.beneficiaryName' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.beneficiaryName}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <!-- EMAIL -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.email' | translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="email{{i}}"
+                                                                placeholder="{{ 'public.email' | translate }}"
+                                                                [(ngModel)]="beneficiary.email" #emailAlRajhi="ngModel"
+                                                                maxlength="50"
+                                                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                inputPattern="notArabic" />
+                                                            <p *ngIf="emailAlRajhi.errors && emailAlRajhi.errors.pattern"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.emailVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /EMAIL -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="height: 15px;"></div>
+                            <app-beneficiary-details [beneficiary]="beneficiary"></app-beneficiary-details>
+                        </div>
+                    </arb-closeable-panel>
+
+
+                    <arb-closeable-panel index="index" (removeElementAction)="removeBeneficiary(i)"
+                        *ngIf="beneficiary.beneficiaryType==='02'">
+
+                        <div [title]="beneficiary.name+' - ' +beneficiary.account">
+                            <div class="sme-form__content">
+
+
+                                <div class="">
+                                    <div class="sme-form__form">
+                                        <div class="sme-form__body">
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.ibanAccount' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.account}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.bankName' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <span
+                                                                [innerHTML]="'bankCode' | modelPipe:sanitize(beneficiary.bankCode)"
+                                                                class="form-control" disabled></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.beneficiaryName' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.beneficiaryName}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <!-- EMAIL -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.email' | translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="email{{i}}"
+                                                                placeholder="{{ 'public.email' | translate }}"
+                                                                [(ngModel)]="beneficiary.email" #emailAlRajhi="ngModel"
+                                                                maxlength="50"
+                                                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                inputPattern="notArabic" />
+                                                            <p *ngIf="emailAlRajhi.errors && emailAlRajhi.errors.pattern"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.emailVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /EMAIL -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="height: 15px;"></div>
+                            <app-beneficiary-details [beneficiary]="beneficiary"></app-beneficiary-details>
+                        </div>
+                    </arb-closeable-panel>
+
+                    <arb-closeable-panel index="index" (removeElementAction)="removeBeneficiary(i)"
+                        *ngIf="beneficiary.beneficiaryType==='03'">
+
+                        <div [title]="beneficiary.name+' - ' +beneficiary.account">
+                            <div class="sme-form__content">
+
+                                <div class="">
+                                    <div class="sme-form__form">
+
+                                        <div class="sme-form__body">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <div class="legend" style="margin-bottom: 0px;">{{
+                                                            'beneficiaries.beneficiaryListFields.category' | translate
+                                                            }}</div>
+                                                        <!-- CATEGORY -->
+                                                        <div>
+                                                            <input type="text" class="form-control" name="category"
+                                                                value="{{beneficiary.beneficiaryCategory}}" disabled />
+                                                        </div>
+                                                        <!-- /CATEGORY -->
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend"></div>
+
+                                                <div class="legend">
+                                                    {{ 'beneficiaries.beneficiaryBankDetails' | translate }}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- COUNTRY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'public.country' | translate }}</label>
+
+                                                            <span [innerHTML]="getNameCountry(beneficiary.countryCode)"
+                                                                class="form-control" disabled></span>
+                                                        </div>
+
+                                                        <!-- /COUNTRY -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BANK NAME -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.bankName' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <span [innerHTML]="beneficiary.bankName"
+                                                                    class="form-control" disabled></span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BANK NAME -->
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- Branch NAME -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.currency' |
+                                                                translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <span
+                                                                    [innerHTML]="getNameCurrency(beneficiary.currency)"
+                                                                    class="form-control" disabled></span>
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- /Branch NAME -->
+                                                    </div>
+
+                                                </div>
+
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend">{{ 'beneficiaries.beneficiaryDetails' | translate }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- CHANGE CATEGORY -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.changeCategory' |
+                                                                translate }}</label>
+                                                            <div class="sme-select form-control">
+                                                                <select class="form-control" name="category"
+                                                                    [(ngModel)]="beneficiary.beneficiaryCategory"
+                                                                    required #categorySelector="ngModel">
+                                                                    <option selected value disabled>
+                                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                                    </option>
+                                                                    <option [ngValue]="'Individual'"
+                                                                        [selected]="beneficiary.beneficiaryCategory === 'Individual'"
+                                                                        value="Individual">
+                                                                        {{ 'beneficiaries.selectIndividual' | translate
+                                                                        }}
+                                                                    </option>
+                                                                    <option [ngValue]="'Company'"
+                                                                        [selected]="beneficiary.beneficiaryCategory === 'Company'"
+                                                                        value="Company">
+                                                                        {{ 'beneficiaries.selectCompany' | translate }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <p *ngIf="categorySelector.errors"
+                                                                class="alert alert-danger">
+                                                                {{ 'beneficiaries.beneficiaryListFields.category' |
+                                                                translate }} {{ 'error.required' | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- / CHANGE CATEGORY -->
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryAccount'
+                                                                | translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    value="{{ beneficiary.account }}" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.retypeBeneficiaryAccount'
+                                                                | translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    value="{{ beneficiary.account }}" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.sortCode' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    [(ngModel)]="beneficiary.beneficiary.beneficiaryAccount.code000"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryName' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    value="{{ beneficiary.beneficiaryName }}"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- CUSTOMER NAME -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.customerName' | translate
+                                                                }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control" name="firstName"
+                                                                    value="{{beneficiary.name}}" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /CUSTOMER NAME -->
+                                                    </div>
+
+                                                    <div *ngIf="beneficiary.beneficiaryCategory == 'Individual'">
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <!-- BENEFICIARY FullName -->
+                                                            <div class="form-group">
+                                                                <label>{{
+                                                                    'beneficiaries.beneficiaryListFields.beneficiaryFullName'
+                                                                    | translate }}
+                                                                    *</label>
+                                                                <div>
+                                                                    <input type="text" class="form-control"
+                                                                        name="beneficiaryFullName"
+                                                                        [(ngModel)]="beneficiary.name" disabled />
+                                                                </div>
+                                                            </div>
+                                                            <!-- BENEFICIARY FullName -->
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>{{ 'public.dateBirth' | translate }} *</label>
+                                                                <input type="text" class="form-control"
+                                                                    style="z-index: 1000;" bsDatepicker
+                                                                    [(bsValue)]="beneficiary.dateBirth"
+                                                                    [bsConfig]="bsConfig" />
+                                                            </div>
+                                                            <!-- /DATE OF BIRTH -->
+                                                        </div>
+
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <!-- PLACE OF BIRTH -->
+                                                            <div class="form-group">
+                                                                <label>{{ 'public.placeBirth' | translate }}
+                                                                    *</label>
+                                                                <div>
+
+                                                                    <input type="text" class="form-control"
+                                                                           name="placeBirth"
+                                                                           [(ngModel)]="beneficiary.placeBirth" disabled />
+                                                                </div>
+                                                            </div>
+                                                            <!-- /PLACE OF BIRTH -->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY TYPE -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryType' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryType"
+                                                                    [value]="(beneficiary.beneficiaryType ?  ('beneficiaryType' | modelPipe:beneficiary.beneficiaryType) :'')"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- BENEFICIARY TYPE -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- NATIONALITY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.nationality'
+                                                                | translate }}
+                                                                *</label>
+                                                            <div class="sme-select form-control">
+                                                                <select class="form-control" name="nationality"
+                                                                    [(ngModel)]="beneficiary.nationality">
+                                                                    <option selected value disabled>
+                                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                                    </option>
+                                                                    <option
+                                                                        *ngFor="let nationality of backEndCountryCode | values"
+                                                                        [selected]="nationality === beneficiary.countryCode"
+                                                                        [ngValue]="nationality">
+                                                                        {{ backEndCountryCode[nationality] }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /NATIONALITY -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY MOBILE NUMBER -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryMobileNumber' |
+                                                                translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryMobile{{i}}"
+                                                                    [(ngModel)]="beneficiary.mobileNo" required
+                                                                    pattern="^(\+|0)[0-9]{0,18}$" maxlength="18"
+                                                                    inputPattern="onlyMobileNumbers"
+                                                                    #numberMovil="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="numberMovil.errors" class="alert alert-danger">
+                                                                {{
+                                                                'beneficiaries.beneficiaryListFields.phoneVerification'
+                                                                | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /BENEFICIARY MOBILE NUMBER -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- EMAIL -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'public.email' | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryEmail{{i}}"
+                                                                    [(ngModel)]="beneficiary.email" #email="ngModel"
+                                                                    maxlength="50"
+                                                                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                    required inputPattern="notArabic" />
+                                                            </div>
+                                                            <p *ngIf="email.errors && email.errors.pattern"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.emailVerification' | translate }}
+                                                            </p>
+                                                            <p *ngIf="email.errors && email.errors.required"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.email' | translate }} {{ 'error.required' |
+                                                                translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /EMAIL -->
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <!-- BENEFICIARY TYPE -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.phoneNumber'
+                                                                | translate }}</label>
+                                                            <div class="col-xs-12">
+                                                                <div class="d-flex">
+                                                                    <input type="text" class="form-control col-4"
+                                                                        name="phoneInternationalCode" placeholder="Area"
+                                                                        [(ngModel)]="beneficiary.phoneInternationalCode"
+                                                                        disabled />
+                                                                    <input type="text" class="form-control col-4"
+                                                                        name="phoneExtension" placeholder="Extension"
+                                                                        [(ngModel)]="beneficiary.phoneExtension"
+                                                                        disabled />
+                                                                    <input type="text" class="form-control col-4"
+                                                                        name="phoneNumber" placeholder="PhoneNumber"
+                                                                        [(ngModel)]="beneficiary.phoneNumber"
+                                                                        disabled />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- BENEFICIARY TYPE -->
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend">{{ 'beneficiaries.beneficiaryAddress' | translate }}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ADDRESS 1 -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryAddress1' | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAddress1{{i}}"
+                                                                    [(ngModel)]="beneficiary.address1" required
+                                                                    #beneficiaryAddress1="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="beneficiaryAddress1.errors && (beneficiaryAddress1.dirty || beneficiaryAddress1.touched)"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.addressVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ADDRESS 1 -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- STREET / BUILDING NUMBER -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.streetBuildingNumber'
+                                                                | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="streetBuildingNumber{{i}}"
+                                                                    #addressNumber="ngModel"
+                                                                    [(ngModel)]="beneficiary.addressNumber" required />
+                                                            </div>
+                                                            <p *ngIf="addressNumber.errors && (addressNumber.dirty || addressNumber.touched)"
+                                                                class="alert alert-danger">
+                                                                {{ 'beneficiaries.beneficiaryStreetBuldingVerification'
+                                                                | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /STREET / BUILDING NUMBER -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ADDRESS 2 -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryAddress2' | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAddress1{{i}}"
+                                                                    [(ngModel)]="beneficiary.address1" required
+                                                                    #beneficiaryAddress1="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="beneficiaryAddress1.errors && (beneficiaryAddress1.dirty || beneficiaryAddress1.touched)"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.addressVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ADDRESS 2 -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- POSTAL CODE -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.postalCode' |
+                                                                translate }}
+                                                                *</label>
+                                                            <input type="text" name="postalCode{{i}}"
+                                                                [(ngModel)]="beneficiary.zipCode" #zipCode="ngModel"
+                                                                class="form-control" maxlength="5"
+                                                                inputPattern="onlyDigits" required />
+                                                        </div>
+                                                        <p *ngIf="zipCode.errors && (zipCode.dirty || zipCode.touched)"
+                                                            class="alert alert-danger">
+                                                            {{
+                                                            'beneficiaries.beneficiaryListFields.beneficiaryPostalCodeVerification'
+                                                            | translate }}
+                                                        </p>
+                                                        <!-- /POSTAL CODE -->
+                                                    </div>
+                                                    <!--Country-->
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- COUNTRY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'public.country' | translate }}</label>
+                                                            <div>
+                                                                <!-- <input type="text" class="form-control" name="country"
+                                                                    [(ngModel)]="this.tableSelected[i].countryCode"/> -->
+                                                                <select class="form-control" name="countryCode"
+                                                                    [(ngModel)]="beneficiary.countryCode">
+                                                                    <option selected value disabled>
+                                                                        --{{ 'public.selectDropdown' | translate }}
+                                                                    </option>
+                                                                    <option
+                                                                        *ngFor="let country of backEndCountryCode | values"
+                                                                        [selected]="country === beneficiary.countryCode"
+                                                                        [ngValue]="country">
+                                                                        {{ backEndCountryCode[country] }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /COUNTRY -->
+                                                    </div>
+                                                    <!--Country-->
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- PO BOX -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.poBox' |
+                                                                translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="poBox{{i}}" [(ngModel)]="beneficiary.poBox"
+                                                                    required maxlength="30" #poBox="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="poBox.errors && (poBox.dirty || poBox.touched)"
+                                                                class="alert alert-danger">
+                                                                {{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryPoBoxVerification'
+                                                                | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /PO BOX -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- COUNTRY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.cityState' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control" name="city"
+                                                                    [(ngModel)]="beneficiary.city"
+                                                                    disabled="disabled" />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /COUNTRY -->
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend">{{ 'beneficiaries.documentId.documentIds' |
+                                                    translate }}</div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.idType' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="type"
+                                                                [value]="(beneficiary.type ?  ('documentIdType' | modelPipe:beneficiary.type) :'')"
+                                                                disabled />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.idNumber' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="branchid"
+                                                                [(ngModel)]="beneficiary.beneficiary.beneficiaryAccount.branchid"
+                                                                disabled />
+                                                        </div>
+                                                    </div>
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.issuedAt' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="date"
+                                                                [(ngModel)]="beneficiary.transferReason" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.issueDate' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="date"
+                                                                [(ngModel)]="beneficiary.date" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- COUNTRY -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.country' | translate }}</label>
+                                                        <div>
+                                                            <!-- <input type="text" class="form-control" name="country"
+                                                                [(ngModel)]="this.tableSelected[i].countryCode"	disabled /> -->
+                                                            <select class="form-control" name="countryCode"
+                                                                [(ngModel)]="beneficiary.countryCode">
+                                                                <option selected value disabled>
+                                                                    --{{ 'public.selectDropdown' | translate }}</option>
+                                                                <option
+                                                                    *ngFor="let country of backEndCountryCode | values"
+                                                                    [selected]="country === beneficiary.countryCode"
+                                                                    [ngValue]="country">
+                                                                    {{ backEndCountryCode[country] }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /COUNTRY -->
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="height: 15px;"></div>
+
+                            <app-beneficiary-details [beneficiary]="beneficiary"></app-beneficiary-details>
+                        </div>
+                    </arb-closeable-panel>
+                </div>
+
+                <div class="sme-form__form">
+                    <div class="sme-wizard__navigation sme-form__actions">
+                        <button (click)="returnBeneficiaryList(true)" class=" btn btn-default btn-wide">
+                            {{ 'public.back' | translate }}
+                        </button>
+                        <button [disabled]="!formEdit.valid" type="submit" class=" btn btn-primary btn-wide">{{
+                            'public.confirm' | translate }}</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- ./"wizardStep==2 && editAlrajhiBeneficiariesView -->
+
+
+        <div *ngIf="wizardStep==4 && this.editAlrajhiBeneficiariesView == true">
+            <form autocomplete="off" (ngSubmit)="modifyBeneficiary()" class="sme-form__form" novalidate>
+                <div *ngFor="let beneficiary of this.tableSelected; let i = index" class="sme-form">
+                    <arb-closeable-panel index="index" (removeElementAction)="removeBeneficiary(i)">
+
+                        <div [title]="beneficiary.name+' - ' +beneficiary.account">
+                            <div class="sme-form__content">
+
+
+                                <div class="">
+                                    <div class="sme-form__form">
+                                        <div class="sme-form__body">
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'accounts.accountNumber' | translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.account}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'accounts.accountNickname' | translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                   value="{{beneficiary.nickName}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.beneficiaryName' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.beneficiaryName}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <!-- EMAIL -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.email' | translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="email{{i}}"
+                                                                placeholder="{{ 'public.email' | translate }}"
+                                                                [(ngModel)]="beneficiary.email" #emailAlRajhi="ngModel"
+                                                                maxlength="50"
+                                                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                inputPattern="notArabic" />
+                                                            <p *ngIf="emailAlRajhi.errors && emailAlRajhi.errors.pattern"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.emailVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /EMAIL -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="height: 15px;"></div>
+                            <app-beneficiary-details [beneficiary]="beneficiary"></app-beneficiary-details>
+                        </div>
+                    </arb-closeable-panel>
+                </div>
+
+                <div class="sme-form__form">
+                    <div class="sme-wizard__navigation sme-form__actions">
+                        <button (click)="returnBeneficiaryList(true)" class=" btn btn-default btn-wide">
+                            {{ 'public.back' | translate }}
+                        </button>
+                        <!-- <button (click)="editdetailsBeneficiaries()" type="submit" class="btn btn-primary btn-wide">{{ 'public.edit' | translate }}</button> -->
+                        <button (click)="deletedetailsBeneficiaries()" class="btn btn-default btn-wide">{{
+                            'public.delete' | translate }}</button>
+                        <button type="submit" class=" btn btn-primary btn-wide">{{ 'public.confirm' | translate
+                            }}</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- ./"wizardStep==2 && editAlrajhiBeneficiariesView -->
+
+        <div *ngIf="wizardStep==4 && this.editLocalBeneficiariesView">
+            <form autocomplete="off" (ngSubmit)="modifyBeneficiary()" class="sme-form__form" novalidate>
+                <div *ngFor="let beneficiary of this.tableSelected; let i = index" class="sme-form">
+                    <arb-closeable-panel index="index" (removeElementAction)="removeBeneficiary(i)">
+
+                        <div [title]="beneficiary.name+' - ' +beneficiary.account">
+                            <div class="sme-form__content">
+
+
+                                <div class="">
+                                    <div class="sme-form__form">
+                                        <div class="sme-form__body">
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.ibanAccount' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.account}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.bankName' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <span
+                                                                [innerHTML]="'bankCode' | modelPipe:sanitize(beneficiary.bankCode)"
+                                                                class="form-control" disabled></span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            {{ 'beneficiaries.beneficiaryListFields.beneficiaryName' |
+                                                            translate }}
+                                                        </label>
+                                                        <div>
+                                                            <input type="text" class="form-control"
+                                                                value="{{beneficiary.beneficiaryName}}" disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <!-- EMAIL -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.email' | translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="email{{i}}"
+                                                                placeholder="{{ 'public.email' | translate }}"
+                                                                [(ngModel)]="beneficiary.email" #emailAlRajhi="ngModel"
+                                                                maxlength="50"
+                                                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                inputPattern="notArabic" />
+                                                            <p *ngIf="emailAlRajhi.errors && emailAlRajhi.errors.pattern"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.emailVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /EMAIL -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="height: 15px;"></div>
+                            <app-beneficiary-details [beneficiary]="beneficiary"></app-beneficiary-details>
+                        </div>
+                    </arb-closeable-panel>
+                </div>
+
+                <div class="sme-form__form">
+                    <div class="sme-wizard__navigation sme-form__actions">
+                        <button (click)="returnBeneficiaryList(true)" class=" btn btn-default btn-wide">
+                            {{ 'public.back' | translate }}
+                        </button>
+                        <!-- <button (click)="editdetailsBeneficiaries()" type="submit" class="btn btn-primary btn-wide">{{ 'public.edit' | translate }}</button> -->
+                        <button (click)="deletedetailsBeneficiaries()" class="btn btn-default btn-wide">{{
+                            'public.delete' | translate }}</button>
+                        <button type="submit" class=" btn btn-primary btn-wide">{{ 'public.confirm' | translate
+                            }}</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- ./"wizardStep==2 && editLocalBeneficiariesView -->
+
+        <div *ngIf="wizardStep==4 && this.editInternationalBeneficiariesView">
+            <form autocomplete="off" (ngSubmit)="modifyBeneficiary()" class="sme-form__form" #formModInt="ngForm"
+                novalidate>
+                <div *ngFor="let beneficiary of this.tableSelected; let i = index" class="sme-form">
+                    <arb-closeable-panel index="index" (removeElementAction)="removeBeneficiary(i)">
+
+                        <div [title]="beneficiary.name+' - ' +beneficiary.account">
+                            <div class="sme-form__content">
+                                <!--
+                                <div class="sme-form__head">{{ 'beneficiaries.beneficiaryLabel' | translate }} {{i+1}}
+                                    <a class="sme-form__close btn" (click)="removeBeneficiary(i)"><span class="icon -close"></span></a>
+                                </div> -->
+                                <div class="">
+                                    <div class="sme-form__form">
+
+                                        <div class="sme-form__body">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <div class="legend" style="margin-bottom: 0px;">{{
+                                                            'beneficiaries.beneficiaryListFields.category' | translate
+                                                            }}</div>
+                                                        <!-- CATEGORY -->
+                                                        <div>
+                                                            <input type="text" class="form-control" name="category"
+                                                                value="{{beneficiary.beneficiaryCategory}}" disabled />
+                                                        </div>
+                                                        <!-- /CATEGORY -->
+                                                    </div>
+
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend"></div>
+
+                                                <div class="legend">
+                                                    {{ 'beneficiaries.beneficiaryBankDetails' | translate }}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- COUNTRY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'public.country' | translate }}</label>
+                                                            <!-- <input type="text" class="form-control" name="country"
+                                                                [ngModel]="countryCode" disabled /> -->
+                                                            <!-- <div *ngFor="let country of backEndCountryCode | values">{{ backEndCountryCode[country] }}</div> -->
+                                                            <span [innerHTML]="getNameCountry(beneficiary.countryCode)"
+                                                                class="form-control" disabled></span>
+                                                            <!--																		<select class="form-control" name="countryCode" [(ngModel)]="beneficiary.countryCode" >-->
+                                                            <!--																			<option selected value disabled>&#45;&#45;{{ 'public.selectDropdown' | translate }}</option>-->
+                                                            <!--																		   <option *ngFor="let country of backEndCountryCode | values" [selected]="country === beneficiary.countryCode" [ngValue]="country">-->
+                                                            <!--																			   {{ backEndCountryCode[country] }}-->
+                                                            <!--																		   </option>-->
+                                                            <!--																	   </select>-->
+                                                        </div>
+
+                                                        <!-- /COUNTRY -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BANK NAME -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.bankName' |
+                                                                translate }}</label>
+                                                            <div>
+
+                                                                <span [innerHTML]="beneficiary.bankName"
+                                                                    class="form-control" disabled></span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BANK NAME -->
+                                                    </div>
+                                                    <!--														<div class="col-xs-12 col-sm-3">-->
+                                                    <!--															&lt;!&ndash; Branch NAME &ndash;&gt;-->
+                                                    <!--															<div class="form-group">-->
+                                                    <!--																<label>{{ 'beneficiaries.beneficiaryListFields.branchName' | translate }}*</label>-->
+                                                    <!--																<div>-->
+                                                    <!--																	<span [innerHTML]="beneficiary.branchName" class="form-control" disabled></span> -->
+                                                    <!--																</div>-->
+                                                    <!--															</div>-->
+                                                    <!--															&lt;!&ndash; /Branch NAME &ndash;&gt;-->
+                                                    <!--														</div>-->
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- Branch NAME -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.currency' |
+                                                                translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <span
+                                                                    [innerHTML]="getNameCurrency(beneficiary.currency)"
+                                                                    class="form-control" disabled></span>
+                                                                <!--																	<select class="form-control" name="currency" [(ngModel)]="beneficiary.currency" >-->
+                                                                <!--																		<option selected value disabled>&#45;&#45;{{ 'public.selectDropdown' | translate }}&#45;&#45;</option>-->
+                                                                <!--																		   <option *ngFor="let currency of currencies | values" [selected]="currency === beneficiary.currency" [ngValue]="currency">-->
+                                                                <!--																			   {{ currencies[currency] }}-->
+                                                                <!--																		   </option>-->
+                                                                <!--																	   </select>-->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /Branch NAME -->
+                                                    </div>
+                                                    <!--														<div class="col-xs-12 col-sm-3">-->
+                                                    <!--															&lt;!&ndash; Branch NAME &ndash;&gt;-->
+                                                    <!--															<div class="form-group">-->
+                                                    <!--																<label>{{ 'beneficiaries.beneficiaryListFields.swiftCode' | translate }}*</label>-->
+                                                    <!--																<div>-->
+                                                    <!--																	<span [innerHTML]="beneficiary.bankCode" class="form-control" disabled></span> -->
+                                                    <!--																</div>-->
+                                                    <!--															</div>-->
+                                                    <!--															&lt;!&ndash; /Branch NAME &ndash;&gt;-->
+                                                    <!--														</div>	-->
+                                                    <!--														<div class="col-xs-12 col-sm-3">-->
+                                                    <!--															&lt;!&ndash; Branch NAME &ndash;&gt;-->
+                                                    <!--															<div class="form-group">-->
+                                                    <!--																<label>{{ 'beneficiaries.beneficiaryListFields.bankAddress' | translate }}*</label>-->
+                                                    <!--																<div>-->
+                                                    <!--																	<span [innerHTML]="beneficiary.bankAddress" class="form-control" disabled></span> -->
+                                                    <!--																</div>-->
+                                                    <!--															</div>-->
+                                                    <!--															&lt;!&ndash; /Branch NAME &ndash;&gt;-->
+                                                    <!--														</div>-->
+                                                    <!--														<div class="col-xs-12 col-sm-3">-->
+                                                    <!--															&lt;!&ndash; Branch NAME &ndash;&gt;-->
+                                                    <!--															<div class="form-group">-->
+                                                    <!--																<label>{{ 'beneficiaries.beneficiaryListFields.branchAddress' | translate }}*</label>-->
+                                                    <!--																<div>-->
+                                                    <!--																	<span [innerHTML]="beneficiary.branchAddress" class="form-control" disabled></span> -->
+                                                    <!--																</div>-->
+                                                    <!--															</div>-->
+                                                    <!--															&lt;!&ndash; /Branch NAME &ndash;&gt;-->
+                                                    <!--														</div>-->
+                                                </div>
+
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend">{{ 'beneficiaries.beneficiaryDetails' | translate }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- CHANGE CATEGORY -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.changeCategory' |
+                                                                translate }}</label>
+                                                            <div class="sme-select form-control">
+                                                                <select class="form-control" name="category"
+                                                                    [(ngModel)]="beneficiary.beneficiaryCategory">
+                                                                    <option selected value disabled>
+                                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                                    </option>
+                                                                    <option [ngValue]="'Individual'"
+                                                                        [selected]="beneficiary.beneficiaryCategory === 'Individual'"
+                                                                        value="Individual">
+                                                                        {{ 'beneficiaries.selectIndividual' | translate
+                                                                        }}
+                                                                    </option>
+                                                                    <option [ngValue]="'Company'"
+                                                                        [selected]="beneficiary.beneficiaryCategory === 'Company'"
+                                                                        value="Company">
+                                                                        {{ 'beneficiaries.selectCompany' | translate }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!-- / CHANGE CATEGORY -->
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryAccount'
+                                                                | translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    value="{{ beneficiary.account }}" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.retypeBeneficiaryAccount'
+                                                                | translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    value="{{ beneficiary.account }}" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.sortCode' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    [(ngModel)]="beneficiary.beneficiary.beneficiaryAccount.code000"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ACCOUNT -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryName' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAccount"
+                                                                    value="{{ beneficiary.beneficiaryName }}"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ACCOUNT -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- CUSTOMER NAME -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.customerName' | translate
+                                                                }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control" name="firstName"
+                                                                    value="{{beneficiary.name}}" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /CUSTOMER NAME -->
+                                                    </div>
+
+                                                    <div *ngIf="beneficiary.beneficiaryCategory == 'Individual'">
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <!-- BENEFICIARY FullName -->
+                                                            <div class="form-group">
+                                                                <label>{{
+                                                                    'beneficiaries.beneficiaryListFields.beneficiaryFullName'
+                                                                    | translate }}
+                                                                    *</label>
+                                                                <div>
+                                                                    <input type="text" class="form-control"
+                                                                        name="beneficiaryFullName"
+                                                                        [(ngModel)]="beneficiary.name" disabled />
+                                                                </div>
+                                                            </div>
+                                                            <!-- BENEFICIARY FullName -->
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <!-- DATE OF BIRTH -->
+                                                            <div class="form-group">
+                                                                <label>{{ 'public.dateBirth' | translate }} *</label>
+                                                                <input type="text" class="form-control"
+                                                                    style="z-index: 1000;" bsDatepicker
+                                                                    [(bsValue)]="beneficiary.dateBirth"
+                                                                    [bsConfig]="bsConfig" />
+                                                            </div>
+                                                            <!-- /DATE OF BIRTH -->
+                                                        </div>
+
+                                                        <div class="col-xs-12 col-sm-3">
+                                                            <!-- PLACE OF BIRTH -->
+                                                            <div class="form-group">
+                                                                <label>{{ 'public.placeBirth' | translate }}
+                                                                    *</label>
+                                                                <div>
+
+                                                                    <!--
+                                                                    <input type="text" class="form-control" name="placeBirth{{i}}" [(ngModel)]="beneficiary.placeBirth" />
+                                                                    -->
+                                                                    <select class="form-control" name="nationality"
+                                                                        [(ngModel)]="beneficiary.countryCode">
+                                                                        <option selected value disabled>
+                                                                            --{{ 'public.selectDropdown' | translate }}
+                                                                            --
+                                                                        </option>
+                                                                        <option
+                                                                            *ngFor="let country of backEndCountryCode | values"
+                                                                            [selected]="country === beneficiary.countryCode"
+                                                                            [ngValue]="country">
+                                                                            {{ backEndCountryCode[country] }}
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /PLACE OF BIRTH -->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY TYPE -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryType' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryType"
+                                                                    [value]="(beneficiary.beneficiaryType ?  ('beneficiaryType' | modelPipe:beneficiary.beneficiaryType) :'')"
+                                                                    disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- BENEFICIARY TYPE -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- NATIONALITY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.nationality'
+                                                                | translate }}
+                                                                *</label>
+                                                            <div class="sme-select form-control">
+                                                                <select class="form-control" name="nationality"
+                                                                    [(ngModel)]="beneficiary.nationality">
+                                                                    <option selected value disabled>
+                                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                                    </option>
+                                                                    <option
+                                                                        *ngFor="let nationality of backEndCountryCode | values"
+                                                                        [selected]="nationality === beneficiary.countryCode"
+                                                                        [ngValue]="nationality">
+                                                                        {{ backEndCountryCode[nationality] }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /NATIONALITY -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY MOBILE NUMBER -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryMobileNumber' |
+                                                                translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryMobile{{i}}"
+                                                                    [(ngModel)]="beneficiary.mobileNo" required
+                                                                    pattern="^(\+|0)[0-9]{0,18}$" maxlength="18"
+                                                                    inputPattern="onlyMobileNumbers"
+                                                                    #numberMovil="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="numberMovil.errors && (numberMovil.dirty || numberMovil.touched)"
+                                                                class="alert alert-danger">
+                                                                {{
+                                                                'beneficiaries.beneficiaryListFields.phoneVerification'
+                                                                | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /BENEFICIARY MOBILE NUMBER -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- EMAIL -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'public.email' | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryEmail{{i}}"
+                                                                    [(ngModel)]="beneficiary.email" #email="ngModel"
+                                                                    maxlength="50"
+                                                                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                    required inputPattern="notArabic" />
+                                                            </div>
+                                                            <p *ngIf="email.errors && email.errors.pattern"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.emailVerification' | translate }}
+                                                            </p>
+                                                            <p *ngIf="email.errors && email.errors.required"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.email' | translate }} {{ 'error.required' |
+                                                                translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /EMAIL -->
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <!-- BENEFICIARY TYPE -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.phoneNumber'
+                                                                | translate }}</label>
+                                                            <div class="col-xs-12">
+                                                                <div class="d-flex">
+                                                                    <input type="text" class="form-control col-4"
+                                                                        name="phoneInternationalCode" placeholder="Area"
+                                                                        [(ngModel)]="beneficiary.phoneInternationalCode"
+                                                                        disabled />
+                                                                    <input type="text" class="form-control col-4"
+                                                                        name="phoneExtension" placeholder="Extension"
+                                                                        [(ngModel)]="beneficiary.phoneExtension"
+                                                                        disabled />
+                                                                    <input type="text" class="form-control col-4"
+                                                                        name="phoneNumber" placeholder="PhoneNumber"
+                                                                        [(ngModel)]="beneficiary.phoneNumber"
+                                                                        disabled />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- BENEFICIARY TYPE -->
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="legend">{{ 'beneficiaries.beneficiaryAddress' | translate }}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ADDRESS 1 -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryAddress1' | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAddress1{{i}}"
+                                                                    [(ngModel)]="beneficiary.address1" required
+                                                                    #beneficiaryAddress1="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="beneficiaryAddress1.errors && (beneficiaryAddress1.dirty || beneficiaryAddress1.touched)"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.addressVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ADDRESS 1 -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- STREET / BUILDING NUMBER -->
+                                                        <div class="form-group">
+                                                            <label>{{
+                                                                'beneficiaries.beneficiaryListFields.streetBuildingNumber'
+                                                                | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="streetBuildingNumber{{i}}"
+                                                                    #addressNumber="ngModel"
+                                                                    [(ngModel)]="beneficiary.addressNumber" required />
+                                                            </div>
+                                                            <p *ngIf="addressNumber.errors && (addressNumber.dirty || addressNumber.touched)"
+                                                                class="alert alert-danger">
+                                                                {{ 'beneficiaries.beneficiaryStreetBuldingVerification'
+                                                                | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /STREET / BUILDING NUMBER -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- BENEFICIARY ADDRESS 2 -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryAddress2' | translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="beneficiaryAddress1{{i}}"
+                                                                    [(ngModel)]="beneficiary.address1" required
+                                                                    #beneficiaryAddress1="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="beneficiaryAddress1.errors && (beneficiaryAddress1.dirty || beneficiaryAddress1.touched)"
+                                                                class="alert alert-danger">
+                                                                {{ 'public.addressVerification' | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /BENEFICIARY ADDRESS 2 -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- POSTAL CODE -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.postalCode' |
+                                                                translate }}
+                                                                *</label>
+                                                            <input type="text" name="postalCode{{i}}"
+                                                                [(ngModel)]="beneficiary.zipCode" #zipCode="ngModel"
+                                                                class="form-control" maxlength="5"
+                                                                inputPattern="onlyDigits" required />
+                                                        </div>
+                                                        <p *ngIf="zipCode.errors && (zipCode.dirty || zipCode.touched)"
+                                                            class="alert alert-danger">
+                                                            {{
+                                                            'beneficiaries.beneficiaryListFields.beneficiaryPostalCodeVerification'
+                                                            | translate }}
+                                                        </p>
+                                                        <!-- /POSTAL CODE -->
+                                                    </div>
+                                                    <!--Country-->
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- COUNTRY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'public.country' | translate }}</label>
+                                                            <div>
+                                                                <!-- <input type="text" class="form-control" name="country"
+                                                                    [(ngModel)]="this.tableSelected[i].countryCode"/> -->
+                                                                <select class="form-control" name="countryCode"
+                                                                    [(ngModel)]="beneficiary.countryCode">
+                                                                    <option selected value disabled>
+                                                                        --{{ 'public.selectDropdown' | translate }}
+                                                                    </option>
+                                                                    <option
+                                                                        *ngFor="let country of backEndCountryCode | values"
+                                                                        [selected]="country === beneficiary.countryCode"
+                                                                        [ngValue]="country">
+                                                                        {{ backEndCountryCode[country] }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /COUNTRY -->
+                                                    </div>
+                                                    <!--Country-->
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- PO BOX -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.poBox' |
+                                                                translate }}
+                                                                *</label>
+                                                            <div>
+                                                                <input type="text" class="form-control"
+                                                                    name="poBox{{i}}" [(ngModel)]="beneficiary.poBox"
+                                                                    required maxlength="30" #poBox="ngModel" />
+                                                            </div>
+                                                            <p *ngIf="poBox.errors && (poBox.dirty || poBox.touched)"
+                                                                class="alert alert-danger">
+                                                                {{
+                                                                'beneficiaries.beneficiaryListFields.beneficiaryPoBoxVerification'
+                                                                | translate }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- /PO BOX -->
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3">
+                                                        <!-- COUNTRY -->
+                                                        <div class="form-group">
+                                                            <label>{{ 'beneficiaries.beneficiaryListFields.cityState' |
+                                                                translate }}</label>
+                                                            <div>
+                                                                <input type="text" class="form-control" name="city"
+                                                                    [(ngModel)]="beneficiary.city" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <!-- /COUNTRY -->
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset *ngIf="false">
+                                                <div class="legend">{{ 'beneficiaries.documentId.documentIds' |
+                                                    translate }}</div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.idType' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="type"
+                                                                [value]="(beneficiary.type ?  ('documentIdType' | modelPipe:beneficiary.type) :'')"
+                                                                disabled />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.idNumber' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="branchid"
+                                                                [(ngModel)]="beneficiary.beneficiary.beneficiaryAccount.branchid"
+                                                                disabled />
+                                                        </div>
+                                                    </div>
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.issuedAt' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="date"
+                                                                [(ngModel)]="beneficiary.transferReason" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- BENEFICIARY TYPE -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'beneficiaries.beneficiaryListFields.issueDate' |
+                                                            translate }}</label>
+                                                        <div>
+                                                            <input type="text" class="form-control" name="date"
+                                                                [(ngModel)]="beneficiary.date" disabled />
+                                                        </div>
+                                                    </div>
+                                                    <!-- BENEFICIARY TYPE -->
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <!-- COUNTRY -->
+                                                    <div class="form-group">
+                                                        <label>{{ 'public.country' | translate }}</label>
+                                                        <div>
+                                                            <!-- <input type="text" class="form-control" name="country"
+                                                                [(ngModel)]="this.tableSelected[i].countryCode"	disabled /> -->
+                                                            <select class="form-control" name="countryCode"
+                                                                [(ngModel)]="beneficiary.countryCode">
+                                                                <option selected value disabled>
+                                                                    --{{ 'public.selectDropdown' | translate }}</option>
+                                                                <option
+                                                                    *ngFor="let country of backEndCountryCode | values"
+                                                                    [selected]="country === beneficiary.countryCode"
+                                                                    [ngValue]="country">
+                                                                    {{ backEndCountryCode[country] }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /COUNTRY -->
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="height: 15px;"></div>
+
+                            <app-beneficiary-details [beneficiary]="beneficiary"></app-beneficiary-details>
+                        </div>
+                    </arb-closeable-panel>
+                </div>
+
+                <div class="sme-form__form">
+                    <div class="sme-wizard__navigation sme-form__actions">
+                        <button (click)="returnBeneficiaryList(true)" class=" btn btn-default btn-wide">
+                            {{ 'public.back' | translate }}
+                        </button>
+                        <!-- <button (click)="editdetailsBeneficiaries()" type="submit" class="btn btn-primary btn-wide">{{ 'public.edit' | translate }}</button> -->
+                        <button (click)="deletedetailsBeneficiaries()" class="btn btn-default btn-wide">{{
+                            'public.delete' | translate }}</button>
+                        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!formModInt.valid">{{
+                            'public.confirm' | translate }}</button>
+                    </div>
+                </div>
+
+            </form>
+        </div><!-- ./"wizardStep==2 && editInternationalBeneficiariesView -->
+
+        <div *ngIf="wizardStep==2 && this.deleteBeneficiariesView">
+
+            <div *ngFor="let beneficiary of this.tableSelected; let i = index" class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__head">{{ 'beneficiaries.beneficiaryLabel' | translate }} {{i + 1}}
+                        <a class="sme-form__close btn" (click)="removeBeneficiary(i)"><span
+                                class="icon -close"></span></a>
+                    </div>
+
+                    <div class="sme-form__collapse">
+                        <div class="sme-form__form">
+                            <div class="sme-form__body">
+
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control"
+                                                    value="{{beneficiary.beneficiaryName}}" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'beneficiaries.beneficiaryListFields.beneficiaryType' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control"
+                                                    [value]="('beneficiaryType' | modelPipe:beneficiary.beneficiaryType)"
+                                                    disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'beneficiaries.beneficiaryListFields.bankName' | translate }}
+                                            </label>
+                                            <div>
+
+                                                <span *ngIf="beneficiary.beneficiaryType == 'Local'"
+                                                    [innerHTML]="'bankCode' | modelPipe:sanitize(beneficiary.bankCode)"
+                                                    class="form-control" disabled></span>
+                                                <span *ngIf="beneficiary.beneficiaryType!= 'Local'"
+                                                    [innerHTML]="beneficiary.bankName" class="form-control"
+                                                    disabled></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'accounts.accountNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" value="{{beneficiary.account}}"
+                                                    disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'beneficiaries.idBeneficiaryLabel' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control"
+                                                    ([ngModel])="formData.idBeneficiary"
+                                                    value="{{beneficiary.idBeneficiary}}" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'public.email' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" value="{{beneficiary.email}}"
+                                                    disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="height: 15px;"></div>
+            </div>
+            <div class="sme-form__form">
+                <div class="sme-wizard__navigation sme-form__actions">
+                    <button (click)="returnBeneficiaryList(true)" class=" btn btn-default btn-wide">
+                        {{ 'public.back' | translate }}
+                    </button>
+                    <button (click)="deleteBeneficiariesBtn()" class=" btn btn-primary btn-wide">{{ 'public.confirm' |
+                        translate }}</button>
+                </div>
+            </div>
+        </div><!-- ./"wizardStep==2 && deleteBeneficiariesView -->
+    </div>
+    <div *ngIf="wizardStep==5 && this.deletedetailsBeneficiariesview">
+        <div *ngFor="let beneficiary of this.selected; let i = index" class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__head">{{ 'beneficiaries.beneficiaryLabel' | translate }} {{i + 1}}
+                    <a class="sme-form__close btn" (click)="removeBeneficiary(i)"><span class="icon -close"></span></a>
+                </div>
+
+                <div class="sme-form__collapse">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control"
+                                                value="{{beneficiary.beneficiaryName}}" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'beneficiaries.beneficiaryListFields.beneficiaryType' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control"
+                                                [value]="('beneficiaryType' | modelPipe:beneficiary.beneficiaryType)"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'beneficiaries.beneficiaryListFields.bankName' | translate }}
+                                        </label>
+                                        <div>
+
+                                            <span *ngIf="beneficiary.beneficiaryType == 'Local'"
+                                                [innerHTML]="'bankCode' | modelPipe:sanitize(beneficiary.bankCode)"
+                                                class="form-control" disabled></span>
+                                            <span *ngIf="beneficiary.beneficiaryType!= 'Local'"
+                                                [innerHTML]="beneficiary.bankName" class="form-control" disabled></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'accounts.accountNumber' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control" value="{{beneficiary.account}}"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'beneficiaries.idBeneficiaryLabel' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control" ([ngModel])="formData.idBeneficiary"
+                                                value="{{beneficiary.idBeneficiary}}" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'public.email' | translate }}
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control" value="{{beneficiary.email}}"
+                                                disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height: 15px;"></div>
+        </div>
+        <div class="sme-form__form">
+            <div class="sme-wizard__navigation sme-form__actions">
+                <button (click)="returnBeneficiaryList(true)" class=" btn btn-default btn-wide">
+                    {{ 'public.back' | translate }}
+                </button>
+                <button (click)="deleteBeneficiariesBtn()" class=" btn btn-primary btn-wide">{{ 'public.confirm' |
+                    translate }}</button>
+            </div>
+        </div>
+    </div>
+    <!-- OVERLAY EDIT BENEFICIARY -->
+    <div class="modal fade" bsModal #requestSubmittedModal="bs-modal" tabindex="-1" role="dialog"
+        aria-labelledby="requestSubmittedModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="icon -close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'beneficiaries.modify.editedSuccessfully' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-wide"
+                        [routerLink]="['/beneficiaries/beneficiaryList']" data-dismiss="modal" aria-label="Close"
+                        (click)="returnBeneficiaryList(false)">
+                        {{ 'public.ok' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- OVERLAY EDIT BENEFICIARY -->
+
+    <!-- OVERLAY DELETE BENEFICIARY -->
+    <div class="modal fade" bsModal #deleteBeneficiaryModal="bs-modal" tabindex="-1" role="dialog"
+        aria-labelledby="requestSubmittedModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="icon -close"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'beneficiaries.delete.deletedSuccessfully' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-wide"
+                        [routerLink]="['/beneficiaries/beneficiaryList']" data-dismiss="modal" aria-label="Close"
+                        (click)="returnBeneficiaryList(false)">
+                        {{ 'public.ok' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- OVERLAY DELETE BENEFICIARY -->
+
+</div>

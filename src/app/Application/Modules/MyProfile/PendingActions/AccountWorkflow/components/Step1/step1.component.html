@@ -1,0 +1,29 @@
+<app-account-table
+    [items]="accountPagedResults.items"
+    [modal]="modalAuth"
+    [tableDisplaySize]="tableDisplaySize"
+    [totalSize]="accountPagedResults.total"
+    [futureLevels]="false"
+    [externalPagination]="true"
+    [selectable]="true" 
+    [selected]="sharedData.tableAccountSelected"  
+    (setPage)="setPage($event)"
+    (onSelect)="onSelect($event)"
+    (changeDisplaySize)="changeDisplaySize($event)">
+</app-account-table>
+
+<app-nonFinancial-table
+    [items]="nonfinancePagedResults.items"
+    [modal]="modalAuth"
+    [tableDisplaySize]="tableNonfinanceDisplaySize"
+    [totalSize]="nonfinancePagedResults.total"
+    [futureLevels]="false"
+    [externalPagination]="true"
+    [selectable]="true"
+    [selected]="sharedData.tableNonfinancialSelected" 
+    (setPage)="setPageNonfinance($event)"
+    (onSelect)="onSelectnonfinance($event)"
+    (changeDisplaySize)="changeDisplaySizeNonFinancial($event)">
+</app-nonFinancial-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

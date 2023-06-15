@@ -1,0 +1,1000 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">
+            {{ services[this.data.serviceType].applicationTypes[this.data.applicationType].name | translate}}
+        </div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <fieldset disabled="!isActivating">
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.payments.serviceType' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="'eGovSadadType' | modelPipe :data.serviceType"
+                                                   name="serviceType">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.payments.transactionType' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="'eGovProcess' | modelPipe: data.transactionType"
+                                                   name="transactionType">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.refunds.applicationType' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="'eGovApplicationTypeAll' | modelPipe: data.applicationType"
+                                                   name="applicationType">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.initiationDate' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="data.initiationDate" name="initiationDate">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.initiationTime' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="data.initiationTime" name="initiationTime">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.initiationBy' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="data.initiationBy" name="initiationBy">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3" *ngIf="data.paymentId">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.referenceNumber' | translate }} </label>
+                                            <input type="text" class="form-control" disabled [ngModel]="data.paymentId"
+                                                   name="paymentId">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- ACCOUNTS -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.account' | translate }}</label>
+                                            <div class="form-control" disabled>
+                                                <ng-select disabled [notFoundText]="'public.noData' | translate" name="account"
+                                                           [(ngModel)]="data.accountNumber" required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectAccount' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option *ngFor="let account of accounts"
+                                                               [value]="account.key">
+                                                        {{ account.value.fullAccountNumber }} {{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}
+                                                        - {{account.value.availableBalance | amountCurrency:account.value.currency}} {{ 'currencyIso' | modelPipe:account.value.currency}}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /ACCOUNTS -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].iqamaId">
+                                        <!-- IQUAMA ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.iqamaId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="iquamaId"
+                                                       [(ngModel)]="data.iqamaId" #iquamaId="ngModel" maxlength="10"
+                                                       number required/>
+                                                <p *ngIf="iquamaId.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /IQUAMA ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].associatedBorderNumber">
+                                        <!-- VISA NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.associateIquamaId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="associatedBorderNumber"
+                                                       [(ngModel)]="data.associatedBorderNumber"
+                                                       #associatedBorderNumber="ngModel" maxlength="10" number
+                                                       required/>
+                                                <p *ngIf="associatedBorderNumber.errors?.number"
+                                                   class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].violationId">
+                                        <!-- VIOLATION ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.trafficViolations.violationID' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="violationID"
+                                                       [(ngModel)]="data.violationId" #violationID="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="violationID.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VIOLATION ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].violatorId">
+                                        <!-- VIOLATOR ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.publicViolation.violatorId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="violatorId"
+                                                       [(ngModel)]="data.violatorId" #violatorId="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="violatorId.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VIOLATOR ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].verdictNumber">
+                                        <!-- VERDICT NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.civilDefense.verdictNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="verdictNumber"
+                                                       [(ngModel)]="data.verdictNumber" #verdictNumber="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="verdictNumber.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VERDICT NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].citizenId">
+                                        <!-- CITIZEN ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.citizenId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="citizenID"
+                                                       [(ngModel)]="data.citizenId" #citizenID="ngModel" maxlength="10"
+                                                       number required/>
+                                                <p *ngIf="citizenID.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /CITIZEN ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].householdIdNumber">
+                                        <!-- HEAD OF HOUSEHOLD ID NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.headHouseholdIdNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="headHouseholdIdNumber"
+                                                       [(ngModel)]="data.householdIdNumber"
+                                                       #headHouseholdIdNumber="ngModel" maxlength="10" number required/>
+                                                <p *ngIf="headHouseholdIdNumber.errors?.number"
+                                                   class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /HEAD OF HOUSEHOLD ID NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].numberDependant">
+                                        <!-- NUMBER OF DEPENDENT -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.numberDependant' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="numberDependant"
+                                                       [(ngModel)]="data.numberDependant" #numberDependant="ngModel"
+                                                       maxlength="2" inputPattern="onlyNumbers" required/>
+                                                <p *ngIf="numberDependant.touched && numberDependant.invalid"
+                                                   class="alert alert-danger">
+                                                    {{ 'payments.moiPayments.reviewField2Length' | translate }}
+                                                </p>
+                                                <p *ngIf="numberDependant.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /NUMBER OF DEPENDENT -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].nationalIdNumber">
+                                        <!-- NATIONAL ID NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.civilRegistrationServices.nationnalIdNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="nationnalIdNumber"
+                                                       [(ngModel)]="data.nationalIdNumber" #nationnalIdNumber="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="nationnalIdNumber.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /NATIONAL ID NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].birthDate">
+                                        <!-- BIRTH DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.birthDate' | translate }}</label>
+                                            <div class="form-control">
+                                                <ngbd-datepicker-calendars [mindate]="false" [maxdate]="true"
+                                                                           name="value-date-input"
+                                                                           [id]="'value-date-input'"
+                                                                           [(ngModel)]="data.birthDate"></ngbd-datepicker-calendars>
+                                            </div>
+                                        </div>
+                                        <!-- /BIRTH DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].deathDate">
+                                        <!-- BIRTH DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.deathDate' | translate }}</label>
+                                            <div class="form-control">
+                                                <ngbd-datepicker-calendars [mindate]="false" [maxdate]="true"
+                                                                           name="value-date-input"
+                                                                           [id]="'value-date-input'"
+                                                                           [(ngModel)]="data.deathDate"></ngbd-datepicker-calendars>
+                                            </div>
+                                        </div>
+                                        <!-- /BIRTH DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].divorceDate">
+                                        <!-- DIVORCE DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.divorceDate' | translate }}</label>
+                                            <div class="form-control">
+                                                <ngbd-datepicker-calendars [mindate]="false" [maxdate]="true"
+                                                                           name="value-date-input"
+                                                                           [id]="'value-date-input'"
+                                                                           [(ngModel)]="data.divorceDate"></ngbd-datepicker-calendars>
+                                            </div>
+                                        </div>
+                                        <!-- /DIVORCE DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].feesDurationEndDate">
+                                        <!-- NUMBER OF DEPENDENT -->
+
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.feesDurationDate' | translate }}</label>
+                                            <div class="form-control">
+                                                <ngbd-datepicker-calendars [mindate]="true" [maxdate]="false"
+                                                                           name="value-date-input"
+                                                                           [id]="'value-date-input'"
+                                                                           [(ngModel)]="data.feesDurationEndDate"></ngbd-datepicker-calendars>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].issuanceReason">
+                                        <!-- ISSUANCE REASON -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.issuanceReason' | translate }}</label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="account"
+                                                           [(ngModel)]="data.issuanceReason" required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option
+                                                            *ngFor="let issuanceReason of combo.issuanceReasons | values"
+                                                            [value]="issuanceReason">
+                                                        {{ combo.issuanceReasons[issuanceReason] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /ISSUANCE REASON -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].cardVersionNumber">
+                                        <!-- CARD VERSION NO -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.civilRegistrationServices.cardVersionNo' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="cardVersionNo"
+                                                       [(ngModel)]="data.cardVersionNumber" #cardVersionNo="ngModel"
+                                                       maxlength="2" number required/>
+                                                <p *ngIf="cardVersionNo.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /CARD VERSION NO -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].marriageDate">
+                                        <!-- MARRIAGE DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.marriageDate' | translate }}</label>
+                                            <div class="form-control">
+                                                <ngbd-datepicker-calendars [mindate]="false" [maxdate]="true"
+                                                                           name="value-date-input"
+                                                                           [id]="'value-date-input'"
+                                                                           [(ngModel)]="data.marriageDate"></ngbd-datepicker-calendars>
+
+                                            </div>
+                                        </div>
+                                        <!-- /MARRIAGE DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].beneficiaryId">
+                                        <!-- BENEFICIARY ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.drivingLicenseServices.beneficiaryId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="beneficiaryID"
+                                                       [(ngModel)]="data.beneficiaryId" #beneficiaryID="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="beneficiaryID.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /BENEFICIARY ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].borderNumber">
+                                        <!-- BORDER NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.borderNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="borderNumber"
+                                                       [(ngModel)]="data.borderNumber" #borderNumber="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="borderNumber.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /BORDER NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].visaNumber">
+                                        <!-- VISA NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.visaNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="visaNumber"
+                                                       [(ngModel)]="data.visaNumber" #visaNumber="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="visaNumber.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].visaDuration">
+                                        <!-- VISA DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.visaDuration' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="visaDuration"
+                                                           [(ngModel)]="data.visaDuration" required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option
+                                                            *ngFor="let visaDuration of combo.visaDurations | values | orderBy"
+                                                            [value]="visaDuration">
+                                                        {{ combo.visaDurations[visaDuration] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].licenseType">
+                                        <!-- LICENSE TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.drivingLicenseServices.licenseType' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="licenseType"
+                                                           [(ngModel)]="data.licenseType" (change)="changeLicenseType()"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option *ngFor="let licenseType of combo.licenseTypes | values"
+                                                               [value]="licenseType">
+                                                        {{ combo.licenseTypes[licenseType] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /LICENSE TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].licenseDuration">
+                                        <!-- DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.drivingLicenseServices.licenseDuration' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="durationLicense"
+                                                           [(ngModel)]="data.licenseDuration" required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option
+                                                            *ngFor="let durationLicense of combo.licenseDurations | values | orderBy"
+                                                            [value]="durationLicense">
+                                                        {{ combo.licenseDurations[durationLicense] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].iqamaDuration">
+                                        <!-- IQAMA DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.iquamaDuration' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="iquamaDuration"
+                                                           [(ngModel)]="data.iqamaDuration" required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option
+                                                            *ngFor="let iqamaDuration of combo.iqamaDurations | values| orderBy"
+                                                            [value]="iqamaDuration">
+                                                        {{ combo.iqamaDurations[iqamaDuration] }}
+                                                    </ng-option>
+                                                </ng-select>
+
+                                            </div>
+                                        </div>
+                                        <!-- /IQAMA DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].sponsorId">
+                                        <!-- SPONSOR ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.sponsorId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="sponsorId"
+                                                       [(ngModel)]="data.sponsorId" #sponsorId="ngModel" maxlength="10"
+                                                       number required/>
+                                                <p *ngIf="sponsorId.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /SPONSOR ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].currentOwnerId">
+                                        <!-- CURRENT OWNER ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.currentOwnerId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="currentOwnerId"
+                                                       [(ngModel)]="data.currentOwnerId" #currentOwnerId="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="currentOwnerId.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /CURRENT OWNER ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].vehicleSequenceNumber">
+                                        <!-- VEHICLE SEQUENCE NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.vehicleSequenceNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="vehicleSequenceNumber"
+                                                       [(ngModel)]="data.vehicleSequenceNumber"
+                                                       #vehicleSequenceNumber="ngModel" maxlength="9" number required/>
+                                                <p *ngIf="vehicleSequenceNumber.errors?.number"
+                                                   class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VEHICLE SEQUENCE NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].newOwnerId">
+                                        <!-- NEW OWNER ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.newOwnerId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="newOwnerId"
+                                                       [(ngModel)]="data.newOwnerId" #newOwnerId="ngModel"
+                                                       maxlength="10" number required/>
+                                                <p *ngIf="newOwnerId.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerificationMoiExPlByOw' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /NEW OWNER ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].vehicleCustomCardNumber">
+                                        <!-- VEHICLE CUSTOM CARD NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.vehicleCustomCardNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="vehicleCustomCardNumber"
+                                                       [(ngModel)]="data.vehicleCustomCardNumber"
+                                                       #vehicleCustomCardNumber="ngModel" maxlength="10" number
+                                                       required/>
+                                                <p *ngIf="vehicleCustomCardNumber.errors?.number"
+                                                   class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /VEHICLE CUSTOM CARD NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].newVehicleRegistrationType">
+                                        <!-- NEW VEHICLE REGISTRATION TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.newVehicleRegistrationType' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="newVehicleRegistrationType"
+                                                           [(ngModel)]="data.newVehicleRegistrationType"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option
+                                                            *ngFor="let newVehicleRegistrationType of combo.vehicleRegistrationTypes | values"
+                                                            [value]="newVehicleRegistrationType">
+                                                        {{ combo.vehicleRegistrationTypes[newVehicleRegistrationType] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /NEW VEHICLE REGISTRATION TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].numberOfVisas">
+                                        <!-- NUMBER OF VISAS -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.visaServices.numberOfVisas' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="numberVisas"
+                                                       [(ngModel)]="data.numberOfVisas" #numberVisas="ngModel"
+                                                       maxlength="3" number required/>
+                                                <p *ngIf="numberVisas.touched && numberVisas.invalid"
+                                                   class="alert alert-danger">
+                                                    {{ 'payments.moiPayments.reviewField' | translate }}
+                                                </p>
+                                                <p *ngIf="numberVisas.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /NUMBER OF VISAS -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].visaType">
+                                        <!-- VISA TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.payments.visaType' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="visaType" [(ngModel)]="data.visaType"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option *ngFor="let visaType of combo.visaTypes | values"
+                                                               [value]="visaType">
+                                                        {{ combo.visaTypes[visaType] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].jobCategory">
+                                        <!-- JOB CATEGORY -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.jobCategory' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="jobCategory"
+                                                           [(ngModel)]="data.jobCategory"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+                                                    <ng-option *ngFor="let jobCategory of combo.jobCategorys | values"
+                                                               [value]="jobCategory">
+                                                        {{ combo.jobCategorys[jobCategory] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /JOB CATEGORY -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].vehicleBodyType">
+                                        <!-- VEHICLE BODY TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.vehicleBodyType' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="vehicleBodyType"
+                                                           [(ngModel)]="data.vehicleBodyType"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option
+                                                            *ngFor="let vehicleBodyType of combo.vehicleBodyTypes | values"
+                                                            [value]="vehicleBodyType">
+                                                        {{ combo.vehicleBodyTypes[vehicleBodyType] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- /VEHICLE BODY TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportType && this.data.transactionType=='P'">
+                                        <!-- PASSPORT TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.saudiPassportServices.passportType' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="passportType"
+                                                           [(ngModel)]="data.passportType"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option *ngFor="let passportType of combo.passportTypes | values"
+                                                               [value]="passportType">
+                                                        {{ combo.passportTypes[passportType] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- PASSPORT TYPE -->
+                                    </div>
+
+                                    <!-- PASSPORT TYPE AND  PASSPORT DURATION-->
+                                    <!-- todo no son necesarios para this.data.transactionType = R (refunds), pero el API los requiere, los ponemos hidden -->
+                                        <input type="hidden"  [(ngModel)]="data.passportType" name="passportType" value="0000000000"
+                                               *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportType && this.data.transactionType=='R'">
+                                        <input type="hidden"  [(ngModel)]="data.passportDuration" name="passportDuration" value="0000000000"
+                                               *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportDuration && this.data.transactionType=='R'">
+                                    <!-- PASSPORT TYPE AND  PASSPORT DURATION-->
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportDuration && this.data.transactionType=='P'" >
+                                        <!-- PASSPORT DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.saudiPassportServices.passportDuration' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="passportDuration"
+                                                           [(ngModel)]="data.passportDuration"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option
+                                                            *ngFor="let passportDuration of combo.passportDurations | values"
+                                                            [value]="passportDuration">
+                                                        {{ combo.passportDurations[passportDuration] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <!-- PASSPORT DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12"></div>
+
+                                    <div class="col-xs-12 col-sm-5"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].issuingEntity">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.publicViolation.issuingEntity' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="issuingEntity"
+                                                           [(ngModel)]="data.issuingEntity"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option
+                                                            *ngFor="let issuingEntity of combo.eGovViolationsIssuingEntity | values"
+                                                            [value]="issuingEntity">
+                                                        {{ combo.eGovViolationsIssuingEntity[issuingEntity] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-4"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].category">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.publicViolation.category' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" name="category"
+                                                           [(ngModel)]="data.category"
+                                                           required>
+                                                    <ng-option value="" disabled="disabled">
+                                                        --{{ 'public.selectDropdown' | translate }}--
+                                                    </ng-option>
+
+                                                    <ng-option
+                                                            *ngFor="let category of combo['eGovCategory'+ (data.issuingEntity?data.issuingEntity:'')] | values"
+                                                            [value]="category">
+                                                        {{ combo['eGovCategory' + (data.issuingEntity ? data.issuingEntity : '')][category] }}
+                                                    </ng-option>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- FEESS -->
+
+                                <div class="row" *ngIf="isActivating == false">
+                                    <div class="col-xs-12 col-sm-3" *ngIf="batch.amount != '' && batch.amount != null">
+                                        <!-- AMOUNT -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.amount' | translate }}
+                                            </label>
+                                            <div>
+												<span class="form-control" disabled>
+													{{batch.amount | amountCurrency}}
+												</span>
+                                            </div>
+                                        </div>
+                                        <!-- /AMOUNT -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="batch.unusedBalance != null && batch.unusedBalance != ''">
+                                        <!-- UNUSED BALANCE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.unusedBalance' | translate }}
+                                            </label>
+                                            <div>
+												<span class="form-control" disabled>
+													{{ batch.unusedBalance  | amountCurrency}}
+												</span>
+                                            </div>
+                                        </div>
+                                        <!-- /UNUSED BALANCE-->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- STATUS -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'public.status' | translate }}
+                                            </label>
+                                            <div>
+												<span class="form-control" disabled>
+													{{ batch.status | statusPipe }}
+												</span>
+                                            </div>
+                                        </div>
+                                        <!-- /STATUS-->
+                                    </div>
+                                </div>
+
+                                <!-- BLOCK FEES -->
+
+                                <div class="row" *ngIf="batch.fees && batch.fees.length > 0">
+                                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                                                   class="material" [rows]="batch.fees" [columnMode]="defaultColumnMode"
+                                                   [headerHeight]="30"
+                                                   [rowHeight]="defaultHeight"
+                                                   [externalPaging]="false"
+                                                   [externalSorting]="false">
+                                        <ngx-datatable-column prop="feeType">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                         ngx-datatable-header-template let-row="row">
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                               {{'payments.moiPayments.fees' | translate }} {{ 'public.type' | translate }}
+                                        </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column prop="feeAmount">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                         ngx-datatable-header-template let-row="row">
+                                         <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                             {{'payments.moiPayments.feesAmount' | translate }}
+                                         </span>
+                                            </ng-template>
+                                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                                <span>{{ value | amountCurrency }}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                    </ngx-datatable>
+                                </div>
+                            </fieldset>
+
+                        </div>
+
+                        <div class="sme-form__body" *ngIf="isActivating">
+                            <div class="row">
+                                <fieldset disabled="!isActivating">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                            <span class="form-control"
+                                                 >{{batch.rejectedReason}}</span>
+
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <app-levels-table *ngIf="batch.securityLevelsDTOList" [futureSecurityLevels]="batch.securityLevelsDTOList">
+                </app-levels-table>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+

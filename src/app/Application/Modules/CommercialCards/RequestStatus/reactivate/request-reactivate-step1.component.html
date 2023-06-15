@@ -1,0 +1,159 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="legend" class="title-legend">
+                                {{'commercialCards.commercialCardDetails' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="cardHoldername">{{
+                                            'commercialCards.cardHolderName' | translate }}</label>
+                                        <div class="titlePin message" style="margin-top: 10px">
+                                            <span class="border-none">{{ batch?.holderName }}</span>
+                                        </div>
+                                        <!-- <div>
+                                            <input id="transfer-amount" class="form-control "
+                                                formControlName="cardHolderName" [readonly]="true">
+                                        </div> -->
+                                        <!-- <div class="titlePin message" style="margin-top: 10px">
+                                            <span class="border-none">{{batch?.accountAlias}}</span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="cardNumber">{{
+                                                'commercialCards.cardNumber' | translate }}</label>
+                                        <div class="titlePin message" style="margin-top: 10px">
+                                            <!-- <input id="reasons" class="form-control" formControlName="cardNumber"
+                                                [value]="form.get('cardNumber').value | hiddenCardNumber"
+                                                [readonly]="true"> -->
+                                            <span
+                                                class="border-none">{{batch?.cardAccountNumber | hiddenCardNumber:'7to12' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group input-flex-width">
+                                        <label for="relatedAccount">{{
+                                                'commercialCards.relatedAccount' | translate }}</label>
+                                        <div class="titlePin message" style="margin-top: 10px">
+                                            <!-- <input id="reasons" class="form-control" formControlName="relatedAccount"
+                                                [readonly]="true"> -->
+                                            <span class="border-none">{{batch?.accountNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset style="margin-bottom: 20px">
+                            <div class="legend" class="title-legend">
+                                {{'commercialCards.paymentOptionDetails' | translate}}
+                            </div>
+                            <hr class="hr-title">
+                            <div class="payment-options-group">
+                                <div class="form-field-25">
+                                    <div class="form-group" style="margin-bottom: 50px">
+                                        <label for="search-criteria--input-account-from"
+                                            class="required">{{'commercialCards.accountSelection' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="sme-select form-control select-flex-width">
+                                            <select id="payment-options-accountFrom" class="form-control"
+                                                formControlName="account">
+                                                <option selected value disabled>
+                                                    --{{ 'public.selectAccount' | translate }}--</option>
+                                                <option *ngFor="let account of accounts"
+                                                    [value]="account.value.fullAccountNumber"
+                                                    [selected]="this.form.controls.account == account.value.fullAccountNumber">
+                                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}}
+                                                    {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}}
+                                                    {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="form.controls.account.hasError('required') && form.controls.account.touched"
+                                                class="alert alert-danger">
+                                                <small>{{'transfer.error.accountFromRequired' | translate }} </small>
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-select -->
+                                    </div>
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group">
+                                        <label
+                                            for="search-criteria-collapsed-input-operations">{{ 'commercialCards.amount' | translate }}</label>
+                                        <!-- sme-select -->
+                                        <div class="form-control" style="border-bottom:0px;margin-bottom:70px">
+                                            <div class="sme-radio radio">
+                                                <label>
+                                                    <input type="radio" formControlName="paymentOption" [value]=0
+                                                        (change)="resetAmount()">
+                                                    <i aria-hidden=" true"></i>
+                                                    <span>{{'commercialCards.dueAmount' | translate }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="sme-radio radio">
+                                                <label>
+                                                    <input type="radio" formControlName="paymentOption" [value]=1
+                                                        (change)="resetAmount()">
+                                                    <i aria-hidden="true"></i>
+                                                    <span>{{'commercialCards.outstandingAmount' | translate }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="sme-radio radio">
+                                                <label>
+                                                    <input type="radio" formControlName="paymentOption" [value]=2
+                                                        (change)="resetAmount()">
+                                                    <i aria-hidden="true"></i>
+                                                    <span>{{'commercialCards.custom' | translate }}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-select -->
+                                    </div>
+                                    <div class="form-group" style="margin-left: 50px;">
+                                        <!-- *ngIf="form.controls.paymentType.value===2"> -->
+                                        <div>
+                                            <label for="relatedAccount">{{
+                                                    'commercialCards.amount' | translate }}</label>
+                                        </div>
+                                        <div>
+                                            <input id="reasons" class="form-control" formControlName="amount"
+                                                placeholder="{{'commercialCards.amountInSar' | translate}}"
+                                                inputPattern="onlyPositiveNumbers">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-field-25">
+                                    <div class="form-group">
+                                        <label
+                                            for="rejectedReason">{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                        <input class="form-control" id="rejectedReason"
+                                            value="{{batch?.rejectedReason}}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

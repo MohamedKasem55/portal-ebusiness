@@ -1,0 +1,123 @@
+<div class="container-fluid">
+	<div class="sme-head">
+        <div class="sme-head__title">{{ 'wpspayroll.addEmployee' | translate}}</div>
+    </div>
+</div>    
+
+<div class="container-fluid" *ngFor="let employee of initEmployee?.companyEmployeeList">
+	<div class="sme-page-block">
+		<div class="sme-form">		
+			<div class="sme-form__content">
+			<form autocomplete="off" class="sme-form__form"  >
+					<div class="sme-form__body">
+							<fieldset>
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="deduct-from-account-input">{{ 'wpspayroll.employeeNumber' |
+											translate }}</label> 
+										<span id="deduct-from-account-input" class="form-control">{{employee.employeeReference}}</span>
+                                        
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'wpspayroll.employeeName' |
+											translate }}</label> 
+										<span class="form-control">{{employee.name}}
+                                        </span>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'wpspayroll.civilianID' |
+											translate }}</label> 
+										<span class="form-control">{{employee.civilianId}}
+                                        </span>
+									</div>	
+								</div>	
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'public.bank' |
+											translate }}</label> 
+										<span class="form-control" >{{ 'payrollBankCode' | modelPipe:employee.bankCode}}
+                                        </span>
+									</div>	
+								</div>	
+							</div>
+							</fieldset>
+							<fieldset>
+							<div class="row">	
+								
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.basicSalary' |
+											translate }}</label> 
+										<span class="form-control" >{{employee.salaryBasic}}
+                                        </span>
+									</div>	
+								</div>	
+									<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.housingAllowance' |
+											translate }}</label> 
+										<span class="form-control" >{{employee.allowanceHousing}}
+                                        </span>
+									</div>	
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.otherAllowance' |
+											translate }}</label> 
+										<span class="form-control" >{{employee.allowanceOther}}
+                                        </span>
+									</div>	
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.deductions' |
+											translate }}</label> 
+										<span class="form-control" >{{employee.deductions}}
+                                        </span>
+									</div>	
+								</div>
+							</div>
+							</fieldset>
+								<fieldset>
+							<div class="row">	
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label>{{ 'wpspayroll.account' |
+											translate }}</label> 
+										<span class="form-control">{{employee.account}}
+                                        </span>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.salary' |
+											translate }}</label> 
+										<span class="form-control" >{{employee.salary}}
+                                        </span>
+									</div>	
+								</div>
+							</div>
+							</fieldset>	
+						
+					</div>
+			</form>		
+			</div>
+		</div>
+	</div>		
+</div>	

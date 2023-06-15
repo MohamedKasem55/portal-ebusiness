@@ -1,0 +1,261 @@
+<div class="sme-breadcrumb">
+        <ol class="breadcrumb">
+            <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+            <li class="active" ><a href="" [routerLink]="['/companyadmin/aramco']">{{ 'aramcoPayments.aramcoBeneficiary'| translate }}</a></li>
+            <li class="active" ><a href="" [routerLink]="['/companyadmin/aramco/beneficiaryList']">{{ 'aramcoPayments.beneficiaryList'| translate }}</a></li>
+            <li class="active">{{ 'aramcoPayments.details'| translate }}</li>
+        </ol>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                            class="required">{{ 'aramcoPayments.passNumber' | translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.details.customerId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                            class="required">{{ 'aramcoPayments.beneficiaryName' | translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.details.customerName }}</span>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-xs-12 col-sm-3">
+                                    sme-form-group
+                                    <div class="form-group">
+                                        <label class="required">{{ 'aramcoPayments.createDate' | translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.details.createDate |  date:"dd/MM/yyyy" }}</span>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__title">
+                        {{'aramcoPayments.payments' | translate}}
+                    </div>
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="paymentsPageTable" [header]="'aramcoPayments.payments' | translate"
+                            [columns]="[
+                        {'title': 'aramcoPayments.date' | translate, 'dataKey':'paymentDateG'},
+                        {'title': 'aramcoPayments.hijriDate' | translate, 'dataKey':'paymentDateH'},
+                        {'title': 'aramcoPayments.amount' | translate, 'dataKey':'amount'},
+                        {'title': 'aramcoPayments.rajhiReference' | translate, 'dataKey':'alRahjiReferenceNumber'},
+                        {'title': 'aramcoPayments.aramcoReference' | translate, 'dataKey':'aramcoReferenceNumber'},
+                        {'title': 'aramcoPayments.detail' | translate, 'dataKey':'paymentDesc'}
+                    ]"></table-export>
+    
+                    </div>
+                </div>
+                <div>
+                    <div class="sme-table table headerDataTable">
+                        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #paymentsPageTable
+                            class="material sme-table sme-table--responsive table" [rows]="paymentsPage.data"
+                            [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                            [rowHeight]="defaultHeight" [externalPaging]="true" [count]="paymentsPage.page.totalElements"
+                            [offset]="paymentsPage.page.pageNumber" [limit]="paymentsPage.page.pageSize"
+                            (page)="setPage($event)">
+    
+                            <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'aramcoPayments.date' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.paymentDateG}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'aramcoPayments.hijriDate' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.paymentDateH }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'aramcoPayments.amount' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.amount }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'aramcoPayments.rajhiReference' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.alRahjiReferenceNumber }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                        </fieldset>
+                                    </div>
+                                    <div class="row">
+                                        <fieldset>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'aramcoPayments.aramcoReference' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.aramcoReferenceNumber }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'aramcoPayments.detail' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.paymentDesc }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                        </fieldset>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-row-detail>
+    
+                            <ngx-datatable-column prop="paymentDateG">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'aramcoPayments.date' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | date:"dd/MM/yyyy" }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+    
+                            <ngx-datatable-column prop="paymentDateH">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'aramcoPayments.hijriDate' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | date:"dd/MM/yyyy" }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+    
+                            <ngx-datatable-column prop="amount">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'aramcoPayments.amount' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | amountCurrency }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+    
+                            <ngx-datatable-column prop="alRahjiReferenceNumber">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'aramcoPayments.rajhiReference' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+    
+                            <ngx-datatable-column prop="aramcoReferenceNumber">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'aramcoPayments.aramcoReference' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+    
+                            <ngx-datatable-column prop="paymentDesc">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'aramcoPayments.detail' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+    
+                            <ngx-datatable-footer>
+                                <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                    let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                    <div class="sme-data-table__footer">
+                                        <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                            (change)="paymentsPageTable.onFooterPage($event)">
+                                        </app-datatable-pager>
+    
+                                        <div class="sme-data-table__actions form-inline">
+                                            <span
+                                                class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                                {{this.paymentsPage.page.size}}
+                                                {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                            <span class="hidden-xs"> | </span>
+                                            <span class="sme-data-table__action-group">
+                                                <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                <div class="sme-select form-control">
+                                                    <select class="form-control"
+                                                        [(ngModel)]="this.paymentsPage.page.pageSize"
+                                                        (change)="this.setPage(null)">
+                                                        <option [value]="10">10</option>
+                                                        <option [value]="20">20</option>
+                                                    </select>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                    </div>
+                                </ng-template>
+    
+                            </ngx-datatable-footer>
+    
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button class="btn btn-default btn-wide" type="button"
+            (click)="backButton()">{{ 'public.back' | translate}}</button>
+        <button class="btn btn-default btn-wide" type="button" (click)="deleteDetails()"
+            *ngIf="authenticationService.activateOption('AramcoAdminService',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoBeneficiariesGroup'])">{{ 'public.delete' | translate}}</button>
+    </div>

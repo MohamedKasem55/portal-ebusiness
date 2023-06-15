@@ -1,0 +1,323 @@
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()"
+    #searchablePanelComponent>
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'sadadOLP.refunds.transactionId' | translate }}</label>
+                    <input minlength="20" maxlength="30" type="text" name="transactionId" class="form-control"
+                        formControlName="transactionId">
+                    <div
+                        *ngIf="searchForm.controls['transactionId'].errors && (searchForm.controls['transactionId'].touched || searchForm.controls['transactionId'].dirty)">
+                        <p class="alert alert-danger">
+                            {{ 'sadadOLP.refunds.transactionIDLength' | translate}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'sadadOLP.refunds.refundId' | translate }}</label>
+                    <input maxlength="10" type="text" pattern="\d*" name="refundId" class="form-control"
+                        formControlName="refundId">
+                    <div
+                        *ngIf="searchForm.controls['refundId'].errors && (searchForm.controls['refundId'].touched || searchForm.controls['refundId'].dirty)">
+                        <p class="alert alert-danger">
+                            {{ 'error.onlyNumber' | translate}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{'sadadOLP.refunds.dateFrom' | translate }}</label>
+                    <input name="dateFrom" type="text" #dateFrom bsDatepicker formControlName="dateFrom"
+                        class="form-control" [bsConfig]="bsConfig" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{
+                        'sadadOLP.refunds.dateTo' | translate }}</label>
+                    <input type="text" #dateTo bsDatepicker formControlName="dateTo" name="dateTo" class="form-control"
+                        [bsConfig]="bsConfig" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="refundStatusSelect">{{ 'sadadOLP.refunds.refundStatus' | translate }}</label>
+                    <ng-select class="form-control" name="refundStatusSelect" id="refundStatusSelect"
+                        formControlName="refundStatus">
+                        <ng-option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</ng-option>
+                        <ng-option *ngFor="let refundStatusSelectValue of refundStatusSelect"
+                            [value]="refundStatusSelectValue['key']">
+                            {{refundStatusSelectValue['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="initiatorTypeSelect">{{ 'sadadOLP.refunds.initiatorType' | translate }}</label>
+                    <ng-select class="form-control" name="initiatorTypeSelect" id="initiatorTypeSelect"
+                        formControlName="initiatorType" (change)="onChangeInitiator($event)">
+                        <ng-option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</ng-option>
+                        <ng-option *ngFor="let initiatorTypeSelectValue of initiatorTypeSelect"
+                            [value]="initiatorTypeSelectValue['key']">
+                            {{initiatorTypeSelectValue['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-searchable-panel>
+<arb-table-panel [title]="this.listTitle">
+    <table-export [dataTable]="elementsTable" [header]="'sadadOLP.refunds.list' | translate" [columns]="[
+                        {'title':'sadadOLP.refunds.refundId' | translate ,'dataKey':'refundID'},
+                        {'title':'sadadOLP.refunds.transactionId' | translate,'dataKey':'transactionID'},
+                        {'title':'sadadOLP.refunds.requestedDate' | translate,'dataKey':'requestedDate'},
+                        {'title':'sadadOLP.refunds.closedDate' | translate,'dataKey':'closedDate'},
+                        {'title':'sadadOLP.refunds.requestedAmount' | translate,'dataKey':'requestedAmount'},
+                        {'title':'sadadOLP.refunds.transactionAmount' | translate,'dataKey':'transactionAmount'},
+                        {'title':'sadadOLP.refunds.approvedAmount' | translate,'dataKey':'approvedAmount'},
+                        {'title':'sadadOLP.refunds.refundStatus' | translate,'dataKey':'statusForPrint'}
+                        ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+        [externalPaging]="true" [externalSorting]="true" [count]="elementsPage.page.totalElements"
+        [offset]="elementsPage.page.pageNumber-1" [limit]="elementsPage.page.pageSize"
+        [selectionType]="defaultSelectionType" [selected]="tableSelectedRows" (page)='setPage($event)'
+        (sort)="setSort($event)" (select)='onSelect($event)' [rowIdentity]="getIdFunction()">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="refund-id">{{'sadadOLP.refunds.refundId' | translate }}</label>
+                                <div>
+                                    <span id="refund-id">{{row.refundID}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transaction-id">{{'sadadOLP.refunds.transactionId' | translate }}</label>
+                                <div>
+                                    <span id="transaction-id">{{row.transactionID}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="requested-date">{{'sadadOLP.refunds.requestedDate' | translate }}</label>
+                                <div>
+                                    <span id="requested-date">{{row.requestedDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="closed-date">{{'sadadOLP.refunds.closedDate' | translate }}</label>
+                                <div>
+                                    <span id="closed-date">{{row.closedDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="requested-amount">{{'sadadOLP.refunds.requestedAmount' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="requested-amount">{{row.requestedAmount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="transaction-amount">{{'sadadOLP.refunds.transactionAmount' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="transaction-amount">{{row.transactionAmount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="approved-amount">{{'sadadOLP.refunds.approvedAmount' | translate }}</label>
+                                <div>
+                                    <span id="approved-amount">{{row.approvedAmount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label for="refund-status">{{'sadadOLP.refunds.refundStatus' | translate }}</label>
+                                <div>
+                                    <span id="refund-status">{{'sadadOLPRefundsStatus' | modelPipe:row.status }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!--custom checkbox- defaul select all resete preview item selected with extern pagination-->
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value">
+                <label class="datatable-checkbox">
+                    <input type="checkbox" [checked]="selectAllOnPage[elementsPage.page.pageNumber]"
+                        (change)="selectAll()" />
+                </label>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <label class="datatable-checkbox" [hidden]="row.status != '1'">
+                    <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+        <!--end custom checkbox-->
+
+
+        <ngx-datatable-column prop="refundID" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.refundId' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="transactionID" [width]="200" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.transactionId' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="requestedDate" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.requestedDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span [innerHTML]="value"></span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="closedDate" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.closedDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="requestedAmount" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.requestedAmount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="transactionAmount" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.transactionAmount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="approvedAmount" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.approvedAmount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="status" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.refunds.refundStatus' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{'sadadOLPRefundsStatus' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

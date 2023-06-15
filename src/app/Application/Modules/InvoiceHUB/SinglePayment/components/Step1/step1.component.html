@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'invoiceHUB.invoiceId' | translate }}</label>
+                                    <input type="text" class="form-control" id="invoice-id" [(ngModel)]="sharedData.invoiceId" required inputPattern="onlyDigits" maxlength="12" minlength="12" #invoiceId="ngModel" name="invoiceId"/>
+                                    <div *ngIf="invoiceId.hasError('required') && invoiceId.touched" class="alert alert-danger">
+                                                    <small>{{'invoiceHUB.invoiceId' | translate }}{{ 'error.required' | translate }} </small>
+                                    </div>  
+                                    <div *ngIf="invoiceId.hasError('minlength') && invoiceId.touched" class="alert alert-danger">
+                                                    <small>{{'invoiceHUB.invoiceId' | translate }}{{ 'error.minlength' | translate:{size:12} }} </small>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

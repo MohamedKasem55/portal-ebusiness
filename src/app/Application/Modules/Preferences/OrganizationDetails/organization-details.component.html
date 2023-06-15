@@ -1,0 +1,335 @@
+<arb-breadcrumb [routes]="[
+['dashboard.preferences'],
+['dashboard.organizationDetails']
+]">
+</arb-breadcrumb>
+
+<arb-steps *ngIf="view == viewWizard" [currentStep]="wizardStep">
+</arb-steps>
+
+<arb-colapsable-panel [hidden]="wizardStep == 3" #readOnlyPanel [title]="'preferences.orgDetail.title'">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.profileNumber' | translate }}</label>
+                <span class="form-control">{{data.profileNumber}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.honorificTitle' | translate }}</label>
+                <span class="form-control">{{data.customerDetails.honorificTitle}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.name' | translate }}</label>
+                <span class="form-control">{{data.customerDetails.customerName}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'public.address' | translate }}</label>
+                <span class="form-control">{{data.address.street}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'public.city' | translate }}</label>
+                <span class="form-control">{{'cityType' | modelPipe:data.address.city}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.zipCode' | translate }}</label>
+                <span class="form-control">{{data.address.zipCode}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.poBox' | translate }}</label>
+                <span class="form-control">{{data.address.poBox}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.cityRegion' | translate }}</label>
+                <span class="form-control">{{'regionType' | modelPipe:data.address.region}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.customerType' | translate }}</label>
+                <span class="form-control">{{'customerIdType' | modelPipe:data.customerDetails.customerType}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.customerID' | translate }}</label>
+                <span class="form-control">{{data.customerDetails.customerId}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.issueDate' | translate }}</label>
+                <span class="form-control">{{data.customerDetails.issuanceDate}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'preferences.orgDetail.issuePlace' | translate }}</label>
+                <span class="form-control">{{data.customerDetails.issuancePlace}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'public.country' | translate }}</label>
+                <span class="form-control">{{data.address.country}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'public.language' | translate }}</label>
+                <span class="form-control">{{'languages' | modelPipe:data.customerDetails.language}}</span>
+            </div>
+        </div>
+    </div>
+</arb-colapsable-panel>
+<div class="container-fluid" [hidden]="wizardStep == 3">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="contactInfoForm">
+                <div class="sme-form__head">
+                    <span>{{'preferences.orgDetail.contactTitle' | translate }}</span>
+                </div>
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <fieldset [disabled]="view == viewDetails || wizardStep != 1">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'preferences.orgDetail.emailAddress' | translate }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" formControlName="email"
+                                                   placeholder="{{ 'public.emailPlaceHolder' | translate }}"
+                                                   inputPattern="notArabic" maxlength="50">
+                                            <div class="input-group-addon">
+                                                <span> {{ 'preferences.orgDetail.receipt' | translate }}</span>
+                                            </div>
+                                            <div class="input-group-addon">
+                                                <input formControlName="selectedProperty" type="radio"
+                                                       value="personalDetailsMail" >
+                                            </div>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.email.touched && contactInfoForm.controls.email.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'public.emailVerification' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'preferences.orgDetail.mobileNumber' | translate }}</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">{{data.customerDetails.variableData.personalDetailsMobile?.interCode}}</div>
+                                            <input type="text" class="form-control" formControlName="mobileNumber" maxlength="10" inputPattern="onlyMobileNumbers" >
+                                            <div class="input-group-addon">
+                                                <span>{{ 'preferences.orgDetail.receipt' | translate }}</span>
+                                            </div>
+                                            <div class="input-group-addon">
+                                                <input formControlName="selectedProperty" type="radio"
+                                                       value="personalDetailsMobile">
+                                            </div>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.mobileNumber.touched && contactInfoForm.controls.mobileNumber.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{'preferences.orgDetail.mobileNumber'| translate }}{{ 'error.format' | translate: { format: '05xxxxxxxx'} }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'preferences.orgDetail.phoneNumber' | translate }}</label>
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">{{data.customerDetails.variableData.personalDetailsPhone?.interCode}}</div>
+                                                        <div class="sme-select form-control">
+                                                            <select class="form-control"
+                                                                    formControlName="phoneNumberAreaCode">
+                                                                <option *ngFor="let areaCode of areaCodes"
+                                                                        [ngValue]="areaCode.value">{{areaCode.value}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control"
+                                                           formControlName="phoneNumber"
+                                                           inputPattern="onlyDigits" maxlength="7" inputPattern="onlyDigits">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group ">
+                                                        <div class="input-group-addon">
+                                                            <span>{{ 'preferences.orgDetail.ext' | translate }}</span>
+                                                        </div>
+                                                        <input type="text" class="form-control"
+                                                               formControlName="phoneNumberExtension"
+                                                               inputPattern="onlyDigits" maxlength="4">
+                                                        <div class="input-group-addon">
+                                                            <span>{{ 'preferences.orgDetail.receipt' | translate }}</span>
+                                                        </div>
+                                                        <div class="input-group-addon">
+                                                            <input formControlName="selectedProperty" type="radio"
+                                                                   value="personalDetailsPhone">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.phoneNumber.touched && contactInfoForm.controls.phoneNumber.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'preferences.orgDetail.error.invalid' | translate }}{{ 'preferences.orgDetail.phoneNumber' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.phoneNumberExtension.touched && contactInfoForm.controls.phoneNumberExtension.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'preferences.orgDetail.error.invalidExt' | translate }}{{ 'preferences.orgDetail.phoneNumber' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'preferences.orgDetail.faxNumber' | translate }}</label>
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">{{data.customerDetails.variableData.personalDetailsFax?.interCode}}</div>
+                                                        <div class="sme-select form-control">
+                                                            <select class="form-control" formControlName="faxAreaCode"  >
+                                                                <option *ngFor="let areaCode of areaCodes"
+                                                                        [ngValue]="areaCode.value">{{areaCode.value}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" formControlName="fax" maxlength="7" inputPattern="onlyDigits">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">{{ 'preferences.orgDetail.ext' | translate }}</div>
+                                                        <input type="text" class="form-control"
+                                                               formControlName="faxExtension"  maxlength="4">
+                                                        <div class="input-group-addon">
+                                                            <span>{{ 'preferences.orgDetail.receipt' | translate }}</span>
+                                                        </div>
+                                                        <div class="input-group-addon">
+                                                            <input formControlName="selectedProperty" type="radio"
+                                                                   value="personalDetailsFax" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.fax.touched && contactInfoForm.controls.fax.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'preferences.orgDetail.error.invalid' | translate }}{{ 'preferences.orgDetail.faxNumber' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.faxExtension.touched && contactInfoForm.controls.faxExtension.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'preferences.orgDetail.error.invalidExt' | translate }}{{ 'preferences.orgDetail.faxNumber' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'preferences.orgDetail.workPhoneNumber' | translate }}</label>
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">{{data.customerDetails.variableData.personalDetailsWPhone?.interCode}}</div>
+                                                        <div class="sme-select form-control">
+                                                            <select class="form-control"
+                                                                    formControlName="workNumberAreaCode" >
+                                                                <option *ngFor="let areaCode of areaCodes"
+                                                                        [ngValue]="areaCode.value">{{areaCode.value}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" inputPattern="onlyDigits"
+                                                           formControlName="workNumber" maxlength="7" >
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">{{ 'preferences.orgDetail.ext' | translate }}</div>
+                                                        <input type="text" class="form-control"
+                                                               formControlName="workNumberExtension" maxlength="4">
+                                                        <div class="input-group-addon">
+                                                            <span>{{ 'preferences.orgDetail.receipt' | translate }}</span>
+                                                        </div>
+                                                        <div class="input-group-addon">
+                                                            <input formControlName="selectedProperty" type="radio"
+                                                                   value="personalDetailsWPhone">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.workNumber.touched && contactInfoForm.controls.workNumber.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'preferences.orgDetail.error.invalid' | translate }}{{ 'preferences.orgDetail.workPhoneNumber' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="contactInfoForm.controls.workNumberExtension.touched && contactInfoForm.controls.workNumberExtension.invalid"
+                                             class="alert alert-danger">
+                                            <small>{{ 'preferences.orgDetail.error.invalidExt' | translate }}{{ 'preferences.orgDetail.workPhoneNumber' | translate }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<arb-confirm-panel *ngIf="wizardStep==3">
+
+</arb-confirm-panel>
+
+<arb-buttons>
+    <button *ngIf="view == viewDetails && authenticationService.activateOption('Home', [], ['CompanyAdmins','ServGroup'])" class="btn btn-primary btn-wide" type="button"
+            (click)="modify()">{{'public.edit' | translate}}
+    </button>
+    <button *ngIf="view == viewWizard &&  wizardStep==1" class="btn btn-default btn-wide" type="button"
+            (click)="cancelModify()">{{ 'public.cancel' | translate }}
+    </button>
+    <button *ngIf="view == viewWizard && wizardStep>1 && wizardStep<3" (click)="previous()"
+            class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button *ngIf="view == viewWizard && wizardStep>=1 && wizardStep < 3" type="button"
+            class=" btn btn-primary btn-wide" [disabled]="wizardStep == 1 && this.contactInfoForm.invalid"
+            (click)="next()">{{'public.proceed' | translate}}</button>
+    <button *ngIf="view == viewWizard && wizardStep == 3" type="submit"
+            class="btn btn-primary btn-wide" (click)="next()">{{'public.finish' | translate}}</button>
+</arb-buttons>

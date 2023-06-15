@@ -1,0 +1,40 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" bsModal
+     #workflowDetailsPopUp="bs-modal" [config]="{ backdrop: 'static' }" [formGroup]="form"
+     style="height: 90%"
+>
+  <div class="modal-dialog large" role="document"  *ngIf="init" style="overflow-y: initial !important;
+    margin-top: 50px; margin-bottom:20px; width: 50%; top: 50%; height: 95%;">
+    <div class="modal-content" style="height: 95%">
+      <div class="modal-header" style="border-bottom: 1px solid;">
+<!--        <h3 class="modal-title">ASDFASDFASDFASDF</h3>-->
+        <div style="font-size: 16px; font-weight: 600;">
+          {{'myProfile.pending_actions.types.' + title | translate}}
+          <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true" class="icon -close"></span>
+          </button>
+        </div>
+
+        <!-- Account selection -->
+        <fieldset style="margin: 15px 30px 0px 30px;" *ngIf="showAccountSelection">
+          <div class="form-group">
+            <label>{{ "public.account" | translate }}</label>
+            <div class="sme-select form-control dropdown">
+              <select class="form-control" formControlName="account" required>
+                <option selected value disabled>--{{ "public.selectAccount" | translate }}--
+                </option>
+                <option *ngFor="let account of accounts" [value]="account.fullAccountNumber">
+                  {{ account.fullAccountNumber
+                  }}{{ account.alias != "" ? " - " + account.alias : "" }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="modal-body defaultAlign" style="overflow-y: auto;height: 75%;width: 100%;padding-bottom: 10px;">
+        <app-workflow-detail-table *ngFor="let workflowData of workflowDetailTables" [workflowData]="workflowData">
+        </app-workflow-detail-table>
+       </div>
+    </div>
+  </div>
+</div>

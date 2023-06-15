@@ -1,0 +1,51 @@
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.accounts' | translate }}</li>
+        <li class="active"><a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a></li>
+        <li class="active">{{ 'chequebook.stopChequebook'| translate }}</li>
+        
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+    <div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+				<span>
+					<span class="num">1</span>
+					<span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+				<span>
+					<span class="num">2</span>
+					<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+				<span>
+					<span class="icon -check"></span>
+					<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+				</span>
+			</li>
+		</ul>
+    </div>
+</div>
+
+<app-stop-payment-step1 *ngIf="step === 1" [form]="this.form" (onInit)="onInitStep1($event)"> </app-stop-payment-step1>
+
+<app-stop-payment-step2 *ngIf="step === 2" [form]="this.form" [viewRequest]="viewRequest" [requestValidate]="requestValidate"
+	[generateChallengeAndOTP]="generateChallengeAndOTP" (onInit)="onInitStep2($event)">
+</app-stop-payment-step2>
+
+<app-stop-payment-step3 *ngIf="step === 3" [form]="this.form" [generateChallengeAndOTP]="generateChallengeAndOTP"
+	(onInit)="onInitStep3($event)">
+</app-stop-payment-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+	<button [routerLink]="['/accounts/chequebook']" class=" btn btn-secondary btn-wide" *ngIf="step === 1">{{ 'public.back' | translate }}</button>
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3" [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="finish()" *ngIf="step == 3">{{'public.finish' | translate}}</button>
+</div>

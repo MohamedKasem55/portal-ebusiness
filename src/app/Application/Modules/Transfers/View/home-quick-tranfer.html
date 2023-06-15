@@ -1,0 +1,268 @@
+<!-- BREADCRUMB -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li><a class="human-selectable" href="#" [routerLink]="['/transfers']"
+               (click)="currentStep = 1">{{ 'public.transfers' | translate }}</a>
+        </li>
+        <li class="active" *ngIf="currentStep === 1">{{ 'transfer.selectType' | translate }} </li>
+        <li class="active"
+            *ngIf="currentTransfer==OWN && currentStep != 1">{{ 'transfer.transferBrdOwn' | translate }}</li>
+        <li class="active"
+            *ngIf="currentTransfer==ALRAJHI && currentStep != 1">{{ 'transfer.transferBrdAlrajhi' | translate }}</li>
+        <li class="active"
+            *ngIf="currentTransfer==LOCAL && currentStep != 1">{{ 'transfer.transferBrdLocal' | translate }}</li>
+        <li class="active"
+            *ngIf="currentTransfer==INTERNATIONAL && currentStep != 1">{{ 'transfer.transferBrdInternational' | translate }}</li>
+    </ol>
+</div>
+<!-- BREADCRUMB -->
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-form -->
+        <div class="sme-form">
+
+            <div class="sme-form__title" *ngIf="currentStep === 1">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-6 col-sm-6 text-right">
+                    <button class="btn  btn-primary" [routerLink]="['/transfers/requestStatus']">
+                        {{'payments.requestStatus' | translate | uppercase }} </button>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <!-- sme-demo--wizard--step1 -->
+
+                    <!-- sme-panel -->
+                    <div class="sme-panel">
+                        <div class="sme-panel__head">
+
+                            <!--  <div class="sme-panel__title">
+                                  {{'transfer.quick' | translate}}
+                              </div> -->
+
+                        </div>
+
+                        <div class="sme-panel__body">
+
+
+                            <!-- sme-wizard -->
+                            <!--<form autocomplete="off" autocomplete="off" class="sme-wizard" [formGroup]="formAlert" (ngSubmit)="create()"> -->
+                            <breadcrum-transfer-4-steps [currentStep]="currentStep" *ngIf="isOwnTransfer() && !isLocal()">
+                            </breadcrum-transfer-4-steps>
+
+                            <breadcrum-transfer-5-steps [currentStep]="currentStep" *ngIf="(!isOwnTransfer() && !isLocal()) || isQuick()">
+                            </breadcrum-transfer-5-steps>
+
+                            <breadcrum-transfer-6-steps [currentStep]="currentStep" *ngIf="isLocal() && !isQuick()">
+                            </breadcrum-transfer-6-steps>
+                        </div>
+
+                        <div class="sme-panel__body">
+
+                            <div *ngIf="currentStep === 1" class="sme-data-table__advisory">
+                                <span>{{'transfer.advisory' | translate}}</span>
+                            </div>
+
+                            <quick-transfer-step1 *ngIf="currentStep === 1" [form]="step1Form"
+                                                  [buttonLabel]="'public.proceed' | translate "
+                                                  (onNext)="futureStep($event)" (onInit)="onInitStep1($event)">
+                            </quick-transfer-step1>
+
+                            <app-quick-own-transfer-step2 *ngIf="currentStep === 2 && currentTransfer==OWN"
+                                                      [form]="step2Form"
+                                                      [selectedAccount]="selectedAccount"
+                                                      [buttonLabel]="'public.proceed' | translate "
+                                                      (onNext)="futureStep($event)"
+                                                      (sharedObject)="onStep3InIt($event)"
+                                                      (onInit)="onInitStep2Own($event)">
+                            </app-quick-own-transfer-step2>
+
+                            <app-quick-own-transfer-step3 *ngIf="currentStep === 3 && currentTransfer==OWN"
+                                                      [form]="step3Form"
+                                                      [valuesForm]="step2Form.value"
+                                                      [step3Object]="step3Object"
+                                                      [currencies]="dataOwnTransfer['step2']['currencies']"
+                                                      [selectedAccountFrom]="dataOwnTransfer['step2']['selectedAccountFrom']"
+                                                      [selectedAccountTo]="dataOwnTransfer['step2']['selectedAccountTo']"
+                                                      [accountsFrom]="dataOwnTransfer['step2']['accountsFrom']"
+                                                      [accountsTo]="dataOwnTransfer['step2']['accountsTo']"
+                                                      [reasons]="dataOwnTransfer['step2']['reasons']"
+                                                      [amount2]="dataOwnTransfer['step2']['amount2']"
+                                                      [exchangeRate]="dataOwnTransfer['step2']['exchangeRate']"
+                                                      [buttonLabel]="'public.proceed' | translate "
+                                                      (onNext)="futureStep($event)" (onInit)="onInitStep3Own($event)">
+                            </app-quick-own-transfer-step3>
+
+                            <app-quick-own-transfer-step4 *ngIf="currentStep === 4 && currentTransfer==OWN"
+                                                      [buttonLabel]="'public.finish' | translate "
+                                                      [generateChallengeAndOTP]="dataOwnTransfer['step3']['generateChallengeAndOTP']"
+                                                      (onNext)="futureStep($event)" (onInit)="onInitStep4Own($event)">
+                            </app-quick-own-transfer-step4>
+
+
+                            <app-within-transfer-step2 *ngIf="currentStep === 2 && currentTransfer==ALRAJHI"
+                                                         [form]="step2Form"
+                                                         [buttonLabel]="'public.proceed' | translate "
+                                                         [beneficiariesService]="beneficiariesService"
+                                                         (onNext)="futureStep($event)"
+                                                         (onInit)="onInitStep2Within($event)">
+                            </app-within-transfer-step2>
+
+                            <app-within-transfer-step3 *ngIf="currentStep === 3 && currentTransfer==ALRAJHI"
+                                                       [form]="step3Form"
+                                                       [selectedAccount]="selectedAccount"
+                                                       [beneficiariesService]="beneficiariesService"
+                                                       [buttonLabel]="'public.proceed' | translate "
+                                                         [accounts]="dataWithinTransfer['step2']['initTransferData'].listAccount"
+                                                         [beneficiaries]="dataWithinTransfer['step2']['fillBeneficiariesData'].listBeneficiaries"
+                                                         [transferLimit]="dataWithinTransfer['step2']['initTransferData'].transferLimit"
+                                                         (onNext)="futureStep($event)"
+                                                         (onInit)="onInitStep3Within($event)">
+                            </app-within-transfer-step3>
+
+                            <app-within-transfer-step4 *ngIf="currentStep === 4 && currentTransfer==ALRAJHI"
+                                                         [form]="step3Form"
+                                                         [buttonLabel]="'public.proceed' | translate "
+                                                         [currencies]="dataWithinTransfer['step3']['currencies']"
+                                                         [accounts]="dataWithinTransfer['step2']['initTransferData'].listAccount"
+                                                         [beneficiaries]="dataWithinTransfer['step2']['fillBeneficiariesData'].listBeneficiaries"
+                                                         [confirmSave]="dataWithinTransfer['step3']['confirmSave']"
+                                                         (onNext)="futureStep($event)"
+                                                         (onInit)="onInitStep4Within($event)">
+                            </app-within-transfer-step4>
+
+                            <app-within-transfer-step5 *ngIf="currentStep === 5 && currentTransfer==ALRAJHI"
+                                                         [buttonLabel]="'public.finish' | translate "
+                                                         [generateChallengeAndOTP]="dataWithinTransfer['step3']['confirmSave']['generateChallengeAndOTP']"
+                                                         (onNext)="futureStep($event)"
+                                                         (onInit)="onInitStep5Within($event)">
+                            </app-within-transfer-step5>
+
+
+                            <quick-international-transfer-step2
+                                    *ngIf="currentStep === 2 && currentTransfer==INTERNATIONAL"
+                                    [form]="step2Form"
+                                    [beneficiariesService]="beneficiariesService"
+                                    [buttonLabel]="'public.proceed' | translate "
+                                    (onNext)="futureStep($event)"
+                                    (onInit)="onInitStep2International($event)">
+                            </quick-international-transfer-step2>
+
+                            <quick-international-transfer-step3
+                                    *ngIf="currentStep === 3 && currentTransfer==INTERNATIONAL"
+                                    [form]="step3Form"
+                                    [buttonLabel]="'public.proceed' | translate "
+                                    [beneficiariesService]="beneficiariesService"
+                                    [accounts]="dataInternationalTransfer['step2']['initTransferData'].listAccount"
+                                    [transferLimit]="dataInternationalTransfer['step2']['initTransferData'].transferLimit"
+                                    [beneficiaries]="dataInternationalTransfer['step2']['fillBeneficiariesData'].listBeneficiaries"
+                                    [remitterCategory]="dataInternationalTransfer['step2']['fillBeneficiariesData']['remitterCategory']"
+                                    [batch]="dataInternationalTransfer['step2']['initTransferData'].batch"
+                                    (onNext)="futureStep($event)"
+                                    (onInit)="onInitStep3International($event)">
+                            </quick-international-transfer-step3>
+
+                            <quick-international-transfer-step4
+                                    *ngIf="currentStep === 4 && currentTransfer==INTERNATIONAL"
+                                    [form]="step3Form"
+                                    [buttonLabel]="'public.proceed' | translate "
+                                    [accounts]="dataInternationalTransfer['step2']['initTransferData'].listAccount"
+                                    [beneficiaries]="dataInternationalTransfer['step2']['fillBeneficiariesData'].listBeneficiaries"
+                                    [reasons]="dataInternationalTransfer['step3']['reasons']"
+                                    [confirmSave]="dataInternationalTransfer['step3']['confirmSave']"
+                                    [totalAmount]="dataInternationalTransfer['step3']['confirmSave'].totalAmountProcess"
+                                    (onNext)="futureStep($event)"
+                                    (onInit)="onInitStep4International($event)">
+                            </quick-international-transfer-step4>
+
+                            <quick-international-transfer-step5
+                                    *ngIf="currentStep === 5 && currentTransfer==INTERNATIONAL"
+                                    [buttonLabel]="'public.finish' | translate "
+                                    (onNext)="futureStep($event)"
+                                    (onInit)="onInitStep5International($event)"
+                                    [generateChallengeAndOTP]="dataInternationalTransfer['step3']['confirmSave']['generateChallengeAndOTP']">
+                            </quick-international-transfer-step5>
+
+                            <quick-local-transfer-step2 *ngIf="currentStep === 2 && (currentTransfer==LOCAL || currentTransfer == QUICK )"
+                                                        [form]="step2Form"
+                                                        [buttonLabel]="'public.proceed' | translate "
+                                                        (onNext)="futureStep($event)"
+                                                        (onInit)="onInitStep2Local($event)">
+                            </quick-local-transfer-step2>
+
+                            <quick-local-transfer-step3 *ngIf="currentStep === 3 && currentTransfer==LOCAL"
+                                                        [form]="step2Form"
+                                                        [beneficiariesService]="beneficiariesService"
+                                                        [buttonLabel]="'public.proceed' | translate "
+                                                        (onNext)="futureStep($event)"
+                                                        (onInit)="onInitStep3Local($event)">
+                            </quick-local-transfer-step3>
+
+                            <quick-local-transfer-step4 *ngIf="currentStep === 4 && currentTransfer==LOCAL"
+                                                        [form]="step3Form"
+                                                        [selectedAccount]="selectedAccount"
+                                                        [beneficiariesService]="beneficiariesService"
+                                                        [buttonLabel]="'public.proceed' | translate "
+                                                        [accounts]="dataLocalTransfer['step3']['initTransferData'].listAccount"
+                                                        [beneficiaries]="dataLocalTransfer['step3']['fillBeneficiariesData'].listBeneficiaries"
+                                                        [transferLimit]="dataLocalTransfer['step3']['initTransferData'].transferLimit"
+                                                        (onNext)="futureStep($event)"
+                                                        (onInit)="onInitStep4Local($event)">
+                            </quick-local-transfer-step4>
+
+                            <quick-local-transfer-step5 *ngIf="currentStep === 5 && currentTransfer==LOCAL"
+                                                        [buttonLabel]="'public.proceed' | translate "
+                                                        [form]="step3Form"
+                                                        [currencies]="dataLocalTransfer['step4']['currencies']"
+                                                        [accounts]="dataLocalTransfer['step3']['initTransferData'].listAccount"
+                                                        [beneficiaries]="dataLocalTransfer['step3']['fillBeneficiariesData'].listBeneficiaries"
+                                                        [confirmSave]="dataLocalTransfer['step4']['confirmSave']"
+                                                        [totalAmount]="dataLocalTransfer['step4']['totalAmount']"
+                                                        (onNext)="futureStep($event)"
+                                                        (reset)="localReset()"
+                                                        (onInit)="onInitStep5Local($event)">
+                            </quick-local-transfer-step5>
+
+                            <quick-local-transfer-step6 *ngIf="currentStep === 6 && currentTransfer==LOCAL"
+                                                        [buttonLabel]="'public.finish' | translate "
+                                                        [generateChallengeAndOTP]="dataLocalTransfer['step4']['confirmSave']['generateChallengeAndOTP']"
+                                                        (onNext)="futureStep($event)"
+                                                        (onInit)="onInitStep6Local($event)">
+                            </quick-local-transfer-step6>
+                            <!--</form> -->
+                            <!-- ./sme-wizard -->
+
+                            <!--  IPS transfer-->
+
+                            <quick-ips-transfer-step3 *ngIf="currentStep === 3 && currentTransfer==QUICK"
+                                                      [buttonLabel]="'public.proceed' | translate "
+                                                      (onNext)="futureStep($event)"
+                                                      [form]="step2Form">
+
+                            </quick-ips-transfer-step3>
+
+                            <quick-ips-transfer-step4 *ngIf="currentStep === 4 && currentTransfer==QUICK"
+                                                      [buttonLabel]="'public.proceed' | translate "
+                                                      (onNext)="futureStep($event)"
+                                                      (reset)="localReset()"
+                                                      [transferValidateResponse] = "dataQuickTransfer['step3']['transferValidateResponse']"
+                                                      [form]="step2Form">
+                            </quick-ips-transfer-step4>
+
+                            <quick-ips-transfer-step5 *ngIf="currentStep === 5 && currentTransfer==QUICK"
+                                                      [buttonLabel]="'public.finish' | translate "
+                                                      (onNext)="futureStep($event)"
+                                                      [form]="step2Form">
+                            </quick-ips-transfer-step5>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

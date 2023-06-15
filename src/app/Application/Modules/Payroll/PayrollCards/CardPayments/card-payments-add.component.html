@@ -1,0 +1,12 @@
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'dashboard.payrolls'| translate }}</li>
+        <li><a href="#" [routerLink]="['/payroll/payroll-cards']">{{ 'dashboard.payrollCards'| translate }}</a></li>
+        <li><a href="#" [routerLink]="['/payroll/payroll-cards/card-payments']">{{ 'payroll.cardPayments'| translate }}</a></li>
+        <li class="active">{{ 'payroll.addNewPayment'| translate }}</li>
+    </ol>
+</div>
+
+
+<app-card-payments-add-step1 *ngIf="step === 1"></app-card-payments-add-step1>

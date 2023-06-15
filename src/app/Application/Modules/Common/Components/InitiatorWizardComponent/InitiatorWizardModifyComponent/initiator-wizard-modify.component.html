@@ -1,0 +1,55 @@
+<arb-steps
+        [currentStep]="wizardStep"
+        [steps]="['public.completeDetails','public.confirm','public.summary']">
+</arb-steps>
+
+<arb-panel-title [title]="title">
+</arb-panel-title>
+
+<arb-panel [formGroup]="formModel"
+           *ngIf="(isStepVisible(1) || isStepVisible(2)) && formModel">
+    <form autocomplete="off" [formGroup]="formModel">
+        <div class="row">
+            <fieldset>
+                <app-dynamic-simple-extras-form-fields
+                        [fieldsConfigs]="formEntityProperties"
+                        [translate_prefix]="translate_prefix"
+                        [combosData]="combosData"
+                        [custom_fields_templates]="custom_fields_templates"
+                        [formModel]="formModel"
+                        (onAllFieldsCreated)="allFieldsCreated($event)"
+                        (onInit)="initFormFieldsUtility($event)">
+                </app-dynamic-simple-extras-form-fields>
+            </fieldset>
+        </div>
+    </form>
+</arb-panel>
+<arb-panel *ngIf="wizardStep==3">
+    <arb-confirm-panel
+            [pending]="pending"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+</arb-panel>
+<arb-buttons>
+    <button *ngIf="isBackAllowed()" class="btn btn-default btn-wide" (click)="back()">
+        {{ 'public.back' | translate }}
+    </button>
+
+    <button *ngIf="isPreviousAllowed() && !isBackAllowed()" class="btn btn-default btn-wide"
+            (click)="previous()"
+            [disabled]="!isPreviousAllowed()">
+        {{ 'public.back' | translate }}
+    </button>
+
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="!isNextAllowed() || (this.formModel.invalid)">
+        {{'public.proceed' | translate}}
+    </button>
+
+    <button class="btn btn-primary btn-wide" (click)="back()"
+            *ngIf="isFinishAllowed()"
+            [disabled]="!isFinishAllowed()">
+        {{'public.finish' | translate}}
+    </button>
+</arb-buttons>

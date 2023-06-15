@@ -1,0 +1,540 @@
+
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
+import { Observable, of, throwError as observableThrowError } from 'rxjs';
+// Import RxJs required methods
+import { catchError, map } from 'rxjs/operators';
+import { Exception } from "../../../Application/Model/exception";
+import { ConfigResourceService } from "../../../core/config/config.resource.local";
+import { AuthenticationService } from "../../../core/security/authentication.service";
+import { StorageService } from "../../../core/storage/storage.service";
+
+
+
+@Injectable()
+export class RegistrationService {
+
+    servicesUrl: string;
+    registrationUrl: string;
+    private storageService: StorageService;
+    constructor(private http: HttpClient,
+        public config: ConfigResourceService,
+        public authenticationService: AuthenticationService, private injector: Injector) {
+        this.servicesUrl = config.getServicesUrl();
+     //   this.registrationUrl = config.getRegistrationUrl();
+        this.storageService = this.injector.get(StorageService);
+    }
+
+    // Service management error
+    public handleError(error: HttpResponse<any> | any) {
+        // In a real world app, you might use a remote logging infrastructure
+        let errMsg: string;
+        if (error instanceof HttpResponse) {
+
+            const err = error['error'] || JSON.stringify(error);
+            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+        } else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        const errorService: Exception = new Exception('handle', errMsg);
+        return observableThrowError(errorService);
+    }
+
+    firstStep(cr, cic): Observable<any> {
+
+        //console.log("First Step");
+
+        const data: any = {};
+        data.cic = cic;
+        data.cr = cr;
+        const body = JSON.stringify(data);
+
+
+
+
+        this.storageService.clearAll()
+
+        return this.http.post(this.registrationUrl + "/login/login", body)
+            .pipe(map((response: any) => {
+                const result: any = {};
+                this.storageService.store('regToken', response["token"]);
+                //console.log(response["token"]);
+                return response;
+            })
+
+            ,catchError((err, caught) => {
+                const result: any = {};
+                result.error = true;
+                result.errorCode = -1;
+                result.errorDescription = "Operation no availble";
+                return of(err);
+            }));
+    }
+
+    firstStepsecontservice(cr, cic, token) {
+
+
+        const data: any = {};
+        data.cic = cic;
+        data.cr = cr;
+
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/first", data).pipe(catchError((err, caught) => {
+
+
+
+            let errorMessage = "";
+
+            if (err.error) {
+                for (const index of err.errorr) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = err.errors[index];
+                    errorMessage += _error.field + ": ";
+                    errorMessage += _error.errorCode;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = err.message;
+            return of(result);
+        }));
+    }
+
+    callAddAccount(data, token) {
+        return this.http.post(this.registrationUrl + "/registration/addAccount", data).pipe(catchError((error, caught) => {
+                //
+                //console.log("ERROR");
+                return error;
+
+            }));
+    }
+
+    borrarAcount(account, registrationPk: number) {
+        const data: any = {};
+        data.account = account.iban;
+        data.registrationPk = registrationPk;
+        let _param: HttpParams = new HttpParams();
+        _param = _param.append("deletebody", JSON.stringify(data));
+
+        return this.http.delete(this.registrationUrl + "/registration/removeAccount", { params: _param }).pipe(catchError((errors, caught) => {
+
+            //console.log(Observable.throw(errors))
+            let errorMessage = "";
+            //console.log(errors)
+            if (errors.errors) {
+                for (const index of errors.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = errors.errors[index];
+                    errorMessage += _error.field + ": ";
+                    errorMessage += _error.errorCode;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "Operation no availble";
+            return of(result);
+        }));
+
+    }
+
+
+    // step 3
+    thirdStep(telephone, account, data): Observable<any> {
+
+        data.account = account;
+        data.telephone = telephone;
+        //console.log(data)
+
+
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/generateOTP", data).pipe(catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+    //INDEX:
+    // gettelephones    ./components/step3/step3.component.ts
+    // thirdStep          ./registration.component.ts                 /generato opt
+    // validateotp      ./registration.component.ts                 /validateotp
+    // validateMinOTP    ./registration.component.ts                 /validate min otp (no parameters)
+    gettelephones(data: any) {
+
+
+        //console.log(data)
+
+        return this.http.post(this.registrationUrl + "/registration/getAccountsMobiles", data).pipe(catchError((error) => {
+
+            const _body = error;
+            //console.log("imprimo body);")
+            //console.log(_body)
+            let errorMessage = "";
+
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.fatalErrorCode;
+                }
+            }
+            const result: any = {};
+
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+
+    }
+
+    generateOTP(data: any) {
+
+
+        return this.http.post(this.registrationUrl + "/registration/generateOTP", data).pipe(map((response: any) => {
+
+            const result: any = {};
+            return result;
+
+        }),catchError((error, caught) => {
+
+            let errorMessage = "";
+            if (error.errors) {
+                for (const index of error.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = error.errors[index];
+                    errorMessage += error.error.field + ": ";
+                    errorMessage += error.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+    validateOTP(data: any) {
+
+
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/validateOTP", data).pipe(catchError((error, caught) => {
+
+            let errorMessage = "";
+            if (error.errors) {
+                for (const index of error.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = error.errors[index];
+                    errorMessage += error.error.field + ": ";
+                    errorMessage += error.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+    validateMinOTP(data: any) {
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/validateMinOTPs", data).pipe(map((response: any) => {
+
+            const result: any = {};
+            return result;
+
+        }),catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+
+    }
+
+    initFiles(data: any): Observable<any> {
+        const body = { registrationPk: data };
+        return this.http.post(this.registrationUrl + "/registration/initFiles", body).pipe(map((response: any) => {
+
+            return response;
+
+        }),catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+    services() {
+        return this.http.get(this.registrationUrl + "/registration/services").pipe(map((response: any) => {
+            return response;
+        }),catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+
+    }
+
+    //fourth step
+    fourthStep(data: any) {
+
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/validateCompanyInformation", data).pipe(map((response: any) => {
+         //   console.log('en el servicio',response);
+            return response;
+
+        }),catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+
+    }
+
+    public uploadFile(file: File, typeFile: number, registrationPk) {
+
+
+        const formData = new FormData();
+        //  formData.append('registrationPk', JSON.stringify(registrationPk));
+        //  formData.append('typeOfFile', JSON.stringify(typeFile));
+        formData.append('file', file);
+        const headers = new HttpHeaders({
+            'Content-Type': 'multipart/form-data'
+        })
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/uploadFile/" + registrationPk + "/" + typeFile, formData, { headers }).pipe(map((response: any) => {
+            //console.log(response);
+            return response;
+
+        }),catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+
+
+    }
+
+
+    public sendProductsAndServices(data: any) {
+
+
+        return this.http.post(this.registrationUrl + "/registration/sendProductsAndServices", data).pipe(catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+
+
+    public uploadFilePDF(file: File, registrationPk: number) {
+
+
+        const formData = new FormData();
+        formData.append('typeOfFile', JSON.stringify(0));
+        formData.append('file', file);
+        const headers = new HttpHeaders({
+            'Content-Type': 'multipart/form-data'
+        })
+
+
+
+        return this.http.post(this.registrationUrl + "/registration/uploadPDF/"+registrationPk, formData, { headers }).pipe(map((response: any) => {
+
+            return response;
+
+        }),catchError((error, caught) => {
+            const _body = error;
+            let errorMessage = "";
+            if (_body.errors) {
+                for (const index of _body.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = _body.errors[index];
+                    errorMessage += _body.error.field + ": ";
+                    errorMessage += _body.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+
+
+    public sixStep(data, agreement) {
+        return this.http.post(this.registrationUrl + "/registration/authorize", data, {
+            params: new HttpParams().set('agreement', agreement)
+        }).pipe(map((response: any) =>{
+              return response;
+        }),catchError((error, caught) => {
+
+            let errorMessage = "";
+            if (error.errors) {
+                for (const index of error.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = error.errors[index];
+                    errorMessage += _error.error.field + ": ";
+                    errorMessage += _error.statusText;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "errorMessage";
+            return of(result);
+        }));
+    }
+
+    deleteFile(fileName, registrationPk: number) {
+        const data: any = {};
+        data.fileName = fileName;
+        data.registrationPk = registrationPk;
+        let _param: HttpParams = new HttpParams();
+        _param = _param.append("deletebody", JSON.stringify(data));
+
+        return this.http.delete(this.registrationUrl + "/registration/removeFile", { params: _param }).pipe(catchError((errors, caught) => {
+
+            //console.log(Observable.throw(errors))
+            let errorMessage = "";
+            //console.log(errors)
+            if (errors.errors) {
+                for (const index of errors.errors) {
+                    if (index !== "0") { errorMessage += "\n"; }
+
+                    const _error = errors.errors[index];
+                    errorMessage += _error.field + ": ";
+                    errorMessage += _error.errorCode;
+                }
+            }
+            const result: any = {};
+            result.error = true;
+            result.errorCode = -1;
+            result.errorDescription = "Operation no availble";
+            return of(result);
+        }));
+
+    }
+}
+
+
+
+

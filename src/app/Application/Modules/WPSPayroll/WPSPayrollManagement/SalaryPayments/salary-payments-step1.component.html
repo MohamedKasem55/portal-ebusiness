@@ -1,0 +1,500 @@
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'wpspayroll.salaryPayments' | translate}}</div>
+        <div class="col-xs-12 col-sm-12 sme-form__actions" style="padding: 0px 0px">
+
+
+            <a class="btn btn-primary btn-wide"
+               [routerLink]="['/wpspayroll/wpspayroll-management/salary-payment-upload-file']">{{
+                'wpspayroll.salaryPaymentUploadFile' | translate }}</a>
+
+        </div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form" id="formSalary" [formGroup]="formSalary">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="deduct-from-account-input"
+                                               class="required">{{ 'payments.deduct-from-account' |
+                                            translate }}</label>
+                                        <div>
+                                            <ng-select id="deduct-from-account-input" class="form-control"
+                                                    formControlName="accountFrom" [placeholder]="canShowSelectPlaceHolder(formSalary.get('accountFrom').value) ? ('-- '+('public.selectAccount' | translate )+' --'):''">
+                                                <ng-option selected value disabled>
+                                                    --{{ 'public.selectAccount' | translate }}--
+                                                </ng-option>
+                                                <ng-option *ngFor="let account of accounts" [value]="account.key">
+                                                    {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - ' + account.value.alias : '')}}{{(account.value.inquiry ? ' - ' + (account.value.availableBalance | amountCurrency:account.value.currency) : '')}}
+                                                    {{(account.value.inquiry ? ('currencyIso' | modelPipe:account.value.currency) : '')}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <div *ngIf="formSalary.controls.accountFrom.hasError('required') && formSalary.controls.accountFrom.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{'payments.deduct-from-account' | translate }}{{ 'error.required' | translate }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.customerCIC' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="customerCIC">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.organizationName' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="organizationName">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-2">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group left">
+                                        <label class="required">{{ 'wpspayroll.molId' |
+                                            translate }}</label>
+
+                                        <input type="text" class="form-control" id="molId"
+                                               formControlName="molId" value="formSalary.value.molId">
+
+                                        <div *ngIf="formSalary.controls.molId.hasError('required') && formSalary.controls.molId.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'wpspayroll.molId' | translate }}
+                                                {{ 'error.required' | translate }} </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                               class="required">{{ 'wpspayroll.batchPayrollName' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="batchName" maxlength="100">
+                                        <div *ngIf="formSalary.controls.batchName.hasError('required') && formSalary.controls.batchName.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'wpspayroll.batchPayrollNameError' | translate }}{{ 'error.required' | translate }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group left">
+                                        <label class="required">{{ 'wpspayroll.valueDate' |
+                                            translate }}</label>
+                                        <div class="form-control">
+                                            <input type="text" #dp bsDatepicker placement="top"
+                                                   [bsConfig]="bsConfig" formControlName="valueDate"
+                                                   style="border:0px;z-index:1000"/>
+                                            <label
+                                                   class="human-selectable icon -calendar"
+                                                   style="font-size: initial;">
+                                            </label>
+                                        </div>
+                                        <div *ngIf="formSalary.controls.valueDate.hasError('required') && formSalary.controls.valueDate.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'wpspayroll.valueDate' | translate }}{{ 'error.required' | translate }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.hijraDate' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="hijraDate">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                               class="required">{{ 'wpspayroll.customerReference' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="customerReference" maxlength="16">
+                                        <div *ngIf="formSalary.controls.customerReference.hasError('required') && formSalary.controls.customerReference.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'wpspayroll.customerReferenceError' | translate }} </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label
+                                               class="required">{{ 'wpspayroll.paymentPurpose' |
+                                            translate }}</label>
+                                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                                                   formControlName="paymentPurpose" name="paymentPurpose"
+                                                   [disabled]="true">
+
+                                            <ng-option *ngFor="let purp of propous" [value]="purp.key">
+                                                {{purp.value}}</ng-option>
+                                        </ng-select>
+
+                                        <div *ngIf="formSalary.controls.paymentPurpose.hasError('required') && formSalary.controls.paymentPurpose.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'wpspayroll.paymentPurpose' | translate }}{{ 'error.required' | translate }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.remarks' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="remarks" maxlength="30">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="searchForm" (ngSubmit)="search()">
+                <div class="sme-form__content">
+                    <a class="sme-form__head collapsed" role="button"
+                       (click)="isCollapsedContent = !isCollapsedContent"> <span>{{
+                        'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.employeeNumber' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="employeeNumber">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.employeeName'
+                                            | translate }}</label>
+                                        <input type="text" class="form-control"
+                                               formControlName="employeeName">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="civilian-id-input">{{
+                                            'wpspayroll.civilianID' | translate }}</label>
+                                        <input type="text" class="form-control" id="civilian-id-input"
+                                               formControlName="civilianId">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                                'public.reset' | translate }}</button>
+                            <button type="submit" class="btn btn-primary btn-wide">{{
+                                'public.search' | translate }}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'wpspayroll.employeeList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="employeePageTable" [header]="'wpspayroll.employeeList' | translate"
+                                  [columns]="[
+                                            {'title': 'wpspayroll.employeeNumber' | translate, 'dataKey':'employeeReference',width:'auto'},
+                                            {'title': 'wpspayroll.employeeName' | translate, 'dataKey':'name',width:'auto'},
+                                            {'title': 'wpspayroll.civilianID' | translate, 'dataKey':'civilianId',width:'auto'},
+                                            {'title': 'public.bank' | translate, 'dataKey':'bankCodePayroll', 'modelKey': 'bankCode',width:'auto'},
+                                            {'title': 'wpspayroll.account' | translate, 'dataKey':'account',width:'auto'},
+                                            {'title': 'wpspayroll.basicSalary' | translate, 'dataKey':'salaryBasic',width:'auto'},
+                                            {'title': 'wpspayroll.housingAllowance' | translate, 'dataKey':'allowanceHousing',width:'auto'},
+                                            {'title': 'wpspayroll.otherAllowance' | translate, 'dataKey':'allowanceOther',width:'auto'},
+                                            {'title': 'wpspayroll.deductions' | translate, 'dataKey':'deductions',width:'auto'},
+                                            {'title': 'wpspayroll.salary' | translate, 'dataKey':'salary',width:'auto'},
+                                            {'title': 'public.department' | translate, 'dataKey':'departmentId',width:'auto'},
+                                            {'title': 'wpspayroll.remarks' | translate, 'dataKey':'remarks',width:'auto'}
+                                            ]">
+                    </table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #employeePageTable
+                                   class="material sme-table sme-table--responsive table" [rows]="employeePage.data"
+                                   [columnMode]="defaultColumnMode" [headerHeight]="60"
+                                   [footerHeight]="footerHeight"
+                                   [rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+                                   [count]="employeePage.page.totalElements" [offset]="employeePage.page.pageNumber-1"
+                                   [limit]="employeePage.page.pageSize" [selectionType]="defaultSelectionType"
+                                   [rowIdentity]="getIdFunction()" (page)="setPage($event)" (sort)="setSort($event)"
+                                   [selected]="tableSelectedRows"
+                                   (select)='onSelect($event)'>
+
+                        <!--                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"-->
+                        <!--                                              [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"-->
+                        <!--                                              [checkboxable]="true">-->
+                        <!--                        </ngx-datatable-column>-->
+                        <!--custom checkbox- defaul select all resete preview item selected with extern pagination-->
+                        <ngx-datatable-column
+                                [width]="50"
+                                [sortable]="false"
+                                [canAutoResize]="false"
+                                [draggable]="false"
+                                [resizeable]="false">
+                            <ng-template ngx-datatable-header-template let-value="value">
+                                <label class="datatable-checkbox">
+                                    <input type="checkbox" [checked]="selectAllOnPage[employeePage.page.pageNumber]"
+                                           (change)="selectAll($event)"/>
+                                </label>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-row="row"
+                                         let-value="value" let-isSelected="isSelected"
+                                         let-onCheckboxChangeFn="onCheckboxChangeFn">
+                                <label class="datatable-checkbox">
+                                    <input type="checkbox"
+                                           [disabled]="!isValidSalaryRow(row)"
+                                           [checked]="isSelected"
+                                           (change)="onCheckboxChangeFn($event)"/>
+                                </label>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <!--end custom checkbox-->
+
+                        <ngx-datatable-column prop="name">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.employeeName' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="employeeReference">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.employeeNumber' | translate }}
+                                </span>
+                                <br>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.civilianID' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-row="row" let-sort="sortFn" ngx-datatable-cell-template>
+                                <span>{{ row.employeeReference }}</span>
+                                <br>
+                                <span>{{ row.civilianId }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="bankCodePayroll" [width]="150">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper" style="display: inline-block; width: 100%; white-space: pre-wrap;">
+                                    {{'wpspayroll.bankName' | translate }}
+                                </span>
+                                <br>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.account' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <ng-container *ngIf="('payrollBankCode' | modelPipe:value).indexOf('?') === -1">
+                                    <span [innerHTML]="'payrollBankCode' | modelPipe:value" style="width: 100%; white-space: pre-wrap;"></span>
+                                </ng-container>
+                                <ng-container *ngIf="('payrollBankCode' | modelPipe:value).indexOf('?') !== -1">
+                                    <span [innerHTML]="'bankCode' | modelPipe:value"  style="width: 100%; white-space: pre-wrap;"></span>
+                                </ng-container>
+                                <br>
+                                <span>{{ row.account }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="salary">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.salary' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value  | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="salaryBasic">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.basicSalary' | translate }}
+                                </span>
+                                <br>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.housingAllowance' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value  | amountCurrency }}</span>
+                                <br>
+                                <span>{{ row.allowanceHousing  | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="allowanceOther">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.otherAllowance' | translate }}
+                                </span>
+                                <br>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.deduction' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value  | amountCurrency }}</span>
+                                <br>
+                                <span>{{ row.deductions  | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="remarks" [width]="150">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'wpspayroll.remarks' | translate }}
+                                </span>
+                                <br>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.department' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <span>
+                                    <input type="text"
+                                           style="width: 90%"
+                                           [value]="value"
+                                           (keyup)="updateRemark($event, row)" maxlength="30">
+                                </span>
+                                <span *ngIf="row.showSave"
+                                      class="human-selectable glyphicon glyphicon-floppy-disk"></span>
+                                <br>
+                                <span>{{ row.departmentId }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="valid" [width]="20"
+                                              [sortable]="false"
+                                              [canAutoResize]="false"
+                                              [draggable]="false"
+                                              [resizeable]="false">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    &nbsp;
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                &nbsp;
+                                <span *ngIf="!isValidSalaryRow(row)"
+                                      [title]="'wpspayroll.msgEmployeeNotElegible' | translate"
+                                      class="glyphicon glyphicon-warning-sign"
+                                      style="color: #ac2925; position: absolute;top: 10px;right: 10px;">
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="employeePageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{this.employeePage.page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control"
+                                                        [(ngModel)]="this.employeePage.page.pageSize"
+                                                        (change)="this.setPage(null)">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

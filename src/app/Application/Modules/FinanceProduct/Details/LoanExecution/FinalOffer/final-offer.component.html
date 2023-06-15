@@ -1,0 +1,173 @@
+<div class='sme-head'>
+  <div class='sme-head__title'>
+    <P>{{ 'financeProduct.details.finalOffer' | translate }}</P>
+  </div>
+</div>
+<arb-panel>
+  <form autocomplete='off' #posFinalOffer='ngForm' class='sme-form__form' novalidate *ngIf='formModel'>
+    <fieldset [formGroup]='formModel'>
+      <div class='legend'>{{ 'financeProduct.details.offerDetails' | translate }}</div>
+      <div *ngIf='formModel.controls["productCode"].value==POS_PRODUCT_CODE'>
+        <div class='row'>
+          <!-- Finance ID -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.financeID' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['financeID'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Finance ID -->
+          <!-- Finance Amount -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.financeAmount' | translate }} </label>
+              <div class='input-group'>
+                            <span>{{formModel.controls['financeAmount'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Finance Amount -->
+          <!-- Tenure -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.tenure' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['tenure'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Tenure -->
+          <!-- Instalment Amount -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.instalmentAmount' | translate }} </label>
+              <div class='input-group'>
+                            <span>{{formModel.controls['instalmentAmount'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Instalment Amount -->
+        </div>
+        <div class='row'>
+          <!-- Contract Number -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.contractNumber' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['contractNumber'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Contract Number -->
+          <!-- Account Number -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.accountNumber' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['accountNumber'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Account Number -->
+          <!-- Total Profit -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.totalProfit' | translate }} </label>
+              <div class='input-group'>
+                   <span>{{formModel.controls['totalProfit'].value  | amountCurrency}}
+                     {{formModel.controls['currency'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Total Profit -->
+          <!-- Total Amount -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.totalAmount' | translate }} </label>
+              <div class='input-group'>
+                            <span>{{formModel.controls['totalAmount'].value | amountCurrency}}
+                              {{formModel.controls['currency'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Total Amount -->
+        </div>
+        <div class='row'>
+          <!-- Annual Profit Rate -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.annualProfitRate' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['annualProfitRate'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Annual Profit Rate -->
+
+          <!-- Fees -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.fees' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['fees'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Fees -->
+        </div>
+      </div>
+      <div *ngIf='formModel.controls["productCode"].value==MRCC_PRODUCT_CODE'>
+        <div class='row'>
+          <!-- Contract Number -->
+          <div class='col-xs-12 col-sm-6'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.contractNumber' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['contractNumber'].value}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Contract Number -->
+          <!-- Request Date -->
+          <div class='col-xs-12 col-sm-6'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.requestDate' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['requestDate'].value | date:'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Request Date -->
+        </div>
+        <div class='row'>
+          <!-- Application Type -->
+          <div class='col-xs-12 col-sm-6'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.applicationType' | translate }} </label>
+              <div class='input-group'>
+                <span>{{'financeProduct.details.murabahaCard' | translate}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Application Type -->
+          <!-- Application Status -->
+          <div class='col-xs-12 col-sm-6'>
+            <div class='form-group'>
+              <label>{{ 'financeProduct.details.applicationStatus' | translate }} </label>
+              <div class='input-group'>
+                <span>{{formModel.controls['applicationStatus'].value }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- /Application Status -->
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>
+
+

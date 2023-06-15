@@ -1,0 +1,119 @@
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from "@angular/forms";
+import { TranslateService } from '@ngx-translate/core';
+import { SimpleMQ } from "ng2-simple-mq";
+import { RegistrationService } from "../../../../Modules/Registration/registration.service";
+
+@Component({
+    templateUrl: './step3.component.html',
+    styleUrls: ['../../registration.component.scss']
+})
+export class Step3Component implements OnInit, OnDestroy {
+
+    @ViewChild('stepForm', { static: true }) stepForm: NgForm;
+
+    step = 3;
+    formData: any;
+    mobileNumber = [];
+    numberTels: any;
+    accountrefs = [];
+    validOTP = false;
+
+    otpTimer=[];
+    timeout = 460;//7 minutos
+
+    constructor(
+        private service: RegistrationService,
+        private smq: SimpleMQ,
+        public translate:TranslateService) { }
+
+
+
+    ngOnInit() {
+        this.formData.accountsTelephones = [];
+        // habilitar despues cuando el servicio responda genera lentutud al no tener respuesta
+        this.formData.aux3 = []
+        const data: any = { registrationPk: this.formData.registrationPk }
+        this.service.gettelephones(data).subscribe((result) => {
+            if (result.error) {
+                this.smq.publish('error-mq', result.errorDescription);
+            }
+            else {
+                this.formData.aux3 = result.accountsTelephones;
+                for (let i = this.formData.aux3.length - 1; i >= 0; i--) {
+                    this.otpTimer.push(this.timeout); //7 minutos
+                    this.formData.aux3[i]['shadowTelefone'] = [];
+                    this.formData.aux3[i]['lastNumbers'] = [];
+                    this.formData.aux3[i]['generateOtp'] = [];
+					this.formData.aux3[i]['validateOTP'] = [];
+                    this.formData.aux3[i]['otp'] = [];
+                    for (let j = this.formData.aux3[i].telephones.length - 1; j >= 0; j--) {
+                        this.formData.aux3[i]['shadowTelefone'].push(this.formData.aux3[i].telephones[i].slice(0, -4));
+                        this.formData.aux3[i]['lastNumbers'].push('');
+                        this.formData.aux3[i]['generateOtp'].push(false);
+						this.formData.aux3[i]['validateOTP'].push(false);
+                        this.formData.aux3[i]['otp'].push('');
+                    }
+                }
+            }
+        });
+
+    }
+
+    public validateOTP(indexAccount, i) {
+        const account = this.formData.aux3[indexAccount].account;
+        const phoneNumber = this.formData.aux3[indexAccount]['shadowTelefone'][i] + '' + this.formData.aux3[indexAccount]['lastNumbers'][i];
+        const otp = this.formData.aux3[indexAccount]['otp'][i];
+        const data: any = { account, telephone: phoneNumber, otp, registrationPk: this.formData.registrationPk }
+        this.service.validateOTP(data).subscribe((result) => {
+            if (result.error) {
+                //this.smq.publish('error-mq', result.errorDescription);
+
+            }
+            else {
+                //
+                this.validOTP = true;
+				this.formData.aux3[indexAccount]['validateOTP'][i] = true;
+
+            }
+        });
+
+
+    }
+
+    public generateOTP(indexAccount, i) {
+        const account = this.formData.aux3[indexAccount].account;
+        const phoneNumber = this.formData.aux3[indexAccount]['shadowTelefone'][i] + '' + this.formData.aux3[indexAccount]['lastNumbers'][i];
+        const data: any = { account, telephone: phoneNumber, registrationPk: this.formData.registrationPk }
+        this.service.generateOTP(data).subscribe((result) => {
+            if (result.error) {
+                //this.smq.publish('error-mq', result.errorCode);
+
+            }
+            else {
+                //
+                this.otpTimer[i] = this.timeout;
+                this.formData.aux3[indexAccount]['generateOtp'][i] = true;
+                    const interval = setInterval((t) => {
+                    this.otpTimer[i]--;
+
+                    if(this.otpTimer[i]==0){
+                        this.formData.aux3[indexAccount]['generateOtp'][i] = false;
+                        clearInterval(interval); }
+                }, 1000);
+            }
+        });
+
+
+    }
+
+    ngOnDestroy() { }
+
+    valid() {
+        return this.validOTP;
+    }
+
+    isPrint(){
+        return false;
+    }
+}

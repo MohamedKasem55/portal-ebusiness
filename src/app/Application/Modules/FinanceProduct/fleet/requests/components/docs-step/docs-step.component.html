@@ -1,0 +1,58 @@
+<div class="container-fluid">
+  <div class="sme-page-title">
+    {{'fleet.requests.documentationUpload' | translate}}
+  </div>
+  <div class="sme-card">
+    <div class="sme-row">
+      <img src="assets/icons/info.svg" />
+      <p class="sme-card-msg"> {{'fleet.requests.requiredDocuments' | translate}}</p>
+    </div>
+  </div>
+</div>
+<form [formGroup]="uploadForm"  *ngIf="requiredDocsList?.length > 0">
+<div class="container-fluid">
+  <div class="sme-card">
+    <div class="sme-card-header">
+      <div class="sme-card-header-start">
+        {{'fleet.requests.documentation' | translate}}
+      </div>
+    </div>
+    <sme-card>
+      <div class="card-body">
+        <div class="sme-row-4-col">
+          <ng-container *ngFor="let element of requiredDocsList; index as i">
+          <div class="sme-col"  formArrayName="uploadDocVal">
+            <div class="form-group">
+              <label>{{element?.name}}</label>
+              <div class="sme-col form-control" >
+                <div class='fileUpload btn' ><img id="docIcon_{{i}}" name="docIcon_{{i}}" />
+                  <span class="upload"  (click)="fileUpload.click()">
+                    <input id="uploadDocVal_{{i}}"  name="uploadDocVal_{{i}}" value="" placeholder="Upload File" class="file-name" required disabled>
+                    <span id="cancelDoc_{{i}}"  name="cancelDoc_{{i}}">{{'public.upload' | translate | uppercase}}</span>
+                    <input  id="uploadDoc_{{i}}"  [formControlName]="i" required name="uploadDoc_{{i}}" placeholder="" (change)="onFileSelected($event, i)"  #fileUpload type='file' accept='.jpeg,.pdf,.gif,.jpg,.png' class="file-input upload"></span>
+          <!--        {{ uploadForm.controls['uploadDocVal'].controls[i].invalid }}-->
+                  <img id="closeIcon_{{i}}" name="closeIcon_{{i}}" (click)="onCancelFile(i)"/>
+                </div>
+                <span class="sme-card-msg error-color"  *ngIf="this.showFileUploadError===i">{{'fleet.requests.errorUploading'|translate }}</span>
+                <span  *ngIf="this.showFileSizeError===i"  class="sme-card-msg error-color"> {{'fleet.requests.fileSizeError'|translate}}</span>
+              </div>
+            </div>
+          </div>
+          </ng-container>
+      </div>
+      </div>
+    </sme-card>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class=" btn btn-default btn-wide sme-back-btn" (click)="navigateTo(3)">
+      {{'fleet.btn.back' | translate}}
+    </button>
+    <button type="submit" class=" btn btn-primary btn-wide" (click)="navigateTo(5)" [disabled]="uploadForm.controls['uploadDocVal'].invalid || uploadForm?.errors?.invalid ">
+      {{'fleet.btn.proceed' | translate}}
+    </button>
+  </div>
+</div>
+</form>
+

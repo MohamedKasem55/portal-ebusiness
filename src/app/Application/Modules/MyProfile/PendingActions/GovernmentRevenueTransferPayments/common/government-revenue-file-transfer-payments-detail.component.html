@@ -1,0 +1,105 @@
+<arb-panel>
+    <div class="row" *ngIf="error && error['exist']">
+        <div class="alert alert-danger text-align-center">
+            <small>{{error['description']}}</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label for="profileNumber"> {{ 'governmentRevenue.profileNumber' | translate }}</label>
+                <span id="profileNumber" class="form-control">{{ company?.profileNumber }}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label for="customerName">{{ 'governmentRevenue.customerName' | translate }}</label>
+                <span id="customerName" class="form-control">{{ company?.companyName }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label class="required" for="accountFrom">{{ 'governmentRevenue.accountFrom' | translate }}</label>
+                <span id="accountFrom" class="form-control">{{getControlValue("accountNumber")}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label for="beneficiaryBank" class="required">{{ 'governmentRevenue.bank' | translate }}</label>
+                <span id="beneficiaryBank" class="form-control">{{getControlValue("beneficiaryBank")}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label class="required" for="totalAmount">{{ 'governmentRevenue.totalAmount' | translate }}</label>
+                <span id="totalAmount" class="form-control">{{getControlValue("totalAmount")}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label class="required"
+                       for="letterNumber">{{ 'governmentRevenue.letterNumber' | translate }}</label>
+                <span id="letterNumber" class="form-control">{{getControlValue("letterNumber")}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label for="letterDate" class="required">{{ 'governmentRevenue.letterDate' | translate }}</label>
+                <span id="letterDate" class="form-control">{{getControlValue("valueDate")}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label class="required">{{ 'governmentRevenue.letterPeriodFrom' | translate }}</label>
+                <span id="letterPeriodFrom" class="form-control">{{getControlValue("letterPeriodFrom")}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label for="letterPeriodTo"
+                       class="required">{{ 'governmentRevenue.letterPeriodTo' | translate }}</label>
+                <span id="letterPeriodTo" class="form-control">{{getControlValue("letterPeriodTo")}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label for="finclosingyear">{{ 'governmentRevenue.closingDateFinancial' | translate }}</label>
+                <span id="finclosingyear" class="form-control">{{getControlValue("finClosingYear")}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="form-group">
+                <app-originator-table [originator]="getControlValue('beneficiaryOriginator')"
+                                      [showName]="true" [type]="OriginatorType.BENEFICIARY">
+                </app-originator-table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="form-group">
+                <app-originator-table id="depositorOriginator" [originator]="getControlValue('depositorOriginator')"
+                                      [showName]="true" [type]="OriginatorType.DEPOSITOR">
+                </app-originator-table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-9 col-sm-9">
+            <app-revenue-accounts-table [subAccountAmounts]="subAccountAmounts">
+            </app-revenue-accounts-table>
+        </div>
+    </div>
+</arb-panel>
+<!--<app-levels-table *ngIf="getControlValue('securityLevelsDTOList')" [futureSecurityLevels]="getControlValue('securityLevelsDTOList')">-->
+<!--</app-levels-table>-->
+
+
+
+

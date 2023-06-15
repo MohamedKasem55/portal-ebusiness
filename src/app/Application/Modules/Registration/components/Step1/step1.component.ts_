@@ -1,0 +1,56 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from "@angular/forms";
+
+@Component({
+    templateUrl: './step1.component.html',
+    styleUrls: ['../../registration.component.scss']
+})
+export class Step1Component implements OnInit {
+
+    @ViewChild('stepForm', { static: true }) stepForm: NgForm;
+
+    step = 1;
+    formData: any;
+
+    ngOnInit(): void {
+        if (!this.formData.typeOfCompany) { this.formData.typeOfCompany = 'company'; }
+    }
+
+
+    onCicChange(event) {
+       // console.log(event,this.formData.cic);
+        if(this.formData.cic){
+            this.formData.cic = this.fillLeftCero(this.formData.cic, 10);
+        }
+    }
+
+    fillLeftCero(chain, totalNumber): string {
+        let value;
+        if (chain) {
+            value = parseInt(chain, 10).toString();
+        } else {
+            value = "";
+        }
+        const length = value.length;
+        for (let i = 0; i < totalNumber - length; i++) {
+            value = "0" + value;
+        }
+        return value;
+    }
+
+    ifBuilder(element): boolean {
+        if (element) {
+            //console.log(element);
+            return true;
+        }
+        return false;
+    }
+
+    valid() {
+        return true;
+    }
+
+    isPrint(){
+        return false;
+    }
+}

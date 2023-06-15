@@ -1,0 +1,36 @@
+
+<div class="container-fluid">
+    <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+  </div>
+  <div class="container-fluid">
+    <div class="sme-page-title-info">
+      <p class="sme-page-title">
+        {{'fleet.requests.fleetFinanceRequest' |translate}}
+      </p>
+    </div>
+  </div>
+<div class="container-fluid">
+  <sme-check
+    [title]="'Your financing application has been submitted'"
+    [status]="'success'"
+    [img]="'assets/icons/check-success.svg'"
+  >
+    <div class="check-body">
+      <p> {{'fleet.requests.submitApplicationNote' | translate}}
+        <br />
+      {{'fleet.requests.dossairID'| translate}} <strong>{{dossairID}}</strong>
+      </p>
+    </div>
+  </sme-check>
+</div>
+
+<div class="container-fluid">
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button  class="btn btn-default btn-wide" type='button' (click)="goDashboard()">
+        {{'fleet.btn.backToDashboard'|translate}}
+      </button>
+      <button class="btn btn-primary btn-wide" (click)="goDetailScreen()">
+        {{ 'fleet.btn.trackApplicationStatus' | translate }}
+      </button>
+  </div>
+</div>

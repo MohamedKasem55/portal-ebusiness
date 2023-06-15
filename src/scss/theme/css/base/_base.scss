@@ -1,0 +1,2044 @@
+body {
+  @if $dir != ltr {
+    font-family: $font-base-rtl;
+    font-size: $font-size-15;
+    @media screen and (max-width: $max-width) {
+      font-size: $font-size-15 * $factor;
+    }
+    @media screen and (max-width: $max-width2) {
+      font-size: $font-size-15 * $factor2;
+    }
+  }
+}
+
+.text-ar {
+  font-family: $font-base-rtl;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 400;
+}
+
+h2 {
+  font-weight: 600;
+}
+
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+.text-left {
+  text-align: #{$left};
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: #{$right};
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.pull-right {
+  float: $right !important;
+}
+
+.pull-left {
+  float: $left !important;
+}
+
+#sme-main {
+  padding-top: $sme-header-height-xs;
+
+  @media #{$sm-up} {
+    height: 64px;
+    padding: 0;
+
+    display: inline-block;
+    width: 100%;
+
+    @include anchor {
+      text-decoration: none;
+    }
+    &__title,
+    &__actions,
+    &__export-actions {
+      display: table-cell;
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    &__title {
+      height: 64px;
+      padding: 0 20px;
+    }
+
+    &__actions,
+    &__export-actions {
+      margin-top: $grid-gutter-width * 0.5;
+      width: 1%;
+      white-space: nowrap;
+    }
+
+    &__actions + &__export-actions {
+      padding-#{$left}: 12px;
+    }
+
+    padding-top: $sme-header-height;
+    padding-#{$left}: $sme-navigation-width;
+    padding-#{$right}: 0px;
+
+    transition: padding-#{$left} $sme-navigation-transition;
+    transition: padding-#{$right} $sme-navigation-transition;
+
+    body.sme-navigation-open & {
+      padding-#{$left}: $sme-navigation-width-open;
+      display: block;
+    }
+
+    body.sme-navigation-open-right & {
+      padding-#{$right}: $sme-navigation-width-open;
+      display: block;
+    }
+  }
+}
+
+body.sme-navigation-open .ngx-datatable.material {
+  overflow-x: scroll;
+}
+
+.sme-head {
+  position: relative;
+  padding: 24px 0;
+
+  @include anchor {
+    text-decoration: none;
+  }
+
+  &__title {
+    display: block;
+    color: $brand-black;
+
+    @include heading2;
+  }
+
+  &__actions,
+  &__export-actions {
+    margin-top: $grid-gutter-width * 0.5;
+  }
+
+  &__actions {
+  }
+
+  &__export-actions {
+  }
+
+  @media #{$sm-up} {
+    height: 64px;
+    padding: 0;
+
+    display: table;
+    width: 100%;
+
+    @include anchor {
+      text-decoration: none;
+    }
+    &__title,
+    &__actions,
+    &__export-actions {
+      display: table-cell;
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    &__title {
+      height: 64px;
+      padding: 0 20px;
+    }
+
+    &__actions,
+    &__export-actions {
+      margin-top: $grid-gutter-width * 0.5;
+      width: 1%;
+      white-space: nowrap;
+    }
+
+    &__actions + &__export-actions {
+      padding-#{$left}: 12px;
+    }
+  }
+}
+
+.sme-collapse {
+  $padding: 15px;
+  $icon-size: 25px;
+  $chevron-size: 15px;
+
+  margin-bottom: $grid-gutter-width * 0.5;
+
+  &__heading {
+    display: table;
+    height: 50px;
+    width: 100%;
+    background: #fff;
+
+    @include font-headings;
+    font-weight: 600;
+
+    > a {
+      display: table-cell;
+      position: relative;
+      padding-#{$left}: $padding + $icon-size + $padding;
+      padding-#{$right}: $padding + $chevron-size + $padding;
+      vertical-align: middle;
+
+      @include anchor {
+        color: $text-color;
+        text-decoration: none;
+      }
+
+      .icon {
+        @include center-y;
+        @include icon-size($icon-size);
+        #{$left}: $padding;
+        color: $brand-primary;
+      }
+
+      @include append-icon($chevron-size, $icon-chevron-up) {
+        @include center-y;
+        #{$right}: $padding;
+      }
+
+      &.collapsed {
+        &:before {
+          content: $icon-chevron-down;
+        }
+      }
+    }
+  }
+
+  .list-group {
+    margin: 0;
+
+    .list-group-item {
+      padding-top: 14px;
+      padding-bottom: 14px;
+      padding-#{$left}: $padding + $icon-size + $padding;
+
+      border-left: 0;
+      border-right: 0;
+
+      &:first-child,
+      &:last-child {
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+//
+// List groups
+// --------------------------------------------------
+
+// Base class
+//
+// Easily usable on <ul>, <ol>, or <div>.
+
+.list-group {
+  // No need to set list-style: none; since .list-group-item is block level
+  margin-bottom: 20px;
+  padding-#{$left}: 0; // reset padding because ul and ol
+}
+
+// Individual list items
+//
+// Use on `li`s or `div`s within the `.list-group` parent.
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  // Place the border on the list items and negative margin up for better styling
+  margin-bottom: -1px;
+  background-color: $list-group-bg;
+  border: 1px solid $list-group-border;
+
+  // Round the first and last items
+  &:first-child {
+    @include border-top-radius($list-group-border-radius);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+    @include border-bottom-radius($list-group-border-radius);
+  }
+}
+
+// Interactive list items
+//
+// Use anchor or button elements instead of `li`s or `div`s to create interactive items.
+// Includes an extra `.active` modifier class for showing selected items.
+
+a.list-group-item,
+button.list-group-item {
+  color: $list-group-link-color;
+
+  .list-group-item-heading {
+    color: $list-group-link-heading-color;
+  }
+
+  // Hover state
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: $list-group-link-hover-color;
+    background-color: $list-group-hover-bg;
+  }
+}
+
+button.list-group-item {
+  width: 100%;
+  text-align: $left;
+}
+
+.list-group-item {
+  // Disabled state
+  &.disabled,
+  &.disabled:hover,
+  &.disabled:focus {
+    background-color: $list-group-disabled-bg;
+    color: $list-group-disabled-color;
+    cursor: $cursor-disabled;
+
+    // Force color to inherit for custom content
+    .list-group-item-heading {
+      color: inherit;
+    }
+
+    .list-group-item-text {
+      color: $list-group-disabled-text-color;
+    }
+  }
+
+  // Active class on item itself, not parent
+  &.active,
+  &.active:hover,
+  &.active:focus {
+    z-index: 2; // Place active items above their siblings for proper border styling
+    color: $list-group-active-color;
+    background-color: $list-group-active-bg;
+    border-color: $list-group-active-border;
+
+    // Force color to inherit for custom content
+    .list-group-item-heading,
+    .list-group-item-heading > small,
+    .list-group-item-heading > .small {
+      color: inherit;
+    }
+
+    .list-group-item-text {
+      color: $list-group-active-text-color;
+    }
+  }
+}
+
+// Contextual variants
+//
+// Add modifier classes to change text and background color on individual items.
+// Organizationally, this must come after the `:hover` states.
+
+@include list-group-item-variant(success, $state-success-bg, $state-success-text);
+@include list-group-item-variant(info, $state-info-bg, $state-info-text);
+@include list-group-item-variant(warning, $state-warning-bg, $state-warning-text);
+@include list-group-item-variant(danger, $state-danger-bg, $state-danger-text);
+
+// Custom content options
+//
+// Extra classes for creating well-formatted content within `.list-group-item`s.
+
+.list-group-item-heading {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.list-group-item-text {
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .sme-head__title {
+    height: 64px;
+    padding: 0 20px;
+  }
+}
+
+@media #{$xs-only} {
+  .row-grid-xs {
+    & + .row-grid-xs,
+    > div + div,
+    > .row-grid-xs-col + .row-grid-xs-col {
+      margin-top: $grid-gutter-width;
+    }
+  }
+  .row-packed-xs {
+    > div {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+//.btn {
+//    position: relative;
+//
+//    &.btn-icon {
+//        .icon {
+//            @include center-y;
+//            @include icon-size(24px);
+//
+//            #{$left}: 10px;
+//
+//            + .btn-text {
+//                padding-#{$left}: 24px;
+//            }
+//        }
+//    }
+//
+//    &.btn-icon-only {
+//
+//    }
+//}
+
+//.row > .col-center {
+//    float: none;
+//    margin: 0 auto;
+//}
+
+//.row-grid {
+//    > .row {
+//        & + .row, > div + div {
+//            margin-top: $grid-gutter-width;
+//        }
+//
+///*        > div {
+//            background: #fdd;
+//        }*/
+//    }
+//
+//    @media #{$sm-up} {
+//        > .row {
+//            /*display: table;*/
+//            /*display: flex;*/
+//
+//            > div {
+///*                height: 100%;
+//                display: table-cell;
+//                vertical-align: top;
+//                float: none;
+//
+//                > div {
+//                    height: 100%;
+//                }*/
+//            }
+//            > div + div {
+//                margin-top: 0;
+//            }
+//        }
+//    }
+//}
+//
+//@media #{$portable} {
+//    .row-grid-portable {
+//        > .row {
+//            & + .row, > div + div {
+//                margin-top: $grid-gutter-width;
+//            }
+//        }
+//    }
+//}
+//
+//@media #{$xs-only} {
+//    .row-grid-xs {
+//        > .row {
+//            & + .row, > div + div {
+//                margin-top: $grid-gutter-width;
+//            }
+//        }
+//    }
+//}
+
+.form-group {
+  /*margin: 0;*/
+}
+
+fieldset,
+.fieldset-group {
+  & + & {
+    margin-top: 40px;
+  }
+}
+
+.fieldset-group fieldset + fieldset {
+  margin-top: 0;
+}
+
+legend,
+.legend {
+  border: 0;
+  padding: 0;
+  font: 15px $font-headings;
+  color: $brand-black;
+  margin-top: -15px;
+  margin-bottom: 30px;
+}
+
+label,
+.fieldset-horizontal legend {
+  margin: 0;
+  font: 400 11px/11px $font-base;
+  /*letter-spacing: 0.5px;*/
+  color: #999;
+  font-weight: 400;
+
+  @if $dir != ltr {
+    font: 400 13px/13px $font-base-rtl;
+  }
+}
+
+@media #{$xs-only} {
+  fieldset,
+  .fieldset-group {
+    & + & {
+      margin-top: 20px;
+    }
+  }
+
+  legend,
+  .legend {
+    margin-top: 0;
+  }
+
+  .page-block + .page-block {
+    border-top: 20px solid $background;
+  }
+  .fieldset-block {
+    @include clearfix;
+    margin: 0;
+
+    legend {
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      float: left;
+    }
+
+    .sme-table {
+      margin-bottom: 0;
+    }
+
+    .sme-table--responsive {
+      > tbody {
+        > tr:last-child {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+
+  /*    .fieldset-group + .fieldset-group {
+          border-top: 20px solid $background;
+          margin: 0;
+      }*/
+}
+
+.fieldset-horizontal {
+  legend {
+    margin-bottom: 20px;
+  }
+
+  @media #{$md-up} {
+    padding-#{$left}: 138px;
+
+    legend {
+      float: #{$left};
+      margin: 0;
+      margin-#{$left}: -138px;
+      padding-top: 5px;
+      width: 118px;
+    }
+  }
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: $input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+  padding: $padding-base-vertical 0;
+  @include font($font-size-15);
+  @media screen and (max-width: $max-width) {
+    @include font($font-size-15 * $factor);
+  }
+  @media screen and (max-width: $max-width2) {
+    @include font($font-size-15 * $factor2);
+  }
+  line-height: 20px;
+  color: $input-color;
+  position: relative;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
+
+  border-top-color: transparent;
+  border-#{$left}-color: transparent;
+  border-#{$right}-color: transparent;
+
+  &,
+  &:focus {
+    box-shadow: none;
+
+    border-top-color: transparent;
+    border-#{$left}-color: transparent;
+    border-#{$right}-color: transparent;
+  }
+
+  &:focus {
+    border-bottom-color: darken($input-border, 20%);
+  }
+
+  // Disabled and read-only inputs
+  //
+  // HTML5 says that controls under a fieldset > legend:first-child won't be
+  // disabled if the fieldset is disabled. Due to implementation difficulty, we
+  // don't honor that edge case; we style them as disabled anyway.
+  &[disabled],
+  &[readonly],
+  fieldset[disabled] & {
+    background-color: $input-bg;
+    color: $brand-grey-light;
+    opacity: 0.7; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
+  }
+
+  &[disabled],
+  fieldset[disabled] & {
+    cursor: $cursor-disabled;
+  }
+
+  // [converter] extracted textarea& to textarea.form-control
+}
+
+.sme-page-block {
+  & + .sme-page-block {
+    margin-top: 10px;
+  }
+}
+
+.popover {
+  #{$right}: 1;
+  #{$left}: 1;
+}
+
+.sme-box {
+  padding: 15px;
+  background: #fff;
+}
+
+.sme-wizard-choices {
+  padding: 30px 15px;
+  background: #fff;
+  color: #9099a0;
+}
+
+.sme-wizard-steps {
+  padding-left: 15px;
+  padding-right: 15px;
+  background: #fff;
+}
+
+label.required:after {
+  content: " *";
+  color: #999;
+}
+
+span.mouseoverblue:hover {
+  border-color: #bac0d9;
+  background: #2b4499;
+  color: white !important;
+}
+
+.sme-form a.sme-form__head.noBeforeArrow:before {
+  content: "";
+}
+
+.form-group-help {
+  position: relative;
+  @if $dir != ltr {
+    padding-left: 35px;
+  }
+  @if $dir == ltr {
+    padding-right: 35px;
+  }
+}
+
+.sme-reg-help {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  @if $dir != ltr {
+    left: 0;
+  }
+  @if $dir == ltr {
+    right: 0;
+  }
+}
+
+.sme-data-table__advisory {
+  font-size: $font-size-12 !important;
+  @media screen and (max-width: $max-width) {
+    font-size: $font-size-12 * $factor !important;
+  }
+  @media screen and (max-width: $max-width2) {
+    font-size: $font-size-12 * $factor2 !important;
+  }
+}
+
+div.qr-marco img {
+  border-style: solid !important;
+  border: 5px;
+  border-color: white;
+}
+
+.sme-checkbox input[disabled] + i {
+  border-color: #999999 !important;
+  background: #999999 !important;
+  opacity: 0.7;
+}
+
+.sme-radio input[disabled] + i {
+  border-color: #999999;
+  background: #999999;
+  opacity: 0.7;
+}
+
+.sme-radio input[disabled]:checked + i {
+  border-color: #999999;
+  background: none !important;
+  opacity: 0.7;
+}
+
+@media all and (-ms-high-contrast: none) {
+  .sme-collapse__heading > a .icon {
+    transform: translateY(0%);
+  }
+  /* IE10 */
+  *::-ms-backdrop,
+  .sme-collapse__heading > a .icon {
+    transform: translateY(0%);
+  }
+  /* IE11 */
+}
+
+.empty-row {
+  height: 50px;
+  @if $dir != ltr {
+    text-align: right !important;
+  }
+  @if $dir == ltr {
+    text-align: left !important;
+  }
+
+  padding: 0.5rem 1.2rem;
+  vertical-align: top;
+  border-top: 0;
+}
+
+.sme-social > span:before {
+  font-size: 42px !important;
+}
+
+.sme-social + li:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 11px;
+  right: 11px;
+  height: 1px;
+  background: inherit !important;
+}
+
+.ck-editor__editable_inline {
+  min-height: 400px !important;
+}
+
+.input_readonly.form-group,
+.input_readonly input,
+.input_readonly select,
+.input_readonly ng-select,
+.input_readonly textarea,
+.input_readonly span,
+.input_readonly .ng-select,
+.input_readonly .ng-select .ng-value {
+  pointer-events: none !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container,
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+  white-space: normal !important;
+  overflow: initial !important;
+  text-overflow: ellipsis;
+}
+
+/*
+.ng-dropdown-panel {
+  box-sizing: border-box;
+  position: absolute;
+  opacity: 0;
+  width: initial !important;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+}
+*/
+/// Commercial Cards
+/// div flex with row direction
+.display-div-row {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+/// div flex with column direction
+.display-div-column {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.display-prepaid {
+  display: flex;
+  flex-direction: column;
+}
+/// input digits disabled
+.input-disabled {
+  background-color: #bdc0ce80;
+  outline: none;
+}
+/// margin message card
+.card-message-margin {
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+/// button try again styles
+.tryAgain {
+  margin-left: auto !important;
+}
+/// display flex
+.flex {
+  display: flex;
+}
+/// input pin styles bottom
+.new-pin {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+/// activation Card div
+#activation-Card > div {
+  display: flex;
+  width: 33%;
+}
+
+/// mixins space flex design
+@mixin display-flex($fdir: "", $juscon: "", $alitem: "", $width: "", $maright: "", $marleft: "") {
+  display: flex;
+  flex-direction: $fdir;
+  justify-content: $juscon;
+  align-items: $alitem;
+  width: $width;
+  margin-right: $maright;
+  margin-left: $marleft;
+}
+/// styles message with flex mixin
+.message {
+  @include display-flex(null, null, flex-start, null, null, null);
+}
+.inputPin,
+.inputRepeatPin {
+  @include display-flex(row, space-between, null, null, null, null);
+  direction: ltr;
+}
+.page,
+.body {
+  @include display-flex(column, null, null, 100%, null, null);
+}
+.head {
+  @include display-flex(column, null, center, 100%, null, null);
+}
+.form-complete {
+  @include display-flex(column, null, center, 100%, auto, auto);
+}
+/// second column of frame target data
+.column-second-data {
+  @include display-flex(column, null, null, 40%, auto, auto);
+}
+/// icon menu column of frame target data
+.column-icon {
+  @if $dir != ltr {
+    @include display-flex(column, null, center, 10%, auto, auto);
+  } @else {
+    @include display-flex(column, null, center, 20%, auto, auto);
+  }
+}
+/// form design 100%
+.form-complete {
+  @include display-flex(column, null, center, 100%, auto, auto);
+}
+/// footer form design 70%
+.footer {
+  @include display-flex(column, null, null, 70%, auto, auto);
+  margin-top: 20px;
+}
+.footer > div.center-error {
+  padding-top: 20px;
+}
+/// div error
+.footer > div.center-error > p {
+  margin: 0px !important;
+  text-align: center;
+}
+/// title
+.title-legend {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+/// separator line
+.hr-title {
+  margin-top: 5px;
+  margin-bottom: 45px;
+}
+/// Center
+.center {
+  text-align: center;
+  padding-bottom: 20px;
+}
+/// div modal error
+.modal-error {
+  @include display-flex(column, null, center, 80%, auto, auto);
+}
+/// Format div for 30%
+.form-field-30 {
+  @include display-flex(column, null, null, 30%, null, null);
+}
+/// Format div for 20%
+.form-field-20 {
+  @include display-flex(column, null, null, 20%, null, null);
+}
+/// Format div for 15%
+.form-field-15 {
+  @include display-flex(column, null, null, 15%, null, null);
+}
+
+/// Format div for 15%
+.form-field-5 {
+  @include display-flex(column, null, null, 5%, null, null);
+}
+/// Link options
+.option-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+/// Format div for 60%
+.summary-width {
+  @include display-flex(column, null, center, 60%, auto, auto);
+}
+.body-list {
+  @include display-flex(column, null, null, 100%, auto, auto);
+}
+
+.head-list {
+  @include display-flex(column, null, center, null, auto, auto);
+}
+/// div carousel
+.carousel,
+.search {
+  @include display-flex(column, null, null, 100%, null, null);
+}
+/// div slides carousel format
+.target-data {
+  @include display-flex(row, null, null, 100%, null, null);
+}
+/// active button center style
+.center-button-active {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+/// Button active card style
+.button-card-active {
+  width: 120px;
+  margin-top: 15px;
+  padding: 10px 30px;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #bf4500;
+  border-color: #bf4500;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 500;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 10px 10px;
+  line-height: 12px;
+  border-radius: 2px;
+}
+/// little font
+.little-font {
+  font-size: 10px;
+}
+
+/// font target text
+.text-name {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+/// field color counts in bold
+.navy-bold {
+  font-weight: bold;
+  color: #2b4499;
+}
+/// field color counts
+.navy {
+  color: #2b4499;
+}
+/// quit border
+.border-none {
+  border: none;
+}
+
+/// card details detail design
+.details-group {
+  width: 60%;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+/// specific font
+.text-legend {
+  font: 400 11px/11px;
+  font-family: 'noto-sans-en',"noto-sans-ar";
+  @if $dir != ltr {
+    font-family: "noto-sans-ar",'noto-sans-en';
+  }
+  color: #999;
+  font-weight: 400;
+}
+/// bar progress
+.bar-progress {
+  border-bottom: 8px solid;
+  border-radius: 5px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+/// card cancel link
+.link-target {
+  @if $dir != ltr {
+    color: #e9bd15;
+    font-size: 12px;
+    padding-right: 20px;
+    white-space: nowrap;
+    font-weight: 500;
+  } @else {
+    color: #e9bd15;
+    font-size: 12px;
+    padding-left: 20px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  cursor: pointer;
+}
+/// center table buttons pdf-excel-print
+.center-table-buttons {
+  display: table-cell;
+  vertical-align: middle;
+}
+/// point styles of meatballs
+.meatballs {
+  font-size: 20px !important;
+  font-weight: bold !important;
+  background-color: white;
+  outline: none !important;
+}
+/// meatballs-menu-padding
+.meatballs-menu {
+  padding-bottom: 10px !important;
+  padding-top: 10px !important;
+  font-size: 12px !important;
+}
+/// buttons of meatball menu
+.meatballs-menu > button {
+  @if $dir != ltr {
+    width: 100%;
+    background-color: white;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-bottom-width: 0px;
+    text-align: end;
+    padding-left: 40px !important;
+    padding: 5px;
+    @include display-flex(row-reverse, space-evenly, null, null, null, null);
+  } @else {
+    width: 100%;
+    background-color: white;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-bottom-width: 0px;
+    text-align: start;
+    padding: 5px;
+    @include display-flex(row-reverse, space-evenly, null, null, null, null);
+  }
+}
+/// /// buttons replace of meatball menu
+.meatballs-menu > button.replace span {
+  @if $dir != ltr {
+    margin-right: 20px;
+  } @else {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/// icon css meatballs
+.icon-meatballs {
+  width: 60px;
+  background-color: white;
+  height: 60px;
+  padding: 20px;
+  color: red;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transform: rotate(90deg);
+  flex-direction: row;
+}
+/// icon css meatballs circles
+.icon-meatballs > .circle {
+  width: 12px;
+  height: 12px;
+  margin: 3px;
+  background: red;
+  border-radius: 50%;
+  display: block;
+}
+
+/// step-span in two lines
+.step-payment {
+  text-align: center;
+  white-space: unset !important;
+}
+/// width of input
+.input-flex-width {
+  width: 60%;
+}
+/// width of select
+.select-flex-width {
+  width: 90%;
+}
+/// progress bar extern part
+.progress-bar-ext {
+  background-color: #999;
+  border-radius: 13px;
+  padding: 3px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+/// progress bar intern part
+.progress-bar-ext > div {
+  background-color: #2b4499;
+  height: 6px;
+  border-radius: 10px;
+}
+/// Range amount error message
+.amount-range-error {
+  width: 30%;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+// Range date error message
+.date-range-error {
+  width: 30%;
+  display: flex;
+  margin-left: auto;
+}
+
+/// small screen
+@media screen and (max-width: 800px) {
+  .form-field-25,
+  .form-field-20,
+  .form-field-15,
+  .form-field-30,
+  .form-field-5,
+  .show-errors {
+    @include display-flex(column, null, null, 100%, null, null);
+  }
+  /// Size graphic
+  .graphic {
+    height: 185px !important;
+    width: 270px !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /// card details box home
+  .cap-targets-list-home {
+    background-color: #f2f2f2;
+    width: 85%;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    padding: 15px;
+    height: 55%;
+  }
+  /// inside data position
+  .inside-data {
+    text-align: center;
+    position: relative;
+    top: 155px;
+    font-size: 8px;
+  }
+  /// fitst column of frame target data
+  .column-first-data {
+    @include display-flex(column, null, null, 45%, auto, auto);
+  }
+  /// card details box
+  .cap-targets-list {
+    background-color: #f2f2f2;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    height: 55%;
+  }
+  /// line separation detail card data
+  .line-separator {
+    @if $dir != ltr {
+      border-right: 3px solid;
+      border-color: hsla(229, 14%, 77%, 0.3);
+      padding-right: 15px;
+    } @else {
+      border-left: 3px solid;
+      border-color: hsla(229, 14%, 77%, 0.3);
+      padding-left: 5px;
+    }
+  }
+  /// div footer Reset pin
+  .footer-reset {
+    @include display-flex(column, null, null, 70%, auto, auto);
+    margin-top: 20px;
+  }
+  /// div details target data
+  .body-list-details,
+  .body-list-details-graphic,
+  .footer-list {
+    @include display-flex(column, null, null, null, auto, auto);
+    margin-right: 5px;
+  }
+  /// design div inputs
+  .body-code {
+    @include display-flex(column, null, null, 85%, null, null);
+  }
+  /// Desing form commercial card
+  .form-center {
+    @include display-flex(column, null, center, null, null, null);
+  }
+  /// design target List line wrap format
+  .list-line {
+    padding: 1em;
+  }
+  /// design target List wrap format
+  .flex-wrap {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  /// div slides carousel format
+  .target-data,
+  .payment-options-group {
+    @include display-flex(column, null, null, 100%, null, null);
+  }
+  /// div input card numbers
+  .card-numbers {
+    @include display-flex(row, space-between, null, null, auto, auto);
+  }
+  /// div display card reset
+  .card-numbers-reset {
+    @include display-flex(row, center, null, 50%, auto, auto);
+  }
+  /// input digits style small screen
+  .input-digit {
+    outline: none;
+    border-color: #bdc0ce80;
+    font-weight: 600;
+    width: 13px;
+    height: 35px;
+    text-align: center;
+    border-radius: 5px;
+  }
+  /// Span input digits
+  .input-digit-disabled {
+    outline: none;
+    border-color: #bdc0ce80;
+    font-weight: 600;
+    width: 13px;
+    height: 35px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #bdc0ce80;
+    outline: none;
+    border-style: inset;
+    display: grid;
+    align-items: center;
+    border-width: 2px;
+    border-image: initial;
+  }
+  /// view query cards icon menu
+  .posit-top {
+    @if $dir != ltr {
+      position: absolute !important;
+      top: 0 !important;
+      left: 2px !important;
+    } @else {
+      position: absolute !important;
+      top: 0 !important;
+    }
+  }
+  /// Div validation error
+  .small-screen-error {
+    width: 90%;
+    margin-right: auto;
+  }
+  /// div frame target data
+  .frame-target-data {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+  }
+  /// separator fields
+  .border-separator {
+    border-left: 0px solid;
+    border-color: hsla(229, 14%, 77%, 0.3);
+    padding-left: 15px;
+  }
+  /// div frame target image
+  .frame-target {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+  }
+
+  /// Targeg little image style
+  .image-little-target {
+    background: url("../img/assets/img/credit-card-4.png");
+    background-repeat: no-repeat;
+    height: 115px;
+    width: 195px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+  .image-little-target-prepaid {
+    background: url("../img/assets/img/prepaid-card-1.png");
+    background-repeat: no-repeat;
+    height: 115px;
+    width: 195px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+  /// Targeg medium image style
+  .image-medium-target {
+    background: url("../img/assets/img/credit-card-4.png");
+    background-repeat: no-repeat;
+    height: 105px;
+    width: 200px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  /// Targeg medium image style
+  .image-medium-target-prepaid {
+    background: url("../img/assets/img/prepaid-card-1.png");
+    background-repeat: no-repeat;
+    height: 105px;
+    width: 200px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  .debit-image-target {
+    background: url("../img/assets/img/490810.png");
+    background-repeat: no-repeat;
+    height: 105px;
+    width: 200px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  /// Targeg image style
+  .image-target {
+    background: url("../img/assets/img/credit-card-4.png");
+    background-repeat: no-repeat;
+    height: 120px;
+    width: 190px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  /// Target image style
+  .image-target-prepaid {
+    background: url("../img/assets/img/prepaid-card-1.png");
+    background-repeat: no-repeat;
+    height: 250px;
+    width: 400px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+}
+/// big screen
+@media screen and (min-width: 800px) {
+  /// Targeg little image style
+  .image-little-target {
+    background: url("../img/assets/img/credit-card-4.png");
+    background-repeat: no-repeat;
+    height: 120px;
+    width: 195px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  @media screen and (min-width: 800px) {
+    /// Targeg little image style
+    .image-little-target-prepaid {
+      background: url("../img/assets/img/prepaid-card-1.png");
+      background-repeat: no-repeat;
+      height: 120px;
+      width: 195px;
+      background-size: cover;
+      border-radius: 15px;
+    }
+  }
+  /// Targeg medium image style
+  .image-medium-target {
+    background: url("../img/assets/img/credit-card-4.png");
+    background-repeat: no-repeat;
+    height: 195px;
+    width: 315px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  .image-medium-target-prepaid {
+    background: url("../img/assets/img/prepaid-card-1.png");
+    background-repeat: no-repeat;
+    height: 195px;
+    width: 315px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  .debit-image-target {
+    background: url("../img/assets/img/490810.png");
+    background-repeat: no-repeat;
+    height: 195px;
+    width: 325px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+  /// Targeg image style
+  .image-target {
+    background: url("../img/assets/img/credit-card-4.png");
+    background-repeat: no-repeat;
+    height: 250px;
+    width: 400px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  /// Target image style
+  .image-target-prepaid {
+    background: url("../img/assets/img/prepaid-card-1.png");
+    background-repeat: no-repeat;
+    height: 250px;
+    width: 400px;
+    background-size: cover;
+    border-radius: 15px;
+  }
+
+  .show-errors {
+    @include display-flex(null, null, null, null, null, null);
+  }
+  .graphic-align {
+    @if $dir != rtl {
+      width: 91%;
+    }
+  }
+  /// Size graphic
+  .graphic {
+    height: 370px !important;
+    width: 740px !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /// inside data position
+  .inside-data {
+    text-align: center;
+    position: relative;
+    top: 180px;
+  }
+  /// fitst column of frame target data
+  .column-first-data {
+    @include display-flex(column, null, center, 40%, auto, auto);
+  }
+  /// card details box
+  .cap-targets-list {
+    background-color: #f2f2f2;
+    width: 65%;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    padding: 15px;
+    height: 45%;
+  }
+  /// card details box home
+  .cap-targets-list-home {
+    background-color: #f2f2f2;
+    width: 80%;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    padding: 15px;
+    height: 55%;
+  }
+  /// line separation detail card data
+  .line-separator {
+    @if $dir != ltr {
+      border-right: 3px solid;
+      border-color: hsla(229, 14%, 77%, 0.3);
+      padding-right: 15px;
+    } @else {
+      border-left: 3px solid;
+      border-color: hsla(229, 14%, 77%, 0.3);
+      padding-left: 15px;
+    }
+  }
+  /// div footer Reset pin
+  .footer-reset {
+    @include display-flex(column, null, null, 80%, auto, auto);
+    margin-top: 20px;
+  }
+  /// div details target data
+  .body-list-details {
+    @include display-flex(column, null, null, 50%, auto, auto);
+  }
+  @if $dir != ltr {
+    .body-list-details-graphic {
+      @include display-flex(column, null, null, null, auto, auto);
+      margin-right: 5px;
+      padding-left: 15px;
+    }
+  } @else {
+    .body-list-details-graphic {
+      @include display-flex(column, null, null, null, auto, auto);
+      margin-right: 5px;
+    }
+  }
+  .footer-list {
+    @include display-flex(column, null, null, 100%, auto, auto);
+    margin-top: 5px;
+  }
+  /// design div inputs
+  .body-code {
+    @include display-flex(column, null, null, 40%, null, null);
+  }
+  /// Desing form commercial card
+  .form-center {
+    @include display-flex(column, null, center, null, auto, auto);
+  }
+  /// div input card numbers
+  .card-numbers {
+    @include display-flex(row, space-between, null, 50%, auto, auto);
+  }
+  /// div display card reset
+  .card-numbers-reset {
+    @include display-flex(row, center, null, null, auto, auto);
+  }
+  /// design target List line wrap format
+  .list-line {
+    width: 33%;
+    padding: 1em;
+    margin-bottom: 5em;
+  }
+  /// design target List wrap format
+  .flex-wrap {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  /// separator fields
+  .border-separator {
+    @if $dir != ltr {
+      border-right: 3px solid;
+      border-color: hsla(229, 14%, 77%, 0.3);
+      padding-left: 15px;
+    } @else {
+      border-left: 3px solid;
+      border-color: hsla(229, 14%, 77%, 0.3);
+      padding-left: 15px;
+    }
+  }
+  /// div card payment design
+  .payment-options-group {
+    @include display-flex(row, null, null, 100%, null, null);
+  }
+  /// fields format card payment
+  .form-field-25 {
+    @include display-flex(column, null, null, 25%, null, null);
+  }
+  /// fields format card payment
+  .form-field-35 {
+    @include display-flex(column, null, null, 35%, null, null);
+  }
+  /// position top for meatball-menu
+  .posit-top {
+    @if $dir != ltr {
+      position: absolute !important;
+      top: 0 !important;
+    } @else {
+      position: absolute !important;
+      top: 0 !important;
+    }
+  }
+  /// input digits style big screen
+  .input-digit {
+    outline: none;
+    border-color: #bdc0ce80;
+    font-weight: 600;
+    width: 40px;
+    height: 35px;
+    text-align: center;
+    border-radius: 5px;
+  }
+  /// span input digits big
+
+  .input-digit-disabled {
+    outline: none;
+    border-color: #bdc0ce80;
+    font-weight: 600;
+    width: 40px;
+    height: 35px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #bdc0ce80;
+    outline: none;
+    border-style: inset;
+    display: grid;
+    align-items: center;
+    border-width: 2px;
+    border-image: initial;
+  }
+  /// div frame target image
+  .frame-target {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+  }
+  /// zone design card details
+  .frame-target-data {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+  }
+}
+/// message targets no data style
+.noTargetsData {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}
+/// input digits otp style
+.input-digit-otp {
+  outline: none;
+  border-color: #bdc0ce80;
+  font-weight: 600;
+  width: 40px;
+  height: 35px;
+  text-align: center;
+  border-radius: 5px;
+}
+/// Tabs button style
+.tabs-button {
+  padding: 15px;
+  padding-top: 20px;
+  text-align: center;
+}
+/// tabs color and font color
+.tabs-cards {
+  background-color: #2b4499 !important;
+  color: white !important;
+}
+/// disabled tab
+.tab-disabled {
+  display: none;
+}
+/// enabled tab
+.tab-enabled {
+  display: inline;
+}
+/// style disabled for text
+.span-disabled {
+  background-color: #fff;
+  color: #999999;
+  opacity: 0.7;
+}
+// div span disabled with line
+.div-disabled-line {
+  margin-top: 15px;
+  border-bottom: 1px solid #e4e5e6;
+  padding-bottom: 10px;
+  opacity: 0.7;
+}
+/// style disabled for div
+.div-disabled {
+  margin-top: 15px;
+  border-bottom: 1px solid #e4e5e6;
+  padding-bottom: 10px;
+}
+/// arabic language menu
+.my-drop-down .dropdown-menu.show {
+  top: 5px !important;
+  left: 15px !important;
+  transform: translate(130px, 30px) !important;
+}
+/// shadows menu hover
+.options-target:hover {
+  background-color: rgba(188, 191, 205, 0.3);
+}
+///  padding form for each language
+.padding {
+  @if $dir != ltr {
+    padding-left: 15px;
+  } @else {
+    padding-right: 15px;
+  }
+}
+///  padding title for each language
+.padding-title {
+  @if $dir != ltr {
+    padding-right: 15px;
+  } @else {
+    padding-left: 15px;
+  }
+}
+/// Padding style for activation card message
+.act-card-message-margin {
+  margin-top: 20px;
+}
+/// token width of input
+.input-flex-width-token {
+  width: 30%;
+}
+.modal-dialog.loading-position > .modal-content {
+  border: 1px solid #4b4b4b;
+}
+/// message targets no data style
+.noTargetsData {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}
+/// input digits otp style
+.input-digit-otp {
+  outline: none;
+  border-color: #bdc0ce80;
+  font-weight: 600;
+  width: 40px;
+  height: 35px;
+  text-align: center;
+  border-radius: 5px;
+}
+/// Tabs button style
+.tabs-button {
+  padding: 15px;
+  padding-top: 20px;
+  text-align: center;
+}
+/// tabs color and font color
+.tabs-cards {
+  background-color: #2b4499 !important;
+  color: white !important;
+}
+/// disabled tab
+.tab-disabled {
+  display: none;
+}
+/// enabled tab
+.tab-enabled {
+  display: inline;
+}
+/// style disabled for text
+.span-disabled {
+  background-color: #fff;
+  color: #999999;
+  opacity: 0.7;
+}
+// div span disabled with line
+.div-disabled-line {
+  margin-top: 15px;
+  border-bottom: 1px solid #e4e5e6;
+  padding-bottom: 10px;
+  opacity: 0.7;
+}
+/// style disabled for div
+.div-disabled {
+  margin-top: 15px;
+  border-bottom: 1px solid #e4e5e6;
+  padding-bottom: 10px;
+}
+/// arabic language menu
+.my-drop-down .dropdown-menu.show {
+  top: 5px !important;
+  left: 15px !important;
+  transform: translate(130px, 30px) !important;
+}
+/// shadows menu hover
+.options-target:hover {
+  background-color: rgba(188, 191, 205, 0.3);
+}
+///  padding form for each language
+.padding {
+  @if $dir != ltr {
+    padding-left: 15px;
+  } @else {
+    padding-right: 15px;
+  }
+}
+///  padding title for each language
+.padding-title {
+  @if $dir != ltr {
+    padding-right: 15px;
+  } @else {
+    padding-left: 15px;
+  }
+}
+/// Padding style for activation card message
+.act-card-message-margin {
+  margin-top: 20px;
+}
+/// padding for dropdown prepaid button
+.options-target-prepaid-refund-en {
+  padding-right: 60px !important;
+}
+.options-target-prepaid-fund-en {
+  padding-right: 35px !important;
+}
+.options-target-prepaid-refund-ar {
+  padding-left: 15px !important;
+}
+.options-target-prepaid-fund-ar {
+  padding-right: 20px !important;
+}
+/// margin for positioning prepaid actions button
+.btn-prepaid {
+  margin: 25px !important;
+}
+/// font size of buttons of meatball menu
+.meatballs-menu-prepaid {
+  padding-bottom: 10px !important;
+  padding-top: 10px !important;
+  font-size: 12px !important;
+}
+/// buttons of meatball menu
+.meatballs-menu-prepaid > button {
+  @if $dir != ltr {
+    width: 100%;
+    background-color: white;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-bottom-width: 0px;
+    text-align: end;
+    // padding-left: 40px !important;
+    height: 20px;
+    padding: 5px;
+    outline: none;
+    @include display-flex(row-reverse, space-evenly, null, null, null, null);
+  } @else {
+    width: 100%;
+    background-color: white;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-bottom-width: 0px;
+    text-align: start;
+    height: 20px;
+    padding: 5px;
+    outline: none;
+    @include display-flex(row-reverse, space-evenly, null, null, null, null);
+  }
+
+  .modal-dialog.loading-position > .modal-content {
+    border: 1px solid #4b4b4b;
+  }
+}
+.banner-div {
+  background-color: #45494c;
+}
+.banner-image {
+  display: flex;
+  width: 80%;
+  height: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.left-menu-banner {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+div.datatable-body-cell-label > label.datatable-checkbox input[type="checkbox"]:checked:before {
+  @if $dir != ltr {
+    text-align: end;
+  }
+  @if $dir == ltr {
+    text-align: inherit;
+  }
+}
+.status-icon-first {
+  @if $dir != ltr {
+    padding-left: 10px;
+  } @else {
+    padding-right: 10px;
+  }
+}
+
+.line {
+  height: 10px;
+  border-bottom: 1px solid #e8e8e8;
+  margin: 10px;
+}
+
+.divDisabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+
+.center-horizontal {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.labelInfo-summery {
+  font-size: 15px;
+  color: black;
+
+}
+.labelInfo-apply {
+  color: black;
+}
+
+
+
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell:hover {
+  width: auto;
+  overflow: hidden !important;
+  z-index: 11;
+}
+
+.loginCampaignBanner {
+  @if $dir == ltr {
+    width: 96.5%;
+    margin-left: 1.75%;
+  } @else {
+    width: 96.5%;
+    margin-right: 1.75%;
+  }
+}
+/// row height of Sub Account Number table
+.sme-table--responsive .form-group .ng-select.form-control {
+  position: absolute;
+  width: auto;
+  min-width: 200px;
+}
+
+.sme-table--responsive .form-group .ng-select.form-control ~ div.alert {
+  margin-top: 52px;
+  margin-bottom: 0;
+}
+
+
+.login-corp-link {
+  color: whitesmoke;
+  padding-bottom: 35px;
+  @if $dir != ltr {
+    padding-right: 165px;
+  }@else {
+    padding-left: 165px;
+  }
+}
+.RMImage{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.RmMessageLabel {
+  color: #2b4499;
+  font-size: 16px;
+  padding: 5px;
+}
+.RmNumberLabel{
+  color: #2b4499;
+  font-size: 12px;
+  padding: 15px;
+}
+.RMarabicTelf{
+    display: flex;
+    flex-direction: row-reverse;
+}
+

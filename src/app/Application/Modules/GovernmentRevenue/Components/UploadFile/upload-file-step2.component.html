@@ -1,0 +1,164 @@
+<app-duplicate-payrollFile [duplicateData]="suspicious" [payroll]="false"
+                           *ngIf="suspicious && suspicious.length>0"></app-duplicate-payrollFile>
+
+
+<arb-panel [title]="'governmentRevenue.menu.bulkUploadFile'">
+    <span class="sme-form__head">{{ 'governmentRevenue.bulkUploadFile.headerDetail' | translate }}</span>
+    <div class="sme-form__collapse">
+        <div class="sme-form__body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.batchName' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.batchName}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.accountNumber' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.accountNumber}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.beneficiaryBank' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.beneficiaryBank}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.letterNumber' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.letterNumber}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.letterDate' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.letterValueDate |
+                            date:'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.letterPeriodFrom' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.letterPeriodFrom |
+                            date:'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.letterPeriodTo' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.letterPeriodTo |
+                            date:'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.finClosingYear' | translate }}</label>
+                        <span class="form-control">{{initPayment.govRevenueFileUploadBatchDSO.finClosingYear}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{ 'governmentRevenue.bulkUploadFile.status' | translate }}</label>
+                        <span class="form-control">
+                            {{'governmentRevenue.bulkUploadFile.status_' +
+                            (initPayment.govRevenueFileUploadBatchDSO.status ?
+                            initPayment.govRevenueFileUploadBatchDSO.status : "") | translate}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<!--
+<app-levels-table [futureSecurityLevels]="initPayment.govRevenueFileUploadBatchDSO.futureSecurityLevelsDTOList">
+</app-levels-table>
+-->
+
+<app-government-revenue-table-depositors-beneficiaries-tabular-details
+    [details]="initPayment['govRevenueFileUploadBatchDSO'].details">
+</app-government-revenue-table-depositors-beneficiaries-tabular-details>
+
+<arb-panel [title]="'governmentRevenue.bulkUploadFile.summarySection'">
+    <span class="sme-form__head">{{ 'governmentRevenue.bulkUploadFile.summarySection' | translate }}</span>
+    <div class="sme-form__collapse">
+        <div class="sme-form__body">
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{'governmentRevenue.bulkUploadFile.depositorCount' | translate }}</label>
+                        <span class="form-control">
+                            {{initPayment['govRevenueFileUploadBatchDSO']?.summary?.uniqueDepositorCount }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{'governmentRevenue.bulkUploadFile.beneficiariesCount' | translate }}</label>
+                        <span class="form-control">
+                            {{initPayment['govRevenueFileUploadBatchDSO']?.summary?.beneficiaryCount }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{'governmentRevenue.bulkUploadFile.revenueCount' | translate }}</label>
+                        <span class="form-control">
+                            {{initPayment['govRevenueFileUploadBatchDSO']?.summary?.revenueCount }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{'governmentRevenue.bulkUploadFile.subtotalAmount' | translate }}</label>
+                        <span class="form-control">
+                            {{initPayment['govRevenueFileUploadBatchDSO']?.summary?.totalAmount | amountCurrency }}
+                            {{'currencyIso' | modelPipe: '608'}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{'governmentRevenue.bulkUploadFile.recordsInTheFile' | translate }}</label>
+                        <span class="form-control">
+                            {{initPayment['govRevenueFileUploadBatchDSO']?.summary?.recordsCount }}
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<app-levels-table [futureSecurityLevels]="initPayment['govRevenueFileUploadBatchDSO'].futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<arb-panel [title]="'governmentRevenue.bulkUploadFile.verification'" *ngIf="generateChallengeAndOTP">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <!-- sme-form-group -->
+            <div class="form-group">
+                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                    [requestValidate]="requestValidate" #authorization>
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>

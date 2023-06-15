@@ -1,0 +1,115 @@
+<arb-panel>
+    <form autocomplete="off" #posProduct="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.wps-new.feesStructure' | translate }}</div>
+            <div class="row">
+                <!-- Numbero Of Employees -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.numberOfEmployees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['numberOfEmployees'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Numbero Of Employees -->
+            </div>
+            <div class="row">
+                <!-- Monthly Fees -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.monthlyFees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['monthlyFees'].value | amountCurrency}} {{currency}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Monthly Fees -->
+
+                <!-- Employee Fees -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.employeeFees' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['employeeFees'].value | amountCurrency}} {{currency}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Employee Fees -->
+            </div>
+            <div class="row">
+                <!-- MOL-ID -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.molID' | translate }} </label>
+                        <div class="input-group">
+                            <span>{{formModel.controls['molID'].value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /MOL-ID -->
+
+                <!-- Charge Account -->
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'newProduct.wps-new.chargeAccount' | translate }} </label>
+                        <div class="input-group">
+                            <span>
+                                {{account.fullAccountNumber}}{{(account.alias != '' ? ' - ' +
+                                account.alias : '')}} {{(account.inquiry ? (' - ' +
+                                (account.availableBalance | amountCurrency:account.currency)) : '')}}
+                                {{(account.inquiry ? ('currencyIso' | modelPipe:account.currency) : '')}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Charge Account -->
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+<arb-panel>
+    <form autocomplete="off" #posTermsConditions="ngForm" class="sme-form__form" novalidate>
+        <fieldset [formGroup]="formModel">
+            <div class="legend" style="margin-top: 15px;"> {{ 'newProduct.wps-new.disclaimer' | translate }}</div>
+            <div class="moreDeatils"> {{ 'newProduct.wps-new.moreDeatils' | translate }}
+                <span (click)="showModal()" class="here">{{ 'newProduct.wps-new.here' | translate }}</span>
+            </div>
+            <p class="terms checkbox-inline">
+                <input type="checkbox" class="sme-checkbox checkbox-inline" formControlName="termsAccept" />
+                <span class="checkSpan">{{ 'newProduct.wps-new.accept' | translate }}
+                    <span (click)="showTC()" class="here">{{ 'newProduct.wps-new.terms' | translate }}</span>
+                </span>
+            </p>
+        </fieldset>
+    </form>
+</arb-panel>
+
+<!-- Templates Details Modal -->
+<div class="modal fade" bsModal #templatesDetailsModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="headerDiv">
+                    <h4 class="title">{{ 'newProduct.wps-new.moreDetails' | translate }}</h4>
+                    <span class="close" (click)="hideModal()"> x </span>
+                </div>
+            </div>
+            <div class="tableContainer">
+                <div class="table">
+                    <div class="row">
+                        <div>{{ 'newProduct.wps-new.numberOfEmployees' | translate }}</div>
+                        <div>{{ 'newProduct.wps-new.monthlyFees' | translate }}</div>
+                        <div>{{ 'newProduct.wps-new.employeeFees' | translate }}</div>
+                    </div>
+                    <div class="row" *ngFor="let template of agreementTemplates">
+                        <div>{{template.employeeCountMinimum + " - " + template.employeeCountMaximum}}</div>
+                        <div>{{ template.monthlyFees | amountCurrency}} {{currency}}</div>
+                        <div>{{ template.employeeFees | amountCurrency}} {{currency}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

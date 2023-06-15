@@ -1,0 +1,231 @@
+<div class="container-fluid">
+  <div class="sme-page-block">
+    <div class="sme-form">
+      <div class="sme-form__title">
+        {{ 'payroll.cardOperationsDetails' | translate}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<form autocomplete="off" #stepForm="ngForm">
+  <div class="container-fluid">
+    <div class="sme-page-block">
+      <div class="sme-form">
+
+        <div class="sme-form__content">
+          <div class="sme-form__form">
+            <div class="sme-form__body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label for="operation-type-input-type">{{'payroll.operation' | translate }}</label>
+                    <input type="text" class="form-control" id="operation-type-input-type"
+                      value="{{sharedData.operationsType[sharedData.operationCode]}}" disabled>
+
+
+                  </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label for="expected-fees-input-type">{{'payroll.expectedFees' | translate }}</label>
+                    <input type="text" class="form-control" id="expected-fees-input-type"
+                      value="{{ fee | amountCurrency}}" disabled>
+                    <app-vat-calculator [fee]="fee"></app-vat-calculator>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngFor="let selectedRow of selectedRows; let i = index">
+    <div class="container-fluid">
+      <div class="sme-page-block">
+        <div class="sme-form">
+          <div class="sme-form__content">
+            <a role="button" (click)="isCollapsedContent[i] = !isCollapsedContent[i]"
+              class="sme-form__head human-selectable sme-form__title" [ngClass]="{'collapsed': isCollapsedContent[i]}">
+              <span>{{ 'payroll.employee' | translate }}</span>
+            </a>
+
+            <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent[i]">
+              <div class="sme-form__form">
+                <div class="sme-form__body">
+
+                  <!-- INICIO CAMPOS FIJOS  -->
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label>{{ 'payroll.employeeName' | translate }}</label>
+                        <input type="text" class="form-control"
+                          value="{{ selectedRow['cardHolderNameOld'] }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label for="card-number-input">{{ 'payroll.cardNumber' | translate }}</label>
+                        <input type="text" class="form-control" id="card-number-input"
+                          value="{{ selectedRow['cardNumber'] }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label for="civilian-input">{{ 'payroll.civilianID' | translate }}</label>
+                        <input type="text" class="form-control" id="civilian-input"
+                          value="{{ selectedRow['nationalIdOld'] }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label for="balance-input">{{ 'accounts.balance' | translate }}</label>
+                        <input type="text" class="form-control" id="balance-input"
+                          value="{{ selectedRow['currentBalance'] }}" disabled>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label for="movil-number-input">{{ 'payroll.movilNumber' | translate }}</label>
+                        <input type="text" class="form-control" id="movil-number-input"
+                          value="{{ selectedRow['mobileNumber'] }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label>{{ 'payroll.employeeNumber' | translate }}</label>
+                        <input type="text" class="form-control"
+                          value="{{ selectedRow['memberIdOld'] }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label for="total-amount-load-input">{{ 'payroll.totalAmountLoad' | translate }}</label>
+                        <input type="text" class="form-control" id="total-amount-load-input"
+                          value="{{ selectedRow['totalAmountOld'] }}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                      <div class="form-group">
+                        <label>{{ 'public.status' | translate }}</label>
+                        <input type="text" class="form-control" id="status-input"
+                          value="{{ sharedData.coboStatus[selectedRow['status']] }}" disabled>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- FIN CAMPOS FIJOS  -->
+
+
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === 'C'">
+                      <div class="form-group">
+                        <label>{{ 'payroll.employeeName' | translate }}</label>
+                        <input type="text" class="form-control" name="cardHolderName"
+                          value="{{sharedData.newValue[i].cardHolderName}}" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === 'A'">
+                      <div class="form-group">
+                        <label for="employee-id-input">{{ 'payroll.employeeId' | translate }}</label>
+                        <input type="text" class="form-control" id="employee-id-input"
+                          value="{{sharedData.newValue[i].employeeId}}" name="employeeId" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === 'B'">
+                      <div class="form-group">
+                        <label for="national-id-input">{{ 'payroll.nationalId' | translate }}</label>
+                        <input type="text" class="form-control" id="national-id-input"
+                          value="{{sharedData.newValue[i].nationalId}}" name="nationalId" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '8'">
+                      <div class="form-group">
+                        <label for="amount-input">{{ 'public.amount' | translate }}</label>
+                        <input class="form-control" value="{{sharedData.newValue[i].ammount | amountCurrency}}"
+                          name="ammount" type="text" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '2'">
+                        <div class="form-group">
+                          <label for="amount-input">{{ 'public.amount' | translate }}</label>
+                          <input class="form-control" value="{{sharedData.newValue[i].ammount | amountCurrency}}"
+                            name="ammount" type="text" disabled>
+                        </div>
+                      </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                      <div class="form-group">
+                        <label for="basic-salary-input">{{ 'payroll.management.salaryBasic' | translate }}</label>
+                        <input type="text" class="form-control" id="basic-salary-input"
+                          value="{{sharedData.newValue[i].salaryBasis | amountCurrency}}" name="salaryBasis" disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                      <div class="form-group">
+                        <label for="housing-allowance-input">{{ 'payroll.housingAllowance' | translate }}</label>
+                        <input type="text" class="form-control" id="housing-allowance-input"
+                          value="{{sharedData.newValue[i].homeAllowance | amountCurrency}}" name="homeAllowance"
+                          disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                      <div class="form-group">
+                        <label for="other-allowance-input">{{ 'payroll.otherAllowance' | translate }}</label>
+                        <input type="text" class="form-control" id="other-allowance-input"
+                          value="{{sharedData.newValue[i].allowanceOthers | amountCurrency}}" name="allowanceOthers"
+                          disabled>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                      <div class="form-group">
+                        <label for="deduction-input">{{ 'payroll.deduction' | translate }}</label>
+                        <input type="text" class="form-control" id="deduction-input"
+                          value="{{sharedData.newValue[i].deductions | amountCurrency}}" name="deductions" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <app-levels-table [futureSecurityLevels]="getFromLevelsMap(selectedRow['cardNumber'])">
+                    </app-levels-table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</form>
+
+<div class="container-fluid" *ngIf="sharedData.generateChallengeAndOTP">
+  <div class="sme-page-block">
+    <div class="sme-form__content">
+      <div class="sme-form__form">
+        <div class="sme-form__body" style="padding: 15px;">
+          <div class="sme-form__box sme-form__box--form">
+            <div class="row">
+              <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                  <app-secured-authentication [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                    [requestValidate]="sharedData.requestValidate" #authorization></app-secured-authentication>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

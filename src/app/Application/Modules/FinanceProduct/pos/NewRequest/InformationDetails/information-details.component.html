@@ -1,0 +1,588 @@
+<arb-panel>
+  <form autocomplete='off' #form0='ngForm' class='sme-form__form' novalidate>
+    <div class='legend'>{{ 'financeProduct.newRequest.financingAccount' | translate }}
+      <span class='iconSpan' (click)='showMore(0)'>
+                <span class='statusSpan' [ngClass]="completeList[0]? 'greenSpan' : 'yellowSpan' ">
+                    {{completeList[0] ? ('financeProduct.newRequest.complete'| translate) :
+                  ('financeProduct.newRequest.pending'| translate)}}</span>
+                <img *ngIf='showMoreList[0]' class='iconImage' src='assets/icons/expand-more.png' />
+                <img *ngIf='!showMoreList[0]' class='iconImage' src='assets/icons/expand-less.png' />
+            </span>
+    </div>
+    <fieldset [formGroup]='formModel' *ngIf='showMoreList[0]'>
+      <div class=' row'>
+        <!-- Accounts -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.account' | translate }}</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='account' (ngModelChange)='modelChange(0)'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor='let item of accounts' [value]='item'>
+                  {{item}}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="formModel.controls.account.hasError('required') && formModel.controls.account.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.account' | translate }} is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Accounts -->
+      </div>
+      <div class=' row'>
+        <small class='accountNote'> {{ 'financeProduct.newRequest.accountNote' | translate }}  </small>
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>
+
+<arb-panel>
+  <form autocomplete='off' #form1='ngForm' class='sme-form__form' novalidate>
+    <div class='legend'>{{ 'financeProduct.newRequest.businessDetails' | translate }}
+      <span class='iconSpan' (click)='showMore(1)'>
+                <span class='statusSpan' [ngClass]="completeList[1]? 'greenSpan' : 'yellowSpan' ">
+                    {{completeList[1] ? ('financeProduct.newRequest.complete'| translate) :
+                  ('financeProduct.newRequest.pending'| translate)}}</span>
+                <img *ngIf='showMoreList[1]' class='iconImage' src='assets/icons/expand-more.png' />
+                <img *ngIf='!showMoreList[1]' class='iconImage' src='assets/icons/expand-less.png' />
+            </span>
+    </div>
+    <fieldset [formGroup]='formModel' *ngIf='showMoreList[1]'>
+      <div class=' row'>
+        <!-- Number Of Business -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.numberOfBusiness' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='numberOfBusiness'
+                     (ngModelChange)='modelChange(1)' inputPattern='onlyPositiveDecimalNumbers' />
+            </div>
+          </div>
+          <div
+            *ngIf="formModel.controls.numberOfBusiness.hasError('required') && formModel.controls.numberOfBusiness.touched"
+            class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.numberOfBusiness' | translate }} is required
+          </div>
+        </div>
+        <!-- /Number Of Business -->
+
+        <!-- Type Of Business -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.typeOfBusiness' | translate }}</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='typeOfBusiness' (ngModelChange)='modelChange(1)'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor="let item of combosData['typeOfBusiness']" [value]='item'>
+                  {{item.value}}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="formModel.controls.typeOfBusiness.hasError('required') && formModel.controls.typeOfBusiness.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.typeOfBusiness' | translate }} is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Type Of Business -->
+
+        <!-- Pattern Description -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.patternDescription' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='patternDescription'
+                     (ngModelChange)='modelChange(1)' />
+            </div>
+          </div>
+          <div
+            *ngIf="formModel.controls.patternDescription.hasError('required') && formModel.controls.patternDescription.touched"
+            class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.patternDescription' | translate }} is required
+          </div>
+        </div>
+        <!-- /Pattern Description -->
+      </div>
+
+      <div class='row'>
+
+        <!-- Location Of Business -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.locationOfBusiness' | translate }}</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='locationOfBusiness' (ngModelChange)='modelChange(1)'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor="let item of combosData['locationOfBusiness']" [value]='item'>
+                  {{item.value}}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="formModel.controls.locationOfBusiness.hasError('required') && formModel.controls.locationOfBusiness.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.locationOfBusiness' | translate }} is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Location Of Business -->
+      </div>
+    </fieldset>
+  </form>
+</arb-panel>
+
+<arb-panel>
+  <form autocomplete='off' #form2='ngForm' class='sme-form__form' novalidate>
+    <!-- Current Year -->
+    <div class='legend'>{{ 'financeProduct.newRequest.currentYear' | translate }}
+      <span class='iconSpan' (click)='showMore(2)'>
+                <span class='statusSpan' [ngClass]="completeList[2]? 'greenSpan' : 'yellowSpan' ">
+                    {{completeList[2] ? ('financeProduct.newRequest.complete'| translate) :
+                  ('financeProduct.newRequest.pending'| translate)}}</span>
+                <img *ngIf='showMoreList[2]' class='iconImage' src='assets/icons/expand-more.png' />
+                <img *ngIf='!showMoreList[2]' class='iconImage' src='assets/icons/expand-less.png' />
+            </span>
+    </div>
+    <fieldset [formGroup]='formModel' *ngIf='showMoreList[2]'>
+      <div class='row'>
+        <!-- From Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.fromDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+                     bsDatepicker formControlName='c_fromDate' [bsConfig]='bsConfig'
+                     (ngModelChange)='modelChange(2)' />
+              <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.c_fromDate.hasError('required') && formModel.controls.c_fromDate.touched"
+               class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.fromDate' | translate }} is required
+          </div>
+        </div>
+        <!-- /From Date -->
+
+        <!-- To Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.toDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateTo='bsDatepicker'
+                     bsDatepicker formControlName='c_toDate' [bsConfig]='bsConfig'
+                     (ngModelChange)='modelChange(2)' />
+              <span class=' input-group-addon icon -calendar' (click)='dateTo.show()'></span>
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.c_toDate.hasError('required') && formModel.controls.c_toDate.touched"
+               class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.toDate' | translate }} is required
+          </div>
+        </div>
+        <!-- /To Date -->
+
+        <!-- Account Type -->
+        <div class='col-xs-12 col-sm-4' *ngIf='productType == "financeProduct.posFinance"'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.accountType' | translate }}</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='c_accountType' (ngModelChange)='modelChange(2)'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor="let item of combosData['accountType']" [value]='item'>
+                  {{item.value}}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="formModel.controls.c_accountType.hasError('required') && formModel.controls.c_accountType.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.accountType' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Account Type -->
+
+
+        <!-- Full Year Account -->
+        <!-- <div class="col-xs-12 col-sm-4">
+            <label class="sme-checkbox checkbox-inline margin-top">
+                <input type="checkbox" formControlName="c_fullYearAccount" />
+                <i aria-hidden="true"></i>
+                <span class="checkSpan">{{ 'financeProduct.newRequest.fullYearAccount' | translate }}</span>
+            </label>
+        </div> -->
+        <!-- /Full Year Account -->
+      </div>
+
+      <div class='row'>
+
+        <!-- Sales Turnover -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.salesTurnover' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='c_salesTurnover'
+                     (ngModelChange)='modelChange(2)' inputPattern='onlyPositiveDecimalNumbers'
+                     decimal-precision />
+              <div
+                *ngIf="formModel.controls.c_salesTurnover.hasError('required') && formModel.controls.c_salesTurnover.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.salesTurnover' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Sales Turnover -->
+
+        <!-- Gross Profit -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.grossProfit' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='c_grossProfit' (ngModelChange)='modelChange(2)'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+              <div
+                *ngIf="formModel.controls.c_grossProfit.hasError('required') && formModel.controls.c_grossProfit.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.grossProfit' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Gross Profit -->
+
+
+        <!-- Net Profit -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.netProfit' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='c_netProfit' (ngModelChange)='modelChange(2)'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+              <div *ngIf="formModel.controls.c_netProfit.hasError('required') && formModel.controls.c_netProfit.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.netProfit' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Net Profit -->
+      </div>
+    </fieldset>
+    <!--/Current Year -->
+  </form>
+</arb-panel>
+
+<arb-panel>
+  <form autocomplete='off' #form3='ngForm' class='sme-form__form' novalidate>
+    <!-- Last Year -->
+    <div class='legend'>{{ 'financeProduct.newRequest.lastYear' | translate }}
+      <span class='iconSpan' (click)='showMore(3)'>
+                <span class='statusSpan' [ngClass]="completeList[3]? 'greenSpan' : 'yellowSpan' ">
+                    {{completeList[3] ? ('financeProduct.newRequest.complete'| translate) :
+                  ('financeProduct.newRequest.pending'| translate)}}</span>
+                <img *ngIf='showMoreList[3]' class='iconImage' src='assets/icons/expand-more.png' />
+                <img *ngIf='!showMoreList[3]' class='iconImage' src='assets/icons/expand-less.png' />
+            </span>
+    </div>
+    <fieldset [formGroup]='formModel' *ngIf='showMoreList[3]'>
+      <div class='row'>
+        <!-- From Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.fromDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+                     (ngModelChange)='modelChange(3)' bsDatepicker formControlName='l_fromDate'
+                     [bsConfig]='bsConfig' />
+              <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.l_fromDate.hasError('required') && formModel.controls.l_fromDate.touched"
+               class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.fromDate' | translate }} is required
+          </div>
+        </div>
+        <!-- /From Date -->
+
+        <!-- To Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.toDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateTo='bsDatepicker'
+                     (ngModelChange)='modelChange(3)' bsDatepicker formControlName='l_toDate'
+                     [bsConfig]='bsConfig' />
+              <span class=' input-group-addon icon -calendar' (click)='dateTo.show()'></span>
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.l_toDate.hasError('required') && formModel.controls.l_toDate.touched"
+               class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.toDate' | translate }} is required
+          </div>
+        </div>
+        <!-- /To Date -->
+
+        <!-- Account Type -->
+        <div class='col-xs-12 col-sm-4' *ngIf='productType == "financeProduct.posFinance"'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.accountType' | translate }}</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='l_accountType' (ngModelChange)='modelChange(3)'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor="let item of combosData['accountType']" [value]='item'>
+                  {{item.value}}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="formModel.controls.l_accountType.hasError('required') && formModel.controls.l_accountType.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.accountType' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Account Type -->
+      </div>
+
+      <div class='row'>
+
+        <!-- Sales Turnover -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.salesTurnover' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='l_salesTurnover'
+                     (ngModelChange)='modelChange(3)' inputPattern='onlyPositiveDecimalNumbers'
+                     decimal-precision />
+              <div
+                *ngIf="formModel.controls.l_salesTurnover.hasError('required') && formModel.controls.l_salesTurnover.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.salesTurnover' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Sales Turnover -->
+
+        <!-- Gross Profit -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.grossProfit' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='l_grossProfit' (ngModelChange)='modelChange(3)'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+              <div
+                *ngIf="formModel.controls.l_grossProfit.hasError('required') && formModel.controls.l_grossProfit.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.grossProfit' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Gross Profit -->
+
+
+        <!-- Net Profit -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.netProfit' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='l_netProfit' (ngModelChange)='modelChange(3)'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+              <div *ngIf="formModel.controls.l_netProfit.hasError('required') && formModel.controls.l_netProfit.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.netProfit' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Net Profit -->
+      </div>
+    </fieldset>
+    <!-- /Last Year -->
+  </form>
+</arb-panel>
+
+<arb-panel *ngIf='productType == "financeProduct.posFinance"'>
+  <form autocomplete='off' #form4='ngForm' class='sme-form__form' novalidate>
+    <!-- Previous Year -->
+    <div class='legend'>{{ 'financeProduct.newRequest.previousYear' | translate }}
+      <span class='iconSpan' (click)='showMore(4)'>
+                <span class='statusSpan' [ngClass]="completeList[4]? 'greenSpan' : 'yellowSpan' ">
+                    {{completeList[4] ? ('financeProduct.newRequest.complete'| translate) :
+                  ('financeProduct.newRequest.pending'| translate)}}</span>
+                <img *ngIf='showMoreList[4]' class='iconImage' src='assets/icons/expand-more.png' />
+                <img *ngIf='!showMoreList[4]' class='iconImage' src='assets/icons/expand-less.png' />
+            </span>
+    </div>
+    <fieldset [formGroup]='formModel' *ngIf='showMoreList[4]'>
+      <div class='row'>
+        <!-- From Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.fromDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+
+                     (ngModelChange)='modelChange(4)' bsDatepicker formControlName='p_fromDate'
+                     [bsConfig]='bsConfig' />
+              <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.p_fromDate.hasError('required') && formModel.controls.p_fromDate.touched"
+               class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.fromDate' | translate }} is required
+          </div>
+        </div>
+        <!-- /From Date -->
+
+        <!-- To Date -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.toDate' | translate }}</label>
+            <div class='input-group'>
+              <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+
+                     (ngModelChange)='modelChange(4)' bsDatepicker formControlName='p_toDate'
+                     [bsConfig]='bsConfig' />
+              <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+            </div>
+          </div>
+          <div *ngIf="formModel.controls.p_toDate.hasError('required') && formModel.controls.p_toDate.touched"
+               class='alert alert-danger'>
+            {{ 'financeProduct.newRequest.toDate' | translate }} is required
+          </div>
+        </div>
+        <!-- /To Date -->
+
+        <!-- Account Type -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.accountType' | translate }}</label>
+            <div class='form-control'>
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         (ngModelChange)='modelChange(4)' formControlName='p_accountType'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor="let item of combosData['accountType']" [value]='item'>
+                  {{item.value}}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="formModel.controls.p_accountType.hasError('required') && formModel.controls.p_accountType.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.accountType' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Account Type -->
+
+      </div>
+      <div class='row'>
+
+        <!-- Sales Turnover -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.salesTurnover' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='p_salesTurnover'
+                     (ngModelChange)='modelChange(4)' inputPattern='onlyPositiveDecimalNumbers'
+                     decimal-precision />
+              <div
+                *ngIf="formModel.controls.p_salesTurnover.hasError('required') && formModel.controls.p_salesTurnover.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.salesTurnover' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Sales Turnover -->
+
+        <!-- Gross Profit -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.grossProfit' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='p_grossProfit' (ngModelChange)='modelChange(4)'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+              <div
+                *ngIf="formModel.controls.p_grossProfit.hasError('required') && formModel.controls.p_grossProfit.touched"
+                class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.grossProfit' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Gross Profit -->
+
+
+        <!-- Net Profit -->
+        <div class='col-xs-12 col-sm-4'>
+          <div class='form-group'>
+            <label>{{ 'financeProduct.newRequest.netProfit' | translate }}</label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='p_netProfit' (ngModelChange)='modelChange(4)'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+              <div *ngIf="formModel.controls.p_netProfit.hasError('required') && formModel.controls.p_netProfit.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'financeProduct.newRequest.netProfit' | translate }} is required </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Net Profit -->
+      </div>
+    </fieldset>
+    <!-- /Previous Year -->
+  </form>
+</arb-panel>
+
+<arb-panel>
+
+  <div class='legend marginBottom'>{{ 'financeProduct.newRequest.attachDocuments' | translate }}</div>
+  <div class='row'>
+
+    <div class='col-xs-12 col-sm-3' *ngFor='let item of mandatoryDocuments'>
+      <div class='form-group'>
+        <label>{{ item.name }}</label>
+        <div class='input-group'>
+          <input type='text' class='form-control' placeholder='Upload file' [disabled]='true'
+                 [(ngModel)]='item.file'>
+          <span class='input-group-btn'>
+                        <div class='fileUpload btn'>
+                            <span>{{'public.upload' | translate | uppercase}}</span>
+                            <input type='file' (change)='fileUploadChange($event,item)'
+                                   accept='.jpeg,.pdf,.gif,.jpg,.png'
+                                   class='upload'>
+                        </div>
+                    </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</arb-panel>

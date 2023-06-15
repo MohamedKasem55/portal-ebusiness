@@ -1,0 +1,627 @@
+<app-transfer-common-table *ngIf="sharedData.selected.length > 0
+    && !sharedData.aproveFlow"
+                           [items]="sharedData.selected"
+                           [modal]="modalAuth"
+                           [futureLevels]="false"
+                           [externalPagination]="false"
+                           [selectable]="false">
+</app-transfer-common-table>
+
+<!-- to authorize -------------------------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.withinAuthorizationPermission
+&& sharedData.validateResponse.withinAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfGroup']))
+||
+(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.ownAuthorizationPermission
+&& sharedData.validateResponse.ownAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfOwnGroup']))
+||
+(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.localAuthorizationPermission
+&& sharedData.validateResponse.localAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup']))">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-transfer-within-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.withinAuthorizationPermission
+&& sharedData.validateResponse.withinAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfGroup'])"
+                           [items]="sharedData.validateResponse.withinAuthorizationPermission.toAuthorize"
+                           [modal]="modalAuth"
+                           [futureLevels]="true"
+                           [externalPagination]="false"
+                           [selectable]="false"
+                           [actionText]="'ToAuthorize'"
+>
+</app-transfer-within-table>
+
+<app-transfer-own-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.ownAuthorizationPermission
+&& sharedData.validateResponse.ownAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfOwnGroup'])"
+                           [items]="sharedData.validateResponse.ownAuthorizationPermission.toAuthorize"
+                           [modal]="modalAuth"
+                           [futureLevels]="true"
+                           [externalPagination]="false"
+                           [selectable]="false"
+                           [actionText]="'ToAuthorize'"
+>
+</app-transfer-own-table>
+
+<app-transfer-local-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.localAuthorizationPermission
+&& sharedData.validateResponse.localAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])"
+                          [items]="sharedData.validateResponse.localAuthorizationPermission.toAuthorize"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [actionText]="'ToAuthorize'"
+>
+</app-transfer-local-table>
+
+<app-transfer-international-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.internationalAuthorizationPermission
+&& sharedData.validateResponse.internationalAuthorizationPermission['toAuthorize'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup'])"
+                                  [showRate]="true"
+                                  [items]="sharedData.validateResponse.internationalAuthorizationPermission.toAuthorize"
+                                  [modal]="modalAuth"
+                                  [futureLevels]="true"
+                                  [externalPagination]="false"
+                                  [selectable]="false"
+                                  [actionText]="'ToAuthorize'"
+>
+</app-transfer-international-table>
+
+<!-- to process ------------------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.withinAuthorizationPermission
+&& sharedData.validateResponse.withinAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfGroup']))
+||
+(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.ownAuthorizationPermission
+&& sharedData.validateResponse.ownAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfOwnGroup']))
+||
+(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.localAuthorizationPermission
+&& sharedData.validateResponse.localAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup']))
+||
+(sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.internationalAuthorizationPermission
+&& sharedData.validateResponse.internationalAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup']))">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="isQuickTransfer" style="margin: 15px">
+        <img src="assets/img/SARIE.png">
+    </div>
+</div>
+<!-- to process -->
+
+<app-transfer-within-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.withinAuthorizationPermission
+&& sharedData.validateResponse.withinAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfGroup'])"
+                           [items]="sharedData.validateResponse.withinAuthorizationPermission.toProcess"
+                           [modal]="modalAuth"
+                           [futureLevels]="true"
+                           [externalPagination]="false"
+                           [selectable]="false"
+                           [actionText]="'ToProcess'">
+</app-transfer-within-table>
+
+<app-transfer-own-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.ownAuthorizationPermission
+&& sharedData.validateResponse.ownAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfOwnGroup'])"
+                        [items]="sharedData.validateResponse.ownAuthorizationPermission.toProcess"
+                        [modal]="modalAuth"
+                        [futureLevels]="true"
+                        [externalPagination]="false"
+                        [selectable]="false"
+                        [actionText]="'ToAuthorize'"
+>
+</app-transfer-own-table>
+
+<app-transfer-local-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.localAuthorizationPermission
+&& sharedData.validateResponse.localAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])"
+                          [items]="sharedData.validateResponse.localAuthorizationPermission.toProcess"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [actionText]="'ToProcess'"
+>
+</app-transfer-local-table>
+
+<app-transfer-international-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.internationalAuthorizationPermission
+&& sharedData.validateResponse.internationalAuthorizationPermission['toProcess'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup'])"
+                                  [showRate]="true"
+                                  [items]="sharedData.validateResponse.internationalAuthorizationPermission.toProcess"
+                                  [modal]="modalAuth"
+                                  [futureLevels]="true"
+                                  [externalPagination]="false"
+                                  [selectable]="false"
+                                  [actionText]="'ToProcess'"
+>
+</app-transfer-international-table>
+
+<app-transfer-within-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.withinAuthorizationPermission
+&& sharedData.validateResponse.withinAuthorizationPermission['notAllowed'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE'],['TfGroup'])"
+                           [items]="sharedData.validateResponse.withinAuthorizationPermission.toAuthorize"
+                           [modal]="modalAuth"
+                           [futureLevels]="true"
+                           [externalPagination]="false"
+                           [selectable]="false"
+                           [actionText]="'ToNotAllow'"
+>
+</app-transfer-within-table>
+
+<app-transfer-local-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.localAuthorizationPermission
+&& sharedData.validateResponse.localAuthorizationPermission['notAllowed'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_LOCALBANK'],['TfLocalGroup'])"
+                          [items]="sharedData.validateResponse.localAuthorizationPermission.toAuthorize"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [actionText]="'ToAuthorize'"
+>
+</app-transfer-local-table>
+
+<app-transfer-international-table *ngIf="sharedData.aproveFlow
+&& sharedData.selected.length > 0
+&& sharedData.validateResponse.internationalAuthorizationPermission
+&& sharedData.validateResponse.internationalAuthorizationPermission['notAllowed'].length>0
+&& authenticationService.activateOption('PendingActionTransfer',['TRANSFER_PRIVILEGE_REMITTANCES'],['TfRemGroup'])"
+                                  [showRate]="true"
+                                  [items]="sharedData.validateResponse.internationalAuthorizationPermission.toAuthorize"
+                                  [modal]="modalAuth"
+                                  [futureLevels]="true"
+                                  [externalPagination]="false"
+                                  [selectable]="false"
+                                  [actionText]="'ToNotAllow'"
+>
+</app-transfer-international-table>
+
+<app-levels-popup #modalAuth>
+</app-levels-popup>
+
+<div class="sme-content-container container-fluid" *ngIf="this.sharedData.aproveFlow">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+
+                        <!-- totalAmountAuthorize>0 -->
+
+                        <div class="row" *ngIf="this.sharedData.validateResponse.totalAmountAuthorize>0">
+                            <div class="col-xs-12 col-sm-12">
+                                <span class="sme-title">{{'transfer.toauthorize.title' | translate}}</span>
+                            </div>
+                            <hr/>
+                        </div>
+
+                        <!-- withinAuthorizationPermission.toAuthorize.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.withinAuthorizationPermission.toAuthorize.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.rahji.toauthorize.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.withinAuthorizationPermission.toAuthorize.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.rahji.toauthorize.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.withinAuthorizationPermission.toAuthorizeAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.rahji.toauthorize.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.withinAuthorizationPermission.toAuthorizeAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.withinAuthorizationPermission.toAuthorizeAmounts.totalFee ">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ownAuthorizationPermission.toAuthorize.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.ownAuthorizationPermission.toAuthorize.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.own.toauthorize.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.ownAuthorizationPermission.toAuthorize.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.own.toauthorize.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.ownAuthorizationPermission.toAuthorizeAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.own.toauthorize.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.ownAuthorizationPermission.toAuthorizeAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.ownAuthorizationPermission.toAuthorizeAmounts.totalFee ">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- localAuthorizationPermission.toAuthorize.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.localAuthorizationPermission.toAuthorize.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.local.toauthorize.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.localAuthorizationPermission.toAuthorize.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.local.toauthorize.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.localAuthorizationPermission.toAuthorizeAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.local.toauthorize.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.localAuthorizationPermission.toAuthorizeAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.localAuthorizationPermission.toAuthorizeAmounts.totalFee">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- internationalAuthorizationPermission.toAuthorize.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.internationalAuthorizationPermission.toAuthorize.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.international.toauthorize.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.internationalAuthorizationPermission.toAuthorize.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.international.toauthorize.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.internationalAuthorizationPermission.toAuthorizeAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.international.toauthorize.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.internationalAuthorizationPermission.toAuthorizeAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.internationalAuthorizationPermission.toAuthorizeAmounts.totalFee">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- totalAmountAuthorize>0 -->
+
+                        <div class="row" *ngIf="this.sharedData.validateResponse.totalAmountAuthorize>0">
+
+                            <div class="col-xs-12 col-sm-4">
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.toauthorize.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.totalAmountAuthorize | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.toauthorize.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.totalFeeAuthorize | amountCurrency"/>
+                                    <app-vat-calculator [fee]="this.sharedData.validateResponse.totalFeeAuthorize">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- totalAmountProcess>0 -->
+
+                        <div class="row" *ngIf="this.sharedData.validateResponse.totalAmountProcess>0">
+                            <div class="col-xs-12 col-sm-12">
+                                <span class="sme-title">{{'transfer.toprocess.title' | translate}}</span>
+                            </div>
+                            <hr/>
+                        </div>
+
+                        <!-- withinAuthorizationPermission.toProcess.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.withinAuthorizationPermission.toProcess.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.rahji.toprocess.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.withinAuthorizationPermission.toProcess.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.rahji.toprocess.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.withinAuthorizationPermission.toProcessAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.rahji.toprocess.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.withinAuthorizationPermission.toProcessAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.withinAuthorizationPermission.toProcessAmounts.totalFee">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ownAuthorizationPermission.toProcess.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.ownAuthorizationPermission.toProcess.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.own.toprocess.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.ownAuthorizationPermission.toProcess.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.own.toprocess.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.ownAuthorizationPermission.toProcessAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.own.toprocess.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.ownAuthorizationPermission.toProcessAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.ownAuthorizationPermission.toProcessAmounts.totalFee">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- localAuthorizationPermission.toProcess.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.localAuthorizationPermission.toProcess.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.local.toprocess.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.localAuthorizationPermission.toProcess.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.local.toprocess.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.localAuthorizationPermission.toProcessAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.local.toprocess.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.localAuthorizationPermission.toProcessAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.localAuthorizationPermission.toProcessAmounts.totalFee">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- internationalAuthorizationPermission.toProcess.length>0 -->
+
+                        <div class="row"
+                             *ngIf="this.sharedData.validateResponse.internationalAuthorizationPermission.toProcess.length>0">
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.international.toprocess.number' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.internationalAuthorizationPermission.toProcess.length"/>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.international.toprocess.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.internationalAuthorizationPermission.toProcessAmounts.totalAmount | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.international.toprocess.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.internationalAuthorizationPermission.toProcessAmounts.totalFee | amountCurrency"/>
+                                    <app-vat-calculator
+                                            [fee]="this.sharedData.validateResponse.internationalAuthorizationPermission.toProcessAmounts.totalFee">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- totalAmountProcess >0 -->
+
+                        <div class="row" *ngIf="this.sharedData.validateResponse.totalAmountProcess >0">
+
+                            <div class="col-xs-12 col-sm-4">
+
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'transfer.toprocess.amount' | translate }}</label>
+                                    <p class="form-control">
+                                        {{ this.sharedData.validateResponse.totalAmountProcess | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{
+                                        'transfer.toprocess.fee' | translate }}</label>
+                                    <input class="form-control" disabled
+                                           [value]="this.sharedData.validateResponse.totalFeeProcess | amountCurrency"/>
+                                    <app-vat-calculator [fee]="this.sharedData.validateResponse.totalFeeProcess">
+                                    </app-vat-calculator>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- generateChallengeAndOTP -->
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group"
+                                     *ngIf="sharedData.validateResponse && sharedData.validateResponse.generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.validateResponse.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

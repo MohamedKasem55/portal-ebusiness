@@ -1,0 +1,82 @@
+<arb-breadcrumb [routes]="[
+	['companyAdmin.companyAdmin'],
+	['companyAdmin.user.management',['/companyadmin/manage/user']],
+	['companyAdmin.user.add']
+]">
+</arb-breadcrumb>
+
+<arb-panel>
+    <!-- BREADCRUMB -->
+    <arb-steps [steps]="[
+                            'companyAdmin.user.details',
+                            'companyAdmin.user.permision',
+                            'companyAdmin.user.confirmation',
+                            'companyAdmin.user.summary'
+                            ]"
+               [currentStep]="wizardStep">
+    </arb-steps>
+
+</arb-panel>
+
+<arb-panel *ngIf="messageError?.code">
+    <div class="alert alert-danger">
+        <small>{{messageError['code']}} {{messageError['description']}}</small>
+    </div>
+</arb-panel>
+
+<company-admin-user-management-add-step1 *ngIf="wizardStep == 1"
+                                         [formModel]="formModel"
+                                         [userData]="userData"
+                                         [combosData]="combosData">
+</company-admin-user-management-add-step1>
+
+<company-admin-user-management-add-step2 *ngIf="wizardStep == 2"
+                                         [formModel]="formModel"
+                                         [userData]="userData"
+                                         [combosData]="combosData">
+</company-admin-user-management-add-step2>
+
+<company-admin-user-management-add-step3 *ngIf="wizardStep == 3"
+                                         [formModel]="formModel"
+                                         [userData]="userData"
+                                         [combosData]="combosData">
+</company-admin-user-management-add-step3>
+
+<company-admin-user-management-add-step4 *ngIf="wizardStep == 4" [generateChallengeAndOTP]="this.generateChallengeAndOTP">
+</company-admin-user-management-add-step4>
+
+<arb-panel *ngIf="this.wizardStep === 3 && this.generateChallengeAndOTP !== null">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <app-secured-authentication [generateChallengeAndOTP]="this.generateChallengeAndOTP"
+                                            [requestValidate]="this.requestValidate"
+                                            #authorization>
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<arb-panel-buttons>
+
+    <arb-buttons>
+        <button *ngIf="isBackAllowed()" class="btn btn-default btn-wide" type="button"
+                (click)="back()">{{ 'public.back' | translate}}
+        </button>
+        <button *ngIf="isPreviousAllowed()"
+                (click)="previous()" class=" btn btn-default btn-wide">
+            {{ 'public.back' | translate }}
+        </button>
+        <button class="btn btn-primary btn-wide" (click)="next()"
+                *ngIf="isNextAllowed()"
+                [disabled]="isDisabled()">
+            {{'public.proceed' | translate}}
+        </button>
+        <button class="btn btn-primary btn-wide" (click)="finish()"
+                *ngIf="isFinishAllowed()">
+            {{'public.finish' | translate}}
+        </button>
+    </arb-buttons>
+
+</arb-panel-buttons>

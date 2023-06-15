@@ -1,0 +1,96 @@
+.sme-login {
+  .container {
+    padding: 0;
+  }
+
+  @media #{$sm-up} {
+    .sme-login-form,
+    .sme-login-campaign,
+    .sme-login-information {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+      margin: 20px 0;
+    }
+
+    .sme-login-form {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .sme-login-campaign {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .sme-login-information {
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @media #{$md-up} {
+    &__main,
+    &__aside {
+      min-height: 100vh;
+      float: $right;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+
+      &:before {
+        content: '';
+        display: inline-block;
+        min-height: 100vh;
+        width: 0;
+        /*background: #f00;*/
+        vertical-align: middle;
+      }
+
+      > div {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    &__main {
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    &__aside {
+      padding-#{$right}: 20px;
+      > div {
+        > div + div {
+          margin-top: 20px;
+        }
+      }
+    }
+
+    .sme-login-form {
+      box-shadow: none;
+      background: none;
+      width: 440px;
+    }
+
+    .sme-login-campaign,
+    .sme-login-information {
+      width: 500px;
+    }
+  }
+
+  @media #{$lg-only} {
+    &__aside {
+      padding-#{$right}: 60px;
+    }
+
+    .sme-login-form {
+      width: 517px;
+    }
+
+    .sme-login-campaign,
+    .sme-login-information {
+      width: 560px;
+    }
+
+    .sme-campaing-img {
+      background: url('../img/sme-login-campaign.jpg') center center no-repeat
+        rgb(102, 102, 102);
+      background-size: 100% 100% !important;
+    }
+  }
+}

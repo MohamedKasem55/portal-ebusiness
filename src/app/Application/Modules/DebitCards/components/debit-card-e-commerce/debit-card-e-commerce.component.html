@@ -1,0 +1,88 @@
+<!-- BREADCRUMB -->
+<arb-steps
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<div *ngIf="wizardStep == 1 || wizardStep == 2">
+
+    <arb-panel>
+        <h3>{{ 'accounts.debitCards.ecommerceStep2Title' | translate }}</h3>
+        <hr>
+        <ng-container [formGroup]="formModel">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label for="search-cardNumberDisplay">{{ 'accounts.debitCards.cardNumberDisplay' | translate }}</label>
+                        <span id="search-cardNumberDisplay" class="form-control" name="cardNumberDisplay">
+                        {{ _selectedCard?.cardNum }}
+                    </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label for="enableECommerce">{{ 'accounts.debitCards.enable_ecommerce' | translate }}</label><br/>
+                        <input [(ngModel)]="enableECommerce" formControlName="enableECommerce" type="checkbox"
+                               class="form-control"
+                               style="height: 20px!important; width:10%!important" id="enableECommerce"/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <input  [(ngModel)]="acceptTC" formControlName="acceptTC"  type="checkbox" style="height: 20px; width:20px"/>
+                    <a routerLinkActive="router-link-active" target="_blank" class="vertical-center"
+                       [href]="debitCardECommerceService.termsConditions">
+                        {{ 'accounts.debitCards.termsConditions' | translate }}
+                    </a>
+                </div>
+            </div>
+        </ng-container>
+    </arb-panel>
+
+    <arb-panel>
+        <div>
+            <div>
+                <label><span class="icon -help"></span> {{ 'accounts.debitCards.helpTitle' | translate }}
+                </label>
+            </div>
+            <div *ngIf="wizardStep == 2">
+                {{ 'accounts.debitCards.ecommerceStep2HelpText' | translate }}
+            </div>
+            <div *ngIf="wizardStep == 1">
+                {{ 'accounts.debitCards.ecommerceStep1HelpText0' | translate }}<br/>
+                <ul>
+                    <li>{{ 'accounts.debitCards.ecommerceStep1HelpText1' | translate }}</li>
+                    <li>{{ 'accounts.debitCards.ecommerceStep1HelpText2' | translate }}</li>
+                    <li>{{ 'accounts.debitCards.ecommerceStep1HelpText3' | translate }}</li>
+                </ul>
+                <br/>
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 3">
+    <arb-confirm-panel
+            [pending]="false"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+
+</div>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed() && wizardStep!=1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()"
+            (click)="previous()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

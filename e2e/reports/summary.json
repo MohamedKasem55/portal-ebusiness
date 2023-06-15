@@ -1,0 +1,275 @@
+[
+  {
+    "keyword": "Feature",
+    "name": "Login",
+    "line": 1,
+    "id": "login",
+    "tags": [],
+    "uri": "e2e\\test\\login.feature",
+    "elements": [
+      {
+        "id": "login;a-first-scenario",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "A first scenario",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "e2e\\steps\\common.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3000000
+            }
+          },
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "I am in the page",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4729000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 6,
+            "name": "I see the title \"Log in Al Mubasher eSME\"",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 17624000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "I see an input field \"profileField\"",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I see an input field \"userField\"",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:24"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 9,
+            "name": "I type \"3045369\" in field \"profileField\"",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 838000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I type \"3045369ad-38\" in field \"userField\"",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:18"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 97000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "I click in button Proceed",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 314000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "I see an input field \"passwordField\"",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:24"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "match": {
+              "location": "node_modules\\protractor-cucumber-framework\\lib\\resultsCapturer.js:25"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "    There is 4 type of transaction own,rajhi,local and international, there is a simple test to check all of them. ",
+    "keyword": "Feature",
+    "name": "transaction",
+    "line": 1,
+    "id": "transaction",
+    "tags": [],
+    "uri": "e2e\\test\\transaction\\transaction.feature",
+    "elements": [
+      {
+        "id": "transaction;<enter-scenario-title>",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "<enter scenario title>",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "e2e\\steps\\common.steps.ts:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          },
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:10"
+            },
+            "result": {
+              "status": "passed"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 6,
+            "name": "I am in the page",
+            "match": {
+              "location": "e2e\\steps\\login.steps.ts:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3801000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "I logged in company \"3045369\" with user \"3045369adm-38\"",
+            "match": {
+              "location": "e2e\\steps\\common.steps.ts:17"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 9924000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "password \"test1234\"",
+            "match": {
+              "location": "e2e\\steps\\common.steps.ts:21"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 60008000000,
+              "error_message": "Error: function timed out, ensure the promise resolves within 60000 milliseconds\n    at Timeout._onTimeout (C:\\alrajhi\\SME\\sme-frontend-invoice\\sme-app-bs3\\node_modules\\cucumber\\src\\user_code_runner.js:61:18)\n    at ontimeout (timers.js:475:11)\n    at tryOnTimeout (timers.js:310:5)\n    at Timer.listOnTimeout (timers.js:270:5)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "I can see user \"luismi38\" is login",
+            "match": {
+              "location": "e2e\\steps\\common.steps.ts:25"
+            },
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 12,
+            "name": "I was in transfer option",
+            "match": {
+              "location": "e2e\\steps\\common.steps.ts:28"
+            },
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "match": {
+              "location": "node_modules\\protractor-cucumber-framework\\lib\\resultsCapturer.js:25"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

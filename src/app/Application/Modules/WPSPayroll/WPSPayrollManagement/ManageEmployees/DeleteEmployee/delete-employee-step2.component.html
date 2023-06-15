@@ -1,0 +1,143 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'wpspayroll.deleteEmployee' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid" formArrayName="employees">
+        <div *ngFor="let employ of employees; let i=index">
+            <div [formGroupName]="i">
+                <div class="sme-page-block">
+                    <div class="sme-form">
+                        <div class="sme-form__form">
+                            <div class="sme-form__content">
+                                <a class="sme-form__close btn" (click)="removeEmployee(i)"><span
+                                        class="icon -close"></span></a>
+                                <div class="sme-form__body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.employeeNumber' |
+                                                    translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.employeeNumber?.value}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.employeeName'
+                                                    | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.employeeName?.value}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'wpspayroll.civilianID' | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.civilianId?.value}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'public.department' | translate }}</label>
+                                                <span class="form-control disabled"
+                                                      [innerHTML]="employ.controls.departmentId?.value"></span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'companyAdmin.user.account' |
+                                                    translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.account?.value}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{
+                                                    'public.bank' | translate }}</label>
+                                                <span class="form-control disabled"
+                                                      [innerHTML]="banksMap.get(employ.controls.bank?.value)"></span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.basicSalary'
+                                                    | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.salaryBasic?.value | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.housingAllowance'
+                                                    | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.allowanceHousing?.value | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.otherAllowance'
+                                                    | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.allowanceOther?.value | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.deductions'
+                                                    | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.deductions?.value | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{ 'wpspayroll.salary'
+                                                    | translate }}</label>
+                                                <span class="form-control disabled">{{employ.controls.salary?.value | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>	

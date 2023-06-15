@@ -1,0 +1,115 @@
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid" formArrayName="disputes" *ngFor="let dispute of disputes; let i=index">
+        <div [formGroupName]="i">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <arb-panel>
+                                <span class="form-control">
+                                    <label class="sme-form__title">{{ 'sadadOLP.requestStatus.approveDispute' |
+                                                translate }}</label>
+                                    <label
+                                        class="sme-form__form">{{form.controls.disputes['controls'][i].controls.detailsTitleProperty.value}}</label>
+                                    <div style="text-align: right;">
+                                        <label
+                                            class="sme-form__title">{{form.controls.disputes['controls'][i].controls.status.value | statusPipe}}</label>
+                                    </div>
+                                </span>
+
+                                <arb-panel-title [title]="'sadadOLP.refunds.transactionDetails'">
+                                </arb-panel-title>
+                                <arb-panel>
+                                    <div class="row">
+                                        <fieldset [disabled]="this.readonly">
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="transactionAmount-input">{{ 'public.amount' |
+                                                                    translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                        id="transactionAmount-input"
+                                                        formControlName="transactionAmount">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="date-input">{{ 'public.date'
+                                                                    | translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control" id="date-input"
+                                                        formControlName="transactionDate">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </arb-panel>
+                                <arb-panel-title [title]="'sadadOLP.refunds.refundDetails'">
+                                </arb-panel-title>
+                                <arb-panel>
+                                    <div class="row">
+                                        <fieldset [disabled]="this.readonly">
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="amount-input">{{ 'sadadOLP.requestStatus.approvedAmount'
+                                                                        | translate }}</label>
+                                                    <input type="text" class="form-control" id="amount-input"
+                                                        formControlName="amount">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="disputeReason-input">{{ 'sadadOLP.disputes.disputeReason'
+                                                                        | translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                        id="disputeReason-input" formControlName="categoryDescription">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="disputestatus-input">{{ 'sadadOLP.disputes.status'
+                                                                            | translate }}</label>
+                                                    <span class="form-control"
+                                                        id="disputestatus-input">{{ (form.controls.disputes['controls'][i].controls.disputeStatus.value) ? ('olpDisputesStatus' | modelPipe:form.controls.disputes['controls'][i].controls.disputeStatus.value) : ''}}
+                                                    </span>
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="details-input">{{ 'sadadOLP.disputes.details'
+                                                                                | translate }}</label>
+                                                    <input type="text" class="form-control" id="details-input"
+                                                        formControlName="details">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label for="rejectedReason-input">{{ 'sadadOLP.requestStatus.rejectedReason'
+                                                                                    | translate }}</label>
+                                                    <input type="text" [disabled]="true" class="form-control"
+                                                        id="rejectedReason-input" formControlName="rejectedReason">
+                                                </div>
+                                                <!-- ./sme-form-group -->
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </arb-panel>
+                            </arb-panel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

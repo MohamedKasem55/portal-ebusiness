@@ -1,0 +1,90 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payments'| translate }}</li>
+        <li><a class="human-selectable" href="#"
+               [routerLink]="['/direct-debits']">{{ 'dashboard.directDebits'| translate }}</a></li>
+        <li class="active">{{ 'directDebits.dashboard'| translate }}</li>
+    </ol>
+</div>
+
+<br/>
+
+<div class="fluid-container">
+
+    <div class="sme-page-block">
+        <div id="datesForm" class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+
+                    <div class="row">
+                        <div class="col-xs-10 col-sm-2"></div>
+                        <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                            <div class="form-group left">
+                                <label class="required">{{ 'directDebits.initiationDateFrom' | translate }}</label>
+                                <div class="form-control">
+                                    <input type="text" id="fromDate"
+                                           #dashboardDateFrom="bsDatepicker" bsDatepicker
+                                           [bsConfig]="bsConfig" [maxDate]="getMaxDate()"
+                                           class="form-control" required [(ngModel)]="fromDate"
+                                    />
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label class="required">{{ 'directDebits.initiationDateTo' | translate }}</label>
+                                <div class="form-control">
+                                    <input type="text" id="toDate" class="form-control"
+                                           #dashboardDateTo="bsDatepicker" bsDatepicker
+                                           [bsConfig]="bsConfig" [minDate]="fromDate"
+                                           required [(ngModel)]="toDate"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-wide"
+                                        (click)="generateDashBoard()">Search
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<br/>
+
+<!--Bar chart-->
+<div class="fluid-container">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+
+                    <div class="row">
+                        <div class="col-xs-15 col-sm-6">
+                            <canvas id="amountChart" width="75px" height="50px"></canvas>
+                        </div>
+                        <div class="col-xs-15 col-sm-6">
+                            <canvas id="countChart" width="75px" height="50px"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

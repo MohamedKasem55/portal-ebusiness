@@ -1,0 +1,77 @@
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'registration.otpVerification' | translate }}</div>
+</div>
+
+<div class="sme-page-block">
+	<div class="sme-form">
+		<div class="sme-form__content">
+
+			<form class="sme-form__form" #stepForm="ngForm">
+				<div class="sme-form__group-title">{{ 'registration.introduceLast4Digits' | translate }}</div>
+				<div class="sme-form__body" *ngFor="let numberaccount of formData.aux3; let indexAccount = index;">
+
+					<input type="hidden" [(ngModel)]="formData.aux3[indexAccount].account" name="{{numberaccount}}" value="{{numberaccount.account}}">
+
+					<fieldset>
+						<!-- linea antigua la conservo de momento
+							<legend>{{ 'registration.account' | translate }} 1 - 232984 938472 239842  </legend> -->
+						<legend>{{ 'registration.account' | translate }} {{indexAccount + 1 }} - {{ numberaccount.account }} </legend>
+
+						<p *ngIf="formData.aux3[indexAccount].telephones.length ==0" class="alert alert-danger">
+							{{ 'registration.telephoneNoFound' | translate }}
+						</p>
+						<div class="row" *ngIf="formData.aux3[indexAccount].telephones.length !=0">
+							<div class="col-xs-14 col-sm-10" *ngFor="let numberTel of formData.aux3[indexAccount]['shadowTelefone'] ; let i = index;">
+								<div class="form-group">
+									<label for="search-criteria--input-registration-acc1-phone1">{{ 'registration.authMobile' | translate }} {{i + 1}}  </label>
+								</div>
+								<div dir="lrt">
+								<div class="col-xs-2" *ngIf="translate.currentLang == 'en'">
+									<input type="text" class="form-control" value="{{numberTel}}" disabled dir="ltr">
+								</div>
+								
+								<div class="col-xs-1" dir="auto">
+									<div class="input-group">
+									<input type="tel" class="form-control" id="search-criteria--input-registration-acc1-phone1"
+									[(ngModel)]="formData.aux3[indexAccount]['lastNumbers'][i]" name="{{numberTel}}" required maxlength="4" inputPattern="onlyDigits" [disabled]="formData.aux3[indexAccount]['generateOtp'][i]" dir="ltr">
+									
+									</div>
+								</div>
+								<div class="col-xs-2" *ngIf="translate.currentLang != 'en'">
+									<input type="text" class="form-control" value="{{numberTel}}" disabled dir="ltr">
+								</div>
+								<div class="col-xs-2" >
+									<span class="input-group-btn" style="padding:0px 10px 0px 10px">
+									<button (click)="generateOTP(indexAccount, i);send=true" class=" btn btn-default" [disabled]="formData.aux3[indexAccount]['generateOtp'][i]" [disabled]="formData.aux3[indexAccount]['lastNumbers'][i].length !== 4">{{ (send? 'registration.reGenerateOTP' :'registration.generateOTP') | translate }}</button>
+									</span>
+								</div>
+								</div>
+								<div *ngIf="formData.aux3[indexAccount]['generateOtp'][i]"  class="col-xs-2">
+									<div class="input-group">
+
+									<input type="tel" class="form-control" id="search-criteria--input-registration-acc1-phone1" placeholder="{{ 'registration.otp' | translate }} " name="otp{{numberTel}}" maxlength="4" inputPattern="onlyDigits"
+									[(ngModel)]="formData.aux3[indexAccount]['otp'][i]" required dir="ltr" [disabled]="formData.aux3[indexAccount]['validateOTP'][i]" >
+									<p [translate]="'securedAuthentication.leftSecondsToInvalidateToken'" [translateParams]="{seconds: otpTimer[i]}"></p>
+
+								</div>
+								</div>
+							<div *ngIf="formData.aux3[indexAccount]['generateOtp'][i]"  class="col-xs-2">
+							<span class="input-group-btn" style="padding:0px 10px 0px 10px">
+									<button (click)="validateOTP(indexAccount, i)" class=" btn btn-default" [disabled]="formData.aux3[indexAccount]['validateOTP'][i]"  [disabled]="!formData.aux3[indexAccount]['otp'][i].length > 0">{{ 'registration.validateOTP' | translate }}</button>
+								</span>
+								
+								
+								</div>
+								<p *ngIf="stepForm.controls.telephone1 && stepForm.controls.telephone1.hasError('pattern')" class="alert alert-danger">
+								{{'registration.validation4DigitsNumber' | translate }}
+							</p>
+							</div>
+
+
+						</div>
+					</fieldset>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

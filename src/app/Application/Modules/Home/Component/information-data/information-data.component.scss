@@ -1,0 +1,79 @@
+@import "../../../../../../scss/theme/css/own-variables.scss";
+@import "./src/scss/theme/css/vendor/_directional.scss";
+
+.label-data {
+    margin-bottom: 15px;
+}
+
+.title-group {
+    color: #1d2233;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-family: 'noto-sans-en',"noto-sans-ar";
+    @if $dir != ltr {
+        font-family: "noto-sans-ar",'noto-sans-en';
+    }
+}
+.bottom-hr {
+    margin-bottom: 20px;
+}
+.status-class,
+.status-fields {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-class {
+    margin-top: 15px;
+    width: 50px;
+}
+.status-data {
+    padding-left: 10px;
+    padding-bottom: 3px;
+    padding-right: 10px;
+}
+.status-icon {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.bottom-row {
+    padding-bottom: 15px;
+}
+.home-hr {
+    margin-bottom: 25 !important;
+    margin-top: 0 !important;
+}
+.success-color {
+    color: $brand-green;
+    font-size: 14px;
+}
+.error-color {
+    color: $brand-red;
+    font-size: 14px;
+}
+.form-group-information {
+    margin-bottom: 40px;
+}
+.date-time-color {
+    color: #9099a0;
+}
+.text-color {
+    color: $brand-black;
+}
+.text-color-ar {
+    color: $brand-black;
+    font-family: "noto-sans-ar", noto-sans-en;
+}
+@media (max-width: 768px) {
+    .sme-header__user-avatar {
+        width: 95px;
+        height: 58px;
+        margin-left: 12%;
+    }
+    .sme-header__user-avatar img {
+        width: 70px;
+        height: 52px;
+        margin-top: 5px;
+    }
+}

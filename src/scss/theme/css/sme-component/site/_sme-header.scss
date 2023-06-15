@@ -1,0 +1,257 @@
+.sme-header {
+  height: $sme-header-height;
+
+  background: #fff;
+  color: $brand-grey-light;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+
+  a {
+    @include anchor {
+      color: $brand-grey-light;
+    }
+  }
+
+  .navbar-header {
+    @include clearfix;
+
+    float: $left;
+    margin-#{$left}: -($grid-gutter-width * 0.5);
+  }
+
+  .container-fluid {
+    > .navbar-header {
+      @media (min-width: 768px) {
+        display: inline-flex !important;
+      }
+    }
+  }
+
+  &__btn {
+    @include square($sme-header-height);
+    text-align: center;
+
+    .icon {
+      @include icon-size(18px);
+    }
+  }
+
+  &__brand {
+    display: inline-block;
+    padding-top: 19px;
+    padding-bottom: 19px;
+    padding: 19px 10px;
+    margin-top: -6% !important ;
+  }
+
+  &__menu-toggler {
+    float: $left;
+    padding-top: $navbar-padding-vertical;
+    padding-bottom: $navbar-padding-vertical;
+
+    padding-top: 22px;
+    padding-bottom: 22px;
+
+    .icon {
+      @include icon-size(24px);
+    }
+  }
+
+  &__logout {
+    display: none;
+  }
+
+  &__switch {
+    padding-#{$left}: 15px;
+    padding-#{$right}: 15px;
+
+    > span {
+      /*display: inline-block;*/
+      /*vertical-align: middle;*/
+    }
+
+    a {
+      display: inline-block;
+      padding: 0 5px;
+    }
+
+    .flag {
+      vertical-align: middle;
+      @include square(18px);
+      position: relative;
+      display: inline-block;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-#{$right}: 5px;
+
+      img {
+        @include center-x;
+        height: 100%;
+        top: 0;
+      }
+    }
+  }
+
+  &__notifications {
+    .sme-header__btn {
+      position: relative;
+      .badge {
+        // @include square(14px);
+        @include center-y;
+        @include font(8px);
+        @media screen and (max-width: $max-width) {
+          @include font($font-size-11 * $factor);
+        }
+        @media screen and (max-width: $max-width2) {
+          @include font($font-size-11 * $factor2);
+        }
+        width: 20px;
+        height: 14px;
+        background: $brand-orange;
+        border-radius: 4px;
+        #{$right}: 12px;
+
+        margin-top: -9px;
+
+        color: #fff;
+        line-height: 14px;
+
+        box-shadow: 0 0 0 2px #fff;
+      }
+    }
+  }
+
+  &__user {
+    &-avatar {
+      @include square(32px);
+      float: $left;
+      display: inline-block;
+      margin-top: -6px;
+      margin-#{$right}: 10px;
+      overflow: hidden;
+      border-radius: 50%;
+
+      img {
+        @include square(32px);
+      }
+    }
+  }
+
+  &__messages,
+  &__notifications,
+  &__user {
+    > .dropdown-menu {
+      margin-top: -10px !important;
+
+      &:before,
+      &:after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        border: solid transparent;
+
+        position: absolute;
+        z-index: 1000;
+
+        #{$right}: $sme-header-height * 0.5;
+        transform: translateX(if-ltr(50%, -50%));
+      }
+
+      &:before {
+        border-bottom-color: #e7e7e7;
+        border-width: 7px;
+        top: -14px;
+      }
+
+      &:after {
+        border-bottom-color: #fff;
+        border-width: 6px;
+        top: -12px;
+      }
+    }
+  }
+
+  &__user {
+    > .dropdown-menu {
+      &:before,
+      &:after {
+        #{$right}: 19px;
+      }
+    }
+  }
+
+  &__menu-toggler {
+    transition: background 0.1, color 0.1s;
+  }
+  body.sme-navigation-open & {
+    &__menu-toggler {
+      background-color: $brand-black;
+      color: #fff;
+    }
+  }
+
+  @media #{$xs-only} {
+    height: $sme-header-height-xs;
+    min-height: 0;
+    text-align: center;
+
+    &__switch,
+    .nav > &__messages,
+    .nav > &__notifications,
+    .nav > &__user {
+      display: none;
+    }
+
+    .container-fluid {
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar-header {
+      @include clearfix;
+
+      float: none;
+      margin: 0;
+      display: block;
+
+      vertical-align: top;
+      height: $sme-header-height-xs;
+    }
+
+    &__btn {
+      @include square($sme-header-height-xs);
+      padding: 15px 0;
+
+      .icon {
+        @include icon-size(18px);
+      }
+    }
+
+    &__menu-toggler {
+      float: $left;
+    }
+
+    &__logout {
+      display: block;
+      float: $right;
+    }
+
+    &__brand {
+      height: $sme-header-height-xs;
+      display: inline-block;
+      /*padding-top: 19px;*/
+      /*padding-bottom: 19px;*/
+      padding: 0;
+      margin-top: -6% !important ;
+      float: none;
+      padding: 13px;
+      img {
+        height: 22px;
+      }
+    }
+
+    .navbar-nav {
+      display: none;
+    }
+  }
+}

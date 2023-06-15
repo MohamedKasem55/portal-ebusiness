@@ -1,0 +1,81 @@
+<form autocomplete="off" [formGroup]="form" *ngIf="form">
+    <div class="container-fluid" *ngIf="batch">
+        <div class="sme-head">
+            <div class="sme-head__title">{{'chequebook.bookTypeDetails' | translate}}</div>
+        </div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset [disabled]="true">
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="account">{{ 'chequebook.account' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="account" class="form-control" formControlName="account" />
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="bookType" class="required">{{ 'chequebook.amount' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="bookType" class="form-control" formControlName="amount" />
+                                            </div>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="quantity">{{ 'chequebook.chequeNumber' | translate }}</label>
+                                            <!-- sme-select -->
+                                            <div>
+                                                <input id="quantity" class="form-control" formControlName="chequeNumber" />
+                                            </div>
+                                            <!-- ./sme-select -->
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<app-billpayment-table
+        *ngIf="authenticationService.activateOption('PendingActionBillPayments',['BILLPAYMENTS_PRIVILEGE'],['BillPayGroup'])"
+        [items]="billsPagedResults.items"
+        [totalSize]="billsPagedResults.total"
+        [modal]="modalAuth"
+        [futureLevels]="false"
+        [tableDisplaySize]="tableDisplaySize"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPage($event)"
+        (changeDisplaySize)="changeDisplaySize($event)">
+</app-billpayment-table>
+
+
+<!-- *ngIf="authenticationService.activateOption('WorkflowAddBiller',['BILLPAYMENTS_PRIVILEGE'],['BillPayAdders']) -->
+<app-bill-table
+        *ngIf="authenticationService.activateOption('PendingActionBillPayments',['BILLPAYMENTS_PRIVILEGE'],['BillPayAdders'])"
+        [items]="billersPagedResults.items"
+        [totalSize]="billersPagedResults.total"
+        [modal]="modalAuth"
+        [futureLevels]="false"
+        [tableDisplaySize]="tableBillerDisplaySize"
+        [externalPagination]="true"
+        [selectable]="true"
+        (setPage)="setPageBiller($event)"
+        (changeDisplaySize)="changeDisplaySizeBiller($event)"
+        [billCodes]="sharedData.billCodes">
+</app-bill-table>
+
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<style>
+    :host ::ng-deep .ngx-datatable .datatable-footer {
+        overflow: hidden;
+    }
+</style>

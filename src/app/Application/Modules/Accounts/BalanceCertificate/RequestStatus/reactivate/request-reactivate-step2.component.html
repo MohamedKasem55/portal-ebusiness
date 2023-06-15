@@ -1,0 +1,64 @@
+<arb-panel *ngIf="batch">
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'public.account' |
+                                                translate }}</label> 
+                                    <span type="text" class="form-control">{{ batch.accountNumber }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                    <!-- CITIES -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.city' | translate }} *</label>
+                                         <span type="text" class="form-control">{{ 'cityType' | modelPipe:batch.city }}</span>
+                                       
+                                    </div>
+                                    <!-- /CITIES -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <!-- COMPANY -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.company' | translate }} *</label>
+                                        <span type="text" class="form-control">{{ batch.company }}</span>     
+                                    </div>
+                                    <!-- /COMPANY -->
+
+                                </div>
+
+                                <div class="col-xs-12 col-sm-2">
+
+                                    <!-- POSTAL CODE -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.postal_code' | translate }} *</label>
+
+                                       <span type="text" class="form-control">{{ batch.postalCode }}</span>
+                                    </div>
+                                    <!-- /POSTAL CODE -->
+                                    
+                                </div>
+                        </fieldset>        
+                        
+                    </div>
+                    
+                    
+                    </arb-panel>
+                
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<arb-panel *ngIf="option == InitiateOption">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                
+</arb-panel>
+
+
+
+
+						

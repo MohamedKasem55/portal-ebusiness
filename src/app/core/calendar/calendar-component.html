@@ -1,0 +1,10 @@
+<div>
+  <label [ngClass]="translate.currentLang === 'en' 
+    ? 'change-calendar-format-en' : 'change-calendar-format-ar'"
+    [ngStyle]="{'font-weight': !calendarType() ? 'bold' :  'normal'}">{{'public.showHijri' | translate}}</label>
+  <label class="switch">
+    <input type="checkbox" [ngModel]="calendarType()" (ngModelChange)="changeCalendarType($event)">
+    <span class="slider round"></span>
+  </label>
+</div>
+<ngb-datepicker #dp [(ngModel)]="today" [firstDayOfWeek]="7" class="calendar-widget"></ngb-datepicker>

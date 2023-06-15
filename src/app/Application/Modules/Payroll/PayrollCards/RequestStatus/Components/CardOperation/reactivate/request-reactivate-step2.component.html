@@ -1,0 +1,154 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                {{ 'payroll.cardOperationsDetails' | translate}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<form autocomplete="off" #stepForm="ngForm">
+
+    <div class="container-fluid">
+        <div>
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__content">
+                            <div class="sme-form__form">
+                                <div class="sme-form__body">
+
+                                    <!-- INICIO CAMPOS FIJOS  -->
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="operation-type-input-type">{{'payroll.operationType' | translate }}</label>
+                                                <input type="text" class="form-control" id="operation-type-input-type" name="operationType"
+                                                    value="{{'payrollcardsOperations' | modelPipe:batch.operation}}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="card-number-input">{{ 'payroll.cardNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="card-number-input" value="{{ batch['cardNumber'] }}"
+                                                    disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="civilian-input2">{{ 'payroll.civilianID' | translate }}</label>
+                                                <input type="text" class="form-control" id="civilian-input2" value="{{ batch['nationalId'] }}"
+                                                    disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="rejectedReason" >{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label> 
+                                                <input  class="form-control" id="rejectedReason" value="{{batch.rejectedReason}}" disabled>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- FIN CAMPOS FIJOS  -->
+
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'SN'">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.employeeName' | translate
+                                                    }}</label>
+                                                <input type="text" class="form-control" name="cardHolderName"
+                                                    [(ngModel)]="batch.employeeName" maxlength="50" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'SI'">
+                                            <div class="form-group">
+                                                <label for="employee-id-input">{{ 'payroll.employeeId' | translate }}</label>
+                                                <input type="text" class="form-control" id="employee-id-input"
+                                                    [(ngModel)]="batch.employeeId" name="employeeId"
+                                                    inputPattern="onlyNumbers" #employeeId="ngModel" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'NI'">
+                                            <div class="form-group">
+                                                <label for="national-id-input">{{ 'payroll.nationalId' | translate }}</label>
+                                                <input type="text" class="form-control" id="national-id-input"
+                                                    [(ngModel)]="batch.nationalId" name="nationalId" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'LD' || batch.operation === 'PR'">
+                                            <div class="form-group">
+                                                <label for="amount-input">{{ 'public.amount' | translate }}</label>
+                                                <input class="form-control" value="{{batch.amount | amountCurrency}}"
+                                                    name="ammount" type="text"   disabled/>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'wps'">
+                                            <div class="form-group">
+                                                <label for="basic-salary-input">{{ 'payroll.basicSalary' | translate }}</label>
+                                                <input type="text" class="form-control" id="basic-salary-input"
+                                                    [(ngModel)]="batch.salaryBasis" name="salaryBasis" #salaryBasis="ngModel" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'wps'">
+                                            <div class="form-group">
+                                                <label for="housing-allowance-input">{{ 'payroll.housingAllowance' |
+                                                    translate }}</label>
+                                                <input type="text" class="form-control" id="housing-allowance-input"
+                                                    [(ngModel)]="batch.homeAllowance" name="housingAllowance"
+                                                    #housingAllowance="ngModel" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'wps'">
+                                            <div class="form-group">
+                                                <label for="other-allowance-input">{{ 'payroll.otherAllowance' |
+                                                    translate }}</label>
+                                                <input type="text" class="form-control" id="other-allowance-input"
+                                                    [(ngModel)]="batch.allowanceOthers" name="otherAllowance" #otherAllowance="ngModel" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="batch.operation === 'wps'">
+                                            <div class="form-group">
+                                                <label for="deduction-input">{{ 'payroll.deduction' | translate }}</label>
+                                                <input type="text" class="form-control" id="deduction-input"
+                                                    [(ngModel)]="batch.deductions" name="deduction" #deduction="ngModel" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

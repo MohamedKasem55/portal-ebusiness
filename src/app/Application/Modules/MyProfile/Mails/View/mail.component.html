@@ -1,0 +1,91 @@
+<arb-breadcrumb *ngIf="confirmType  == ConfirmType.NO_CONFIRM" [routes]="[
+['myProfile.myProfile'],
+['myProfile.mails.messages', '/myprofile/mails/'],
+['myProfile.mails.' + view]
+]">
+</arb-breadcrumb>
+<arb-panel-title [title]="'myProfile.mails.' + view"></arb-panel-title>
+<arb-panel [hidden]="confirmType == ConfirmType.DELETE">
+    <div *ngIf="confirmType == ConfirmType.SEND" class="container-fluid docs-component">
+        <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+            <div class="" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <span class="icon -check icon-success"></span>
+                        <p>{{ 'myProfile.mails.mailSend' | translate }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form autocomplete="off" #mailForm="ngForm">
+        <div *ngIf="view==ViewType.DETAIL && confirmType == ConfirmType.NO_CONFIRM" class="form-group row">
+            <label class="col-sm-2 col-form-label">{{'myProfile.mails.date' | translate }}</label>
+            <div class="col-sm-10">
+                <span class="form-control">{{mail.date | date:'dd/MM/yyyy'}}</span>
+            </div>
+        </div>
+        <div *ngIf="view==ViewType.DETAIL && confirmType == ConfirmType.NO_CONFIRM" class="form-group row">
+            <label class="col-sm-2 col-form-label">{{'myProfile.mails.from' | translate }}</label>
+            <div class="col-sm-10">
+                <span class="form-control">{{mail.fromName}}</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="toName" class="col-sm-2 col-form-label">{{'myProfile.mails.to' | translate }}</label>
+            <div class="col-sm-10">
+                <span *ngIf="view!=ViewType.COMPOSE" class="form-control">{{mail.toName}}</span>
+                <div *ngIf="view==ViewType.COMPOSE" class="sme-select form-control dropdown">
+                    <select id="toName" class="form-control" name="account" [(ngModel)]="ccSelected" required>
+                        <option [selected]="ccSelected==null" [ngValue]="null" disabled>
+                            -- {{ 'myProfile.mails.ccSelect' | translate}} --
+                        </option>
+                        <option *ngFor="let ccDto of ccList" [ngValue]="ccDto"
+                                [selected]="ccSelected!=null && ccSelected.userName == ccDto.userName">
+                            {{ccDto.userName + ' - ' + ccDto.mailAddress}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="subject" class="col-sm-2 col-form-label">{{ 'myProfile.mails.subject' | translate}}</label>
+            <div class="col-sm-10">
+                <span *ngIf="view!=ViewType.COMPOSE" class="form-control">{{mail.subject}}</span>
+                <input *ngIf="view==ViewType.COMPOSE" type="text" class="form-control" id="subject" name="subject"
+                       [(ngModel)]="mail.subject">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12 col-sm-12">
+                <ckeditor  name="content" *ngIf="translate.currentLang ==='en'"  data=""  [config]="ckConfigEn" editorUrl="./ckeditor/ckeditor.js"
+                           [(ngModel)]="mail.content" [disabled]="view==ViewType.DETAIL" (ready)="onCKeditorReady($event)"></ckeditor>
+                <ckeditor  name="content" *ngIf="translate.currentLang !=='en'"  data="" [config]="ckConfigAr" editorUrl="./ckeditor/ckeditor.js"
+                           [(ngModel)]="mail.content" [disabled]="view==ViewType.DETAIL"  (ready)="onCKeditorReady($event)"> </ckeditor>
+                <small *ngIf="view!=ViewType.DETAIL" class="pull-left">
+                    <em>{{getMsgLength()}}/{{maxChars}}</em>
+                </small>
+                <br/>
+                <small *ngIf="view!=ViewType.DETAIL && getMsgLength() >= maxChars" class="pull-left">
+                    <em>{{ 'myProfile.mails.maxCharactersReached' | translate}}</em>
+                </small>
+            </div>
+        </div>
+    </form>
+</arb-panel>
+<app-delete-mail *ngIf="confirmType == ConfirmType.DELETE" [mailsToDelete]="getMails()" [mailFolder]="mailFolder" (onConfirmation)="backToList()"
+                 (onCancel)="setConfirmation(ConfirmType.NO_CONFIRM)">
+</app-delete-mail>
+<arb-buttons *ngIf="confirmType != ConfirmType.DELETE">
+    <button (click)="backToList()" type="button"
+            class="btn btn-default btn-wide ">{{ 'public.back' | translate }}</button>
+    <button *ngIf="view == ViewType.DETAIL && confirmType == ConfirmType.NO_CONFIRM " type="button"
+            class="btn btn-primary btn-wide"
+            [routerLink]="['/myprofile/mails/reply']">{{'public.reply' | translate }}
+    </button>
+    <button *ngIf="view == ViewType.DETAIL && confirmType == ConfirmType.NO_CONFIRM" type="button"
+            class="btn btn-primary btn-wide"
+            (click)="setConfirmation(ConfirmType.DELETE)">{{'public.delete' | translate }}</button>
+    <button *ngIf="view == ViewType.COMPOSE || view == ViewType.REPLY" type="button" class="btn btn-primary btn-wide"
+            [disabled]="!mailForm.valid || getMsgLength() >= maxChars" (click)="sendMail()">{{'public.send' | translate }}</button>
+</arb-buttons>

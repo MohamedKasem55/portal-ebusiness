@@ -1,0 +1,247 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'wpspayroll.modifyEmployee' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+<form autocomplete="off" [formGroup]="form">
+<div class="container-fluid" formArrayName="employees" *ngFor="let employ of form.controls.employees['controls']; let i=index">
+
+	<div [formGroupName]="i">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+				<a class="sme-form__close btn" (click)="removeEmployee(i)"><span class="icon -close"></span></a>
+					<div class="sme-form__body">
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.employeeNumber' |
+											translate }}</label> 
+										<input type="text" class="form-control"	formControlName="employeeNumber" pattern="[1-9][0-9]*" inputPattern="onlyDigits">
+										<div *ngIf="employ.controls.employeeNumber.hasError('required') && employ.controls.employeeNumber.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.employeeNumber' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.employeeNumber.hasError('maxLength') && employ.controls.employeeNumber.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.employeeNumber' | translate }} {{ 'error.maxlength' | translate:{size:12} }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.employeeNumber.hasError('pattern')" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.employeeNumber' | translate }} {{ 'error.start0' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.employeeName'
+											| translate }}</label> 
+										<input type="text" class="form-control" formControlName="employeeName" maxlength="50">
+										<div *ngIf="employ.controls.employeeName.hasError('required') && employ.controls.employeeName.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.employeeName' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.employeeName.hasError('maxLength') && employ.controls.employeeName.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.employeeName' | translate }} {{ 'error.maxlength' | translate:{size:50} }} </small>
+                                        </div>
+										<div *ngIf="employ.controls.employeeName.hasError('pattern') && employ.controls.employeeName.touched" class="alert alert-danger">
+											<small>{{'wpspayroll.employeeName' | translate }}{{ 'error.onlyAlphabetical' | translate }} </small>
+										</div>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="civilian-id-input" class="required">{{
+											'wpspayroll.civilianID' | translate }}</label> 
+										<input type="text" class="form-control" id="civilian-id-input" formControlName="civilianId" maxlength="10" minlength="10" inputPattern="onlyDigits">
+										<div *ngIf="employ.controls.civilianId.hasError('required') && employ.controls.civilianId.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.civilianID' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.civilianId.hasError('maxlength')" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.civilianID' | translate }} {{ 'error.maxlength' | translate:{size:10} }} </small>
+                                        </div>  
+                                        <div *ngIf="employ.controls.civilianId.hasError('minlength')" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.civilianID' | translate }} {{ 'error.minlength' | translate:{size:10} }} </small>
+                                        </div> 
+                                        <div *ngIf="employ.controls.civilianId.hasError('pattern') && employ.controls.civilianId.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.civilianID' | translate }}{{ 'error.numeric' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<div class="form-group">
+									<div class="sme-select  dropdown" dropdown style="width:100%;margin:0;padding:0;line-height: inherit">
+										<label>{{
+											'public.department' | translate }}</label> 
+										<button dropdownToggle type="button" class="form-control" style="margin:0;padding:0">
+											<input formControlName="departmentId" class="form-control" maxlength="10">
+										</button>
+													
+													<ul *dropdownMenu class="dropdown-menu" aria-labelledby="dLabel" style="overflow:auto;max-height:400px">
+														<li *ngFor="let department of departments; let j = index"><a class="human-selectable" (click)="form.controls.employees['controls'][i]['departmentId']=department.value"><span [innerHTML]="department.value"></span></a></li>
+													</ul>
+								</div>
+									</div>
+									<!-- sme-form-group -->
+									
+									<!-- ./sme-form-group -->
+								</div>
+								
+							</fieldset>	
+							</div>
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="account-input" class="required">{{ 'companyAdmin.user.account' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="account-input" fngxIban formControlName="account" maxlength="24">
+										<div *ngIf="employ.controls.account.hasError('required') && employ.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'companyAdmin.user.account' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.account.hasError('maxLength') && employ.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'companyAdmin.user.account' | translate }}{{ 'error.maxlength' | translate:{size:24} }} </small>
+                                        </div>  
+                                        <div *ngIf="employ.controls.account.hasError('pattern') && employ.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{ 'beneficiaries.ibanFrontValidation' | translate }} </small>
+                                        </div>  
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{
+											'public.bank' | translate }}</label> 
+										<span class="form-control disabled" [innerHTML]="banksMap.get(employ.controls.bank?.value)"></span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								
+								
+								
+								</fieldset>
+							</div>
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="salaryBasic-input">{{ 'wpspayroll.basicSalary'
+											| translate }}</label> 
+										<input type="text" class="form-control" id="salaryBasic-input" formControlName="salaryBasic" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$">
+										<!-- <div *ngIf="employ.controls.salaryBasic.hasError('required') && employ.controls.salaryBasic.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.basicSalary' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div> -->
+                                        <div *ngIf="employ.controls.salaryBasic.hasError('maxLength') && employ.controls.salaryBasic.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.basicSalary' | translate }}{{ 'error.maxlength' | translate:{size:16} }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.salaryBasic.hasError('pattern') && employ.controls.salaryBasic.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.basicSalary' | translate }}{{ 'error.maxAndNumericDecimal' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="allowanceHousing-input">{{ 'wpspayroll.housingAllowance'
+											| translate }}</label> 
+										<input type="text" class="form-control" id="allowanceHousing-input" formControlName="allowanceHousing" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$">
+										<!-- <div *ngIf="employ.controls.allowanceHousing.hasError('required') && employ.controls.allowanceHousing.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.housingAllowance' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div> -->
+                                        <div *ngIf="employ.controls.allowanceHousing.hasError('maxLength') && employ.controls.allowanceHousing.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.housingAllowance' | translate }}{{ 'error.maxlength' | translate:{size:16} }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.allowanceHousing.hasError('pattern') && employ.controls.allowanceHousing.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.housingAllowance' | translate }}{{ 'error.maxAndNumericDecimal' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="allowanceOther-input">{{ 'wpspayroll.otherAllowance'
+											| translate }}</label>
+										<input type="text" class="form-control" id="allowanceOther-input" formControlName="allowanceOther" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$">
+										<!-- <div *ngIf="employ.controls.allowanceOther.hasError('required') && employ.controls.allowanceOther.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.otherAllowance' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div> -->
+                                        <div *ngIf="employ.controls.allowanceOther.hasError('maxLength') && employ.controls.allowanceOther.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.otherAllowance' | translate }}{{ 'error.maxlength' | translate:{size:16} }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.allowanceOther.hasError('pattern') && employ.controls.allowanceOther.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.otherAllowance' | translate }}{{ 'error.maxAndNumericDecimal' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="deductions-input">{{ 'wpspayroll.deductions'
+											| translate }}</label>
+										<input type="text" class="form-control" id="deductions-input" formControlName="deductions" maxlength="16" inputPattern="onlyPositiveDecimalNumbers" pattern="[0-9]{0,13}(\.[0-9]{0,2})?$" [lte]="(employ.controls.allowanceOther.value ? +employ.controls.allowanceOther.value : 0)+
+        								(employ.controls.allowanceHousing.value ? +employ.controls.allowanceHousing.value : 0)+
+          								(employ.controls.salaryBasic.value ? +employ.controls.salaryBasic.value : 0)">
+										<!-- <div *ngIf="employ.controls.deductions.hasError('required') && employ.controls.deductions.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.deductions' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div> -->
+                                        <div *ngIf="employ.controls.deductions.hasError('maxLength') && employ.controls.deductions.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.deductions' | translate }}{{ 'error.maxlength' | translate:{size:16} }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.deductions.hasError('pattern') && employ.controls.deductions.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.deductions' | translate }}{{ 'error.maxAndNumericDecimal' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="employ.controls.deductions.hasError('lte') && employ.controls.deductions.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.deductions' | translate }}{{ 'error.maxValue' | translate:{value:(employ.controls.allowanceOther.value ? +employ.controls.allowanceOther.value : 0)+
+        								(employ.controls.allowanceHousing.value ? +employ.controls.allowanceHousing.value : 0)+
+          								(employ.controls.salaryBasic.value ? +employ.controls.salaryBasic.value : 0)} }} </small>
+                                        </div>   	 
+										
+										<!-- <div *ngIf="employ.controls.deductions.hasError('required') && employ.controls.deductions.touched" class="alert alert-danger">
+                                                    <small>{{'wpspayroll.deductions' | translate }}{{ 'error.required' | translate }} </small>
+                                        </div> -->
+                                       
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+							</fieldset>
+							</div>	
+							<div class="row">
+							<fieldset>
+							<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label class="required">{{ 'wpspayroll.salary'
+											| translate }}</label> 
+										<span class="form-control disabled">{{employ.controls.salary?.value | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+									</div>
+									<!-- ./sme-form-group -->
+								</div>	
+							</fieldset>
+							</div>
+					</div>			
+				
+			</div>	
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+
+</form>	

@@ -1,0 +1,488 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.payments' | translate }}</li>
+        <li class="active"><a class="human-selectable" href="#"
+                              [routerLink]="['/invoiceHUB']">{{ 'dashboard.invoiceHUB' | translate }}</a></li>
+        <li class="active">{{ 'invoiceHUB.feedbackFile'| translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid" *ngIf="!details">
+    <div class="sme-page-block">
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'invoiceHUB.downloadableFile'| translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="downloadFileTable" [header]="'invoiceHUB.downloadableFile' | translate"
+                                  [columns]="[
+                           {'title':'invoiceHUB.fileReference' | translate,'dataKey':'fileReference'},
+                           {'title':'invoiceHUB.create' | translate,'dataKey':'requestDate'},
+                           {'title':'invoiceHUB.transferDate' | translate,'dataKey':'transfaerDate'}
+                                
+                               ]"></table-export>
+                </div>
+            </div>
+            <div class="sme-table table headerDataTable">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #downloadFileTable
+                               class="material sme-table sme-table--responsive table" [rows]="downloadFile"
+                               [columnMode]="defaultColumnMode"
+                               [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                               [externalPaging]="false"
+                               [externalSorting]="false" [limit]="downloadableFilePageSize">
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                                   >{{'invoiceHUB.fileReference' | translate }}</label>
+                                            <div>
+                                                <span class="human-selectable"><a
+                                                        (click)="goToDetails(row)">{{ row.fileReference }}</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'invoiceHUB.create' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.requestDate | date:"dd/MM/yyyy" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                                   >{{'invoiceHUB.transferDate' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.transfaerDate | date:"dd/MM/yyyy" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+                    <ngx-datatable-column prop="fileReference">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.fileReference' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span class="human-selectable"><a (click)="goToDetails(row)"> {{value}}</a></span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="requestDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.create' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | date:"dd/MM/yyyy" }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="transfaerDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.transferDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | date:"dd/MM/yyyy" }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="downloadFileTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div [hidden]="!((rowCount / pageSize) > 1)"
+                                     class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount - ((curPage - 1) * pageSize) : pageSize}}
+                                        {{ 'public.ofLabel' | translate}} {{downloadFile.length}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" (change)="setPageSizeDownloadableFile($event)">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                                <option [value]="100">100</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" *ngIf="!details">
+    <div class="sme-page-block">
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'invoiceHUB.filesInProcess'| translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="filesInProcessTable" [header]="'invoiceHUB.filesInProcess' | translate"
+                                  [columns]="[
+                           {'title':'invoiceHUB.fileReference' | translate,'dataKey':'fileReference'},
+                           {'title':'invoiceHUB.create' | translate,'dataKey':'requestDate'},
+                           {'title':'invoiceHUB.transferDate' | translate,'dataKey':'transfaerDate'}
+                                
+                               ]"></table-export>
+                </div>
+            </div>
+            <div class="sme-table table headerDataTable">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #filesInProcessTable
+                               class="material sme-table sme-table--responsive table" [rows]="filesInProcess"
+                               [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                               [rowHeight]="defaultHeight"
+                               [externalPaging]="false" [externalSorting]="false" [limit]="downloadableFilePageSize">
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                                   >{{'invoiceHUB.fileReference' | translate }}</label>
+                                            <div>
+                                                <span class="human-selectable"><a
+                                                        (click)="showFile(row)">{{ row.fileReference }}</a></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'invoiceHUB.create' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.requestDate | date:"dd/MM/yyyy" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                                   >{{'invoiceHUB.transferDate' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.transfaerDate | date:"dd/MM/yyyy" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+                    <ngx-datatable-column prop="fileReference">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.fileReference' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span class="human-selectable"><a (click)="goToDetails(row)"> {{value}}</a></span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="requestDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.create' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | date:"dd/MM/yyyy" }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="transfaerDate">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.transferDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | date:"dd/MM/yyyy" }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="filesInProcessTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div [hidden]="!((rowCount / pageSize) > 1)"
+                                     class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount - ((curPage - 1) * pageSize) : pageSize}}
+                                        {{ 'public.ofLabel' | translate}} {{filesInProcess.length}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" (change)="setPageSizeFilesInProcess($event)">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                                <option [value]="100">100</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sme-page-block sme-wizard__navigation sme-form__actions" *ngIf="!details">
+    <button class="btn btn-default btn-wide" type="button"
+            [routerLink]="['/invoiceHUB']">{{ 'public.back' | translate}}</button>
+</div>
+<div class="container-fluid" *ngIf="details">
+    <div class="sme-page-block">
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'invoiceHUB.fileReference'| translate }} {{currentRow.fileReference}}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="underProcessUpdatableFileTable"
+                                  [header]="'invoiceHUB.fileReference'| translate"
+                                  [columns]="[
+                           {'title':'invoiceHUB.accountFrom' | translate,'dataKey':'accountFrom'},
+                           {'title':'invoiceHUB.billerName' | translate,'dataKey':'billerName'},
+                           {'title':'invoiceHUB.billRef' | translate,'dataKey':'invoiceID'},
+                           {'title':'invoiceHUB.amount' | translate,'dataKey':'amount'},
+                           {'title':'invoiceHUB.process' | translate,'dataKey':'process'},
+                           {'title':'invoiceHUB.result' | translate,'dataKey':'returnCode'}
+                                
+                               ]"></table-export>
+                </div>
+            </div>
+            <div class="sme-table table headerDataTable">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #underProcessUpdatableFileTable
+                               class="material sme-table sme-table--responsive table" [rows]="detailsRow"
+                               [columnMode]="defaultColumnMode"
+                               [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                               [externalPaging]="false"
+                               [externalSorting]="false" [limit]="detailsRowPageSize">
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                              (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{'invoiceHUB.accountFrom' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.accountFrom }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label
+                                                   >{{'invoiceHUB.billerName' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.billerName }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'invoiceHUB.billRef' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.invoiceID }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'invoiceHUB.amount' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.amount| amountCurrency }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'invoiceHUB.process' | translate }}</label>
+                                            <div>
+                                                <span>{{ 'billProcess' | modelPipe:row.process }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'invoiceHUB.result' | translate }}</label>
+                                            <div>
+                                                <span>{{ 'errors' | modelPipe:'errorTable.' + row.returnCode }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+                    <ngx-datatable-column prop="accountFrom" [width]="270">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.accountFrom' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="billerName">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.billerName' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="invoiceID">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.billRef' | translate }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="amount">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.amount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{value | amountCurrency }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="process">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.process' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{ 'billProcess' | modelPipe:value }}</span>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column prop="returnCode">
+                        <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'invoiceHUB.result' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <span>{{'errors' | modelPipe:'errorTable.' + value}}</span>
+                        </ng-template>
+
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                     let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div class="sme-data-table__footer">
+                                <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="detailsRowTable.onFooterPage($event)">
+                                </app-datatable-pager>
+                                <div [hidden]="!((rowCount / pageSize) > 1)"
+                                     class="sme-data-table__actions form-inline">
+                                    <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                        {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount - ((curPage - 1) * pageSize) : pageSize}}
+                                        {{ 'public.ofLabel' | translate}} {{detailsRow.length}}</span>
+                                    <span class="hidden-xs"> | </span>
+                                    <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" (change)="setPageSizedetailsRow($event)">
+                                                <option [value]="10">10</option>
+                                                <option [value]="20">20</option>
+                                                <option [value]="50">50</option>
+                                                <option [value]="100">100</option>
+                                            </select>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-footer>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sme-page-block sme-wizard__navigation sme-form__actions" *ngIf="details">
+    <button class="btn btn-default btn-wide" type="button"
+            (click)="details=false;">{{ 'public.back' | translate}}</button>
+</div>

@@ -1,0 +1,71 @@
+<arb-breadcrumb *ngIf="!isUpdate" [routes]="[['public.newProduct'],['newProduct.wps']]">
+</arb-breadcrumb>
+
+<div class="sme-breadcrumb" *ngIf="isUpdate">
+    <ol class="breadcrumb">
+        <li>{{'public.newProduct' | translate}}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/newProduct/wps/requestStatus']">{{
+                'newProduct.requests' | translate }}</a></li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/newProduct/wps/requestDetails']" [state]="{data:updatedItem}">{{
+                'newProduct.requestStatus.requestNumber' | translate }}
+                {{updatedItem.agreementId}}</a></li>
+        <li class="active">{{ 'newProduct.wps' | translate}}
+        </li>
+    </ol>
+</div>
+
+<div *ngIf="wizardStep===1 && !startSubscribeProcess">
+    <arb-panel-buttons>
+        <button class="btn btn-primary btn-wide" type="button" (click)="subscribe()">{{ 'newProduct.subscribe' |
+            translate}}</button>
+    </arb-panel-buttons>
+</div>
+
+<div *ngIf="startSubscribeProcess">
+    <arb-steps [currentStep]="wizardStep"
+        [steps]="['newProduct.wps-new.feesStructure','newProduct.wps-new.confirmation', 'newProduct.wps-new.finish']">
+    </arb-steps>
+
+    <wps-payroll-new-step1 *ngIf="wizardStep===1" [showDetails]="showDetails" [formModel]="formModel"
+        [combosData]="combosData">
+    </wps-payroll-new-step1>
+    <wps-payroll-new-step2 *ngIf="wizardStep===2" [formModel]="formModel"></wps-payroll-new-step2>
+    <wps-payroll-new-step3 *ngIf="wizardStep===3"></wps-payroll-new-step3>
+
+</div>
+
+<arb-panel *ngIf="wizardStep===2 && hasBeenValidated">
+    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate"
+        #authorization>
+    </app-secured-authentication>
+</arb-panel>
+
+<arb-buttons *ngIf="startSubscribeProcess">
+    <button class=" btn btn-default btn-wide" type="button" *ngIf="(isUpdate && wizardStep === 2) || (!isUpdate && wizardStep !== 3 && showDetails)" (click)="goBack()">{{ backBtnValue |translate}}</button>
+
+    <button class="btn btn-primary btn-wide" type="button" [disabled]="canProceed()" (click)="proceed()">{{
+        'public.next' |translate}}</button>
+</arb-buttons>
+
+
+<div class="modal fade" bsModal  #wpsModal="bs-modal" [config]="{ backdrop: 'static' }" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ '' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <p *ngIf="doesNationalAddressExist == false" >{{ 'companyAdmin.nationalAddress.warningUser' | translate }}</p>
+                <p *ngIf="isEligibleToRegister == false" >{{ 'newProduct.wps-new.notEligibleToRegister' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="close()" class="btn btn-default" data-dismiss="modal">
+                    {{ companyAlreadyRegistered == true
+                    ? ('newProduct.wps-new.viewAgreements' | translate)
+                    : ('public.close' | translate) }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

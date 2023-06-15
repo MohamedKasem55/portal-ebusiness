@@ -1,0 +1,351 @@
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{'chequebook.chequebookPayment' | translate}}</div>
+
+        <div class="col-xs-12 col-sm-12 sme-form__actions">
+            <a class=" btn btn-primary btn-wide" routerLinkActive="active" [routerLink]="['/accounts/chequebook/chequebook-payment/newInquiry']">{{'public.newInquiry' | translate }}</a>
+        </div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <a (click)="isSearchCollapsed = !isSearchCollapsed" class="sme-form__head human-selectable" [ngClass]="{'collapsed': isSearchCollapsed}">
+                    <span>{{ 'public.search' | translate }}</span>
+                </a>
+                <div class="sme-form__collapse" id="sme-demo--form--search-criteria-" [collapse]="isSearchCollapsed">
+
+                    <form autocomplete="off" class="sme-form__form" [formGroup]="form" (ngSubmit)="searchFilterSubmit()">
+                        <div class="sme-form__body">
+
+                            <div class="row">
+                                <div class="col-xs-4" style="display: flex !important; align-items: center;">
+
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>{{ 'chequebook.account' | translate }}</label>
+                                            <div class="sme-select form-control">
+                                                <select id="deduct-from-account-input" class="form-control" formControlName="account">
+                                                    <option selected value disabled>--{{ 'public.selectAccount' | translate }}--</option>
+                                                    <option *ngFor="let account of accounts" [value]="account.key">{{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' -
+                                                        '+ account.value.alias : '')}} - {{account.value.availableBalance
+                                                        | amountCurrency:account.value.currency}} {{ 'currencyIso' | modelPipe:account.value.currency}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-3" style="display: flex !important; align-items: center;">
+
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>{{ 'chequebook.chequeNumber' | translate }}</label>
+                                            <input type="text" name="chequeNumber" class="form-control" formControlName="chequeNumber">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-xs-4" style="display: flex !important; align-items: center;">
+
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'chequebook.chequeNumber' | translate }} {{ 'public.from' | translate }}
+                                            </label>
+                                            <input type="text" name="amountFrom" class="form-control" formControlName="numberFrom" inputPattern="onlyDecimalNumbers">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'chequebook.chequeNumber' | translate }} {{ 'public.to' | translate }}
+                                            </label>
+                                            <input type="number" name="amountTo" class="form-control" formControlName="numberTo" inputPattern="onlyDecimalNumbers">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4" style="display: flex !important; align-items: center;">
+
+
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'public.amount' | translate }} {{ 'public.from' | translate }}</label>
+                                            <input placeholder="{{ 'accounts.amountfrom' | translate }}" type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers"  name="amountFrom" class="form-control"
+                                                formControlName="amountFrom" >
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>{{ 'public.amount' | translate }} {{ 'public.to' | translate }}</label>
+                                            <input placeholder="{{ 'accounts.amountto' | translate }}" type="text" maxlength="16" inputPattern="onlyPositiveDecimalNumbers"  name="amountTo" class="form-control"
+                                                formControlName="amountTo" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="display: flex !important; align-items: center;">
+
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>{{ 'chequebook.status' | translate }}</label>
+                                            <div class="sme-select form-control">
+                                                <select id="deduct-from-account-input" class="form-control" formControlName="status">
+                                                    <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                                    <option *ngFor="let stat of status" [value]="account.key">}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{ 'public.reset' | translate }}</button>
+                            <button type="submit" class="btn btn-primary btn-wide">{{ 'public.search' | translate }}</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-form__content">
+
+        <div class="sme-form__body">
+            <fieldset>
+                <div class="sme-data-table">
+                    <div class="sme-data-table__head">
+                        <div class="sme-data-table__title">{{'chequebook.chequeList' | translate }}</div>
+
+                    </div>
+
+                    <div class="sme-table table headerDataTable"></div>
+                    <ngx-datatable 
+                        [messages]="{emptyMessage: 'public.noData' | translate}" 
+                        #table [rows]="chequeBooks" 
+                        class="material  sme-table sme-table--responsive table" 
+                        [columnMode]="defaultColumnMode"
+                        [headerHeight]="30" 
+                        [footerHeight]="footerHeight" 
+                        [rowHeight]="defaultHeight" 
+                        [count]="chequeBooks?.page?.size" 
+                        [limit]="chequeBooks?.page?.pageSize"
+                        [externalPaging]="true" 
+                        (page)='setPage($event)' 
+                        [externalSorting]="false" 
+                        [selectionType]="defaultSelectionType"
+                        (select)="onSelect($event)">
+                        
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)" >
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.account' | translate }}</label>
+                                            <div>
+                                                <span>{{row.account}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.chequeNumber' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.chequeNumber }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.postedDate' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.postedDate  | date: 'dd/MM/yyyy' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.amount' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.amount  | amountCurrency }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.beneficiaryName' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.beneficiaryName }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.status' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.status }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.withdrawalDate' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.withdrawalDate  | date: 'dd/MM/yyyy' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'chequebook.viewChequeIcon' | translate }}</label>
+                                            <div>
+                                                 <span>{{ row.viewChequeIcon   }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"
+                            [checkboxable]="true">
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="account">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.account' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="chequeNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.chequeNumber' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="postedDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.postedDate' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | date: 'dd/MM/yyyy' }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.amount' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="beneficiaryName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.beneficiaryName' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="status">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.status' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="withdrawalDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.withdrawalDate' | translate }}</span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | date: 'dd/MM/yyyy' }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="viewChequeIcon">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'chequebook.viewChequeIcon' | translate }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+                                let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount" [visiblePagesCount]="visiblePagesCount"  (change)="table.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{rowCount}} {{ 'public.ofLabel' | translate}}
+                                            {{requestStatus?.total}}
+                                        </span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="tableDisplaySize">
+                                                    <option [value]=10>10</option>
+                                                    <option [value]=20>20</option>
+                                                    <option [value]=50>50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+                <div class="row">
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <!-- </form> -->
+</div>
+<!-- </form> -->

@@ -1,0 +1,20 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-title">
+    {{'fleet.newRequest.NoteligibleTitle'|translate}}
+  </div>
+  <sme-check [img]="img" [title]="title" [status]="status">
+    <div class="check-body">
+      <p>
+        {{body}}
+      </p>
+    </div>
+  </sme-check>
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button (click)="navigateTo('/')" type="button" class=" btn btn-primary btn-wide">
+      {{'fleet.btn.backToDashboard'|translate}}
+    </button>
+  </div>
+</div>

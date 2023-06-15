@@ -1,0 +1,240 @@
+<arb-breadcrumb [routes]="[
+	['menu.transfers.transfers.transfer'],
+	['charity.communityServices']]">
+</arb-breadcrumb>
+
+
+<arb-panel>
+    <div class="option-container-icon" (click)="navigateToSingleCharityTransfer()">
+        <img src="img/diagonal-arrow.svg" alt="Diagonal Arrow" class="option-icon"  [ngStyle]="{'transform': translate.currentLang === 'ar' ? ('rotateY(180deg)') : ''}">
+        <h3 class="option-text">Single Charity Transfer</h3>
+        <span class="icon -chevron-right" [ngClass]="{'chevron-ltr': translate.currentLang === 'en', 'chevron-rtl': translate.currentLang === 'ar'}" ></span>
+    </div>
+</arb-panel>
+
+
+<arb-colapsable-panel [title]="'public.search'" [isCollapsedContent]="true">
+    <div class="sme-form">
+        <div class="sme-form__content">
+            <div class="sme-form__form" id="sme-demo--form--search-criteria-">
+                <form autocomplete="off" [formGroup]="formModel"
+                      class="sme-wizard">
+
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'charity.charityCat' | translate }}</label>
+                                    <ng-select [notFoundText]="'public.noData' | translate" [ngModelOptions]="{standalone: true}" [(ngModel)]="charityCategory" class="form-control" (change)="selectCategory($event)">
+                                        <ng-option *ngFor="let charityCategory of charityBaseModels" [value]="charityCategory"  >
+                                            {{charityCategory?.value?.description}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'charity.charityOrg' | translate }}</label>
+                                    <ng-select [notFoundText]="'public.noData' | translate" [ngModelOptions]="{standalone: true}" [(ngModel)]="charityGroup" class="form-control" (change)="selectGroup($event)">
+                                        <ng-option *ngFor="let charityGroup of charityCategoryGroups" [value]="charityGroup" >
+                                            {{charityGroup.description}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                    <arb-buttons>
+                        <button type="submit" class="btn btn-default btn-wide" (click)="reset()">
+                            {{ 'public.reset' | translate }}
+                        </button>
+                            <button [disabled]="formModel.invalid" type="submit" class="btn btn-primary btn-wide" (click)="setPageOffset(0)">
+                                {{ 'public.search' | translate }}
+                            </button>
+                    </arb-buttons>
+            </div>
+        </div>
+    </div>
+</arb-colapsable-panel>
+
+
+<arb-table-panel [title]="'charity.transactionHis'">
+    <table-export
+            [dataTable]="table" [header]="'invoiceHUB.requestStatus' | translate"
+            [columns]="[
+                {'title': 'transfer.feedback.transferDate' | translate, 'dataKey':'transferDate'},
+                {'title': 'transfer.processed_transactions.transferAmount' | translate, 'dataKey':'amount'},
+                {'title': 'charity.charityCat' | translate, 'dataKey':'categoryDescription'},
+                {'title': 'charity.charityOrg' | translate, 'dataKey':'groupDescription'},
+                {'title': 'transfer.remarks' | translate, 'dataKey':'remarks'}
+            ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                   [rows]="transactionsList.data" class="material sme-table sme-table--responsive table"
+                   [columnMode]="defaultColumnMode" [headerHeight]="40" [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight" [count]="transactionsList.page.totalElements" [offset]="transactionsList.page.pageNumber"
+                   [limit]="pageSize" [externalPaging]="true" (page)='setPage($event)'
+                   [externalSorting]="false">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>
+                                    {{'transfer.feedback.transferDate' | translate }}
+                                </label>
+                                <div>
+                                    <span>{{row.transferDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'transfer.processed_transactions.transferAmount' | translate }}</label>
+                                <div>
+                                    <span>{{ row.amount }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'charity.charityCat' | translate }}</label>
+                                <div>
+                                    <span>{{ row.categoryDescription }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'charity.charityOrg' | translate }}</label>
+                                <div>
+                                    <span>{{ row.groupDescription }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'transfer.remarks' | translate }}</label>
+                                <div>
+                                    <span>{{ row.remarks }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="transferDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.feedback.transferDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span style="margin-left: 5%; margin-right: 5%">
+                    {{value}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amount">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.processed_transactions.transferAmount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    {{ value | amountCurrency:row.currency}}
+                    {{ 'currencyIso' | modelPipe:row.currency}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="categoryDescription">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'charity.charityCat' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    {{ value }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="groupDescription">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'charity.charityOrg' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    {{ value }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="remarks">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.remarks' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    {{ value }}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+                         let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                         [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                         [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                         [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                         [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                                         [visiblePagesCount]="visiblePagesCount"
+                                         (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{(pageSize > rowCount ? rowCount : pageSize)}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="transactionsList.page.pageSize" (ngModelChange)="setPageSize($event)">
+                                    <option [value]="20">20</option>
+                                    <option [value]="30">30</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

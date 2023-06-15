@@ -1,0 +1,285 @@
+<form autocomplete="off" [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="legend">{{'chequebook.createChequebook' | translate}}</div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="account" class="required">{{'chequebook.account' | translate }}</label>
+                                            <div class="form-control">
+                                                <span>{{form.controls['account'].value}}</span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="companyName" class="required">{{'chequebook.companyName' | translate }}</label>
+                                            <div class="form-control">
+                                                <span>{{form.controls['companyName'].value}}</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="bookType" class="required">{{'chequebook.bookType' | translate }}</label>
+                                            <div class="form-control">
+                                                <span>{{form.controls['bookType'].value}}</span>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="quantity" class="required">{{'chequebook.quantity' | translate }}</label>
+                                            <div class="form-control">
+                                                <span>{{form.controls['quantity'].value}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="deliveryMethod" class="required">{{'chequebook.deliveryMethod' | translate }}</label>
+                                            <div class="form-control">
+                                                <span>{{form.controls['deliveryMethod'].value}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="form.controls['deliveryMethod'].value === '3'">
+                                    <div class="legend"></div>
+                                    <div class="legend">{{ 'companyAdmin.nationalAddress.name' | translate }}</div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+
+
+                                            <!-- <div class="form-group">
+                                        <label for="country">{{'companyAdmin.nationalAddress.country' | translate }}</label>
+
+                                        <input type="text" class="form-control" id="country" formControlName="country" placeholder="Kingdom of Saudi Arabia">
+
+                                    </div> -->
+
+                                            <div class="form-group">
+                                                <label for="region" class="required">{{'companyAdmin.nationalAddress.region' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['region'].value}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="postal-code" class="required">{{'companyAdmin.nationalAddress.postalCode' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['postalCode'].value}}</span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="phone" class="required">{{'chequebook.phone' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['phone'].value}}</span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label for="city">{{'companyAdmin.nationalAddress.city' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['city'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="additional-code" class="required">{{'companyAdmin.nationalAddress.additionalCode' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['additionalCode'].value}}</span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="feePerChequeBook" class="required">{{'chequebook.feePerChequeBook' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['feePerChequeBook'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="district" class="required">{{'companyAdmin.nationalAddress.district' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['district'].value}}</span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="building-no" class="required">{{'companyAdmin.nationalAddress.buildingNo' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['buildingNo'].value}}</span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="deliveryFees" class="required">{{'chequebook.deliveryFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['deliveryFees'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label for="streetName" class="required">{{'companyAdmin.nationalAddress.streetName' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['streetName'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="unitNo" class="required">{{'companyAdmin.nationalAddress.unitNo' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['unitNo'].value}}</span>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="totalFees" class="required">{{'chequebook.totalFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['totalFees'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="form.controls['deliveryMethod'].value === '1'">
+                                    <div class="legend"></div>
+                                    <div class="legend">{{ 'chequebook.collectFromBranch' | translate }}</div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="branchName" class="required">{{'chequebook.branchName' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['branchName'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="totalFees" class="required">{{'chequebook.totalFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['totalFees'].value}}</span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="phone" class="required">{{'chequebook.phone' | translate }}</label>
+
+                                                <div class="form-control">
+                                                    <span>{{form.controls['phone'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+
+                                            <div class="form-group">
+                                                <label for="feePerChequeBook" class="required">{{'chequebook.feePerChequeBook' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['feePerChequeBook'].value}}</span>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="deliveryFees" class="required">{{'chequebook.deliveryFees' | translate }}</label>
+                                                <div class="form-control">
+                                                    <span>{{form.controls['deliveryFees'].value}}</span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="sme-form">
+
+    <div class="sme-form__content">
+
+
+
+        <div class="sme-form__collapse">
+            <div class="sme-form__form">
+                <div class="sme-form__body">
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 15px;"></div>
+
+
+</div>

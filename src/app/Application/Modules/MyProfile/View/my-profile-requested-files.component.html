@@ -1,0 +1,117 @@
+<div class="container-fluid">
+  <div class="sme-page-block">
+    <!-- sme-data-table -->
+    <div class="sme-data-table">
+      <div class="sme-data-table__head">
+        <div class="sme-data-table__title">
+          {{ 'myProfile.activityLogs.requestedFiles' | translate }}
+        </div>
+      </div>
+      <ngx-datatable
+        class="material sme-table sme-table--responsive table"
+        #requestedFilesTable
+        [rows]="rows"
+        [columnMode]="defaultColumnMode"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="defaultHeight"
+        [limit]="20"
+        [selected]="selected"
+        [selectionType]="defaultSelectionType"
+        [selectAllRowsOnPage]="false"
+        (select)="onSelect($event)"
+      >
+        <ngx-datatable-column
+          name="Deleted"
+          class="checked-row"
+          [width]="30"
+          [sortable]="false"
+          [canAutoResize]="false"
+          [draggable]="false"
+          [resizeable]="false"
+          [headerCheckboxable]="true"
+          [checkboxable]="true"
+        >
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="requested" name="Requested">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <a style="cursor: pointer" (click)="download(value)">{{ value }}</a>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+          <ng-template
+            ngx-datatable-footer-template
+            let-rowCount="rowCount"
+            let-pageSize="pageSize"
+            let-selectedCount="selectedCount"
+            let-curPage="curPage"
+            let-offset="offset"
+          >
+            <div class="sme-data-table__footer">
+              <app-datatable-pager
+                class="sme-data-table__pagination"
+                [pagerLeftArrowIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-left'
+                    : 'datatable-icon-right'
+                "
+                [pagerRightArrowIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-right'
+                    : 'datatable-icon-left'
+                "
+                [pagerPreviousIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-prev'
+                    : 'datatable-icon-skip'
+                "
+                [pagerNextIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-skip'
+                    : 'datatable-icon-prev'
+                "
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="rowCount"
+                [hidden]="!(rowCount / pageSize > 1)"
+                [visiblePagesCount]="visiblePagesCount"
+                (change)="requestedFilesTable.onFooterPage($event)"
+              >
+              </app-datatable-pager>
+              <div class="sme-data-table__actions form-inline">
+                <!-- <span>{{ 'public.showingLabel' | translate}} {{this.rows.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span> |
+                  <span>{{ 'public.showRowsLabel' | translate}}</span> -->
+                <span class="sme-data-table__action-group"
+                  >{{ 'public.showingLabel' | translate }}
+                  {{ test(requestedFilesTable) }}
+                  {{ 'public.ofLabel' | translate }} {{ rowCount }}</span
+                >
+                <span class="hidden-xs"> | </span>
+                <span class="sme-data-table__action-group">
+                  <span>{{ 'public.showRowsLabel' | translate }}</span>
+                  <div class="sme-select form-control">
+                    <select
+                      class="form-control"
+                   
+                      (change)="this.setPage(null)"
+                    >
+                      <option [value]="10">10</option>
+                      <option [value]="20">20</option>
+                      <option [value]="50">50</option>
+                      <option [value]="100">100</option>
+                    </select>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-footer>
+      </ngx-datatable>
+      <arb-buttons>
+        <button class="btn btn-primary btn-wide" (click)="remove()">
+          Delete Selected files
+        </button>
+      </arb-buttons>
+    </div>
+  </div>
+</div>

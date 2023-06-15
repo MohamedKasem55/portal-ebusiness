@@ -1,0 +1,54 @@
+<arb-panel>
+    <arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()" [checkFormValid]="true"  #searchPanel>
+        <ng-container [formGroup]="searchForm">
+            <div class="row">
+                <fieldset>
+                    <app-dynamic-simple-extras-form-fields
+                            [fieldsConfigs]="fieldsConfigForSearchForm"
+                            [translate_prefix]="translate_prefix"
+                            [combosData]="combosData"
+                            [formModel]="searchForm"
+                            (onAllFieldsCreated)="onSearchFormReady($event)"
+                    >
+                    </app-dynamic-simple-extras-form-fields>
+                </fieldset>
+            </div>
+        </ng-container>
+
+    </arb-searchable-panel>
+
+</arb-panel>
+
+<app-government-revenue-transfer-payments-table *ngIf="hasGovRevenueGroupPrivilege"
+                                                [items]="govRevTransPayPagedResults?.items"
+                                                [modal]="modalAuth"
+                                                [tableDisplaySize]="govRevTransPayTableDisplaySize"
+                                                [totalSize]="govRevTransPayPagedResults.total"
+                                                [futureLevels]="false"
+                                                [externalPagination]="true"
+                                                [selectable]="true"
+                                                (setPage)="onSetPageGovRevTransPay($event)"
+                                                (onSelect)="onSelectGovRevTransPay($event)"
+                                                (changeDisplaySize)="onChangeDisplaySizeGovRevTransPay($event)"
+                                                (onDetail)="onDetailGovRevTransPay($event)"
+                                                [selected]="sharedData['govRevTransPayTableSelected']"
+>
+</app-government-revenue-transfer-payments-table>
+
+<app-government-revenue-file-transfer-payments-table *ngIf="hasGovRevenueBulkUploadGroupPrivilege"
+                                                     [items]="govRevFileTransPayPagedResults?.items"
+                                                     [modal]="modalAuth"
+                                                     [tableDisplaySize]="govRevFileTransPayTableDisplaySize"
+                                                     [totalSize]="govRevFileTransPayPagedResults.total"
+                                                     [futureLevels]="false"
+                                                     [externalPagination]="true"
+                                                     [selectable]="true"
+                                                     (setPage)="onSetPageGovRevFileTransPay($event)"
+                                                     (onSelect)="onSelectGovRevFileTransPay($event)"
+                                                     (changeDisplaySize)="onChangeDisplaySizeGovRevFileTransPay($event)"
+                                                     (onDetail)="onDetailGovRevFileTransPay($event)"
+                                                     [selected]="sharedData['govRevFileTransPayTableSelected']"
+>
+</app-government-revenue-file-transfer-payments-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

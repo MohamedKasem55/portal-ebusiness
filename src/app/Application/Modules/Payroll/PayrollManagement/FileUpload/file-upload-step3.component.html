@@ -1,0 +1,41 @@
+<div class="container-fluid docs-component" *ngIf="confirmPaymentResponse && confirmPaymentResponse.fileName">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <b>{{'payments.processedFile.fileReference' | translate}}</b> {{confirmPaymentResponse.fileName}}
+                    <br/>
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" *ngIf="!(confirmPaymentResponse && confirmPaymentResponse.fileName)">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+                            <div class="sme-wizard__success" *ngIf="isPending()">
+                                <span class="icon -check"></span>
+                                {{'payments.sucessPendingRequest' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+                            <div class="sme-wizard__success" *ngIf="!isPending()">
+                                <span class="icon -check"></span>
+                                {{'public.requestOk' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

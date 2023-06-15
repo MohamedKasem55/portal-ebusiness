@@ -1,0 +1,99 @@
+    <app-moi-payment-refund-batch-list *ngIf="batchList.notAllowed.length > 0"
+                                       [items]="batchList.notAllowed"
+                                       [modal]="modalAuth"
+                                       [futureLevels]="true"
+                                       [externalPagination]="false"
+                                       [selectable]="false"
+                                       [moiTypeText]="'refunds'"
+                                       [actionText]="'NotAllowed'"
+                                       [applicationTypePipe]="'eGovApplicationRTypeAll'"
+                                       [serviceTypePipe]="'eGovSadadRType'"
+    >
+    </app-moi-payment-refund-batch-list>
+
+    <app-moi-payment-refund-batch-list *ngIf="batchList.toProcess.length > 0"
+                                       [items]="batchList.toProcess"
+                                       [modal]="modalAuth"
+                                       [futureLevels]="true"
+                                       [externalPagination]="false"
+                                       [selectable]="false"
+                                       [moiTypeText]="'refunds'"
+                                       [actionText]="'ToProcess'"
+                                       [applicationTypePipe]="'eGovApplicationRTypeAll'"
+                                       [serviceTypePipe]="'eGovSadadRType'"
+    >
+    </app-moi-payment-refund-batch-list>
+
+    <app-moi-payment-refund-batch-list *ngIf="batchList.toAuthorize.length > 0"
+                                       [items]="batchList.toAuthorize"
+                                       [modal]="modalAuth"
+                                       [futureLevels]="true"
+                                       [externalPagination]="false"
+                                       [selectable]="false"
+                                       [moiTypeText]="'refunds'"
+                                       [actionText]="'ToAuthorize'"
+                                       [applicationTypePipe]="'eGovApplicationRTypeAll'"
+                                       [serviceTypePipe]="'eGovSadadRType'"
+    >
+    </app-moi-payment-refund-batch-list>
+
+    <div class="container-fluid" *ngIf="feesData.length > 0">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-table table headerDataTable">
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #feesDataTable
+                       class="material sme-table sme-table--responsive table"
+                       [rows]="feesData"
+                       [columnMode]="defaultColumnMode"
+                       [headerHeight]="30"
+                       [footerHeight]="0"
+                       [rowHeight]="defaultHeight"
+                       [count]="feesData.length"
+                       [offset]="0"
+                       [limit]="feesData.length"
+                       [externalPaging]="false"
+                       [externalSorting]="false">
+
+            <ngx-datatable-column prop="applicationType">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span class="datatable-header-cell-wrapper">
+                        {{'payments.moiPayments.fees' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                    <span>
+                        <b>{{ getApplicationTypeText(row.serviceType, row.applicationType) }}</b>
+                    </span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="amount">
+                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                    <span class="datatable-header-cell-wrapper">
+                        {{'payments.moiPayments.feesAmount' | translate }}
+                    </span>
+                </ng-template>
+                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                    <span>
+                        <b>{{ row.amount | amountCurrency }}</b>
+                    </span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+                <ng-template
+                        ngx-datatable-footer-template
+                        let-rowCount="rowCount"
+                        let-pageSize="pageSize"
+                        let-selectedCount="selectedCount"
+                        let-curPage="curPage"
+                        let-offset="offset">
+                </ng-template>
+            </ngx-datatable-footer>
+        </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-levels-popup #modalAuth></app-levels-popup>

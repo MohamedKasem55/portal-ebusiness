@@ -1,0 +1,135 @@
+<arb-panel [title]="'myProfile.pending_actions.governmentRevenueFileTransferPaymentProcess'">
+    <div class="row" *ngIf="error && error['exist']">
+        <div class="alert alert-danger text-align-center">
+            <small>{{error['description']}}</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.batchName' | translate }}</label>
+                <span class="form-control">{{detailsData.batchName}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.accountNumber' | translate }}</label>
+                <span class="form-control">{{detailsData.accountNumber}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.beneficiaryBank' | translate }}</label>
+                <span class="form-control">{{detailsData.beneficiaryBank}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.letterNumber' | translate }}</label>
+                <span class="form-control">{{detailsData.letterNumber}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.letterDate' | translate }}</label>
+                <span class="form-control">{{detailsData.letterValueDate | date:'dd/MM/yyyy'}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.letterPeriodFrom' | translate }}</label>
+                <span class="form-control">{{detailsData.letterPeriodFrom | date:'dd/MM/yyyy'}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.letterPeriodTo' | translate }}</label>
+                <span class="form-control">{{detailsData.letterPeriodTo | date:'dd/MM/yyyy'}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.finClosingYear' | translate }}</label>
+                <span class="form-control">{{detailsData.finClosingYear}}</span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{ 'governmentRevenue.bulkUploadFile.status' | translate }}</label>
+                <span class="form-control">
+                    {{'governmentRevenue.bulkUploadFile.status_' + (detailsData.status ? detailsData.status : "") | translate}}
+                </span>
+            </div>
+        </div>
+
+    </div>
+</arb-panel>
+
+<!--
+<app-levels-table [futureSecurityLevels]="detailsData.futureSecurityLevelsDTOList">
+</app-levels-table>
+-->
+
+<app-government-revenue-table-depositors-beneficiaries-tabular-details
+        [details]="detailsData.details?detailsData.details:[]">
+</app-government-revenue-table-depositors-beneficiaries-tabular-details>
+
+<arb-panel [title]="'governmentRevenue.bulkUploadFile.summarySection' ">
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{'governmentRevenue.bulkUploadFile.depositorCount' | translate }}</label>
+                <span class="form-control">
+                    {{detailsData.summary?.uniqueDepositorCount }}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{'governmentRevenue.bulkUploadFile.beneficiariesCount' | translate }}</label>
+                <span class="form-control">
+                    {{detailsData.summary?.beneficiaryCount }}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{'governmentRevenue.bulkUploadFile.revenueCount' | translate }}</label>
+                <span class="form-control">
+                    {{detailsData.summary?.revenueCount }}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{'governmentRevenue.bulkUploadFile.subtotalAmount' | translate }}</label>
+                <span class="form-control">
+                    {{detailsData.summary?.totalAmount | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label>{{'governmentRevenue.bulkUploadFile.recordsInTheFile' | translate }}</label>
+                <span class="form-control">
+                    {{detailsData.summary?.recordsCount }}
+                </span>
+            </div>
+        </div>
+
+    </div>
+</arb-panel>
+

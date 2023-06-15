@@ -1,0 +1,51 @@
+
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active">{{ 'dashboard.payrolls' | translate }}</li>
+		<li class="active">{{ 'dashboard.wpspayrollManagment' | translate }}</li>
+	</ol>
+</div>
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title"></div>
+
+			<div class="sme-form__content">
+				<form autocomplete="off" class="sme-form__form">
+					<div class="sme-form__body">
+						<div class="row">
+							<ul>
+								<li *ngIf="authenticationService.activateOption('WPSPayrollDashboard',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a class="human-selectable" routerLinkActive="active" (click)="goDashboard()"> {{ 'wpspayroll.dashboard' | translate }} </a>
+								</li>
+								<li *ngIf="authenticationService.activateOption('WPSPayrollManageEmployees',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a class="human-selectable" routerLinkActive="active" (click)="goManageEmployees()"> {{ 'wpspayroll.manageEmployees' | translate }} </a>
+								</li>
+								
+								<li *ngIf="authenticationService.activateOption('WPSPayrollSalaryPayments',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a class="human-selectable" routerLinkActive="active" (click)="goSalaryPayments()"> {{ 'wpspayroll.salaryPayments' | translate }} </a>
+								</li>
+							
+								<li *ngIf="authenticationService.activateOption('WPSPayrollViewProcessedFiles',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a class="human-selectable" routerLinkActive="active" (click)="goProcessedFiles()"> {{ 'wpspayroll.viewProcessedFiles' | translate }} </a>
+								</li>
+										
+								<li *ngIf="authenticationService.activateOption('WPSPayrollRequestStatus',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a routerLinkActive="active" (click)="goRequestStatus()"> {{ 'wpspayroll.requestStatus' | translate }} </a>
+								</li>
+								
+								<li *ngIf="authenticationService.activateOption('WPSPayrollDownloadMOLFile',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a class="human-selectable" routerLinkActive="active" (click)="goDownloadMol()"> {{ 'wpspayroll.management.downloadMol' | translate }} </a>
+								</li>
+									
+								<li *ngIf="authenticationService.activateOption('WPSPayrollDownloadTemplates',['WPSPAYROLL_PRIVILEGE'],['WPSPayrollGroup'])">
+									<a class="human-selectable" routerLinkActive="active" (click)="goDownloadTemplates()"> {{ 'wpspayroll.downloadTemplates' | translate }} </a>
+								</li>						
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

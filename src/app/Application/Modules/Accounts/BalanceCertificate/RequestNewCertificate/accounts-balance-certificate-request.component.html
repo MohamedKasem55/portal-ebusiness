@@ -1,0 +1,63 @@
+<!-- BREADCRUMB -->
+<arb-breadcrumb [routes]="[
+['public.accounts'],
+['accounts.balanceCertificate.menu',['/accounts/balanceCertificate']]
+]">
+</arb-breadcrumb>
+
+<!-- BREADCRUMB -->
+<arb-steps
+        [currentStep]="wizardStep"
+        [steps]="['aramcoPayments.details','aramcoPayments.confirm','myProfile.pending_actions.steps.summary']">
+</arb-steps>
+
+
+<app-add-balance-certificate-step1 *ngIf="wizardStep == 1"
+                                   [model]="model"
+                                   [accounts]="accounts"
+                                   [cities]="cities"
+                                   (onInit)="onInitStep1($event)">
+</app-add-balance-certificate-step1>
+
+<app-add-balance-certificate-step2 *ngIf="wizardStep == 2"
+                                   [model]="model"
+                                   [accounts]="accounts"
+                                   [cities]="cities"
+                                   (onInit)="onInitStep2($event)">
+</app-add-balance-certificate-step2>
+
+<app-add-balance-certificate-step3 *ngIf="wizardStep == 3"
+                                   [generateChallengeAndOTP]="validationResponse.generateChallengeAndOTP">
+</app-add-balance-certificate-step3>
+
+
+<app-levels-table *ngIf="validationResponse.batch && wizardStep ==2"
+                  [futureSecurityLevels]="validationResponse.batch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+
+<arb-panel *ngIf="validationResponse['generateChallengeAndOTP'] && wizardStep ==2">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <app-secured-authentication [generateChallengeAndOTP]="validationResponse['generateChallengeAndOTP']"
+                                            [requestValidate]="requestValidate"
+                                            #authorization></app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+
+<arb-buttons>
+    <button *ngIf="wizardStep===1" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="wizardStep===2" (click)="backButton()"
+            class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="nextStep()" *ngIf="wizardStep < 3"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="wizardStep === 3">{{'public.finish' | translate}}</button>
+</arb-buttons>
+        
+

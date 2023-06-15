@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                 <div class="sme-form__body">
+                    <div>
+                        <div *ngIf="!error && !isDual" class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                {{'companyAdmin.token.requestOk' | translate}}
+                              <small>{{'public.thanks' | translate }}</small>
+                        </div>
+                        <div *ngIf="!error && isDual" class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                {{'public.requestPendingOk' | translate}}
+                              <small>{{'public.thanks' | translate }}</small>
+                        </div>
+                        <div *ngIf="error" class="sme-wizard__success">
+                            <span class="icon -close icons" style="color: red;"></span>
+                            {{'companyAdmin.token.failure' | translate}}
+                          <small>{{'companyAdmin.token.noSoftToken' | translate }}</small>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

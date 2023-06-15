@@ -1,0 +1,48 @@
+<arb-breadcrumb [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+        ['sadadOLP.requestStatus.menu', ['/sadadOLP/olp-request-status']],
+        ['sadadOLP.requestStatus.rejected']
+]">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep" [steps]="['public.completeDetails','public.confirm','public.summary']">
+</arb-steps>
+
+<div class="container-fluid">
+        <div class="sme-page-block">
+                <div class="sme-form">
+                        <div class="sme-form__title">
+                                <div class="col-xs-12 col-sm-6 text-left">
+                                        {{'sadadOLP.requestStatus.rejected' | translate}}
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
+
+<app-request-status-action-step1 *ngIf="isStepVisible(1)" (onInit)="onInitStep(1,$event)" [formRefunds]="formRefunds"
+        [formDisputes]="formDisputes">
+</app-request-status-action-step1>
+
+<app-request-status-action-step2 *ngIf="isStepVisible(2)" (onInit)="onInitStep(2,$event)" [formRefunds]="formRefunds"
+        [formDisputes]="formDisputes">
+</app-request-status-action-step2>
+
+<app-request-status-action-step3 *ngIf="isStepVisible(3)">
+</app-request-status-action-step3>
+
+<arb-buttons>
+        <button type="button" class="btn btn-default btn-wide" (click)="back()"
+                *ngIf="isBackAllowed()">{{ 'public.back' | translate}}</button>
+        <button class="btn btn-default btn-wide" (click)="previous()"
+                *ngIf="isPreviousAllowed()">{{ 'public.back' | translate }}</button>
+        <button class="btn btn-primary btn-wide" (click)="next()"
+                *ngIf="isStepVisible(2)">{{'public.proceed' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="nextAction('D')"
+                *ngIf="isStepVisible(1)">{{'public.delete' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="nextAction('I')"
+                *ngIf="isStepVisible(1)">{{'public.initiate' | translate}}</button>
+        <button class="btn btn-primary btn-wide" (click)="finish()"
+                *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

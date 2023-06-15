@@ -1,0 +1,141 @@
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.selected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toAuthorize'].length>0)
+||
+(sharedData.allocationsSelected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toAuthorize'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-Hajj-Umrah-table *ngIf="sharedData.selected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toAuthorize'].length>0"
+                      [items]="sharedData.responseValidate.batchListsContainerDTO.toAuthorize" [modal]="modalAuth"
+                      [futureLevels]="true"
+                      [externalPagination]="false" [selectable]="false">
+</app-Hajj-Umrah-table>
+
+<app-Hajj-Umrah-Allocations-table *ngIf="sharedData.allocationsSelected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toAuthorize'].length>0"
+                                  [items]="sharedData.responseValidate.batchListsContainerDTO.toAuthorize"
+                                  [modal]="modalAuth" [futureLevels]="true"
+                                  [externalPagination]="false" [selectable]="false">
+</app-Hajj-Umrah-Allocations-table>
+
+<arb-panel
+        *ngIf="sharedData.aproveFlow && sharedData.responseValidate.batchListsContainerDTO['toAuthorize'].length > 0">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'myProfile.pending_actions.feeAuth' | translate }}</label>
+                <p>
+                    <app-vat-calculator [fee]="sharedData.responseValidate.feeAuth"></app-vat-calculator>
+                </p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.responseValidate.grandAmountAuthFlag">
+            <div class="form-group">
+                <label>{{ 'myProfile.pending_actions.grandAmountAuth' | translate }}</label>
+                <p>
+                    {{ (sharedData.responseValidate.grandAmountAuth ? sharedData.responseValidate.grandAmountAuth : 0) | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.responseValidate.grandRefundAuthFlag">
+            <div class="form-group">
+                <label>{{ 'myProfile.pending_actions.grandRefundAuth' | translate }}</label>
+                <p>
+                    {{ (sharedData.responseValidate.grandRefundAuth ? sharedData.responseValidate.grandRefundAuth : 0) | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.selected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toProcess'].length>0)
+||
+(sharedData.allocationsSelected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toProcess'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-Hajj-Umrah-table *ngIf="sharedData.selected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toProcess'].length>0"
+                      [items]="sharedData.responseValidate.batchListsContainerDTO.toProcess" [modal]="modalAuth"
+                      [futureLevels]="true"
+                      [externalPagination]="false" [selectable]="false">
+</app-Hajj-Umrah-table>
+
+<app-Hajj-Umrah-Allocations-table *ngIf="sharedData.allocationsSelected.length > 0
+    && sharedData.responseValidate.batchListsContainerDTO['toProcess'].length>0"
+                                  [items]="sharedData.responseValidate.batchListsContainerDTO.toProcess"
+                                  [modal]="modalAuth" [futureLevels]="true"
+                                  [externalPagination]="false" [selectable]="false">
+</app-Hajj-Umrah-Allocations-table>
+
+<arb-panel *ngIf="sharedData.aproveFlow && sharedData.responseValidate.batchListsContainerDTO['toProcess'].length > 0">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'myProfile.pending_actions.feeProcess' | translate }}</label>
+                <p>
+                    <app-vat-calculator [fee]="sharedData.responseValidate.feeProcess"></app-vat-calculator>
+                </p>
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.responseValidate.grandAmountProcessFlag">
+            <div class="form-group">
+                <label>{{ 'myProfile.pending_actions.grandAmountProcess' | translate }}</label>
+                <p>
+                    {{ (sharedData.responseValidate.grandAmountProcess ? sharedData.responseValidate.grandAmountProcess : 0) | amountCurrency }}{{'currencyIso' | modelPipe: '608'}}</p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.responseValidate.grandAmountProcessFlag">
+            <div class="form-group">
+                <label>{{ 'myProfile.pending_actions.grandRefundProcess' | translate }}</label>
+                <p>
+                    {{ (sharedData.responseValidate.grandRefundProcess ? sharedData.responseValidate.grandRefundProcess : 0) | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="sharedData.aproveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group"
+                                     *ngIf="sharedData.responseValidate && sharedData.responseValidate.generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.responseValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

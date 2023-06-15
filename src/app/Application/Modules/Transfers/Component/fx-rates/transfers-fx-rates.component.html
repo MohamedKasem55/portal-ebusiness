@@ -1,0 +1,324 @@
+<arb-breadcrumb [routes]="[
+    ['transfer.transferInternational'],
+    ['transfer.fx_rates.fx_rates_list']
+]">
+</arb-breadcrumb>
+
+<!--
+<arb-panel-buttons>
+    <a class="btn btn-primary btn-wide">{{
+        'transfer.fx_rates.fx_rates_list' | translate }}</a>
+</arb-panel-buttons>
+-->
+
+<arb-panel>
+    <form autocomplete="off" [formGroup]="searchForm" class="sme-form__form">
+        <div class="row">
+            <fieldset>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'transfer.fx_rates.fromCurrencyCode' | translate }}</label>
+                        <div class="sme-select form-control">
+                            <select formControlName="fromCurrencyCode">
+                                <option value="" disabled="disabled" selected="selected">
+                                    --{{ 'public.selectDropdown' | translate }}--
+                                </option>
+                                <option *ngFor="let item of combosData['currencyIso']"
+                                        [value]="item['key']"
+                                        [innerHTML]="item['value'] + ' - '+ getCurrencyName(item['key'])">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'transfer.fx_rates.toCurrencyCode' | translate }}</label>
+                        <div class="sme-select form-control">
+                            <select formControlName="toCurrencyCode">
+                                <option value="" disabled="disabled" selected="selected">
+                                    --{{ 'public.selectDropdown' | translate }}--
+                                </option>
+                                <option *ngFor="let item of combosData['currencyIso']"
+                                        [value]="item['key']"
+                                        [innerHTML]="item['value'] + ' - '+ getCurrencyName(item['key'])">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'transfer.fx_rates.baseAmount' | translate }}</label>
+                        <input type="text"
+                               class="form-control"
+                               inputPattern="onlyDecimalNumbers"
+                               maxlength="17"
+                               pattern="^[0-9]{0,15}(\.[0-9]{1,2}$)?"
+                               formControlName="baseAmount"
+                        />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="sme-form__actions">
+            <button type="button" class="btn btn-default btn-wide" (click)="reset()">
+                {{'public.reset' | translate }}
+            </button>
+            <button type="button" class="btn btn-primary btn-wide" (click)="search()" [disabled]="!searchForm.valid">
+                {{'transfer.fx_rates.calculate' | translate }}
+            </button>
+        </div>
+    </form>
+</arb-panel>
+
+
+<arb-panel
+        *ngIf="elementsPage.data && elementsPage.data[0] && elementsPage.data[0]['targetAmount'] && elementsPage.data[0]['exchangeValue']">
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'transfer.fx_rates.exchangeValue' | translate }}</label>
+                    <div class="form-control">
+                        <span [innerHTML]="elementsPage.data[0]['exchangeValue']"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{ 'transfer.fx_rates.targetAmount' | translate }}</label>
+                    <div class="form-control">
+                        <span [innerHTML]="elementsPage.data[0]['targetAmount']"></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</arb-panel>
+
+<arb-table-panel [title]="'transfer.fx_rates.fx_rates_list'">
+    <table-export [dataTable]="elementsTable" [header]="'transfer.fx_rates.fx_rates_list' | translate"
+                  [columns]="[
+                        {'title':'transfer.fx_rates.currencyCodeText' | translate,'dataKey':'currencyCodeText'},
+                        {'title':'transfer.fx_rates.currencyCodeName' | translate,'dataKey':'currencyCodeName'},
+                        {'title':'transfer.fx_rates.buyPrice' | translate,'dataKey':'buyPrice'},
+                        {'title':'transfer.fx_rates.sellPrice' | translate,'dataKey':'sellPrice'}
+                        ]">
+    </table-export>
+
+    <!-- if external paging is true -->
+
+    <!--
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="elementsPage.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="30"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="false"
+                   [externalSorting]="false"
+                   [count]="elementsPage.page.totalElements"
+                   [offset]="elementsPage.page.pageNumber-1"
+                   [limit]="elementsPage.page.pageSize"
+                   
+                   (page)='setPage($event)'
+                   (sort)="setSort($event)"
+                   [rowIdentity]="getIdFunction()"
+                   (select)='onSelect($event)'>
+        -->
+
+    <!-- if external paging is false -->
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="elementsPage.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="30"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="false"
+                   [externalSorting]="false"
+                   [count]="elementsPage.page.totalElements"
+                   [limit]="elementsPage.page.pageSize"
+                   
+                   (page)='setPage($event)'
+                   (sort)="setSort($event)"
+                   [rowIdentity]="getIdFunction()"
+                   (select)='onSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>
+                                    {{'transfer.fx_rates.currencyCodeText' | translate }}
+                                </label>
+                                <div>
+                                 
+                                    <span [innerHTML]="row.currencyCodeText"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label>
+                                    {{'transfer.fx_rates.currencyCodeName' | translate }}
+                                </label>
+                                <div>
+                                    <span [innerHTML]="row.currencyCodeName"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label>
+                                    {{'transfer.fx_rates.buyPrice' | translate }}
+                                </label>
+                                <div>
+                                    <span [innerHTML]="row.buyPrice"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label>
+                                    {{'transfer.fx_rates.sellPrice' | translate }}
+                                </label>
+                                <div>
+                                    <span [innerHTML]="row.sellPrice"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="currencyCodeText">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.fx_rates.currencyCodeText' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <img src="assets/flags/{{row.currencyCodeText}}.png" style="max-width: 50px;">
+              <!--  <span [innerHTML]="row.currencyCodeText"></span> -->
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="currencyCodeName">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.fx_rates.currencyCodeName' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span [innerHTML]="row.currencyCodeName"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="buyPrice">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.fx_rates.buyPrice' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span [innerHTML]="row.buyPrice"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="sellPrice">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'transfer.fx_rates.sellPrice' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span [innerHTML]="row.sellPrice"></span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <!-- if external paging is true -->
+
+        <!--
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                            (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size < pageSize ? elementsPage.page.size : pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                        (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+        -->
+
+        <!-- if external paging is false -->
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                            (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount - ((curPage - 1) * pageSize) : pageSize}}
+                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                        (change)="setPageSize($event)">
+                                    <option *ngFor="let opt of [10, 20, 50]" [value]="opt">
+                                        {{opt}}
+                                    </option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</arb-table-panel>

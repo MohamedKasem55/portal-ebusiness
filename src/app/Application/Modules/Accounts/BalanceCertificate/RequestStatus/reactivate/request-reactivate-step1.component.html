@@ -1,0 +1,87 @@
+<arb-panel *ngIf="batch">
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label class="required">{{ 'public.account' |
+                        translate }}</label>
+                    <select class="form-control" [(ngModel)]="selected" name="selectedAccount" #selectedAccount="ngModel" required (change)="changeAccount($event)">
+                        <option *ngFor="let aco of accounts" [value]="aco.key">
+                            {{aco.value.fullAccountNumber}}{{(aco.value.alias != null && aco.value.alias != '' ? ' - '+ aco.value.alias : '')}} - {{ aco.value.availableBalance | amountCurrency:aco.value.currency}} {{ 'currencyIso' | modelPipe:aco.value.currency}}</option>
+                    </select>
+                    <div *ngIf="selectedAccount.hasError('required') && selectedAccount.touched" class="alert alert-danger">
+                        <small>{{'public.account' | translate }}{{ 'error.required' | translate }} </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- CITIES -->
+                <div class="form-group">
+                    <label>{{ 'public.city' | translate }} *</label>
+                    <div class="sme-select form-control">
+                        <select class="form-control" name="city" [(ngModel)]="batch.city" #city="ngModel" required (change)="onChangeCity($event.target)">
+                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                            <option *ngFor="let city of cities" [value]="city['key']">
+                                {{city['value']}}
+                            </option>
+                        </select>
+                    </div>
+                    <!--
+                                        <div *ngIf="citySelecc" class="alert alert-danger">
+                                            <span>{{'accounts.selectComboCity' | translate}}</span>
+                                        </div>     
+                                        -->
+                </div>
+                <!-- /CITIES -->
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- COMPANY -->
+                <div class="form-group">
+                    <label>{{ 'public.company' | translate }} *</label>
+                    <div>
+                        <input type="text" [(ngModel)]="batch.company" name="company" #company="ngModel" minlength="1" maxlength="30" id="company" class="form-control" required />
+                    </div>
+                    <!-- Comprobamos si el campo está modificado y es válido para mostrar un mensaje -->
+                    <div *ngIf="!company.valid && company.touched" class="alert alert-danger">
+                        <span>{{'accounts.enterCompany' | translate}}</span>
+                    </div>
+                </div>
+                <!-- /COMPANY -->
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <!-- POSTAL CODE -->
+                <div class="form-group">
+                    <label>{{ 'public.postal_code' | translate }} *</label>
+                    <div>
+                        <input type="text" [(ngModel)]="batch.postalCode" name="postalCode" #postalCode="ngModel" class="form-control" maxlength="5" number required inputPattern="onlyDigits" />
+                    </div>
+                    <div *ngIf="postalCode.errors?.number" class="alert alert-danger">
+                        {{'accounts.numberVerification' | translate}}
+                    </div>
+                    <!-- Comprobamos si el campo está modificado y es válido para mostrar un mensaje -->
+                    <!--
+                                        <div *ngIf="!postalCode.valid && postalCode.touched && !postalCode.errors?.number" class="alert alert-danger">
+                                            <span>Please enter a Postal code</span>
+                                        </div>   
+                                        -->
+                </div>
+                <!-- /POSTAL CODE -->
+            </div>
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-4">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{ 'myProfile.pending_actions.rejectedReason' |
+                        translate }}</label>
+                    <span class="form-control">{{batch.rejectedReason}}</span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</arb-panel>
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>

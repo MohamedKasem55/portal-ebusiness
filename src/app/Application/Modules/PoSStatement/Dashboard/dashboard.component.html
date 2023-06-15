@@ -1,0 +1,584 @@
+<!-- sme-breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{'menu.collections_management.menu' | translate}}</li>
+        <li><a class="human-selectable" href="#"
+               [routerLink]="['/posstatement']">{{ 'posStatement.name' | translate }}</a></li>
+        <li class="active">{{ 'posRequest.dashboard'| translate }}</li>
+    </ol>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <form autocomplete="off" class="sme-form__form" [formGroup]="searchForm" (ngSubmit)="search()">
+                <div class="sme-form__content">
+                    <a class="sme-form__head collapsed" role="button"
+                       (click)="isCollapsedContent = !isCollapsedContent"> <span>{{
+                        'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+
+                        <div class="sme-form__body">
+                            <!-- SEARCH PANEL DATA -->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'posRequest.dateFrom' | translate }}</label>
+                                        <input autocomplete="off" type="text" #dateFrom
+                                               bsDatepicker placement="bottom" [bsConfig]="bsConfig"
+                                               formControlName="dateFrom" class="form-control"/>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{
+                                            'posRequest.dateTo' | translate }}</label>
+                                        <input autocomplete="off" type="text" #dateTo bsDatepicker
+                                               placement="bottom" [bsConfig]="bsConfig" formControlName="dateTo"
+                                               class="form-control"/>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                            <!-- END SEARCH PANEL DATA -->
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                                'public.reset' | translate }}</button>
+                            <button type="submit" class="btn btn-primary btn-wide">{{
+                                'public.search' | translate }}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'posRequest.financialTransaction' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="pageFinancialTransactionTable"
+                                  [header]="'posRequest.financialTransaction' | translate" [columns]="[
+        {'title':'posRequest.terminalNumber' |translate ,'dataKey':'terminalNumber'},
+        {'title':'posRequest.accountNumber' |translate ,'dataKey':'accountNumber'},
+        {'title':'posRequest.averageNumber' |translate ,'dataKey':'averageNumber'}
+        ]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                                   #pageFinancialTransactionTable class="material sme-table sme-table--responsive table"
+                                   [rows]="financialTransaction['pageData'].data" [columnMode]="'force'"
+                                   [rowHeight]="defaultHeight"
+                                   [footerHeight]="footerHeight" [externalPaging]="true"
+                                   [externalSorting]="true"
+                                   [count]="financialTransaction['pageData'].page.totalElements"
+                                   [offset]="financialTransaction['pageData'].page.pageNumber-1"
+                                   [limit]="financialTransaction['pageData'].page.pageSize"
+                                   (page)="setFinancialTransactionPage($event)"
+                                   (sort)="setFinancialTransactionSort($event)">
+                        <!-- Row Detail Template -->
+                        <ngx-datatable-row-detail #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.terminalNumber' | translate }}
+                                                </label>
+                                                <div>
+                                                    <span>{{ row.terminalNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.account' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.account}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.averageCredit' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.averageNumber | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                        <ngx-datatable-column prop="terminalNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.terminalNumber' | translate }}
+                                </span>
+                            </ng-template>
+
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="accountNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.accountNumber' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="averageNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.averageNumber' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="pageFinancialTransactionTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span
+                                                class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                            {{financialTransaction['pageData'].page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control"
+                                                        [(ngModel)]="financialTransaction['pageData'].page.pageSize">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'posRequest.terminalStatistic' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="pageTerminalStatisticTable"
+                                  [header]="'posRequest.terminalStatistic' | translate" [columns]="[
+        {'title':'posRequest.terminalNumber' |translate ,'dataKey':'terminalNumber'},
+        {'title':'posRequest.numberTransactions' |translate ,'dataKey':'numberTransactions'},
+        {'title':'posRequest.amount' |translate ,'dataKey':'amount'},
+        {'title':'posRequest.amountMADA' |translate ,'dataKey':'amountMADA'},
+        {'title':'posRequest.pendingAmount' |translate ,'dataKey':'pendingAmount'},
+        {'title':'posRequest.reconciliationDate' |translate ,'dataKey':'reconciliationDate'}
+        ]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #pageTerminalStatisticTable
+                                   class="material sme-table sme-table--responsive table"
+                                   [rows]="terminalStatistic['pageData'].data" [columnMode]="'force'"
+                                   [rowHeight]="defaultHeight"
+                                   [footerHeight]="footerHeight" [externalPaging]="true"
+                                   [externalSorting]="true" [count]="terminalStatistic['pageData'].page.totalElements"
+                                   [offset]="terminalStatistic['pageData'].page.pageNumber-1"
+                                   [limit]="terminalStatistic['pageData'].page.pageSize"
+                                   (page)="setTerminalStatisticPage($event)"
+                                   (sort)="setTerminalStatisticSort($event)">
+                        <!-- Row Detail Template -->
+                        <ngx-datatable-row-detail #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.terminalNumber' | translate }}
+                                                </label>
+                                                <div>
+                                                    <span>{{ row.terminalNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.numberOfTransaction' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.numberTransactions}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.amount' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.amount | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.amountMADA' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.amount | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.pendingAmount' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.pendingAmount | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.reconciliationDate' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.reconciliationDate | date:'dd-MM-yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                        <ngx-datatable-column prop="terminalNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.terminalNumber' | translate }}
+                                </span>
+                            </ng-template>
+
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="numberTransactions">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.numberTransactions' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.amount' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="amountMADA">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.amountMADA' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="pendingAmount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.pendingAmount' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="reconciliationDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.reconciliationDate' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | date:'dd-MM-yyyy'}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="pageTerminalStatisticTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span
+                                                class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                            {{terminalStatistic['pageData'].page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control"
+                                                        [(ngModel)]="terminalStatistic['pageData'].page.pageSize">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+
+
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'posRequest.inactiveTerminals' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="pageInactiveTerminalsTable"
+                                  [header]="'posRequest.inactiveTerminals' | translate" [columns]="[
+        {'title':'posRequest.inactiveTerminal' |translate ,'dataKey':'terminalNumber'},
+        {'title':'posRequest.lastTransactionDate' |translate ,'dataKey':'transactionDate'}
+        ]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #pageInactiveTerminalsTable
+                                   class="material sme-table sme-table--responsive table"
+                                   [rows]="inactiveTerminals['pageData'].data" [columnMode]="'force'"
+                                   [rowHeight]="defaultHeight"
+                                   [footerHeight]="footerHeight" [externalPaging]="true"
+                                   [externalSorting]="true" [count]="inactiveTerminals['pageData'].page.totalElements"
+                                   [offset]="inactiveTerminals['pageData'].page.pageNumber-1"
+                                   [limit]="inactiveTerminals['pageData'].page.pageSize"
+                                   (page)="setInactiveTerminalsPage($event)"
+                                   (sort)="setInactiveTerminalsSort($event)">
+                        <!-- Row Detail Template -->
+                        <ngx-datatable-row-detail #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                        <div>{{row.date}}, {{row.time}}</div>
+                      </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.terminalNumber' | translate }}
+                                                </label>
+                                                <div>
+                                                    <span>{{ row.terminalNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                >{{'posRequest.lastTransactionDate' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.lastTransactionDate | date:'dd-MM-yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                        <ngx-datatable-column prop="terminalNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.inactiveTerminal' | translate }}
+                                </span>
+                            </ng-template>
+
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="lastTransactionDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'posRequest.lastTransactionDate' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | date:'dd-MM-yyyy'}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="pageInactiveTerminalsTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                            {{inactiveTerminals['pageData'].page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control"
+                                                        [(ngModel)]="inactiveTerminals['pageData'].page.pageSize">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+
+
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+
+                <div class="sme-form__actions">
+                    <a href="#" class="btn btn-default btn-wide" [routerLink]="['/posstatement']">
+                        {{'public.back' | translate }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

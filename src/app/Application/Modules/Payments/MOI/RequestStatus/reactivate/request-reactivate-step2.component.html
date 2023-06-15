@@ -1,0 +1,790 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">
+            {{ services[this.data.serviceType].applicationTypes[this.data.applicationType].name | translate}}
+        </div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <fieldset>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.payments.serviceType' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="'eGovSadadType' | modelPipe :data.serviceType"
+                                                   name="serviceType">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.payments.transactionType' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="'eGovProcess' | modelPipe: data.transactionType"
+                                                   name="transactionType">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.refunds.applicationType' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="'eGovApplicationTypeAll' | modelPipe: data.applicationType"
+                                                   name="applicationType">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.initiationDate' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="data.initiationDate" name="initiationDate">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.initiationTime' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="data.initiationTime" name="initiationTime">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label> {{ 'payments.moiPayments.request.initiationBy' | translate }} </label>
+                                            <input type="text" class="form-control" disabled
+                                                   [ngModel]="data.initiationBy" name="initiationBy">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- ACCOUNTS -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.account' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       [(ngModel)]="data.accountNumber" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /ACCOUNTS -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].iqamaId">
+                                        <!-- IQUAMA ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.iqamaId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="iquamaId"
+                                                       [(ngModel)]="data.iqamaId" #iquamaId="ngModel" maxlength="10"
+                                                       number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /IQUAMA ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].associatedBorderNumber">
+                                        <!-- VISA NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.associateIquamaId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="associatedBorderNumber"
+                                                       [(ngModel)]="data.associatedBorderNumber"
+                                                       #associatedBorderNumber="ngModel" maxlength="10" number required
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].violationId">
+                                        <!-- VIOLATION ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.trafficViolations.violationID' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="violationID"
+                                                       [(ngModel)]="data.violationId" #violationID="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VIOLATION ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].violatorId">
+                                        <!-- VIOLATOR ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.publicViolation.violatorId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="violatorId"
+                                                       [(ngModel)]="data.violatorId" #violatorId="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VIOLATOR ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].verdictNumber">
+                                        <!-- VERDICT NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.civilDefense.verdictNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="verdictNumber"
+                                                       [(ngModel)]="data.verdictNumber" #verdictNumber="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VERDICT NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].citizenId">
+                                        <!-- CITIZEN ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.citizenId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="citizenID"
+                                                       [(ngModel)]="data.citizenId" #citizenID="ngModel" maxlength="10"
+                                                       number required disabled/>
+
+                                            </div>
+                                        </div>
+                                        <!-- /CITIZEN ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].householdIdNumber">
+                                        <!-- HEAD OF HOUSEHOLD ID NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.headHouseholdIdNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="headHouseholdIdNumber"
+                                                       [(ngModel)]="data.householdIdNumber"
+                                                       #headHouseholdIdNumber="ngModel" maxlength="10" number required
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /HEAD OF HOUSEHOLD ID NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].numberDependant">
+                                        <!-- NUMBER OF DEPENDENT -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.numberDependant' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="numberDependant"
+                                                       [(ngModel)]="data.numberDependant" #numberDependant="ngModel"
+                                                       maxlength="2" inputPattern="onlyNumbers" required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /NUMBER OF DEPENDENT -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].nationalIdNumber">
+                                        <!-- NATIONAL ID NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.civilRegistrationServices.nationalIdNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="nationnalIdNumber"
+                                                       [(ngModel)]="data.nationalIdNumber" #nationnalIdNumber="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /NATIONAL ID NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].birthDate">
+                                        <!-- BIRTH DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.birthDate' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="birthDate"
+                                                       value="toShortDate(data.birthDate)" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /BIRTH DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].deathDate">
+                                        <!-- BIRTH DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.deathDate' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="birthDate"
+                                                       value="toShortDate(data.deathDate)" disabled/>
+                                            </div>
+
+                                        </div>
+                                        <!-- /BIRTH DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].divorceDate">
+                                        <!-- DIVORCE DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.divorceDate' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="birthDate"
+                                                       value="toShortDate(data.divorceDate)" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /DIVORCE DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].feesDurationEndDate">
+                                        <!-- NUMBER OF DEPENDENT -->
+
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.feesDurationDate' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="birthDate"
+                                                       value="toShortDate(data.feesDurationEndDate)" disabled/>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].issuanceReason">
+                                        <!-- ISSUANCE REASON -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.issuanceReason' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.issuanceReasons[data.issuanceReason]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /ISSUANCE REASON -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].cardVersionNumber">
+                                        <!-- CARD VERSION NO -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.civilRegistrationServices.cardVersionNo' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="cardVersionNo"
+                                                       [(ngModel)]="data.cardVersionNumber" #cardVersionNo="ngModel"
+                                                       maxlength="2" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /CARD VERSION NO -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].marriageDate">
+                                        <!-- MARRIAGE DATE -->
+                                        <div class="form-group">
+                                            <label>{{ 'payments.moiPayments.civilRegistrationServices.marriageDate' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="birthDate"
+                                                       value="toShortDate(data.marriageDate)" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /MARRIAGE DATE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].beneficiaryId">
+                                        <!-- BENEFICIARY ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.drivingLicenseServices.beneficiaryId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="beneficiaryID"
+                                                       [(ngModel)]="data.beneficiaryId" #beneficiaryID="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /BENEFICIARY ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].borderNumber">
+                                        <!-- BORDER NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.borderNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="borderNumber"
+                                                       [(ngModel)]="data.borderNumber" #borderNumber="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /BORDER NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].visaNumber">
+                                        <!-- VISA NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.visaNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="visaNumber"
+                                                       [(ngModel)]="data.visaNumber" #visaNumber="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].visaDuration">
+                                        <!-- VISA DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.visaDuration' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.visaDurations[data.visaDuration]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].licenseType">
+                                        <!-- LICENSE TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.drivingLicenseServices.licenseType' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.licenseTypes[data.licenseType]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /LICENSE TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].licenseDuration">
+                                        <!-- DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.saudiPassportServices.passportDuration' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.licenseDurations[data.licenseDuration]}}"
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].iqamaDuration">
+                                        <!-- IQAMA DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.iquamaDuration' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.iqamaDurations[data.iqamaDuration]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /IQAMA DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].sponsorId">
+                                        <!-- SPONSOR ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.sponsorId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="sponsorId"
+                                                       [(ngModel)]="data.sponsorId" #sponsorId="ngModel" maxlength="10"
+                                                       number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /SPONSOR ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].currentOwnerId">
+                                        <!-- CURRENT OWNER ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.currentOwnerId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="currentOwnerId"
+                                                       [(ngModel)]="data.currentOwnerId" #currentOwnerId="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /CURRENT OWNER ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].vehicleSequenceNumber">
+                                        <!-- VEHICLE SEQUENCE NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.vehicleSequenceNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="vehicleSequenceNumber"
+                                                       [(ngModel)]="data.vehicleSequenceNumber"
+                                                       #vehicleSequenceNumber="ngModel" maxlength="10" number required
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VEHICLE SEQUENCE NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].newOwnerId">
+                                        <!-- NEW OWNER ID -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.newOwnerId' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="newOwnerId"
+                                                       [(ngModel)]="data.newOwnerId" #newOwnerId="ngModel"
+                                                       maxlength="10" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /NEW OWNER ID -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].vehicleCustomCardNumber">
+                                        <!-- VEHICLE CUSTOM CARD NUMBER -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.vehicleCustomCardNumber' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="vehicleCustomCardNumber"
+                                                       [(ngModel)]="data.vehicleCustomCardNumber"
+                                                       #vehicleCustomCardNumber="ngModel" maxlength="10" number required
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VEHICLE CUSTOM CARD NUMBER -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].newVehicleRegistrationType">
+                                        <!-- NEW VEHICLE REGISTRATION TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.newVehicleRegistrationType' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.vehicleRegistrationTypes[data.newVehicleRegistrationType]}}"
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /NEW VEHICLE REGISTRATION TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].numberOfVisas">
+                                        <!-- NUMBER OF VISAS -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.payments.numberVisas' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="numberVisas"
+                                                       [(ngModel)]="data.numberOfVisas" #numberVisas="ngModel"
+                                                       maxlength="3" number required disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /NUMBER OF VISAS -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].visaType">
+                                        <!-- VISA TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.payments.visaType' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.visaTypes[data.visaType]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VISA TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].jobCategory">
+                                        <!-- JOB CATEGORY -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.expatriateServices.jobCategory' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.jobCategorys[data.jobCategory]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /JOB CATEGORY -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].vehicleBodyType">
+                                        <!-- VEHICLE BODY TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.vehicleRegistrationServices.vehicleBodyType' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="account"
+                                                       value="{{combo.vehicleBodyTypes[data.vehicleBodyType]}}"
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- /VEHICLE BODY TYPE -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportType && this.data.transactionType=='P'">
+                                        <!-- PASSPORT TYPE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.saudiPassportServices.passportType' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="passportType"
+                                                       value="{{combo.passportTypes[data.passportType]}}" disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- PASSPORT TYPE -->
+                                    </div>
+                                    
+                                    <!-- PASSPORT TYPE AND  PASSPORT DURATION-->
+                                    <!-- todo no son necesarios para this.data.transactionType = R (refunds), pero el API los requiere, los ponemos hidden -->
+                                    <input type="hidden"  [(ngModel)]="data.passportType" name="passportType" value="0000000000"
+                                           *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportType && this.data.transactionType=='R'">
+                                    <input type="hidden"  [(ngModel)]="data.passportDuration" name="passportDuration" value="0000000000"
+                                           *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportDuration && this.data.transactionType=='R'">
+                                    <!-- PASSPORT TYPE AND  PASSPORT DURATION-->
+
+                                    <div class="col-xs-12 col-sm-3"
+                                        *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].passportDuration && this.data.transactionType=='P'" >
+                                        <!-- PASSPORT DURATION -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.saudiPassportServices.passportDuration' | translate }}
+                                            </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="passportType"
+                                                       value="{{combo.passportDurations[data.passportDuration]}}"
+                                                       disabled/>
+                                            </div>
+                                        </div>
+                                        <!-- PASSPORT DURATION -->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12"></div>
+
+                                    <div class="col-xs-12 col-sm-5"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].issuingEntity">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.publicViolation.issuingEntity' | translate }}
+                                            </label>
+                                            <input type="text" class="form-control" name="issuingEntity"
+                                                   value="{{combo.eGovViolationsIssuingEntity[data.issuingEntity]}}"
+                                                   disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-4"
+                                         *ngIf="services[this.data.serviceType].applicationTypes[this.data.applicationType].category">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.publicViolation.category' | translate }}
+                                            </label>
+                                            <input type="text" class="form-control" name="category"
+                                                   value="{{combo['eGovCategory' + (data.issuingEntity ? data.issuingEntity : '')][data.category]}}"
+                                                   disabled/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- FEESS -->
+                                <div class="row" *ngIf="option == InitiateOption">
+                                    <div class="col-xs-12 col-sm-3" *ngIf="batch.amount != '' && batch.amount != null">
+                                        <!-- AMOUNT -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.amount' | translate }}
+                                            </label>
+                                            <div>
+												<span class="form-control" disabled>
+													{{batch.amount | amountCurrency}}
+												</span>
+                                            </div>
+                                        </div>
+                                        <!-- /AMOUNT -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="batch.unusedBalance != null && batch.unusedBalance != ''">
+                                        <!-- UNUSED BALANCE -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.unusedBalance' | translate }}
+                                            </label>
+                                            <div>
+												<span class="form-control" disabled>
+													{{ batch.unusedBalance  | amountCurrency}}
+												</span>
+                                            </div>
+                                        </div>
+                                        <!-- /UNUSED BALANCE-->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3"
+                                         *ngIf="batch.beneficiaryName != '' && batch.beneficiaryName!= null ">
+                                        <!-- BENEFICIARY NAME -->
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'payments.moiPayments.beneficiaryName' | translate }}
+                                            </label>
+                                            <div>
+												<span class="form-control" disabled>
+													{{ batch.beneficiaryName }}
+												</span>
+                                            </div>
+                                        </div>
+                                        <!-- /BENEFICIARY NAME -->
+                                    </div>
+                                </div>
+
+                                <!-- BLOCK FEES -->
+                                <div class="row"
+                                     *ngIf="batch.fees && batch.fees.length > 0 && option == InitiateOption">
+                                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                                                   class="material" [rows]="batch.fees" [columnMode]="defaultColumnMode"
+                                                   [headerHeight]="30"
+                                                   [rowHeight]="defaultHeight"
+                                                   [externalPaging]="false"
+                                                   [externalSorting]="false">
+                                        <ngx-datatable-column prop="feeType">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                         ngx-datatable-header-template let-row="row">
+                                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                               {{'payments.moiPayments.fees' | translate }} {{ 'public.type' | translate }}
+                                        </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column prop="feeAmount">
+                                            <ng-template let-value="name" let-sort="sortFn"
+                                                         ngx-datatable-header-template let-row="row">
+                                         <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                             {{'payments.moiPayments.feesAmount' | translate }}
+                                         </span>
+                                            </ng-template>
+                                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                                <span>{{ value | amountCurrency }}</span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                    </ngx-datatable>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="sme-form__body" *ngIf="isActivating">
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label>{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                            <span class="form-control"
+                                                 >{{ batch.rejectedReason }}</span>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption && generateChallengeAndOTP" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                                                [requestValidate]="requestValidate"
+                                                                #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

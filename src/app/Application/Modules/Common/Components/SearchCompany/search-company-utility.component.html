@@ -1,0 +1,56 @@
+<arb-breadcrumb [routes]="addRoutes" *ngIf="addRoutes && addRoutes.length>0">
+</arb-breadcrumb>
+
+<arb-panel-buttons *ngIf="isInitiator() && canAddCompany()">
+    <a class="btn btn-primary btn-wide" [routerLink]="['/management/company/add']">{{
+        'managementCompany.addCompany' | translate }}</a>
+</arb-panel-buttons>
+
+<app-dynamic-searchable-table
+        [searchForm]="searchForm"
+        [service]="service"
+        [combosData]="combosData"
+        [fieldsConfigForSearchForm]="fieldsConfigForSearchForm"
+        [fieldsConfigForList]="fieldsConfigForList"
+
+        [showSearchForm]="showSearchForm"
+        [searchForm_checkValid]="true"
+        [search_form_custom_fields_templates]="{}"
+        [search_form_translate_prefix]="'public.searchCompany'"
+        [search_form_combosData]="combosData"
+        (onSubmitSearchForm)="search()"
+        (onResetSearchForm)="reset()"
+
+        [table_title]="title"
+        [table_export_show_buttons]="showExportButtons()"
+        [table_export_header]="getExportHeader()"
+        [table_export_columns]="getExportColumns()"
+        [table_export_selected_rows]="tableSelectedRows"
+        [table_export_pdf_size]="{ width: 1200, height: 800 }"
+
+        [table_translate_prefix]="translate_prefix"
+        [table_selectionType]="defaultSelectionType"
+        [table_elements_rows]="elementsPage.data"
+        [table_columnMode]="defaultColumnMode"
+        [table_headerHeight]="defaultHeight"
+        [table_footerHeight]="footerHeight"
+        [table_rowHeight]="defaultHeight"
+        [table_externalPaging]="true"
+        [table_externalSorting]="true"
+        [table_elements_count]="elementsPage.page.totalElements"
+        [table_elements_offset]="elementsPage.page.pageNumber-1"
+        [table_elements_limit]="elementsPage.page.pageSize"
+
+        (onTablePage)="setPage($event)"
+        (onTableSort)="setSort($event)"
+        [table_rowIdentity]="getIdFunction()"
+        (onTableSelect)="onSelect($event)"
+        (onTableDetailToggle)="onDetailToggle($event)"
+        (onTableClickRowDetail)="onClickRow($event.row, $event.propName)"
+
+        [table_footer_show_buttons]="true"
+        [table_footer_visiblePagesCount]="visiblePagesCount"
+        [table_footer_pageSize]="elementsPage.page.pageSize"
+        (onTableFooterChangePageSize)="elementsPage.page.pageSize = $event.pageSize">
+
+</app-dynamic-searchable-table>

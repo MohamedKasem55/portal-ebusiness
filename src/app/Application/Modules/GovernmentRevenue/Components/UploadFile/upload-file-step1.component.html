@@ -1,0 +1,58 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'governmentRevenue.menu.bulkUploadFile' | translate}}
+				</div>
+				<!--
+                <div class="col-xs-12 col-sm-6 text-right">
+                    <a class="btn btn-info btn-wide" [routerLink]="['/bulk-payment/downloadTemp']">
+                        <span class="glyphicon glyphicon-download-alt"></span>&nbsp;&nbsp;
+                        <span>{{'payroll.downloadTemplates' | translate }}</span></a>
+                </div>
+                -->
+			</div>
+
+			<div class="sme-panel">
+				<div class="sme-panel__body">
+					<div class="sme-form__body">
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<!-- sme-form-group -->
+								<div class="form-group">
+									<label>{{ 'payroll.uploadFile' |
+										translate }}</label>
+									<div class="input-group">
+										<input type="text" class="form-control" placeholder="Upload file"
+											[disabled]="true" [(ngModel)]="fileName">
+										<span class="input-group-btn">
+											<div class="fileUpload btn">
+												<span>{{'public.upload' | translate | uppercase}}</span>
+												<input type="file" (change)="fileChange($event)" accept=".txt"
+													class="upload">
+											</div>
+										</span>
+									</div>
+
+								</div>
+								<!-- ./sme-form-group -->
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<!-- sme-form-group -->
+								<div class="form-group">
+									<label>{{ 'payroll.batchName' |
+										translate }}</label>
+									<input type="text" class="form-control" id="batch-name-input"
+										[(ngModel)]="batchName">
+
+								</div>
+								<!-- ./sme-form-group -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

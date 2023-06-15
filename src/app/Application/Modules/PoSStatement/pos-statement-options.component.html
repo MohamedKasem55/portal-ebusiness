@@ -1,0 +1,104 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{'menu.collections_management.menu' | translate}}</li>
+        <li>{{ 'posStatement.name'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title"></div>
+
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosRequestMenu',
+                                ['POS_MANAGEMENT_PRIVILEGE'],
+                                ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/pos-request']">
+                                        {{ 'posStatement.newRequest' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosStatementList',
+			                    ['POSSTATEMENT_PRIVILEGE'],
+			                    ['PosStatementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/pos-terminal']">
+                                        {{ 'menu.collections_management.pos_ecommerce.list_of_terminals' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosStatementTerminalStatement',
+			                    ['POSSTATEMENT_PRIVILEGE'],
+			                    ['PosStatementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/accounts/posStatement']">
+                                        {{ 'menu.collections_management.pos_ecommerce.terminal_statement' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosStatementList',
+			                    ['POS_MANAGEMENT_PRIVILEGE'],
+			                    ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/pos-manage-request']">
+                                        {{ 'menu.collections_management.pos_mantenience.pos-manage-request' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosStatementTerminalStatement',
+                    			['POS_MANAGEMENT_PRIVILEGE'],
+			                    ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/pos-maintenance-request']">
+                                        {{ 'menu.collections_management.pos_mantenience.pos-maintenance-request' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'ClaimsMenu',
+			                    ['POS_MANAGEMENT_PRIVILEGE'],
+			                    ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/claims']">
+                                        {{ 'menu.collections_management.pos_mantenience.claims' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosStatementTerminalStatement',
+                                ['POS_MANAGEMENT_PRIVILEGE'],
+                                ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/request-status']">
+                                        {{ 'menu.collections_management.pos_mantenience.request-status' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'PosStatementTerminalStatement',
+                                ['POS_MANAGEMENT_PRIVILEGE'],
+                                ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/crm-status']">
+                                        {{ 'menu.collections_management.pos_mantenience.crm-status' | translate }}
+                                    </a>
+                                </li>
+                                <li *ngIf="this.authenticationService.activateOption(
+                                'POSDashboard',
+                                ['POS_MANAGEMENT_PRIVILEGE'],
+                                ['posManagementGroup'])">
+                                    <a class="human-selectable" href="#" [routerLink]="['/posstatement/dashboard']">
+                                        {{ 'menu.collections_management.pos_mantenience.dashboard' | translate }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="container-fluid"></div>
+
+        </div>
+    </div>
+
+    <div *ngIf="!transactionsPending()" class="alert alert-danger">
+        {{ 'posStatement.outstandingTransactionsMessage' | translate }}
+    </div>
+</div>

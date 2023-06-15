@@ -1,0 +1,40 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.payments' | translate }}</li>
+        <li class="active">{{ 'dashboard.governmentRevenue' | translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title"></div>
+
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <li *ngIf="authenticationService.activateOption('GovernmentRevenueNewPayment',['GOVERNMENTREVENUE_PRIVILEGE'],['GovRevenueGroup'])">
+                                    <a class="human-selectable" href="#"
+                                       [routerLink]="['/government-revenue/new-payment']">{{ 'menu.payments.government_revenue.payment'| translate }}</a>
+                                </li>
+                                <li *ngIf="authenticationService.activateOption('GovernmentRevenuePreviousPayment',['GOVERNMENTREVENUE_PRIVILEGE'],['GovRevenueGroup'])">
+                                    <a class="human-selectable" href="#"
+                                       [routerLink]="['/government-revenue/processed-operation']">{{ 'menu.payments.government_revenue.processed_operations'| translate }}</a>
+                                </li>
+                                <li *ngIf="authenticationService.activateOption('GovernmentRevenueRequestStatus',['GOVERNMENTREVENUE_PRIVILEGE'],['GovRevenueGroup'])">
+                                    <a class="human-selectable" href="#"
+                                       [routerLink]="['/government-revenue/request-status']">{{ 'menu.payments.government_revenue.request_status'| translate }}</a>
+                                </li>
+                                <li *ngIf="authenticationService.activateOption('GovernmentRevenueFileUpload',['GOVERNMENTREVENUE_PRIVILEGE'],['GovRevenueGroup', 'GovRevenueBulkUploadGroup'])">
+                                    <a class="human-selectable" href="#"
+                                       [routerLink]="['/government-revenue/upload-file']">{{ 'menu.payments.government_revenue.upload_file'| translate }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

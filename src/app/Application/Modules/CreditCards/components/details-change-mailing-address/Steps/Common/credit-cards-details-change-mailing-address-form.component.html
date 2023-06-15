@@ -1,0 +1,306 @@
+<ng-container [formGroup]="formModel">
+
+    <!-- card info -->
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'accounts.creditCards.cmaProfileNumber' | translate }}</label>
+                <span class="form-control" [innerHTML]="company.profileNumber"></span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'accounts.creditCards.cmaCardNumberDisplay' | translate }}</label>
+                <span class="form-control" [innerHTML]="inquiryMailingData?.cardNumberDTO.cardNumberDisplay"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- address -->
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label class="required">{{ 'accounts.creditCards.cmaAddressLine' | translate }}</label>
+                <input type="text" class="form-control" formControlName="addressLine" maxlength=40/>
+                <div *ngIf="formModel.controls.addressLine.hasError('required') && formModel.controls.addressLine.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaAddressLine' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <div class="form-group">
+                <label class="required">{{ 'accounts.creditCards.cmaZipCode' | translate }}</label>
+                <input type="text" class="form-control" formControlName="zipCode" maxlength=6 inputPattern="onlyPositiveNumbers"/>
+                <div *ngIf="formModel.controls.zipCode.hasError('required') && formModel.controls.zipCode.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaZipCode' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <div class="form-group">
+                <label class="required">{{ 'accounts.creditCards.cmaPoBox' | translate }}</label>
+                <input type="text" class="form-control" formControlName="poBox" maxlength=35/>
+                <div *ngIf="formModel.controls.poBox.hasError('required') && formModel.controls.poBox.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaPoBox' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- main phone -->
+    <div class="row">
+
+        <input type="hidden" formControlName="mainPhoneInternationalCode" />
+
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <div class="form-group">
+                <span class="form-control">
+                    <label class="required">{{ 'accounts.creditCards.cmaMainPhone' | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-3 col-sm-2 col-md-1">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaMainPhoneUnvalidateAreaCode' | translate }}</label>
+                <select class="form-control" formControlName="mainPhoneUnvalidateAreaCode">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of combosData['phoneNumAreaCode']; index as i" [value]="item['key']"
+                        [innerHTML]="item['value']">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-5 col-sm-3 col-md-3">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaMainPhoneNumber' | translate }}</label>
+                <input type="text" class="form-control" formControlName="mainPhoneNumber"
+                inputPattern="onlyDigits"  maxlength=7/>
+                <div *ngIf="formModel.controls.mainPhoneNumber.hasError('required') && formModel.controls.mainPhoneNumber.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMainPhoneNumber' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.mainPhoneNumber.hasError('minlength') && formModel.controls.mainPhoneNumber.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMainPhoneNumber' | translate }}{{ 'error.minlength' | translate:{size: 7} }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden-xs col-sm-2 col-md-1">
+            <div class="form-group">
+                <span class="form-control"><label
+                        class="required">{{ 'accounts.creditCards.cmaMainPhoneExtension' | translate }}</label></span>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-sm-2 col-md-2">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaMainPhoneExtension' | translate }}</label>
+                <input type="text" class="form-control" formControlName="mainPhoneExtension" maxlength=4
+                inputPattern="onlyDigits" />
+                <div *ngIf="formModel.controls.mainPhoneExtension.hasError('required') && formModel.controls.mainPhoneExtension.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMainPhoneExtension' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- secondary phone -->
+    <div class="row">
+
+        <input type="hidden" formControlName="secondaryPhoneInternationalCode" />
+
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <div class="form-group">
+                <span class="form-control">
+                    <label class="required">{{ 'accounts.creditCards.cmaSecondaryPhone' | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-3 col-sm-2 col-md-1">
+            <div class="form-group">
+                <label
+                    class="hidden">{{ 'accounts.creditCards.cmaSecondaryPhoneUnvalidateAreaCode' | translate }}</label>
+                <select class="form-control" formControlName="secondaryUnvalidateAreaCode">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of combosData['phoneNumAreaCode']; index as i" [value]="item['key']"
+                        [innerHTML]="item['value']">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-5 col-sm-3 col-md-3">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaSecondaryPhoneNumber' | translate }}</label>
+                <input type="text" class="form-control" formControlName="secondaryPhoneNumber"
+                inputPattern="onlyDigits" maxlength=7/>
+                <div *ngIf="formModel.controls.secondaryPhoneNumber.hasError('required') && formModel.controls.secondaryPhoneNumber.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaSecondaryPhoneNumber' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.secondaryPhoneNumber.hasError('minlength') && formModel.controls.secondaryPhoneNumber.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaSecondaryPhoneNumber' | translate }}{{ 'error.minlength' | translate:{size: 7} }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden-xs col-sm-2 col-md-1">
+            <div class="form-group">
+                <span class="form-control"><label
+                        class="required">{{ 'accounts.creditCards.cmaSecondaryPhoneExtension' | translate }}</label></span>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-sm-2 col-md-2">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaSecondaryPhoneExtension' | translate }}</label>
+                <input type="text" class="form-control" formControlName="secondaryPhoneExtension" maxlength=4
+                inputPattern="onlyDigits"  />
+                <div *ngIf="formModel.controls.secondaryPhoneExtension.hasError('required') && formModel.controls.secondaryPhoneExtension.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaSecondaryPhoneExtension' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fax -->
+    <div class="row">
+
+        <input type="hidden" formControlName="faxInternationalCode" />
+
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <div class="form-group">
+                <span class="form-control">
+                    <label class="required">{{ 'accounts.creditCards.cmaFax' | translate }}</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-xs-3 col-sm-2 col-md-1">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaFaxUnvalidateAreaCode' | translate }}</label>
+                <select class="form-control" formControlName="faxUnvalidateAreaCode">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of combosData['phoneNumAreaCode']; index as i" [value]="item['key']"
+                        [innerHTML]="item['value']">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-5 col-sm-3 col-md-3">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaFaxNumber' | translate }}</label>
+                <input type="text" class="form-control" formControlName="faxNumber"
+                inputPattern="onlyDigits" maxlength=7/>
+                <div *ngIf="formModel.controls.faxNumber.hasError('required') && formModel.controls.faxNumber.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaFaxNumber' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.faxNumber.hasError('minlength') && formModel.controls.faxNumber.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaFaxNumber' | translate }}{{ 'error.minlength' | translate:{size: 7} }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden-xs col-sm-2 col-md-1">
+            <div class="form-group">
+                <span class="form-control"><label
+                        class="required">{{ 'accounts.creditCards.cmaFaxExtension' | translate }}</label></span>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-sm-2 col-md-2">
+            <div class="form-group">
+                <label class="hidden">{{ 'accounts.creditCards.cmaFaxExtension' | translate }}</label>
+                <input type="text" class="form-control" formControlName="faxExtension" maxlength=4
+                inputPattern="onlyDigits" />
+                <div *ngIf="formModel.controls.faxExtension.hasError('required') && formModel.controls.faxExtension.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaFaxExtension' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- mobile and mail-->
+    <div class="row">
+
+        <input type="hidden" formControlName="mobileInternationalCode" />
+
+        <div class="col-xs-5 col-sm-3 col-md-3">
+            <div class="form-group">
+                <label>{{ 'accounts.creditCards.cmaMobileUnvalidateAreaCode' | translate }}</label>
+                <input type="text" class="form-control" formControlName="mobileUnvalidateAreaCode" maxlength=10 inputPattern="onlyDigits"/>
+                <div *ngIf="formModel.controls.mobileUnvalidateAreaCode.hasError('required')"
+                    class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMobileUnvalidateAreaCode' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.mobileUnvalidateAreaCode.hasError('minlength') && formModel.controls.mobileUnvalidateAreaCode.touched"
+                    class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMobileUnvalidateAreaCode' | translate }}{{ 'error.minlength' | translate:{size: 10} }}</small>
+                </div>
+                <div *ngIf="formModel.controls.mobileUnvalidateAreaCode.hasError('pattern') && formModel.controls.mobileUnvalidateAreaCode.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMobileUnvalidateAreaCode' | translate }}{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-7 col-sm-5 col-md-5">
+            <div class="form-group">
+                <label>{{ 'accounts.creditCards.cmaMail' | translate }}</label>
+                <input type="text" class="form-control" formControlName="mail" maxlength="50"
+                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" inputPattern="notArabic" />
+                <div *ngIf="formModel.controls.mail.hasError('required') && formModel.controls.mail.touched" class="alert alert-danger">
+                    <small>{{'accounts.creditCards.cmaMail' | translate }}{{ 'error.required' | translate }}</small>
+                </div>
+                <div *ngIf="formModel.controls.mail.hasError('pattern') && formModel.controls.mail.touched" class="alert alert-danger">
+                    <small>{{'public.emailVerification' | translate }}</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- region and city -->
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'accounts.creditCards.cmaCityRegion' | translate }}</label>
+                <select class="form-control" formControlName="cityRegion">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of combosData['regionType']; index as i" [value]="item['key']"
+                        [innerHTML]="item['value']">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label>{{ 'accounts.creditCards.cmaCity' | translate }}</label>
+                <select class="form-control" formControlName="city">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of combosData['cityType']; index as i" [value]="item['key']"
+                        [innerHTML]="item['value']">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+</ng-container>

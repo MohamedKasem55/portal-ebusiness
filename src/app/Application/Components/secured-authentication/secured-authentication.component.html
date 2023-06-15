@@ -1,0 +1,70 @@
+<div *ngIf="generateChallengeAndOTP && generateChallengeAndOTP.typeAuthentication==='STATIC'">
+    <div class="form-group">
+        <label>{{ 'securedAuthentication.authorizationPassword' | translate }}</label>
+        <input type="password" class="form-control"  autocomplete="false"
+               placeholder="{{ 'securedAuthentication.introduceAuthorizationPassword' | translate }}"
+               [(ngModel)]="requestValidate.password" name="password" maxlength=32 required #password="ngModel"
+               #passwordInput>
+    </div>
+</div>
+
+<div *ngIf="generateChallengeAndOTP && (generateChallengeAndOTP.typeAuthentication==='OTP' || generateChallengeAndOTP.owner)">
+
+    <div *ngIf="generateChallengeAndOTP.owner">
+        {{ ('securedAuthentication.otpText' | translate) + " " + (generateChallengeAndOTP.mobileNumber) }}
+    </div>
+    <br/>
+
+    <div class="form-group">
+        <label>{{ 'securedAuthentication.otp' | translate }}</label>
+        <input type="text" class="form-control" placeholder="{{ 'securedAuthentication.introduceOtp' | translate }}"
+               autocomplete="false"
+               [(ngModel)]="requestValidate.otp" (keyup)="changeOTP()" name="otp" minlength="4" maxlength=4 required #otp="ngModel"
+               inputPattern="onlyDigits" #otpInput>
+        <p [translate]="'securedAuthentication.leftSecondsToInvalidateToken'"
+           [translateParams]="{seconds: otpTimer}"></p>
+    </div>
+</div>
+
+<div *ngIf="generateChallengeAndOTP && generateChallengeAndOTP.typeAuthentication==='IVR' && !ivrCustomMessage">
+    <div style="font-size: 16px;">
+        <p  [translate]="'securedAuthentication.message1'"></p>
+        <p  [translate]="'securedAuthentication.message2'" ></p>
+        <p  [translate]="'securedAuthentication.message3'" ></p>
+        <p  *ngIf="showBeneficiaryTip" [translate]="'securedAuthentication.message4'" ></p>
+        <p  [translate]="'securedAuthentication.message5'" ></p>
+        <p  [translate]="'securedAuthentication.message6'" ></p>
+        <p  [translate]="'securedAuthentication.timer'" [translateParams]="{seconds: ivrTimer}"></p>
+    </div>
+</div>
+
+
+<div *ngIf="generateChallengeAndOTP && generateChallengeAndOTP.typeAuthentication==='IVR' && ivrCustomMessage">
+    <div style="font-size: 16px; white-space: pre-wrap">
+        <p>{{ivrCustomMessage}}</p>
+        <br/>
+      <p  [translate]="'securedAuthentication.timer'" [translateParams]="{seconds: ivrTimer}"></p>
+    </div>
+</div>
+
+
+<div *ngIf="generateChallengeAndOTP && generateChallengeAndOTP.typeAuthentication==='CHALLENGE'">
+    <div class="form-group" *ngIf="generateChallengeAndOTP.serial">
+        <label>{{ 'login.serial' | translate }}</label>
+        <p>{{generateChallengeAndOTP.serial}}</p>
+    </div>
+    <div class="form-group">
+        <label>{{ 'securedAuthentication.challengeNumber' | translate }}</label>
+        <p>{{generateChallengeAndOTP.challengeCode}}</p>
+    </div>
+    <div class="form-group" *ngIf="!generateChallengeAndOTP.isNoQr">
+        <qrcode [qrdata]="generateChallengeAndOTP.challengeCode" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
+    <div class="form-group">
+        <label>{{ 'securedAuthentication.challengeResponse' | translate }}</label>
+        <input type="text" class="form-control" autocomplete="false"
+               placeholder="{{ 'securedAuthentication.introduceChallengeResponse' | translate }}"
+               [(ngModel)]="requestValidate.challengeResponse" name="challengeResponse" minlength="4" maxlength=6
+               required #challengeResponseInput #challengeResponse="ngModel" inputPattern="onlyNumbers">
+    </div>
+</div>

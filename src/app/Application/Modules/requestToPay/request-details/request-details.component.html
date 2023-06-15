@@ -1,0 +1,286 @@
+<div class='sme-breadcrumb'>
+    <ol class='breadcrumb'>
+        <li>{{ 'dashboard.transfers' | translate }}</li>
+        <li><a href="#"
+               [routerLink]="['/transfers/rtPay']">{{ 'rtp.rtp' | translate }} </a></li>
+        <li class='active'>{{ 'rtp.requestDetails' | translate }}</li>
+    </ol>
+</div>
+
+<!--##################################OTP#######################################-->
+<div class='container-fluid' *ngIf="pageType==='OTP'">
+    <div class='sme-head'>
+        <div class='sme-head__title'>
+            {{ 'rtp.otp' | translate }}
+        </div>
+    </div>
+    <arb-panel>
+        <app-secured-authentication *ngIf='generateChallengeAndOTP' [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                    [requestValidate]='requestValidate'></app-secured-authentication>
+    </arb-panel>
+</div>
+
+
+<!--##################################Details#######################################-->
+<div class="sme-head__title" *ngIf="pageType=='DETAILS'">
+    {{ 'rtp.requestDetails' | translate }}
+</div>
+
+<arb-panel *ngIf="pageType=='DETAILS' && showDetails">
+    <div class='legend'>{{ 'rtp.details' | translate }}
+        <span class='iconSpan'>
+        <span class='statusSpan'
+              [ngClass]=" getStatusClass(formModel.controls.status.value)">{{formModel.controls.status.value}}</span>
+       </span>
+    </div>
+
+    <ng-container *ngIf="type=='REQUEST'">
+        <div class="row">
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.receiverName' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.receiverName.value  }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.receiverBank' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{getBankName(formModel.controls.bank.value)}} </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.receiverIban' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.receiverIban.value  }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.purpose' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ getReasonsName(formModel.controls.purpose.value)  }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.amount' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.amount.value   | amountCurrency }} SAR</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.comment' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.comments.value  }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="type=='RECEIVE'">
+        <div class="row">
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.requestDate' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.requestDate.value | date:'dd/MM/yyyy'  }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.requesterName' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{formModel.controls.requesterName.value}} </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.requesterBank' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ getBankName(formModel.controls.bank.value)  }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.requesterIban' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.requesterIban.value  }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.amount' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.amount.value   | amountCurrency }} SAR</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.expiryDate' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.expiryDate.value | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.purpose' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ getReasonsName(formModel.controls.purpose.value) }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-3'>
+                <div class='form-group'>
+                    <label>{{ 'rtp.comment' | translate }} </label>
+                    <div class="input-group">
+                        <span>{{ formModel.controls.comments.value }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-panel>
+
+
+<arb-panel *ngIf="pageType=='DETAILS' && showAccount">
+    <div class='legend'>{{ 'rtp.paymentDetails' | translate }}</div>
+    <div class="row">
+        <div class='col-xs-12 col-sm-6'>
+            <app-select-account [accounts]="accounts" (onAccountChange)="selectAccount($event)">
+            </app-select-account>
+        </div>
+    </div>
+</arb-panel>
+
+
+<!--##################################RESULT#######################################-->
+<arb-panel *ngIf="pageType=='RESULT'">
+    <ng-container>
+        <div class='sme-wizard__success'>
+            <ng-container *ngIf="isSuccess">
+                <span class=' icon -check'></span>
+                <div></div>
+                <div>
+                    <p>{{ successTitle }} </p>
+                    <small> {{ successMsg }}</small>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!isSuccess">
+                <span class='iconError'> <img src='assets/img/error.svg'/> </span>
+                <div></div>
+                <div>
+                    <p>{{'rtp.errorCancelMsg' | translate }} </p>
+                    <small> {{'rtp.errorCancelMsg-hint' | translate }}</small>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</arb-panel>
+
+
+<!--##################################Buttons#######################################-->
+<arb-buttons *ngIf="type=='REQUEST' && pageType=='DETAILS' && showDetails">
+    <button class="btn btn-default btn-wide" type="button"
+            (click)="goTo(false)">{{ 'public.back' | translate}}</button>
+
+    <button class="btn btn-primary btn-wide" *ngIf="formModel.controls.status.value == 'Pending'"
+            (click)="cancelRequest()">{{'rtp.cancelRequest' | translate}}</button>
+</arb-buttons>
+
+<arb-buttons *ngIf="type=='RECEIVE' && pageType=='DETAILS' && showDetails && !showAccount">
+    <button class="btn btn-default btn-wide" type="button"
+            (click)="goTo(false)">{{ 'public.back' | translate}}</button>
+
+    <ng-container *ngIf="canPay()">
+        <button class="btn btn-default btn-wide" type="button"
+                (click)="reject()">{{ 'rtp.reject' | translate}}</button>
+
+        <button class="btn btn-default btn-wide" type="button"
+                (click)="later()">{{ 'rtp.later' | translate}}</button>
+
+        <button class="btn btn-primary btn-wide" *ngIf="!requiredBeneficary"
+                (click)="pay()">{{'rtp.pay' | translate}}</button>
+
+        <button class="btn btn-primary btn-wide" *ngIf="requiredBeneficary"
+                (click)="addBeneficiary()">{{'rtp.addBeneficiary' | translate}}</button>
+    </ng-container>
+</arb-buttons>
+
+<arb-buttons *ngIf="type=='RECEIVE' && pageType=='DETAILS' && showAccount">
+    <button class="btn btn-default btn-wide" type="button"
+            (click)="goTo(false)">{{ 'public.back' | translate}}</button>
+    <button class="btn btn-primary btn-wide"
+            (click)="ValidateRTPRequest()">{{'public.next' | translate}}</button>
+</arb-buttons>
+
+
+<arb-buttons *ngIf="pageType=='OTP'">
+    <button class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button class="btn btn-primary btn-wide" [disabled]="!requestValidate.valid()"
+            (click)="proceed()">{{'public.proceed' | translate}}</button>
+</arb-buttons>
+
+<arb-buttons *ngIf="pageType=='RESULT'">
+    <button class="btn btn-primary btn-wide"
+            (click)="goTo(true)">{{'rtp.dashboard' | translate}}</button>
+
+    <button class="btn btn-primary btn-wide"
+            (click)="goTo(false)">{{'rtp.toPay' | translate}}</button>
+</arb-buttons>
+
+
+<!--##################################Modal#######################################-->
+<div class="modal fade" bsModal #modal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog loading-position">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button (click)="hideModal()" type="button" class="close">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="title">   {{ modalTitle}} </p>
+                <p class="body">{{ modalMsg }}</p>
+            </div>
+            <div class="row commentRow">
+                <div class='col-xs-12 col-sm-12'>
+                    <div class='form-group'>
+                        <label>{{ 'rtp.comment' | translate }} </label>
+                        <div class="input-group">
+                            <input maxlength='50' class='form-control' [(ngModel)]="comment"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="hideModal()" class="btn btn-default btn-wide">
+                    {{ 'public.exit' | translate }}
+                </button>
+                <button type="button" (click)="confirm()" class="btn btn-primary btn-wide">
+                    {{ 'public.confirm' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

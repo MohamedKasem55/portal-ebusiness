@@ -1,0 +1,98 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'posRequest.addRequest' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <form class="sme-form__form" >
+                    <div class="sme-form__body">
+                                <div class="row">
+                        <fieldset>
+                             
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.terminalNumber' | translate }}</label>
+                                    <span class="form-control">{{batch.terminalNumber}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.typeOfRequest' | translate }}</label>
+                                    <span class="form-control">{{'posManagementRequestType'|modelPipe:batch.typeRequest}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.city' | translate }}</label>
+                                    <span class="form-control">{{'cityType'|modelPipe:batch.city}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                           
+                        </fieldset>
+                        </div>
+                       <div class="rows">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.contactName' | translate }}</label>
+                                    <span class="form-control">{{batch.contactName}}</span>
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posRequest.mobileNumber' |
+                                        translate }}</label> 
+                                    <span class="form-control">{{batch.mobile}}</span>
+                                    
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>    
+                        </fieldset>
+                       </div>
+                            
+                    </div>
+            </form>     
+            </div>
+        </div>
+    </div>      
+</div>  
+
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+    
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

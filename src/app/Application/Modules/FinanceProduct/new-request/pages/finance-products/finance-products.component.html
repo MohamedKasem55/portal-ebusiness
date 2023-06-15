@@ -1,0 +1,55 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid" *ngIf="eligibleFlg === undefined || eligibleFlg === true">
+  <div class="sme-page-title">
+    {{ 'financeProduct.menu' | translate }}
+    {{'financeProduct.newRequest.newRequest'|translate}}
+  </div>
+  <sme-card [startTitle]="'financeProduct.explore' | translate">
+    <div class="card-body">
+      <div class="sme-row-2-col">
+        <div *ngFor="let product of filteredFinanceProduct"  class="sme-col">
+          <div *ngIf="product.visible">
+            <sme-card-media class="sme-card-media" [mediaBorder]="true" [showEndArraw]="true" (click)="selectProduct(product)">
+              <div class="media-start sme-media-start-icon">
+                <img [src]="product.icon" />
+              </div>
+              <div class="media-content">
+                <h3 class="sme-media-title">{{product.name| translate}}</h3>
+                <p class="sme-media-desc">{{product.desc| translate}}</p>
+              </div>
+            </sme-card-media>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>
+<div *ngIf="eligibleFlg === false">
+  <div class="container-fluid">
+    <div class="sme-page-title">
+      {{'NoteligibleTitle'|translate}}
+    </div>
+    <div class="sme-card">
+      <div class="sme-row">
+        <img src="assets/icons/info.svg" />
+        <p class="sme-card-msg">{{'NoteligibleMsg' | translate}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <sme-check [img]="'assets/icons/check-error.svg'" [title]="'Unfortunately, you are not eligible for this financing product'" [status]="'error'">
+      <div class="sme-check-title" *ngIf="errorList !== null && errorList?.length <= 2 && errorList?.length > 0">
+        <p>{{'ineligibilityReasons'|translate}}:</p>
+      </div>
+      <ol class="sme-ordered-list-center">
+        <li *ngFor="let error of errorList"> {{error}}</li>
+      </ol>
+    </sme-check>
+  </div>
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions btn-container">
+    <button class="btn btn-primary btn-wide left-btn" type="button" [routerLink]="['/financeProduct/financeProductsDashboard']">{{ 'financeProduct.details.dashboard' | translate}}</button>
+    <button class="btn btn-default btn-wide right-btn" type="button" [routerLink]="['/financeProduct/newRequest/branches']">{{ 'financeProduct.details.branches' | translate}}</button>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'posRequest.addRequest' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.terminalNumber' | translate }}</label>
+                                        <ng-select class="form-control" [(ngModel)]="batch.terminalNumber"
+                                                   #terminal="ngModel"
+                                                   name="terminal">
+                                            <ng-option *ngFor="let acc of terminals" [value]="acc">
+                                                {{acc}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="!terminal.valid && terminal.touched" class="alert alert-danger">
+                                            <small>{{'posRequest.terminalNumber' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.typeOfRequest' | translate }}</label>
+                                        <span class="form-control">{{'posManagementRequestType'|modelPipe:batch.typeRequest}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.city' | translate }}</label>
+                                        <span class="form-control">{{'cityType'|modelPipe:batch.city}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.contactName' | translate }}</label>
+                                        <span class="form-control">{{batch.contactName}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.mobileNumber' |
+                                            translate }}</label>
+                                        <span class="form-control">{{batch.mobile}}</span>
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.status' |
+                                            translate }}</label>
+                                        <span class="form-control">{{batch.status | statusPipe}}</span>
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'posRequest.rejectedReason' |
+                                            translate }}</label>
+                                        <span class="form-control"
+                                             >{{batch.rejectedReason}}</span>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-levels-table *ngIf="batch"
+                  [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+
+

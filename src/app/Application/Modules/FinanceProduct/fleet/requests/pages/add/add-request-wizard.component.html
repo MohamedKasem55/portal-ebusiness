@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+
+<div class="container-fluid">
+  <arb-steps [steps]="wizardSteps" [currentStep]="+wizardStep"> </arb-steps>
+</div>
+
+<!--Steps-->
+<div class="steps">
+  <!--step 1 business Details -->
+  <business-details-step1
+    *ngIf="wizardStep == 1"
+    [customerData]="customerData"
+    [businessDetailsRes]="businessDetailsRes"
+    (NextStep)="getBusinessData($event)"
+  ></business-details-step1>
+  <!--Step 2 (Linked Account)-->
+  <linked-account-step
+    *ngIf="wizardStep == 2"
+    [customerData]="customerData"
+    [businessDetails]="businessDetails"
+    (NextStep)="setNextStep($event)"
+  ></linked-account-step>
+  <!--Step 3 with details-->
+  <add-request-details-step1
+    *ngIf="wizardStep == 3"
+    (NextStep)="setNextStep($event)"
+  ></add-request-details-step1>
+  <!--Step 4 Documentation Upload-->
+  <docs-step
+    *ngIf="wizardStep == 4"
+    (NextStep)="setNextStep($event)"
+  ></docs-step>
+  <!--Step 5 InitialOffer-->
+  <initial-offer-step
+    *ngIf="wizardStep == 5"
+    (NextStep)="setNextStep($event)"
+  ></initial-offer-step>
+  <!--Step 6 (Application Summary)-->
+  <application-summary-step
+    *ngIf="wizardStep == 6"
+    (NextStep)="setNextStep($event)"
+  ></application-summary-step>
+</div>

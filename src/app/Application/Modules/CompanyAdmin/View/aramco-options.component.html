@@ -1,0 +1,35 @@
+ <div class="sme-breadcrumb">
+       <ol class="breadcrumb">
+           <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+           <li class="active">{{ 'aramcoPayments.aramcoBeneficiary' | translate }}</li>
+       </ol>
+   </div>
+   	
+	<div class="container-fluid">	
+      <div class="sme-page-block">
+           <div class="sme-form">
+			<div class="sme-form__title"></div>
+
+                <div class="sme-form__content">
+					<form autocomplete="off" class="sme-form__form">
+						<div class="sme-form__body">
+						  <div class="row">
+                <ul>
+                    <li *ngIf="authenticationService.activateOption('AramcoAdminService',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoPaymentsGroupAdmin'])">
+                        <a routerLinkActive="active" (click)="goAddBeneficiary()">
+                            {{ 'aramcoPayments.addBeneficiary' | translate }}
+                        </a>
+                    </li> 
+                    <li  *ngIf="authenticationService.activateOption('AramcoAdminService',['ARAMCOPAYMENTS_PRIVILEGE'],['AramcoPaymentsGroupAdmin'])">
+                        <a routerLinkActive="active" (click)="goBeneficiaryList()">
+                            {{ 'aramcoPayments.beneficiaryList' | translate }}
+                        </a>
+                    </li>
+                </ul> 
+              </div>
+            </div>	
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

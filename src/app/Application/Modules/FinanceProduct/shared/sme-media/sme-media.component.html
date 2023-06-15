@@ -1,0 +1,15 @@
+<ul class="sme-media" [ngClass]="{'sme-media-border': mediaBorder}">
+  <li class="sme-media-start">
+    <ng-content select=".media-start"></ng-content>
+  </li>
+  <li class="sme-media-content">
+    <ng-content select=".media-content"></ng-content>
+  </li>
+  <li class="sme-media-end">
+    <!-- <sme-pill *ngIf="pill != null" [pill]="pill"></sme-pill> -->
+    <ng-content select=".media-end"></ng-content>
+    <div *ngIf="showEndArraw" class="sme-media-end-arrow">
+      <img src="assets/icons/right-arrow.svg" width="17px" />
+    </div>
+  </li>
+</ul>

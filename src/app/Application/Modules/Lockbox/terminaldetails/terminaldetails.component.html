@@ -1,0 +1,182 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.lockbox'| translate }}</li>
+        <li class="active">
+            <a href="#" [routerLink]="['/lockbox/CDMterminal']">{{ 'lockbox.menu.lokbxterminal'| translate }}</a>
+        </li>
+        <li class="active">{{ 'lockbox.menu.terminaldet'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-form">
+        <div class="sme-form__content">
+              <div class="sme-form__body">
+                    <div class="sme-form__title">
+                            <div class="col-xs-12 col-sm-6">{{ 'lockbox.menu.terminaldet' | translate }}</div>
+                    </div>
+                   <form autocomplete="off">
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.terminalId' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.terminalId}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.terminal_name' | translate }}</label>
+                                            <span class="form-control disabled">{{terminalDetailsData.terminalName}}</span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.region' | translate }}</label>
+                                            <span class="form-control disabled" [innerHTML]="terminalDetailsData.site.regionName"></span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.city' | translate }}</label>
+                                            <span class="form-control disabled" [innerHTML]="terminalDetailsData.site.cityName"></span>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.location1' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.site.location1}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.location2' | translate }}</label>
+                                            <span class="form-control disabled">{{terminalDetailsData.site.location2}}</span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.chargeaccount' | translate }}</label>
+                                            <span class="form-control disabled">{{terminalDetailsData.chargeAccount.fullAccountNumber}}</span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.defaccount' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.defaultAccount.fullAccountNumber}}</span>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.Datedel' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.machine.deliveryDate}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.cassetes' | translate }} </label>
+                                            <span class="form-control disabled">{{terminalDetailsData.machine.cassetesNumber}}</span>
+                                        </div>
+                                        </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.modelnumber' | translate }} </label>
+                                            <span class="form-control disabled">{{terminalDetailsData.machine.modelNumber}}</span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.maxallowmach' | translate }}</label>
+                                            <span class="form-control disabled">{{terminalDetailsData.machine.maxCapacity}}</span>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.manufac' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.machine.manufacturer}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.status' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.status}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.gpscoord_n' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.site.gpsCoordinatesN}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>{{ 'lockbox.terminaldetails.gpscoord_e' | translate }} </label>
+                                            <span class="form-control disabled">{{terminalDetailsData.site.gpsCoordinatesE}}</span>
+                                        </div>
+                                </div>
+                                
+                        </div>
+                        <div class="row">
+                            
+                            <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.storenumber' | translate }} </label>
+                                        <span class="form-control disabled">{{terminalDetailsData.site.storeNumber}}</span>
+                                    </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.contname1' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.site.contactName1}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.contnum1' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.site.contactNumber1}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'lockbox.terminaldetails.contname2' | translate }}</label>
+                                        <span class="form-control disabled">{{terminalDetailsData.site.contactName2}}</span>
+                                    </div>
+                                </div>
+                    </div>
+                    <div class="row">
+                            
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'lockbox.terminaldetails.contnum2' | translate }} </label>
+                                    <span class="form-control disabled">{{terminalDetailsData.site.contactNumber2}}</span>
+                                </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'lockbox.terminaldetails.contname3' | translate }}</label>
+                                    <span class="form-control disabled">{{terminalDetailsData.site.contactName3}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'lockbox.terminaldetails.contnum3' | translate }}</label>
+                                    <span class="form-control disabled">{{terminalDetailsData.site.contactNumber3}}</span>
+                                </div>
+                            </div>
+                            
+                    </div>
+                   </form>
+            </div>
+        </div>
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+            <button type="button" [routerLink]="['/lockbox/CDMterminal']" class=" btn btn-default btn-wide">
+                                {{ 'public.back' | translate }}
+            </button>
+            </div>
+    </div>
+</div>

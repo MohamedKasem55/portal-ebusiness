@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <sme-check
+    [title]="'fleet.requests.initialOfferApproved' | translate"
+    [status]="'modal'"
+    [hasBody]="false"
+    [img]="'assets/icons/big_check.svg'"
+  >
+  </sme-check>
+  <div class="sme-check-desc pb-25">
+    <p>
+      {{ 'fleet.requests.yourRequest' | translate }}
+      <strong
+        >({{ 'fleet.requests.dossairID' | translate }}
+        {{ finalOfferInfo.dossairID }})</strong
+      >
+      {{ 'fleet.requests.notFinalizedOffer' | translate }}
+    </p>
+  </div>
+
+  <div class="sme-row">
+    <div class="sme-col">
+      <div class="card-body sme-col">
+        <sme-card-media class="media-bg" [showEndArraw]="false">
+          <div
+            class="media-start sme-media-start-icon sme-media-start-icon-white"
+          >
+            <img src="assets/icons/product.svg" />
+          </div>
+          <div class="media-content">
+            <h3 class="sme-media-content-title">
+              {{ 'fleet.requests.product' | translate }}:
+              <span class="sme-media-content-desc">{{
+                finalOfferInfo.productName
+              }}</span>
+            </h3>
+            <h3 class="sme-media-content-title">
+              {{ 'fleet.newFianceRequest.fianceAmount' | translate }}:
+              {{ finalOfferInfo.financeAmount }}
+              <span class="sme-media-content-desc">{{
+                'financeProduct.sar' | translate
+              }}</span>
+            </h3>
+          </div>
+        </sme-card-media>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button
+      class="btn btn-default btn-wide sme-back-btn"
+      type="button"
+      (click)="modalRef.hide()"
+    >
+      {{ 'fleet.btn.cancel' | translate }}
+    </button>
+    <button class="btn btn-primary btn-wide" (click)="navigateTo()">
+      {{ 'fleet.btn.reviewFinalOffer' | translate }}
+    </button>
+  </div>
+</div>

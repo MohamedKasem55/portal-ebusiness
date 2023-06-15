@@ -1,0 +1,133 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label class="required">{{ 'public.account' |
+                                            translate }}</label> 
+                                <span class="form-control">
+                                      {{batch.accountNumber}}      
+                                </span>
+                                
+                            </div>
+                        </div>
+                    </div>      
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                    <div class="row">
+                        <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.invoiceId' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.invoiceId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierName' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.billerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierId' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.billerId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.amountDue' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.amountDue | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                        </fieldset>        
+                        
+                    </div>
+                     <div class="row">
+                        <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.dateDue' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.dateDue | date:"dd/MM/yyyy"  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.additionalDetails' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.additionalDetails }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.buyerName' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.buyerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'invoiceHUB.pay' |
+                                            translate }}</label> 
+                                       <span class="form-control"> {{batch.amountPayment}}</span>
+                                    </div>
+                                </div>
+                        </fieldset>        
+                        
+                    </div>            
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+						

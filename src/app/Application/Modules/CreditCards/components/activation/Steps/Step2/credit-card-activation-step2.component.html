@@ -1,0 +1,19 @@
+<arb-panel>
+    <h3>{{ 'accounts.creditCards.activationStep2Title' | translate }}</h3>
+    <hr>
+    <app-credit-card-activation-form [formModel]="formModel"
+                                     [cards]="cards">
+    </app-credit-card-activation-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.creditCards.activationStep2HelpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.creditCards.activationStep2HelpText' | translate }}
+        </div>
+    </div>
+</arb-panel>

@@ -1,0 +1,200 @@
+.sme-panel {
+  $head-height: 46px;
+
+  background: #fff;
+
+  &__head {
+    display: table;
+    width: 100%;
+    height: $head-height + 1;
+    border-bottom: 1px solid #eee;
+  }
+
+  &__drag,
+  &__title,
+  &__actions {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  &__drag,
+  &__actions {
+    @include square($head-height);
+
+    .btn {
+      @include square($head-height);
+      min-width: 0;
+      padding: 0;
+      position: relative;
+      background: none;
+
+      .icon {
+        @include center;
+        @include icon-size(15px);
+      }
+    }
+  }
+
+  &__drag .btn {
+    color: #eee;
+  }
+
+  &__actions {
+    .btn {
+      color: $brand-grey-dark;
+    }
+
+    .dropdown-menu {
+      a {
+        color: $brand-grey-light;
+      }
+    }
+  }
+
+  &__title {
+    @include font($font-size-12);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-12 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-12 * $factor2);
+    }
+    line-height: 23px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: $brand-black;
+
+    padding-#{$left}: 15px;
+    padding-right: 15px;
+  }
+
+  &__drag + &__title {
+    padding-#{$left}: 0;
+  }
+
+  &__body {
+    .table {
+      margin: 0;
+    }
+  }
+
+  &__footer {
+    padding: 7px;
+    text-align: right;
+
+    border-top: 1px solid $table-border-color;
+
+    a {
+      .icon {
+        font-size: $font-size-10;
+        @media screen and (max-width: $max-width) {
+          font-size: $font-size-12 * $factor;
+        }
+        @media screen and (max-width: $max-width2) {
+          font-size: $font-size-12 * $factor2;
+        }
+      }
+    }
+  }
+}
+
+.sme-panel-carrusel {
+  max-width: 1190px;
+  margin-bottom: 15px;
+
+  $head-height: 46px;
+
+  background: #fff;
+
+  &__head {
+    display: table;
+    width: 100%;
+    height: $head-height + 1;
+    border-bottom: 1px solid #eee;
+  }
+
+  &__drag,
+  &__title,
+  &__actions {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  &__drag,
+  &__actions {
+    @include square($head-height);
+
+    .btn {
+      @include square($head-height);
+      min-width: 0;
+      padding: 0;
+      position: relative;
+      background: none;
+
+      .icon {
+        @include center;
+        @include icon-size(15px);
+      }
+    }
+  }
+
+  &__drag .btn {
+    color: #eee;
+  }
+
+  &__actions {
+    .btn {
+      color: $brand-grey-dark;
+    }
+
+    .dropdown-menu {
+      a {
+        color: $brand-grey-light;
+      }
+    }
+  }
+
+  &__title {
+    @include font($font-size-12);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-12 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-12 * $factor2);
+    }
+    line-height: 23px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: $brand-black;
+
+    padding-#{$left}: 15px;
+    padding-right: 15px;
+  }
+
+  &__drag + &__title {
+    padding-#{$left}: 0;
+  }
+
+  &__body {
+    .table {
+      margin: 0;
+    }
+  }
+
+  &__footer {
+    padding: 7px;
+    text-align: right;
+
+    border-top: 1px solid $table-border-color;
+
+    a {
+      .icon {
+        font-size: $font-size-10;
+        @media screen and (max-width: $max-width) {
+          font-size: $font-size-10 * $factor;
+        }
+        @media screen and (max-width: $max-width2) {
+          font-size: $font-size-10 * $factor2;
+        }
+      }
+    }
+  }
+}

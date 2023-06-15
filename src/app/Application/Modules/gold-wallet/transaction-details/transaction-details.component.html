@@ -1,0 +1,137 @@
+<div class='container-fluid'>
+    <div class="sme-page-block">
+        <div class="sme-form sme-form__form">
+            <div class='sme-head'>
+                <div class='sme-head__title'>
+                    {{ 'gold-wallet.trnx-details' | translate }}
+                </div>
+            </div>
+            <hr>
+            <div class="sme-form__content" [ngStyle]="{'margin-right':(language === 'ar')? '1%':''}" >
+                <div class="row" style="margin-left: 1%;">
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.wallet-number' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="goldWalletDashboardRes?.walletNum" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.ref-num' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.serialNumber" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.gold-code' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.goldCode" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 1%;">
+                    <div class="col-xs-12 col-sm-4" *ngIf="transaction?.gain">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.gain' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.gain" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.paid-from' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="goldWalletDashboardRes?.linkedAccountNumber"
+                                   class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.amount' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.costPrice" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 1%;">
+
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.purity' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.purity" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.source' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.goldSource" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.vendor' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.vendorName" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 1%;">
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.timestamp' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.transactionDate" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.status' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.transactionStatus" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'gold-wallet.trnx-type' |
+                                translate }}</label>
+                            <input type="text" [ngModel]="transaction?.transactionType" class="form-control"
+                                   disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<arb-buttons>
+    <button class='btn btn-default btn-wide' (click)="back()" [ngStyle]="{'float': language === 'en' ?'left':'right'}"
+            type='button'>{{ 'gold-wallet.back' |translate}}</button>
+</arb-buttons>

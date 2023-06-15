@@ -1,0 +1,19 @@
+<div class='container-fluid'>
+  <div class='sme-breadcrumb'>
+    <ol class='breadcrumb'>
+      <li>{{ 'financeProduct.menu' | translate }}</li>
+      <li class='active'>{{ 'financeProduct.newRequest.newRequest' | translate }}</li>
+      <li class='active'>{{ 'financeProduct.details.branches' | translate }}</li>
+    </ol>
+  </div>
+</div>
+<div class='sme-head'>
+  <div class='sme-head__title '>
+    {{ 'financeProduct.details.branches' | translate }}
+  </div>
+</div>
+<arb-panel>
+  <input type="search">
+  <arb-searchable-panel class="legend" [searchForm]="" [title]=" 'beneficiaries.beneficiaryListFields.category' | translate " [hideButtons]="true">
+  </arb-searchable-panel>
+</arb-panel>

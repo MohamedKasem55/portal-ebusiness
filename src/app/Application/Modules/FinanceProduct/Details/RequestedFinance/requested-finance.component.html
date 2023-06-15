@@ -1,0 +1,112 @@
+<arb-panel>
+    <div class='sme-page-block'>
+
+        <div class='sme-data-table'>
+            <div class='sme-data-table__head'>
+                <div class='sme-data-table__export'>
+                    <table-export [dataTable]='RequestTable' [header]="'financeProduct.details.requested' | translate"
+                                  [columns]="[
+                                   {'title':'financeProduct.details.initiationDate' | translate,'dataKey':'contractDate'},
+                                   {'title':'financeProduct.details.financeType' | translate,'dataKey':'financeType'},
+                                   {'title':'financeProduct.newRequest.dossierID' | translate,'dataKey':'dossierID'},
+                                   {'title':'financeProduct.details.amount' | translate,'dataKey':'amt'},
+                                   {'title':'financeProduct.details.status' | translate,'dataKey':'dossierStatus'}]">
+                    </table-export>
+                </div>
+            </div>
+            <div>
+
+                <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #RequestTable
+                               class='material sme-table sme-table--responsive table' [rows]='data' [headerHeight]='30'
+                               [footerHeight]='footerHeight' [columnMode]="'force'" [rowHeight]='defaultHeight'
+                               [externalPaging]='false' [count]='data.length'  [externalSorting]='false'>
+
+
+                    <ngx-datatable-column prop='contractDate' [width]='220' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='contractDate' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.details.initiationDate' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='contractDate' ngx-datatable-cell-template let-row='row'>
+                            {{ row.contractDate}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop='financeType' [width]='220' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='financeType' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.details.financeType' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='financeType' ngx-datatable-cell-template let-row='row'>
+                            <span [ngClass]="canProceed(row)? 'select':''" (click)='showDetails(row)'>
+                                {{row.financeType }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop='dossierID' [width]='220' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='dossierID' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.newRequest.dossierID' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='dossierID' ngx-datatable-cell-template let-row='row'>
+                            <span [ngClass]="canProceed(row)? 'select':''" (click)='showDetails(row)'>
+                                {{row.dossierID }}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column prop='amt' [width]='220' [resizeable]='false' headerClass='text-align-center'>
+                        <ng-template let-value='amt' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.details.amount' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+                            <span>
+                                {{row.amt | amountCurrency}} {{row.currency}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <!--          <ngx-datatable-column prop='profit' [width]='220' [resizeable]='false'-->
+                    <!--                                headerClass='text-align-center'>-->
+                    <!--            <ng-template let-value='profit' ngx-datatable-header-template>-->
+                    <!--                            <span class='datatable-header-cell-wrapper'>-->
+                    <!--                                {{'financeProduct.details.rate' | translate }}-->
+                    <!--                            </span>-->
+                    <!--            </ng-template>-->
+                    <!--            <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>-->
+                    <!--                            <span>-->
+                    <!--                                {{row.profit}}%-->
+                    <!--                            </span>-->
+                    <!--            </ng-template>-->
+                    <!--          </ngx-datatable-column>-->
+
+                    <ngx-datatable-column prop='dossierStatus' [width]='220' [resizeable]='false'
+                                          headerClass='text-align-center'>
+                        <ng-template let-value='dossierStatus' ngx-datatable-header-template>
+                            <span class='datatable-header-cell-wrapper'>
+                                {{'financeProduct.details.status' | translate }}
+                            </span>
+                        </ng-template>
+                        <ng-template let-value='value' ngx-datatable-cell-template let-row='row'>
+                            <span class='statusSpan'
+                                  [ngClass]=" isApproved(row.dossierStatus)? 'greenSpan':(row.dossierStatus === 'RJC'? 'redSpan' :'yellowSpan')">
+                              {{getStatus(row) | translate}}
+                            </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                </ngx-datatable>
+
+            </div>
+        </div>
+    </div>
+</arb-panel>

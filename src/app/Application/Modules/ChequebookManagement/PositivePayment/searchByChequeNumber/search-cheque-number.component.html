@@ -1,0 +1,133 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.accounts' | translate }}</li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a>
+        </li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook/positive-payment']">{{ 'chequebook.positivePayment'|
+                translate }}</a>
+        </li>
+        <li class="active">{{ 'chequebook.searchByNumber'| translate }}</li>
+
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container" *ngIf="step != 0">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="sme-head">
+    <div class="sme-head__title">{{'chequebook.searchByNumber' | translate}}</div>
+</div>
+
+<form autocomplete="off" [formGroup]="form" *ngIf="step == 0">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="account" class="required">{{ 'chequebook.account' | translate
+                                                }}</label>
+                                            <div class="form-control">
+                                                <ng-select [notFoundText]="'public.noData' | translate" id="account"
+                                                    formControlName="account">
+                                                    <ng-option value="" disabled="disabled" selected="selected">--{{
+                                                        'public.selectAccount' | translate }}--</ng-option>
+                                                    <ng-option *ngFor="let account of accounts"
+                                                        [value]="account.fullAccountNumber">
+                                                        {{account.fullAccountNumber}}{{(account.alias != '' ? ' - ' +
+                                                        account.alias : '')}}
+                                                        {{(account.inquiry ? (' - ' + (account.availableBalance |
+                                                        amountCurrency:account.currency)) : '')}}
+                                                        {{(account.inquiry ? ('currencyIso' |
+                                                        modelPipe:account.currency) : '')}}
+                                                    </ng-option>
+                                                </ng-select>
+                                                <div *ngIf="form.controls.account.hasError('required') && form.controls.account.touched"
+                                                    class="alert alert-danger">
+                                                    <small>{{'chequebook.error.accountRequired' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label for="chequeNumber" class="required">{{ 'chequebook.chequeNumber' |
+                                                translate }}</label>
+                                            <div>
+                                                <input id="chequeNumber" class="form-control"
+                                                    formControlName="chequeNumber" />
+                                                <div *ngIf="form.controls.chequeNumber.hasError('required') && form.controls.chequeNumber.touched"
+                                                    class="alert alert-danger">
+                                                    <small>{{ 'chequebook.error.chequeNumberRequired' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-search-cheque-number-step1 *ngIf="step === 1" [form]="this.form" [chequeSelected]="this.chequeSelected"
+    (onInit)="onInitStep1($event)">
+</app-search-cheque-number-step1>
+
+<app-search-cheque-number-step2 *ngIf="step === 2" [form]="this.form" [chequeSelected]="this.chequeSelected"
+    [generateChallengeAndOTP]="generateChallengeAndOTP" (onInit)="onInitStep2($event)">
+</app-search-cheque-number-step2>
+
+<app-search-cheque-number-step3 *ngIf="step === 3" [positivePayResult]="this.chequeDelete"
+    [generateChallengeAndOTP]="generateChallengeAndOTP">
+</app-search-cheque-number-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class="btn btn-default btn-wide" (click)="previous()" *ngIf="step > 0 && step < 3">{{'public.back' |
+        translate }}</button>
+    <button class="btn btn-default btn-wide" [routerLink]="['/accounts/chequebook/positive-payment']" *ngIf="step == 0">
+        {{'public.cancel' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 0 || step == 2"
+        [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+        *ngIf="step == 1 && chequeSelected?.positivePayCheckAccountsOutDTO[0].checkStatus == 0">{{'public.delete' |
+        translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()" *ngIf="step == 3">{{'public.finish' |
+        translate}}</button>
+</div>

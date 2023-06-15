@@ -1,0 +1,102 @@
+<arb-panel>
+    <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+        <div class="row" formArrayName="accountRules">
+            <div class="col-xs-12 col-sm-12"
+                 *ngFor="let privilege of form.controls?.accountRules['controls']; let j=index">
+                <div>
+                    <fieldset>
+                        <div class="sme-form__title">
+                            <div class="col-xs-12 col-sm-6 text-left">
+                                {{ 'batchTypes'|  modelPipe:form.controls?.accountRules['controls'][j].controls.label.value }}
+                            </div>
+                        </div>
+                        <div [formGroupName]="j">
+                            <table formArrayName="rules"
+                                   class="sme-table sme-table--responsive sme-table--check-list table">
+                                <thead>
+                                <tr>
+                                    <th>{{'workflow.minAmount' | translate}}</th>
+                                    <th>{{'workflow.maxAmount' | translate}}</th>
+                                    <th>{{'public.l1' | translate}}</th>
+                                    <th>{{'public.l2' | translate}}</th>
+                                    <th>{{'public.l3' | translate}}</th>
+                                    <th>{{'public.l4' | translate}}</th>
+                                    <th>{{'public.l5' | translate}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let privilege of getRules(privilege); let i=index">
+                                    <td style="width: 25%;">
+                                        <div [formGroupName]="i" class="form-group" style="width: 80%;">
+                                            <input class="form-control" formControlName="amountMin" type="text">
+                                            <span class="visible-xs">{{'workflow.minAmount' | translate}}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 25%;">
+                                        <div [formGroupName]="i" class="form-group" style="width: 80%;">
+                                            <input class="form-control" formControlName="amountMax" type="text">
+                                            <span class="visible-xs">{{'workflow.maxAmount' | translate}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l1"> <i
+                                                    aria-hidden="true"></i>
+                                                <span class="visible-xs">{{'public.l1' | translate}}</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l2"> <i
+                                                    aria-hidden="true"></i>
+                                                <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l3"> <i
+                                                    aria-hidden="true"></i>
+                                                <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l4"> <i
+                                                    aria-hidden="true"></i>
+                                                <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div [formGroupName]="i">
+                                            <label class="sme-checkbox checkbox-inline">
+                                                <input type="checkbox" formControlName="l5"> <i
+                                                    aria-hidden="true"></i>
+                                                <span class="visible-xs">{{'public.l2' | translate}}</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </form>
+</arb-panel>
+
+<arb-panel *ngIf="generateChallengeAndOTP">
+    <app-secured-authentication
+            [generateChallengeAndOTP]="generateChallengeAndOTP"
+            [requestValidate]="requestValidate"
+            #authorization></app-secured-authentication>
+</arb-panel>

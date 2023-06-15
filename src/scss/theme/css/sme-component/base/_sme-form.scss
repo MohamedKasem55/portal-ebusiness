@@ -1,0 +1,149 @@
+.sme-form {
+  &__title {
+    height: 64px;
+    padding: 16px 20px 0 4px;
+    color: $brand-black;
+
+    @include heading2;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+    color: $brand-grey-light;
+  }
+
+  &__form {
+    position: relative;
+    background: #fff;
+  }
+
+  &__export-actions {
+    float: $right;
+    padding-top: 14px;
+  }
+
+  $chevron-size: 12px;
+  $padding: 15px;
+  &__head {
+    position: relative;
+    display: block;
+
+    padding: 22px $padding;
+    padding-#{$right}: $chevron-size + ($padding * 2);
+
+    background: #fff;
+
+    color: $brand-black;
+
+    @include anchor {
+      text-decoration: none;
+    }
+  }
+
+  a.sme-form__head {
+    @include append-icon($chevron-size, $icon-chevron-up) {
+      @include center-y;
+      #{$right}: $padding;
+    }
+
+    &.collapsed {
+      &:before {
+        content: $icon-chevron-down;
+      }
+    }
+  }
+
+  &__collapse {
+    border-top: 1px solid #dbdbdb;
+  }
+
+  &__body {
+    padding: 34px 15px 40px;
+  }
+
+  &__actions {
+    padding: 22px 15px;
+    text-align: $right;
+
+    .btn + .btn {
+      margin-#{$left}: 8px;
+    }
+  }
+
+  &__content > &__body {
+    background: #fff;
+    padding: 15px;
+  }
+
+  &__content &__actions {
+    padding-top: 0;
+  }
+
+  @media #{$xs-only} {
+    &__actions {
+      .btn {
+        width: 100%;
+        margin: 0;
+
+        & + .btn {
+          margin: 0;
+          margin-top: 15px;
+        }
+      }
+    }
+
+    &--unboxed {
+      .sme-form {
+        &__form {
+          position: relative;
+          background: none;
+        }
+
+        &__body {
+          padding: 0;
+        }
+
+        &__box {
+          background: #fff;
+
+          padding-top: 20px;
+          padding: 20px 15px;
+          margin-top: 0;
+          margin-bottom: 20px;
+
+          legend {
+            margin: 0;
+            padding-bottom: 20px;
+            position: relative;
+            float: left;
+          }
+
+          &--table {
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+
+            legend {
+              padding-left: 20px;
+              padding-right: 20px;
+            }
+
+            .sme-table {
+              margin-bottom: 0;
+            }
+
+            .sme-table--responsive {
+              > tbody {
+                > tr:last-child {
+                  border-bottom: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

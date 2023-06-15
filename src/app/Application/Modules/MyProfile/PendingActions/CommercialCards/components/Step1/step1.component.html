@@ -1,0 +1,14 @@
+<app-commercialCards-table 
+        [items]="businessCardsResults.items" 
+        [modal]="modalAuth" 
+        [tableDisplaySize]="tableDisplaySize"
+        [totalSize]="businessCardsResults.total" 
+        [futureLevels]="false" 
+        [externalPagination]="true" 
+        [selectable]="true"
+        (setPage)="setPage($event)" 
+        (onSelect)="onSelect($event)" 
+        (changeDisplaySize)="changeDisplaySize($event)">
+</app-commercialCards-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

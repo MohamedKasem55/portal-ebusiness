@@ -1,0 +1,41 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-steps
+  [currentStep]='step'
+  [steps]="['companyAdmin.token.requestSoftToken','companyAdmin.token.previewTitle','public.summary']">
+</arb-steps>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left" style="padding-left: 0;font-size: xx-large;">
+                    {{ 'companyAdmin.token.requestSoftToken' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-new-soft-token-step1 *ngIf="step === 1" [form]="form" [accounts]="comboAccounts">
+</app-new-soft-token-step1>
+
+<app-new-soft-token-step2 *ngIf="step === 2" [isDual]="isDualAuth" [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate" [form]="form">
+</app-new-soft-token-step2>
+
+<app-new-soft-token-step3 *ngIf="step === 3" [isDual]="isDualAuth">
+</app-new-soft-token-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step < 3">{{'public.back' |
+        translate }}</button>
+    <button type="button" class="btn btn-default btn-wide" [routerLink]="['/companyadmin/token/managment']"
+        *ngIf="step < 3"> {{'public.cancel' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 1"
+        [disabled]="!form.valid">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 2"
+        [disabled]="!form.valid || !isDisabled()">{{'public.confirm' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 3"
+        [disabled]="!form.valid">{{'public.finish' | translate}}</button>
+</div>

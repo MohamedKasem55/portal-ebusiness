@@ -1,0 +1,81 @@
+    <div class="sme-breadcrumb">
+        <ol class="breadcrumb">
+            <li>{{ 'dashboard.sadad' | translate }}</li>
+            <li>{{ 'sadadOLP.menu' | translate }}</li>
+        </ol>
+    </div>
+
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__title">
+                        {{ 'sadadOLP.bop.headerTitle'| translate }}
+                    </div>
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="bopTable"
+                                      [header]="'sadadOLP.bop.headerTitle' | translate"
+                                      [columns]="[{'title':'sadadOLP.bop.version' | translate,'dataKey':'version'},{'title':'sadadOLP.bop.details' |translate ,'dataKey':'details'}]">
+                        </table-export>
+                    </div>
+                </div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #bopTable
+                                   class="material  sme-table sme-table--responsive table" [rows]="tablePage.data" [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [count]="tablePage.page.totalElements"
+                                   [offset]="tablePage.page.pageNumber - 1" [limit]="tablePage.page.pageSize">
+                        <ngx-datatable-column *ngFor="let column of columns" [prop]="column.prop" cellClass="text-align-center">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{column['translation'] | translate }} </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span class="human-selectable mobile-hidden"> {{value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="download" cellClass="text-align-center" [width]="120" [canAutoResize]="false" [resizeable]="true">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span class="datatable-header-cell-wrapper">
+                                    {{'sadadOLP.bop.downloadBtn' | translate }} </span>
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <button class="btn btn-primary" (click)="getDownload(row)">
+                                    {{'sadadOLP.bop.downloadBtn' | translate }}</button>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount" [visiblePagesCount]="visiblePagesCount"
+                                            (change)="bopTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="tablePage.page.pageSize">
+                                    <option [value]=10>10</option>
+                                    <option [value]=20>20</option>
+                                    <option [value]=50>50</option>
+                                </select>
+                            </div>
+                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>

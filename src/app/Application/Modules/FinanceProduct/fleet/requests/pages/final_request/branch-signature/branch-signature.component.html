@@ -1,0 +1,178 @@
+<div class="container-fluid">
+  <!-- breadcrumb section -->
+  <section class="container-fluid">
+    <sme-breadcrumb [list]="breadcrumbList"></sme-breadcrumb>
+  </section>
+  <!-- Wizzard steps section -->
+  <section class="mt-5">
+    <arb-steps [steps]="wizardSteps" [currentStep]="currentWizStep">
+    </arb-steps>
+  </section>
+  <!-- page title section -->
+  <section class="container-fluid">
+    <span class="sme-page-title">{{
+      'fleet.offerSignature.selectOffice' | translate
+    }}</span>
+  </section>
+  <!-- search section -->
+  <section class="container-fluid">
+    <div class="sme-search sme-form">
+      <div class="search-container sme-form__content">
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          [placeholder]="'fleet.offerSignature.search' | translate"
+          (input)="onSearch($event)"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="currentWizStep === 1" class="container-fluid">
+    <div class="sme-data-table">
+      <div class="sme-data-table__head">
+        <div class="sme-data-table__title">
+          {{ 'fleet.offerSignature.allBranch' | translate }}
+        </div>
+      </div>
+      <ngx-datatable
+        #allBranchesTable
+        [messages]="{ emptyMessage: 'public.noData' | translate }"
+        class="material sme-table sme-table--responsive table"
+        [rows]="rows?.data"
+        [columnMode]="defaultColumnMode"
+        [headerHeight]="30"
+        [footerHeight]="footerHeight"
+        [rowHeight]="defaultHeight"
+        [count]="rows.page.totalElements"
+        [offset]="rows.page.pageNumber - 1"
+        [limit]="rows.page.pageSize"
+        [selectionType]="defaultSelectionType"
+        [rowIdentity]="getIdFunction()"
+        (page)="setPage($event)"
+        [selected]="selected"
+        [selectionType]="defaultSelectionType"
+        (sort)="setSort($event)"
+        (select)="onSelect($event)"
+      >
+
+      <!-- select each row -->
+      <ngx-datatable-column>
+      <ng-template
+      ngx-datatable-header-template
+      let-value="value"
+      let-allRowsSelected="allRowsSelected"
+      let-selectFn="selectFn"
+    >
+      <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)" />
+    </ng-template>
+    <ng-template
+      ngx-datatable-cell-template
+      let-value="value"
+      let-isSelected="isSelected"
+      let-onCheckboxChangeFn="onCheckboxChangeFn"
+    >
+      <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+    </ng-template>
+  </ngx-datatable-column>
+      <!-- end select -->
+        <ngx-datatable-column name="{{'fleet.offerSignature.branchName'|translate}}">
+          <ng-template
+            let-row="row"
+            ngx-datatable-cell-template
+            class="mobile-hidden"
+          >
+            {{ row.branchName }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{'fleet.offerSignature.branchCity'|translate}}">
+          <ng-template
+            let-row="row"
+            class="mobile-hidden"
+            ngx-datatable-cell-template
+          >
+            {{ row.branchCity }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{'fleet.offerSignature.branchCode'|translate}}" class="mobile-hidden">
+        </ngx-datatable-column>
+
+        <!-- footer -->
+        <ngx-datatable-footer>
+          <ng-template
+            ngx-datatable-footer-template
+            let-rowCount="rowCount"
+            let-pageSize="pageSize"
+            let-selectedCount="selectedCount"
+            let-curPage="curPage"
+            let-offset="offset"
+          >
+            <div class="sme-data-table__footer">
+              <app-datatable-pager
+                [pagerLeftArrowIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-left'
+                    : 'datatable-icon-right'
+                "
+                [pagerRightArrowIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-right'
+                    : 'datatable-icon-left'
+                "
+                [pagerPreviousIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-prev'
+                    : 'datatable-icon-skip'
+                "
+                [pagerNextIcon]="
+                  translate.currentLang === 'en'
+                    ? 'datatable-icon-skip'
+                    : 'datatable-icon-prev'
+                "
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="rowCount"
+                [visiblePagesCount]="visiblePagesCount"
+                [hidden]="!(rowCount / pageSize > 1)"
+                (change)="allBranchesTable.onFooterPage($event)"
+              >
+              </app-datatable-pager>
+              <div class="sme-data-table__actions form-inline">
+                <span class="sme-data-table__action-group"
+                  >{{ 'public.showingLabel' | translate }} {{ rows.page.size }}
+                  {{ 'public.ofLabel' | translate }} {{ rowCount }}</span
+                >
+                <span class="hidden-xs"> | </span>
+                <span class="sme-data-table__action-group">
+                  <span>{{ 'public.showRowsLabel' | translate }}</span>
+                  <div class="sme-select form-control">
+                    <select class="form-control" (change)="setPageSize($any($event.target).value)">
+                      <option [value]=5>5</option>
+                      <option [value]=10>10</option>
+											<option [value]=20>20</option>
+											<option [value]=50>50</option>
+                    </select>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-footer>
+        <!-- end footer -->
+      </ngx-datatable>
+    </div>
+  </section>
+  <footer>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button
+        class="btn btn-default btn-wide sme-back-btn"
+        (click)="navigateTo('back')"
+      >
+        {{ 'fleet.btn.back' | translate }}
+      </button>
+    </div>
+  </footer>
+</div>

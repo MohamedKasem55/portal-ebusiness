@@ -1,0 +1,77 @@
+<ng-container *ngFor="let functionItem of companyDetails; index as i">
+    <arb-table-panel [title]="functionItem.etradeFunction.descriptionEn">
+        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                       class="material sme-table sme-table--responsive table"
+                       [rows]="functionItem.companyEtradeWorkflows"
+                       [columnMode]="defaultColumnMode"
+                       [headerHeight]="30"
+                       [footerHeight]="0"
+                       [rowHeight]="defaultHeight"
+                       [externalPaging]="false"
+                       [externalSorting]="false"
+                       [count]="functionItem.companyEtradeWorkflows.length"
+                       [offset]="0"
+                       [limit]="functionItem.companyEtradeWorkflows.length">
+
+                       <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                        <ng-template let-row="row" let-expanded="expanded" let-rowIndex="rowIndex" let-value="value" ngx-datatable-row-detail-template>
+                            <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-9">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'workflow.maxApprovalAmount' | translate }}</label>
+                                            <div>
+                                                <span>{{ row.amount }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{'workflow.level' | translate }}</label>
+                                            <div>
+                                                <span>L{{ row.level }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-row-detail>
+
+            <ngx-datatable-column prop="amount">
+                <ng-template let-rowIndex="rowIndex" let-value="name" let-sort="sortFn" ngx-datatable-header-template
+                             let-row="row">
+                <span class="datatable-header-cell-wrapper">
+                    {{'workflow.maxApprovalAmount' | translate }}
+                </span>
+                </ng-template>
+                <ng-template let-rowIndex="rowIndex" ngx-datatable-cell-template let-value="value" let-row="row">
+                   <span>
+                       {{ value | amountCurrency }}
+                   </span>
+                </ng-template>
+
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="level">
+                <ng-template let-rowIndex="rowIndex" let-value="name" let-sort="sortFn" ngx-datatable-header-template
+                             let-row="row">
+                <span class="datatable-header-cell-wrapper">
+                    {{'workflow.level' | translate }}
+                </span>
+                </ng-template>
+                <ng-template let-rowIndex="rowIndex" ngx-datatable-cell-template let-value="value" let-row="row">
+                    <span style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);background: #2b4499;padding:10px;color:#FFFFFF">
+                        L{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+        </ngx-datatable>
+    </arb-table-panel>
+    <div *ngIf="step===1" class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button class="btn btn-primary btn-wide" (click)="addItem(i)" [disabled]="!canAddItem(i)">{{
+            'public.add' | translate }}</button>
+    </div>
+</ng-container>

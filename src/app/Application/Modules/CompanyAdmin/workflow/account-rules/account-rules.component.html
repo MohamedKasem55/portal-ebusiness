@@ -1,0 +1,44 @@
+<arb-breadcrumb [routes]="[
+                        ['companyAdmin.companyAdmin'],
+                        ['workflow.workflow',['/companyadmin/workflow']],
+                        ['workflow.accountRules']
+                        ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                    'aramcoPayments.details',
+                    'aramcoPayments.confirm',
+                    'myProfile.pending_actions.steps.summary'
+                    ]"
+           [currentStep]="step">
+</arb-steps>
+
+<app-rules-step1 *ngIf="step === 1"
+                 (onInit)="onInitStep1($event)"
+                [companyPropertiesForm]="this.companyPropertiesForm">
+
+</app-rules-step1>
+
+<app-rules-step2 *ngIf="step === 2"
+                 [form]="this.formModify"
+                 (onInit)="onInitStep2($event)"
+                 [companyPropertiesForm]="this.companyPropertiesForm">
+
+</app-rules-step2>
+
+<app-rules-step3 *ngIf="step === 3">
+</app-rules-step3>
+
+<arb-panel-buttons>
+    <button class="btn btn-default btn-wide" (click)="previous()"
+            *ngIf="step > 1 && step < 3">{{ 'public.back' | translate}}</button>
+    <button class="btn btn-default btn-wide" [routerLink]="['/companyadmin/workflow/accountRulesSearch']"
+            *ngIf="step == 1"> {{'public.cancel' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="step == 1"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="step == 2">{{'public.confirm' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="step == 3">{{'public.finish' | translate}}</button>
+</arb-panel-buttons>

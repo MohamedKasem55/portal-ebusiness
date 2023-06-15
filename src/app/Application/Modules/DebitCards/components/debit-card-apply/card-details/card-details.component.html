@@ -1,0 +1,76 @@
+<div class="sme-page-block">
+    <div class="sme-form">
+        <form autocomplete="off" [formGroup]="detailsDetails" class="sme-form__form">
+            <div class='sme-head'>
+                <div class='sme-head__title'>
+                    {{ 'mada-cards.card-details' | translate }}
+                </div>
+            </div>
+
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <div class="row">
+                        <div class="col-lg-1">
+                        </div>
+                        <div class="col-lg-3">
+                            <img style="height: 225px;" src="assets/img/DebitCard.png"/>
+                        </div>
+                    </div>
+                    <div class='sme-head'>
+                        <div class='sme-head__title'>
+                            {{ 'mada-cards.owner-details' | translate }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                              <ng-select  [(ngModel)]="selectedAccount"  [notFoundText]="'public.noData' | translate"
+                                          (change)="selectAccount($event)" formControlName="selectAccount"
+                                          placeholder="{{'public.selectAccount'|translate}}">
+                                <ng-option *ngFor="let account of accounts"
+                                           [value]="account"
+                                           [innerHTML]="account['fullAccountNumber'] + ' - ' + (account['alias']? (account['alias']+' - '): '' )+ (account['availableBalance'] | amountCurrency) + ' ' +
+                                    currentAccountsService.transformComboValue('currencyIso', account['currency'])">
+                                </ng-option>
+                              </ng-select>
+                                <div *ngIf="accounts && accounts.length == 0"
+                                     class="alert alert-danger">
+                                    <small>{{'mada-cards.noAccounts' | translate }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <div class="select-account-container">
+                                    <ng-select  [(ngModel)]="selectedEmbossingName"  [notFoundText]="'public.noData' | translate"  (change)="onSelectEmbossingName()" formControlName="embossingName"
+                                                placeholder="{{'mada-cards.embossing-name'|translate}}">
+                                        <ng-option  value="" disabled="disabled" selected="selected">
+                                            -- {{ 'mada-cards.embossing-name' | translate }} --
+                                        </ng-option>
+                                        <ng-option *ngFor="let embossingName of embossingNames" [value]="embossingName">
+                                            {{ embossingName }}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class='legend'>{{ 'mada-cards.termsConditions' | translate }}</div>
+                    <div class='row'>
+                        <p class='margin-checBox'>
+                            <label class='sme-checkbox checkbox-inline'>
+                                <input type='checkbox' (ngModelChange)="onAcceptingTermsAdnConditions()" [ngModel]="acceptedTermsAndConditions" formControlName='termsAccept' />
+                                <i aria-hidden='true'></i>
+                                <span class='checkSpan'>{{ 'mada-cards.accept' | translate }}  </span>
+                            </label>
+                            <span class='link' (click)='openTermsConditions()'>{{
+                                'mada-cards.termsConditions' | translate }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="new-email" class="required">
+                                                {{ 'preferences.updateMail.newEmail' | translate }}
+                                            </label>
+                                            <input type="email" class="form-control" id="new-email"
+                                                   formControlName="newEmail" inputPattern="notArabic" maxlength="50">
+                                            <div *ngIf="form.controls.newEmail.hasError('required') && form.controls.newEmail.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{'preferences.updateMail.error.newEmailRequired' | translate }}</small>
+                                            </div>
+                                            <div *ngIf="form.controls.newEmail.hasError('incorrectMailFormat')  &&  form.controls.newEmail.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{'public.email' | translate }}{{ 'error.formatNotValid' | translate }}</small>
+                                            </div>
+                                            <div *ngIf="form.controls.newEmail.hasError('maxlength')  &&  form.controls.newEmail.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{'public.email' | translate }}{{ 'error.maxlength' | translate:{size: 50} }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="confirm-email" class="required">
+                                                {{ 'preferences.updateMail.confirmEmail' | translate }}
+                                            </label>
+                                            <input type="email" class="form-control" id="confirm-email"
+                                                   formControlName="confirmEmail" inputPattern="notArabic"
+                                                   pattern="^{{form.controls.newEmail.value}}$" maxlength="50">
+                                            <div *ngIf="form.controls.confirmEmail.hasError('required') && form.controls.confirmEmail.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{'preferences.updateMail.error.confirmEmailRequired' | translate }}</small>
+                                            </div>
+                                            <div *ngIf="form.controls.confirmEmail.hasError('pattern') && form.controls.confirmEmail.touched"
+                                                 class="alert alert-danger">
+                                                <small>{{ 'preferences.updateMail.error.emailMatch' | translate }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,48 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<arb-steps [currentStep]="wizardStep">
+</arb-steps>
+
+<ng-container *ngIf="isStepVisible(1) || isStepVisible(2)">
+    <arb-panel>
+        <fieldset [formGroup]="formModel">
+            <app-dynamic-simple-extras-form-fields
+                    [fieldsConfigs]="fieldsConfigs"
+                    [formModel]="formModel"
+                    [combosData]="combosData"
+                    [translate_prefix]="'payroll-agreement'"
+                    [custom_fields_templates]="{processedMessage: processedMessage}">
+            </app-dynamic-simple-extras-form-fields>
+        </fieldset>
+    </arb-panel>
+</ng-container>
+
+<ng-template #processedMessage>
+    <div class="col-xs-12 col-sm-12">
+        <div class="form-group">
+            <label></label>
+            <div class="form-control">
+                <b><span [innerHTML]="getTranslatedText('letter_guarantee.processedMessage')"></span></b>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="isStepVisible(3)">
+    <arb-confirm-panel
+            [pending]="false"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+</ng-container>
+
+<arb-buttons>
+    <button *ngIf="isBackAllowed()" class="btn btn-default btn-wide" type="button"
+            (click)="back()">{{ 'public.back' | translate}}</button>
+    <button *ngIf="isPreviousAllowed()" (click)="previous()"
+            class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="isNextAllowed()"
+            [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="finish()"
+            *ngIf="isFinishAllowed()">{{'public.finish' | translate}}</button>
+</arb-buttons>

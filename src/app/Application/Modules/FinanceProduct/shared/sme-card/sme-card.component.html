@@ -1,0 +1,16 @@
+<div class="sme-card" [ngClass]="{'sme-row':addRowClass}">
+    <div *ngIf="startTitle != ''" [ngClass]="{'sme-card-header':headerFontSize == 'default','sme-card-header-md':headerFontSize == 'md','sme-card-header-sm':headerFontSize == 'sm'}">
+            <div class="sme-card-header-start">
+                <div *ngIf="headerIcon!=''" class="sme-media-icon-nm">
+                    <img [src]="headerIcon">
+                </div>
+               {{startTitle}}
+            </div>
+            <div *ngIf="endTitle!=''" class="sme-card-header-end">{{endTitle}}</div>
+            <ng-content class="sme-card-header-end" select=".end-header"></ng-content>
+    </div>
+    <div class="sme-card-body"  [ngClass]="{'sme-col':addRowClass}">
+        <ng-content select=".card-body"></ng-content>
+    </div>
+
+</div>

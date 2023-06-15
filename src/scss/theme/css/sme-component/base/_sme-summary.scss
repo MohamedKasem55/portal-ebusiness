@@ -1,0 +1,130 @@
+.sme-summary {
+  padding-top: 15px;
+
+  &__title {
+    height: 64px;
+    padding: 24px 20px 0;
+    color: $brand-black;
+
+    @include heading2;
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+    color: $brand-grey-light;
+  }
+
+  &__content {
+    position: relative;
+  }
+
+  &__collapser {
+    $chevron-size: 12px;
+    $padding: 15px;
+    position: relative;
+    display: block;
+
+    @include font($font-size-12);
+    @media screen and (max-width: $max-width) {
+      @include font($font-size-12 * $factor);
+    }
+    @media screen and (max-width: $max-width2) {
+      @include font($font-size-12 * $factor2);
+    }
+    /*font-size: 12px;*/
+    text-align: $right;
+    /*height: 65px;*/
+
+    padding: 22px $padding;
+    padding-#{$right}: $chevron-size + ($padding * 2);
+
+    background: #fff;
+
+    font-weight: 500;
+    text-align: $right;
+    color: $brand-primary;
+
+    margin-top: 1px;
+
+    &-open {
+      display: none;
+    }
+
+    @include anchor {
+      text-decoration: none;
+    }
+
+    @include append-icon($chevron-size, $icon-chevron-up) {
+      @include center-y;
+      #{$right}: $padding;
+    }
+
+    &.collapsed:before {
+      content: $icon-chevron-down;
+    }
+
+    &.collapsed & {
+      &-open {
+        display: inline;
+      }
+      &-close {
+        display: none;
+      }
+    }
+  }
+
+  &__collapse {
+  }
+
+  &__body {
+    padding: 34px 15px 20px;
+    background: #fff;
+  }
+
+  &__actions {
+    padding: 22px 15px;
+    text-align: $right;
+
+    .btn + .btn {
+      margin-#{$left}: 8px;
+    }
+  }
+
+  &__content &__actions {
+    padding-top: 0;
+  }
+
+  &__export-actions {
+    text-align: $right;
+    margin-bottom: 15px;
+  }
+
+  .sme-summary-group {
+    &__value {
+      font-size: 14px;
+      @media screen and (max-width: $max-width) {
+        font-size: $font-size-14 * $factor;
+      }
+      @media screen and (max-width: $max-width2) {
+        font-size: $font-size-14 * $factor2;
+      }
+      /*border-bottom: 1px solid $input-border;*/
+    }
+  }
+
+  @media #{$xs-only} {
+    &__actions {
+      .btn {
+        width: 100%;
+        margin: 0;
+
+        & + .btn {
+          margin: 0;
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+}

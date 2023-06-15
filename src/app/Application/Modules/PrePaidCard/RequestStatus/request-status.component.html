@@ -1,0 +1,21 @@
+<arb-breadcrumb [routes]="getRoutes()"></arb-breadcrumb>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <app-prepaid-cards-request-status-table [items]="requestStatus?.batchPrepaidCardsList" [modal]="modalaramcoAuth"
+            [tableDisplaySize]="tableDisplaySize" [totalSize]="requestStatus.total" [futureLevels]="false"
+            [externalPagination]="true" (setPage)="setPage($event)" (changeDisplaySize)="changeDisplaySize($event)"
+            [title]="'prePaidCard.requestStatusPayments'" [paymentMode]="true" (goActivate)="goActivate($event)">
+        </app-prepaid-cards-request-status-table>
+        <!-- <app-prepaid-cards-request-status-table [items]="requestStatusReplace?.batchPrepaidCardsList"
+            [modal]="modalaramcoAuth" [tableDisplaySize]="tableDisplaySizeReplace"
+            [totalSize]="requestStatusReplace.total" [futureLevels]="false" [externalPagination]="true"
+            (setPage)="setPage($event)" (changeDisplaySize)="changeDisplaySizeReplace($event)"
+            [title]="'prePaidCard.requestStatusReplace'" [paymentMode]="false" (goActivate)="goActivate($event)">
+        </app-prepaid-cards-request-status-table> -->
+    </div>
+</div>
+<app-levels-popup #modalaramcoAuth></app-levels-popup>
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class="btn btn-default btn-wide" type="button" [routerLink]="['/commercial-cards']">{{ 'public.back' |
+        translate}}</button>
+</div>

@@ -1,0 +1,54 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'posManagement.addEmployee' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posManagement.userId' | translate }}</label>
+                                    <input type="text" [(ngModel)]="selectedUser.userId" name="userId" #userId="ngModel" id="userId" class="form-control" />
+                                </div>
+                                    <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posManagement.userName' |
+                                        translate }}</label> 
+                                    <input type="text" [(ngModel)]="selectedUser.userName" name="userName" #userName="ngModel" id="userName" class="form-control" />
+                                </div>
+                            <!-- ./sme-form-group -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                            <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'posManagement.mobile' |
+                                        translate }}</label> 
+                                    <input type="text" [(ngModel)]="selectedUser.mobile" name="mobile" #userName="ngModel" id="mobile" class="form-control" />
+                                </div>
+                                <!-- ./sme-form-group -->
+                            </div>
+                        </fieldset> 
+                        </div>
+                    </div>          
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>

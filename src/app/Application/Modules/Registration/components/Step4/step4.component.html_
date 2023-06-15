@@ -1,0 +1,283 @@
+<link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
+
+<div class="sme-head">
+	<div class="sme-head__title">{{ 'registration.companyAdministratorInformation' | translate }}</div>
+</div>
+
+<div class="sme-page-block">
+	<div class="sme-form">
+		<div class="sme-form__content">
+			<form class="sme-form__form" #stepForm="ngForm">
+				<div class="sme-form__body">
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label class="required" for="search-criteria--input-registration-id-or-iqama">{{ 'registration.nationalId' | translate }}</label>
+									<input type="text" class="form-control" id="search-criteria--input-registration-id-or-iqama" placeholder="{{ 'registration.pleaseEnterId' | translate }}"
+									 [(ngModel)]="formData.nationalid" name="nationalid" inputPattern="onlyDigits" maxlength="15" required>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label  class="required"  for="search-criteria--input-registration-spiry-date">{{ 'registration.expiryDate' | translate }}</label>
+									<div class="input-group sme-date">
+										<input type="text" class="form-control hasDatepicker" id="search-criteria--input-registration-date-birth" placeholder="{{ 'registration.pleaseEnterExpiryDate' | translate }}" [bsConfig]="bsConfig"
+										 [(ngModel)]="formData.expiryDate" name="expiryDate" bsDatepicker required #expiryDate="bsDatepicker" [minDate]="nextDate">
+										 <span class=" input-group-addon icon -calendar" (click)="expiryDate.show()"></span>
+										
+									</div>
+									 <div *ngIf="stepForm.controls.expiryDate && stepForm.controls.expiryDate.touched && stepForm.controls.expiryDate.invalid" class="alert alert-danger">
+										<small> {{ 'registration.expiryDate' | translate }} {{'error.greatterThanToday' | translate }}</small>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label class="required" for="search-criteria--input-registration-date-birth">{{ 'registration.dateOfBirth' | translate }}</label>
+									<div class="input-group sme-date">
+										
+											<input type="text" class="form-control hasDatepicker" id="search-criteria--input-registration-date-birth" placeholder="{{ 'registration.pleaseEnterDateBirth' | translate }}" [bsConfig]="bsConfig"
+											 [(ngModel)]="formData.birdDate" name="birdDate" bsDatepicker required #birdDate="bsDatepicker" [maxDate]="currentDate">
+											 <span class=" input-group-addon icon -calendar" (click)="birdDate.show()"></span>
+									</div>
+									 <div *ngIf="stepForm.controls.birdDate && stepForm.controls.birdDate.touched &&stepForm.controls.birdDate.invalid" class="alert alert-danger">
+										<small>{{ 'registration.dateOfBirth' | translate }} {{'error.earlierThanToday' | translate }}</small>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label class="required" for="search-criteria--input-registration-name">{{ 'registration.name' | translate }}</label>
+									<input type="text" class="form-control" id="search-criteria--input-registration-name" placeholder="{{ 'registration.pleaseEnterName' | translate }}"
+									 [(ngModel)]="formData.nameUser" name="nameUser" maxlength="70" required>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-3" *ngIf="translate.currentLang == 'en'">
+								<div class="form-group form-group--compund form-group--help">
+									<div class="form-group__label">
+										<label class="required">{{ 'registration.mobileNumber' | translate }}</label>
+									</div>
+									<div class="row">
+										<div class="col-xs-5">
+											
+												<div class="sme-select form-control dropdown" dropdown>
+													<button dropdownToggle type="button" class="form-control">
+														<span *ngIf="formData.prefix != null">{{formData.codigoTelefono}} {{formData.prefix}}</span>
+														<span *ngIf="formData.prefix == null"></span>
+													</button>
+													
+													<ul *dropdownMenu class="dropdown-menu" aria-labelledby="dLabel" style="overflow:auto;height:400px">
+														<li><a class="human-selectable" (click)="formData.prefix=null;formData.codigoTelefono=null">-- {{'public.selectDropdown' | translate}} --</a></li>
+														<li *ngFor="let pre of prefixs.data; let i = index"><a class="human-selectable" (click)="formData.prefix=pre.prefix;formData.codigoTelefono=pre.code">{{pre.code}} {{pre.prefix}}</a></li>
+													</ul>
+								
+												</div>
+
+											
+											
+										</div>
+										<div class="col-xs-7">
+											<input type="" class="form-control" [(ngModel)]="formData.mobileNumber" name="mobileNumber" pattern="^\d*$" maxlength="15" inputPattern="onlyDigits" required *ngIf="formData.prefix != '+966'">
+											<input type="" class="form-control" [(ngModel)]="formData.mobileNumber" name="mobileNumber" pattern="^\d*$" maxlength="9" inputPattern="onlyDigits" required *ngIf="formData.prefix == '+966'" pattern="^[1-9][0-9]{0,8}$">
+											<div *ngIf="stepForm.controls.mobileNumber && stepForm.controls.mobileNumber.hasError('pattern')" class="alert alert-danger">
+										<small>{{'error.formatMobil966' | translate }}</small>
+									</div>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3" *ngIf="translate.currentLang != 'en'">
+								<div class="form-group form-group--compund form-group--help">
+									<div class="form-group__label">
+										<label class="required">{{ 'registration.mobileNumber' | translate }}</label>
+									</div>
+									<div class="row">
+										
+										<div class="col-xs-7">
+											<input type="" class="form-control" [(ngModel)]="formData.mobileNumber" name="mobileNumber" pattern="^\d*$" maxlength="15" inputPattern="onlyDigits" required *ngIf="formData.prefix != '+966'">
+											<input type="" class="form-control" [(ngModel)]="formData.mobileNumber" name="mobileNumber" pattern="^\d*$" maxlength="9" inputPattern="onlyDigits" required *ngIf="formData.prefix == '+966'" pattern="^[1-9][0-9]{0,8}$">
+											<div *ngIf="stepForm.controls.mobileNumber && stepForm.controls.mobileNumber.hasError('pattern')" class="alert alert-danger">
+											<small>{{'error.formatMobil966' | translate }}</small>
+											</div>
+										</div>	
+										<div class="col-xs-5">
+											
+												<div class="sme-select form-control dropdown" dropdown>
+													<button dropdownToggle type="button" class="form-control" style="text-align: right;">
+														<span *ngIf="formData.prefix != null">{{formData.codigoTelefono}} {{formData.prefix}}</span>
+														<span *ngIf="formData.prefix == null"></span>
+													</button>
+													
+													<ul *dropdownMenu class="dropdown-menu" aria-labelledby="dLabel" style="overflow:auto;height:400px">
+														<li><a class="human-selectable" (click)="formData.prefix=null;formData.codigoTelefono=null">-- {{'public.selectDropdown' | translate}} --</a></li>
+														<li *ngFor="let pre of prefixs.data; let i = index"><a class="human-selectable" (click)="formData.prefix=pre.prefix;formData.codigoTelefono=pre.code">{{pre.code}} {{pre.prefix}}</a></li>
+													</ul>
+								
+												</div>
+
+											
+											
+										
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<div class="form-group">
+									<label class="required" for="search-criteria--input-registration-email">{{ 'registration.email' | translate }}</label>
+									<input type="email" class="form-control" id="search-criteria--input-registration-email" placeholder="{{ 'registration.pleaseEnterEmail' | translate }}" 
+									 [(ngModel)]="formData.email" name="email" pattern="^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$" inputPattern="notArabic" required maxlength="40">
+										<div *ngIf="stepForm.controls.email && stepForm.controls.email.hasError('pattern')" class="alert alert-danger">
+										<small>{{'companyAdmin.user.email' | translate }}{{ 'error.formatNotValidEmail' | translate }}</small>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</fieldset>
+					<div class="sme-form__group-title"><p>{{ 'registration.uploadDocuments' | translate }}</p>
+					<p style="font-size:14px">{{'registration.uploadDocumentsRequisites' | translate }}</p></div>
+					
+					<fieldset>
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<div class="form-group">
+									<label class="required" for="search-criteria--input-national-id-or-iqama">{{ 'registration.nationalId' | translate }}</label>
+									
+									<div class="sme-uploader sme-uploader--uploaded">
+										<div class="sme-uploader__input">
+											<div class="col-xs-8">
+												<a class="form-group__help sme-help">
+													<span class="glyphicon glyphicon-file"></span>
+												</a>{{formDatafileNationalIdname}}
+												<!-- bite KB  -->
+												{{ formDatafileNationalIdsize | number : '1.0-0' }} KB
+												<a role="button form-group__help sme-help" (click)="deleteFile($event)">
+                        				    		<span class="glyphicon glyphicon-remove" ></span>
+                       					 		</a>
+                       					 		<div *ngIf="formDatafileNationalIderror" class="alert alert-danger">
+														<small>{{'message.error.invalid.file' | translate }}</small>
+												</div>
+											</div>
+											<div class="col-xs-4">
+												<span class="input-group-btn">
+													<div class="fileUpload btn">
+														<span>{{'public.upload' | translate | uppercase}}</span>
+														<input #file1 type="file" class="upload" (change)="fileChange($event)"
+														(click)="checkFile(formDatafileNationalIdname,$event,'fichero1')" placeholder="Upload file" accept=".docx,.pdf,.doc,.jpg" name="fichero1">
+													</div>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xs-12 col-sm-4">
+								<div class="form-group">
+									<label for="search-criteria--input-power-attorney">{{ 'registration.powerAttorney' | translate }}</label>
+									<div class="sme-uploader sme-uploader--uploading">
+										<div class="sme-uploader__input">
+											<div class="col-xs-8">
+												<a class="form-group__help sme-help">
+													<span class="glyphicon glyphicon-file"></span>
+												</a> {{formDatafilePowerAttorneyname}}
+												<!-- bite KB  -->
+													{{ formDatafilePowerAttorneysize | number : '1.0-0'}} KB
+												<a role="button form-group__help sme-help" (click)="deleteFile2($event)">
+                        				    		<span class="glyphicon glyphicon-remove"  ></span>
+												</a>
+												<div *ngIf="formDatafilePowerAttorneyerror" class="alert alert-danger">
+														<small>{{'message.error.invalid.file' | translate }}</small>
+												</div>
+											</div>
+											<div class="col-xs-4">
+												<span class="input-group-btn">
+													<div class="fileUpload btn">
+		    											<span>{{'public.upload' | translate | uppercase}}</span>
+														<input #file2 type="file" class="upload" (change)="fileChange2($event)" (click)="checkFile(formDatafilePowerAttorneyname,$event,'fichero2')" placeholder="Upload file" accept=".docx,.pdf,.doc,.jpg" name="fichero2">
+													</div>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div class="form-group">
+									<label for="search-criteria--input-other-documents">{{ 'registration.otherDocuments' | translate }}</label>
+									<div class="sme-uploader">
+										<div class="sme-uploader__input">
+
+										<div class="col-xs-8">
+											<a class="form-group__help sme-help">
+												<span class="glyphicon glyphicon-file"></span>
+											</a> {{formDataotherDocumentsInputname}}
+											<!-- bite KB  -->
+											{{ formDataotherDocumentsInputsize | number : '1.0-0' }} KB
+											<a role="button form-group__help sme-help" (click)="deleteFileName($event);">
+                        				    	<span class="glyphicon glyphicon-remove" ></span>
+                       					 	</a>
+                       						<!-- bite KB  -->
+											
+                       					 	<div *ngIf="formDataotherDocumentserror" class="alert alert-danger">
+																<small>{{'message.error.invalid.file' | translate }}</small>
+												</div>
+										</div>
+										<div>
+											<div class="col-xs-4">
+												<span class="input-group-btn">
+													<div class="fileUpload btn">
+														<span>{{'public.upload' | translate | uppercase}}</span>
+														<input #file3 type="file" class="upload" (change)="fileChange3($event)"  placeholder="Upload file" accept=".docx,.pdf,.doc,.jpg"	name="fichero3">
+													</div>
+												</span>
+											</div>
+										</div>
+										<div class="col-xs-8" *ngFor="let doc of formDataotherDocumentsname;let i = index">
+											<a class="form-group__help sme-help">
+												<span class="glyphicon glyphicon-file"></span>
+											</a> {{doc}}
+											<!-- bite KB  -->
+											{{ formDataotherDocumentssize[i] | number : '1.0-0' }} KB
+											<a role="button form-group__help sme-help" (click)="deleteFile3($event,i);">
+                        				    	<span class="glyphicon glyphicon-remove" ></span>
+                       					 	</a>
+                       					</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+					</fieldset>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" bsModal #confirmFileModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ 'registration.fileReplaceTitle' | translate }}</h4>
+      </div>
+      <div class="modal-body">
+            <p>{{ 'registration.fileReplace' | translate }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="onClickCloseModal()" class="btn btn-default" data-dismiss="modal">{{ 'public.cancel' | translate }}</button>
+        <div class="fileUpload btn btn-default" style="margin: 0px 0px 5px 0px">
+														<span>{{ 'public.yes' | translate }}</span>
+														<input #fileModal type="file" class="upload" (change)="fileChangeModal($event)"  placeholder="Upload file" accept=".docx,.pdf,.doc,.jpg" name="ficheroModal"
+														(click)="onClickOkModal()">
+													</div>
+        
+      </div>
+    </div>
+  </div>
+</div>

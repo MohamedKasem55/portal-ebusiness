@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>sa.alrajhi</groupId>
+    <artifactId>ecorp-angular-app</artifactId>
+    <version>1.0.8-ECORP-SSO-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>ECORP FE app</name>
+    <description>ECORP FE app</description>
+    <properties>
+        <!-- frontend-plugin.version>1.4</frontend-plugin.version> <node.version>v6.10.3</node.version>
+			<npm.version>3.10.10</npm.version -->
+        <frontend-plugin.version>1.11.2</frontend-plugin.version>
+        <node.version>v14.15.3</node.version>
+        <npm.version>6.14.9</npm.version>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <!-- dependency> <groupId>com.github.eirslett</groupId> <artifactId>frontend-maven-plugin</artifactId>
+			<version>1.4</version> </dependency -->
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>dist</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <!-- Frontend -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-plugin.version}</version>
+                <configuration>
+                    <workingDirectory>src</workingDirectory>
+                    <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+                    <nodeVersion>${node.version}</nodeVersion>
+                    <npmVersion>${npm.version}</npmVersion>
+                    <installDirectory>target</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                            <installDirectory>target</installDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>angular cli build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run-script prod </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>distro-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                         <finalName>${project.artifactId}</finalName>
+                            <descriptors>
+                                <descriptor>hip_assembly_zip.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <branchBase>https://git.connectis.es/gtn/arb.ecorprevamp</branchBase>
+                    <tagBase>https://git.connectis.es/gtn/arb.ecorprevamp</tagBase>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <!-- Repositories only needed if using a milestone or snapshot -->
+    <repositories>
+    </repositories>
+    <pluginRepositories>
+    </pluginRepositories>
+    <!--
+    <scm>
+        <url>https://git.connectis.es/gtn/arb.ecorprevamp</url>
+        <connection>scm:githttps://git.connectis.es/gtn/arb.ecorprevamp.git</connection>
+        <developerConnection>scm:git:https://git.connectis.es/gtn/arb.ecorprevamp.git</developerConnection>
+    </scm> -->
+</project>

@@ -1,0 +1,18 @@
+<div class="container-resource" style="width:96.5%">
+
+    <div class="container-resource-title">
+        <div class="title" [innerHTML]="getTitleToUpperCase('login.resources.User Resources')"></div>
+    </div>
+
+    <div class="container-resource-content">
+        <ng-container *ngFor="let item of resources">
+            <a class="resource-container" [href]="getDocUrl(item)"
+               routerLinkActive="router-link-active" target="_blank" rel="noopener noreferrer">
+                <img *ngIf="item.icon != null" [src]="item.icon" class="resource-container__icon"/>
+                <span class="resource-container__link">
+                    {{ item.text | translate}}
+                </span>
+            </a>
+        </ng-container>
+    </div>
+</div>

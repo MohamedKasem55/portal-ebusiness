@@ -1,0 +1,233 @@
+<arb-table-panel [title]="'myProfile.pending_actions.pending_accountWorkflow'">
+    <table-export [dataTable]="table" [header]="'myProfile.pending_actions.pending_accountWorkflow' | translate"
+                  [columns]="[
+                      {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                      {'title': 'public.account' | translate, 'dataKey':'accountNumber'},
+                       {'title':'myProfile.pending_actions.accountNickname' | translate,'dataKey':'accountAlias'},
+                       {'title':'public.privileges' | translate,'dataKey':'paymentId', 'modelKey': 'batchTypes'}
+                        ]"></table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                   class="material sme-table sme-table--responsive table" [rows]="items" [selected]="selected"
+                   [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [count]="totalSize" [limit]="tableDisplaySize" [externalPaging]="externalPagination"
+                   [externalSorting]="externalPagination" [rowIdentity]="getIdFunction()"
+                   [selectionType]="defaultSelectionType"
+                   (page)='setInnerPage($event)' (select)='onInnerSelect($event)'>
+
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div *ngIf="mobile">
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                                    </label>
+                                    <div>
+                                        <span>{{ row.initiationDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'public.account' | translate }}</label>
+                                    <div>
+                                        <span>{{row.accountNumber}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'myProfile.pending_actions.accountNickname' | translate }}</label>
+                                    <div>
+                                        <span>{{ row.type }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'public.privileges' | translate }}</label>
+                                    <div>
+                                        <span>{{ 'batchTypes'| modelPipe :row.paymentId }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{'accounts.currency' | translate }}</label>
+                                    <div>
+                                        <span>{{ 'currencyIso' | modelPipe:row.currency }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'accounts.branchid' | translate }}</label>
+                                    <div>
+                                        <span>{{ branch }}</span>
+                                        <!--                                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label>{{ 'pendingActions.general.initiatedBy' | translate}}</label>
+                                    <div>
+                                        <span>{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div *ngIf="isRowChildContentExpanded(row)">
+                    <div>
+                        <div>
+                            <app-account-workflow-table-levels [details]="row['details']" [isMobile]="mobile">
+                            </app-account-workflow-table-levels>
+                        </div>
+                    </div>
+                </div>
+
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column *ngIf="selectable" [width]="60" [sortable]="false" [canAutoResize]="false"
+                              [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"
+                              [checkboxable]="true">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded" ngx-datatable-cell-template>
+                <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
+                   [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                   (click)="showOrHideChildContent(row)">
+                    <span class="human-selectable glyphicon glyphicon-plus"
+                          *ngIf="!isRowChildContentExpanded(row)"></span>
+                    <span class="human-selectable glyphicon glyphicon-minus"
+                          *ngIf="isRowChildContentExpanded(row)"></span>
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="initiationDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">{{
+                    'myProfile.pending_actions.initiationDate' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value | date:'dd/MM/yyyy HH:mm' }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="accountNumber" [width]="120">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'public.account' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="accountAlias">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()"
+                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.accountNickname' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="paymentId">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()"
+                      class="datatable-header-cell-wrapper">{{ 'public.privileges' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ 'batchTypes' | modelPipe:value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="currency">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'accounts.currency' | translate
+                    }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ 'currencyIso' | modelPipe:value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="branch" [width]="50">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()"
+                      class="datatable-header-cell-wrapper">{{ 'accounts.branchid' | translate }}</span>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                <span>{{ branch }}</span>
+                <!--                <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>-->
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="securityLevelsDTOList">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'pendingActions.general.initiatedBy' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{ value[0].updater }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [visiblePagesCount]="visiblePagesCount"
+                            (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{(items.length > pageSize ? pageSize : items.length)}}
+                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [ngModel]="tableDisplaySize"
+                                        (ngModelChange)="onChangeSize($event)">
+                                    <option [value]=10>10</option>
+                                    <option [value]=20>20</option>
+                                    <option [value]=50>50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

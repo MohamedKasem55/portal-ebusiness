@@ -1,0 +1,47 @@
+<div class="sme-content-container container-fluid" [formGroup]="formGroup">
+  <div class="sme-data-table">
+    <div class="sme-data-table__head">
+      <div class="sme-head__title">
+        <span *ngIf="prefixTitle">{{prefixTitle}}</span>
+        {{'myProfile.pending_actions.workflow.' + title | translate}}
+      </div>
+    </div>
+    <div class="sme-table table headerDataTable">
+      <table class="sme-table sme-table--responsive sme-table--check-list table">
+        <thead>
+          <th *ngIf="showAmountInterval">{{ "workflow.minAmount" | translate }}</th>
+          <th *ngIf="showAmountInterval">{{ "workflow.maxAmount" | translate }}</th>
+          <th *ngFor="let voidElement of numberOfLevels; let levelIndex = index">
+            {{ "public.l" + (levelIndex + 1) | translate }}
+          </th>
+          <th></th>
+        </thead>
+        <tbody formArrayName="tiers">
+          <tr *ngFor="let tier of getTiers(); let index = index" [formGroupName]="index">
+            <td style="width: 25%;" *ngIf="showAmountInterval">
+              <div class="form-group">
+                <input class="form-control" formControlName="amountMin" type="text" />
+                <span class="visible-xs">{{ "workflow.minAmount" | translate }}</span>
+              </div>
+            </td>
+            <td style="width: 25%;" *ngIf="showAmountInterval">
+              <div class="form-group">
+                <input class="form-control" formControlName="amountMax" type="text" />
+                <span class="visible-xs">{{ "workflow.maxAmount" | translate }}</span>
+              </div>
+            </td>
+            <td *ngFor="let voidElement of numberOfLevels; let levelIndex = index" formArrayName="levels">
+              <label class="sme-checkbox checkbox-inline">
+                <input type="checkbox" [formControlName]="levelIndex" />
+                <i aria-hidden="true"></i>
+                <span class="visible-xs">{{
+              "public.l" + (levelIndex + 1) | translate
+            }}</span>
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

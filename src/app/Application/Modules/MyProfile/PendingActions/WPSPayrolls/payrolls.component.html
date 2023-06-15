@@ -1,0 +1,837 @@
+<div class="sme-breadcrumb" [hidden]="this.currentItem !== null">
+    <ol class="breadcrumb">
+        <li>{{ 'myProfile.myProfile' | translate }}</li>
+        <li><a class="human-selectable" href="#"
+                [routerLink]="['/myprofile/pending/requeststatus']">{{ 'myProfile.pending_actions.pending_actions' | translate }}</a>
+        </li>
+        <li *ngIf="service.isWPSPayrollLayout()">{{ 'myProfile.pending_actions.wpspayroll' | translate }}</li>
+        <li *ngIf="service.isWMSPayrollLayout()">{{ 'myProfile.pending_actions.wmspayroll' | translate }}</li>
+    </ol>
+</div>
+
+<div *ngIf="wizardStep == 1">
+    <div class="sme-form__actions">
+        <a class="btn btn-primary btn-wide" routerlinkactive="active"
+            (click)="displayWorkflowDetails(workflowDetailsPopup)">
+            {{ "myProfile.pending_actions.actions.workflowDetails" | translate }}
+        </a>
+    </div>
+</div>
+
+<div class="sme-content-container container-fluid" *ngIf="this.currentItem == null">
+
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'myProfile.pending_actions.steps.select' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3}"><span>
+                    <span class="num">3</span>
+                    <span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <router-outlet (activate)="componentAdded($event)"></router-outlet>
+    </div>
+
+    <div class="sme-content-container container-fluid">
+        <div *ngIf="wizardStep==2 && !sharedData.aproveFlow" class="sme-page-block">
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body" style="padding: 15px;">
+                        <div class="sme-form__box sme-form__box--form">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                        <textarea class="form-control" rows="3" maxlength="150"
+                                            [(ngModel)]="rejectReason" name="rejectReason"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button *ngIf="wizardStep==2" (click)="backButton()" class=" btn btn-default btn-wide">
+            {{ 'public.back' | translate }}
+        </button>
+        <button *ngIf="wizardStep==2 && !sharedData.aproveFlow" (click)="confirmReject()"
+            class=" btn btn-primary btn-wide">
+            {{ 'myProfile.pending_actions.reject' | translate }}
+        </button>
+        <button *ngIf="wizardStep==2 && sharedData.aproveFlow" (click)="confirmAprove()"
+            class=" btn btn-primary btn-wide" [disabled]="isNotValid()">
+            {{ 'public.confirm' | translate }}
+        </button>
+        <button [disabled]="sharedData.salarySelected.length==0 && sharedData.payrollSelected.length==0"
+            *ngIf="wizardStep==1" (click)="rejectFirstStep()" class=" btn btn-default btn-wide"
+            style="margin-right:5px">
+            {{ 'myProfile.pending_actions.reject' | translate }}
+        </button>
+        <button [disabled]="sharedData.salarySelected.length==0 && sharedData.payrollSelected.length==0"
+            *ngIf="wizardStep==1" (click)="aproveFirstStep()" class=" btn btn-primary btn-wide">
+            {{ 'myProfile.pending_actions.approve' | translate }}
+        </button>
+    </div>
+
+</div>
+
+<app-workflow-details-popup #workflowDetailsPopup></app-workflow-details-popup>
+
+<!--Payroll Detail ( Pending Action Salary Payment/ Import Payrolls)-->
+<app-levels-popup #modalAuth2></app-levels-popup>
+<div class="sme-breadcrumb" *ngIf="this.currentItem!==null">
+    <ol class="breadcrumb">
+        <li>{{ 'myProfile.myProfile' | translate }}</li>
+        <li><a class="human-selectable" href="#"
+                [routerLink]="['/myprofile/pending/requeststatus']">{{ 'myProfile.pending_actions.pending_actions' | translate }}</a>
+        </li>
+        <li *ngIf="service.isWPSPayrollLayout()">{{ 'myProfile.pending_actions.wpsPayrollDetail' | translate }}</li>
+        <li *ngIf="service.isWMSPayrollLayout()">{{ 'myProfile.pending_actions.wmsPayrollDetail' | translate }}</li>
+    </ol>
+</div>
+<!--Detail View-->
+<div *ngIf="this.currentItem!==null">
+    <!--BEGIN Detail View-->
+    <div class="container-fluid">
+        <div class="sme-head">
+            <div class="sme-head__title" *ngIf="currentItem['salaryPaymentItem'] == true">
+                {{ 'wpspayroll.salaryPayments' | translate}}</div>
+            <div class="sme-head__title"
+                *ngIf="currentItem['salaryPaymentItem'] != true && service.isWPSPayrollLayout()">
+                {{ 'myProfile.pending_actions.wpspayroll' | translate}}</div>
+            <div class="sme-head__title"
+                *ngIf="currentItem['salaryPaymentItem'] != true && service.isWMSPayrollLayout()">
+                {{ 'myProfile.pending_actions.wmspayroll' | translate}}</div>
+            <div class="sme-data-table__export">
+                <export-pa-wps-payroll [header]="'wpspayroll.salaryPayments' | translate">
+                </export-pa-wps-payroll>
+
+            </div>
+        </div>
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <form autocomplete="off" class="sme-form__form" id="formSalary"
+                        *ngIf="currentItem['salaryPaymentItem']">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.deductFromAccount' | translate }}
+                                            </label>
+                                            <span class="form-control">
+                                                {{ currentItem['accountFrom']}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.customerCIC' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['customerCIC']}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.organizationName' |    translate }}
+                                            </label>
+                                            <span class="form-control">
+                                                {{ currentItem['organizationName']}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.management.valueDate' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['valueDate'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <!--									<div class="col-xs-12 col-sm-3">-->
+                                    <!--										<div class="form-group">-->
+                                    <!--											<label>-->
+                                    <!--												{{ 'wpspayroll.hijraDate' | translate }}-->
+                                    <!--											</label>-->
+                                    <!--											<div class="form-control">-->
+                                    <!--												<span> {{ currentItem['hijraDate'] }} </span>-->
+                                    <!--											</div>-->
+                                    <!--										</div>-->
+                                    <!--									</div>-->
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.batchPayrollName' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['batchName'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.molId' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['molEstbId'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.customerReference' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['customerReference'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.paymentPurpose' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{'payrollPaymentPurpose' |modelPipe:currentItem['paymentPurpose'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.remarks' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['remarks']  }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.initiationDate' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['initiationDate']  | date}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'public.status' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ 'batchSecurityLevelStatus' | modelPipe:currentItem['status']   }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                    <form autocomplete="off" class="sme-form__form" id="formWPSPayroll"
+                        *ngIf="!currentItem['salaryPaymentItem']">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.fileReference' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['customerReference'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.batchPayrollName' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['batchName'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.numberOfPayments' | translate }}
+                                            </label>
+                                            <span class="form-control">
+                                                {{ currentItem['numberPayments']}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.totalAmount' | translate }}
+                                            </label>
+                                            <span class="form-control">
+                                                {{ currentItem['totalAmount']}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.accountFrom' | translate }}
+                                            </label>
+                                            <span class="form-control">
+                                                {{ currentItem['accountFrom']}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.fileSendDate' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['fileSendDate']  | date:'yyyy-MM-dd' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group">
+                                            <label>
+                                                {{ 'wpspayroll.paymentDate' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span> {{ currentItem['paymentDate'] }} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.paymentPurpose' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{'payrollPaymentPurpose' |modelPipe:currentItem['paymentPurpose'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'wpspayroll.remarks' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ currentItem['remarks'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="form-group left">
+                                            <label>
+                                                {{ 'public.status' | translate }}
+                                            </label>
+                                            <div class="form-control">
+                                                <span>
+                                                    {{ 'batchSecurityLevelStatus' | modelPipe:currentItem['status']   }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END Detail View-->
+
+    <!--BEGIN  STATUS TAble-->
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__title">
+                        {{'payroll.management.status' | translate }}
+                    </div>
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="authorizationPageTable"
+                            [header]="'wpspayroll.authorizationLevelInformation' | translate" [columns]="[
+											{'title': 'wpspayroll.level' | translate, 'dataKey':'level'},
+											{'title': 'public.status' | translate, 'dataKey':'status'},
+											{'title': 'public.userName' | translate, 'dataKey':'updater'},
+											{'title': 'public.date' | translate, 'dataKey':'updateDate'}
+										]">
+                        </table-export>
+                    </div>
+                </div>
+                <div>
+                    <div class="sme-table table headerDataTable">
+                        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #authorizationPageTable
+                            class="material" [rows]="currentItem['authorizationPage'].data" [footerHeight]="0"
+                            [externalPaging]="false" [externalSorting]="false"
+                            [count]="currentItem['authorizationPage'].page.totalElements"
+                            [offset]="currentItem['authorizationPage'].page.pageNumber-1"
+                            [limit]="currentItem['authorizationPage'].page.pageSize"
+                            (page)="setPageAuthorizationPage($event)">
+
+                            <ngx-datatable-column prop="level">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'payroll.level' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="status">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.status' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ 'batchSecurityLevelStatus' | modelPipe:value }}</span>
+                                </ng-template>
+
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="updater">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.userName' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="updateDate">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.date' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-footer>
+                                <ng-template>
+                                </ng-template>
+                            </ngx-datatable-footer>
+
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END STATUS TABLE-->
+
+    <!--	BEGIN TABLE EMPLOYE-->
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__title">
+                        {{'wpspayroll.employeeList' | translate }}
+                    </div>
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="employeePageTable" [header]="'wpspayroll.employeeList' | translate"
+                            [columns]="[
+                                            {'title': 'wpspayroll.employeeNumber' | translate, 'dataKey':'employeeReference'},
+                                            {'title': 'wpspayroll.employeeName' | translate, 'dataKey':'name'},
+                                            {'title': 'wpspayroll.civilianID' | translate, 'dataKey':'civilianId'},
+                                            {'title': 'public.bank' | translate, 'dataKey':'bankCode'},
+                                            {'title': 'wpspayroll.account' | translate, 'dataKey':'account'},
+                                            {'title': 'wpspayroll.salary' | translate, 'dataKey':'salary'},
+                                            {'title': 'wpspayroll.basicSalary' | translate, 'dataKey':'salaryBasic'},
+                                            {'title': 'wpspayroll.housingAllowance' | translate, 'dataKey':'allowanceHousing'},
+                                            {'title': 'wpspayroll.otherAllowance' | translate, 'dataKey':'allowanceOther'},
+                                            {'title': 'wpspayroll.deductions' | translate, 'dataKey':'deductions'},
+                                            {'title': 'public.department' | translate, 'dataKey':'departmentId'},
+                                            {'title': 'wpspayroll.remarks' | translate, 'dataKey':'remarks'}
+                                            ]">
+                        </table-export>
+
+                    </div>
+                </div>
+                <div>
+                    <div class="sme-table table headerDataTable">
+                        <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #employeePageTable
+                            class="material" [rows]="currentItem['employeeData'].data" [columnMode]="defaultColumnMode"
+                            [headerHeight]="30" [footerHeight]="50" [rowHeight]="defaultHeight" [externalPaging]="false"
+                            [externalSorting]="false" [count]="currentItem['employeeData'].page.totalElements"
+                            [offset]="currentItem['employeeData'].page.pageNumber-1"
+                            [limit]="currentItem['employeeData'].page.pageSize" [scrollbarH]="false">
+
+                            <ngx-datatable-column [width]="10" [sortable]="false" [canAutoResize]="false"
+                                [draggable]="false" [resizeable]="false" [headerCheckboxable]="false"
+                                [checkboxable]="false">
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="employeeReference" [width]="160">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.employeeNumber' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="name" [width]="200">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.employeeName' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template let-value="value" let-sort="sortFn" let-row="row"
+                                    ngx-datatable-cell-template>
+                                    <div>
+                                        <div *ngIf="shrinkData(value,1)[0] != ''">{{ shrinkData(value, 1)[0] }} </div>
+                                        <div *ngIf="shrinkData(value,1)[1] != ''">{{ shrinkData(value, 1)[1] }} </div>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="civilianId" [width]="160">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.civilianID' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="bankCode" [width]="280">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.bank' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span [innerHTML]="'payrollBankCode' | modelPipe:value"></span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="account" [width]="290">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.account' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="salary">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.salary' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | amountCurrency }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="salaryBasic">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.basicSalary' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ (row.salaryBasic ? row.salaryBasic : row.salary)  | amountCurrency }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="allowanceHousing">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.housingAllowance' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | amountCurrency }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column prop="allowanceOther">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.otherAllowance' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | amountCurrency }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column prop="deductions">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.deductions' | translate }}
+                                    </span>
+                                </ng-template>
+                                <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                    <span>{{ value  | amountCurrency }}</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column prop="departmentId">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'public.department' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column prop="remarks">
+                                <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                        {{'wpspayroll.remarks' | translate }}
+                                    </span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-footer>
+                                <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                    let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                                    let-offset="offset">
+                                    <div class="sme-datatable-footer">
+                                        <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            (change)="employeePageTable.onFooterPage($event)"
+                                            [hidden]="!((rowCount / pageSize) > 1)">
+                                        </app-datatable-pager>
+
+                                        <div class="sme-data-table__actions form-inline">
+                                            <span
+                                                class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                                {{(currentItem['employeeData'].data.length > pageSize ? pageSize : currentItem['employeeData'].data.length)}}
+                                                {{ 'public.ofLabel' | translate}}
+                                                {{currentItem['employeeData'].data.length}} </span>
+                                            <span class="hidden-xs"> | </span>
+                                            <span class="sme-data-table__action-group">
+                                                <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                                <div class="sme-select form-control">
+                                                    <select class="form-control"
+                                                        [(ngModel)]="currentItem['employeeData'].page.pageSize">
+                                                        <option [ngValue]="10">10</option>
+                                                        <option [ngValue]="20">20</option>
+                                                        <option [ngValue]="50">50</option>
+                                                        <option [value]="100">100</option>
+                                                    </select>
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </ng-template>
+
+                            </ngx-datatable-footer>
+
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--	END  TABLE EMPLOYE-->
+
+    <!--	BEGIN SUMMARY-->
+    <div class="container-fluid">
+        <!--		<div class="sme-head">-->
+        <!--			<div class="sme-head__title">{{ 'payroll.summaryAndFees' | translate}}</div>-->
+        <!--		</div>-->
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <form autocomplete="off" class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>
+                                            {{ 'wpspayroll.numberOfEmployee' |translate }}
+                                        </label>
+                                        <span
+                                            class="form-control">{{currentItem['salaryPaymentDetailsDTO'].numEmployees}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-amount-input">{{ 'wpspayroll.totalAmount' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-amount-input">
+                                            {{currentItem['salaryPaymentDetailsDTO'].totalAmount  | amountCurrency }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.numberRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control"
+                                           >{{currentItem['salaryPaymentDetailsDTO'].numRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="total-rajhi-transfer-input" class="required">{{ 'wpspayroll.totalRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-rajhi-transfer-input">
+                                            {{currentItem['salaryPaymentDetailsDTO'].totalNumRajhi}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.numberNonRajhiTransfer' | translate }}</label>
+                                        <span class="form-control"
+                                           >{{currentItem['salaryPaymentDetailsDTO'].numNonRajhiTransfers}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="total-non-rajhi-transfer-input" class="required">{{ 'wpspayroll.totalNonRajhiTransfer' |
+                                            translate }}</label>
+                                        <span class="form-control" id="total-non-rajhi-transfer-input">
+                                            {{currentItem['salaryPaymentDetailsDTO'].totalNumNonRajhi}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.feesRajhiTransfers' | translate }}</label>
+                                        <span type="text" class="form-control" id="fee-rajhi-transfer-input">
+                                            {{currentItem['salaryPaymentDetailsDTO'].transactionFee | amountCurrency}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.totalFeesRajhi' | translate }}</label>
+                                        <span class="form-control" id="fee-rajhi-input">
+                                            {{currentItem['salaryPaymentDetailsDTO'].totalFeesRajhi | amountCurrency}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.feesNonRajhiTransfers' |translate }}</label>
+                                        <span class="form-control" id="fee-non-rajhi-transfer-input">
+                                            {{currentItem['salaryPaymentDetailsDTO'].localBankFee | amountCurrency}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'wpspayroll.totalFeesNonRajhi' | translate }}</label>
+                                        <span class="form-control"
+                                            id="fee-non-rajhi-input">{{currentItem['salaryPaymentDetailsDTO'].totalFeesNonRajhi | amountCurrency}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--							<div class="row"  *ngIf="currentItem['salaryaPymentItem']">-->
+                            <!--								<div class="col-xs-12 col-sm-3">-->
+                            <!--									&lt;!&ndash; sme-form-group &ndash;&gt;-->
+                            <!--									<div class="form-group">-->
+                            <!--										<label for="total-estimated-amount-input" class="required">{{ 'payroll.totalEstimatedAmount' |-->
+                            <!--												translate }}</label>-->
+                            <!--										<span class="form-control" id="total-estimated-amount-input">-->
+                            <!--											{{currentItem['salaryPaymentDetailsDTO'].totalEstimated  | amountCurrency}}-->
+                            <!--										</span>-->
+                            <!--									</div>-->
+                            <!--								</div>-->
+                            <!--							</div>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--	END SUMMARY-->
+</div>
+<arb-buttons *ngIf="this.currentItem!==null">
+    <button class="btn btn-default btn-wide" type="button" (click)="closeItem()">{{ 'public.back' | translate}}</button>
+</arb-buttons>

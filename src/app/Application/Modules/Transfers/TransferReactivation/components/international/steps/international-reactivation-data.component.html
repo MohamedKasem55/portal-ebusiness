@@ -1,0 +1,36 @@
+<arb-panel *ngFor="let batch of this.batches; index as i">
+    <div class="sme-form">
+        <div class="sme-form__form" style="background-color: #EEF0F7"
+             *ngIf="this.beneficiaries && this.beneficiaries[i]">
+            <div class="sme-form__title">{{'transfer.transferTo' | translate}}
+                {{this.beneficiaries[i]['beneficiaryFullName']}} - {{this.beneficiaries[i]['beneficiaryAccountCode']}} -
+                {{reactivationService.getTransformedModelValue('bankCode', this.beneficiaries[i]['bankCode'])}}
+            </div>
+        </div>
+        <ng-container>
+            <div class="row">
+                <fieldset *ngIf="this.forms[i] && this.formsFieldsConfigs[i]">
+                    <app-dynamic-simple-extras-form-fields
+                            [formModel]="this.forms[i]"
+                            [fieldsConfigs]="this.formsFieldsConfigs[i]"
+                            [combosData]="combosData"
+                            [translate_prefix]="'transfer'"
+                            (onAllFieldsCreated)="enableDisable(forms[i])">
+                    </app-dynamic-simple-extras-form-fields>
+                </fieldset>
+            </div>
+        </ng-container>
+        <ng-container>
+            <app-levels-table *ngIf="this.batch['securityLevelsDTOList'] !== null
+                                 && this.batch['securityLevelsDTOList'] !== undefined
+                                 && this.batch['securityLevelsDTOList'].length > 0"
+                              [futureSecurityLevels]="this.batch['securityLevelsDTOList']">
+            </app-levels-table>
+            <app-levels-table *ngIf="this.batch['futureSecurityLevelsDTOList'] !== null
+                                 && this.batch['futureSecurityLevelsDTOList'] !== undefined
+                                 && this.batch['futureSecurityLevelsDTOList'].length > 0"
+                              [futureSecurityLevels]="this.batch['futureSecurityLevelsDTOList']">
+            </app-levels-table>
+        </ng-container>
+    </div>
+</arb-panel>

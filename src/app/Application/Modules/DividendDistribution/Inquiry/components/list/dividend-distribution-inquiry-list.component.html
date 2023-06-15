@@ -1,0 +1,317 @@
+<arb-breadcrumb [routes]="[
+    ['dividendDistribution.menu'],
+    ['dividendDistribution.inquiry.menu']
+]">
+</arb-breadcrumb>
+
+<arb-panel>
+    <arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()">
+        <ng-container [formGroup]="searchForm">
+            <div class="row">
+                <fieldset>
+                    <app-dynamic-simple-extras-form-fields
+                            [fieldsConfigs]="fieldsConfigForSearchForm"
+                            [translate_prefix]="translate_prefix"
+                            [combosData]="combosData"
+                            [formModel]="searchForm">
+                    </app-dynamic-simple-extras-form-fields>
+                </fieldset>
+            </div>
+        </ng-container>
+
+    </arb-searchable-panel>
+
+</arb-panel>
+
+<arb-table-panel [title]="'dividendDistribution.inquiry.menu'">
+
+
+<table-export [dataTable]="elementsTable" [header]="'dividendDistribution.inquiry.menu' | translate" [columns]="[
+                            {'title':'dividendDistribution.inquiry.civilianId' | translate,'dataKey':'civilianId'},
+                            {'title':'dividendDistribution.inquiry.name' | translate,'dataKey':'name'},
+                            {'title':'dividendDistribution.inquiry.shareHolderNumber' | translate,'dataKey':'shareHolderNumber'},
+                            {'title':'dividendDistribution.inquiry.shares' | translate,'dataKey':'shares'},
+                            {'title':'dividendDistribution.inquiry.amount' | translate,'dataKey':'amount'},
+                            {'title':'dividendDistribution.inquiry.year' | translate,'dataKey':'year'},
+                            {'title':'dividendDistribution.inquiry.quarter' | translate,'dataKey':'quarter'},
+                            {'title':'dividendDistribution.inquiry.year' | translate,'dataKey':'year'},
+                            {'title':'dividendDistribution.inquiry.status' | translate,'dataKey':'paid', transformFn: getStatusText},
+                            {'title':'dividendDistribution.inquiry.paidDate' | translate,'dataKey':'paidDate'},
+                            {'title':'dividendDistribution.inquiry.paidBranch' | translate,'dataKey':'paidBranch'}
+                        ]">
+</table-export>
+
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}"
+                   #elementsTable
+                   class="material sme-table sme-table--responsive table"
+                   [rows]="elementsPage.data"
+                   [columnMode]="defaultColumnMode"
+                   [headerHeight]="30"
+                   [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight"
+                   [externalPaging]="false"
+                   [externalSorting]="false"
+                   [count]="elementsPage.page.totalElements"
+                   [offset]="elementsPage.page.pageNumber-1"
+                   [limit]="elementsPage.page.pageSize"
+                   (page)='setPage($event)'
+                   (sort)="setSort($event)"
+                   [rowIdentity]="getIdFunction()"
+                   (select)='onSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.civilianId' | translate }}</label>
+                                <div>
+                                    <span>{{row.civilianId}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.name' | translate }}</label>
+                                <div>
+                                    <span>{{row.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.shareHolderNumber' | translate }}</label>
+                                <div>
+                                    <span>{{row.shareHolderNumber}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.shares' | translate }}</label>
+                                <div>
+                                    <span>{{row.shares}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.amount' | translate }}</label>
+                                <div>
+                                    <span>{{row.amount}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.year' | translate }}</label>
+                                <div>
+                                    <span>{{row.year}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.quarter' | translate }}</label>
+                                <div>
+                                    <span>{{row.quarter}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.status' | translate }}</label>
+                                <div>
+                                    <span>{{row.paid?('dividendDistribution.inquiry.paidValue' | translate):('dividendDistribution.inquiry.unPaidValue' | translate)}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.paidDate' | translate }}</label>
+                                <div>
+                                    <span>{{row.paidDate | date}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'dividendDistribution.inquiry.paidBranch' | translate }}</label>
+                                <div>
+                                    <span>{{row.paidBranch}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+
+       <!--
+       <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                              [resizeable]="false" [headerCheckboxable]="false" [checkboxable]="false">
+        </ngx-datatable-column>
+        -->
+
+
+        <ngx-datatable-column prop="civilianId">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.civilianId' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.civilianId}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="name">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.name' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.name}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="shareHolderNumber">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.shareHolderNumber' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.shareHolderNumber}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="shares">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.shares' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.shares}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="amount">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.amount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.amount}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="year">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.year' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.year}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="quarter">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.quarter' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.quarter}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column prop="status">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.status' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.paid?('dividendDistribution.inquiry.paidValue' | translate):('dividendDistribution.inquiry.unPaidValue' | translate)}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="paidDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.paidDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.paidDate}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="paidBranch">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'dividendDistribution.inquiry.paidBranch' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>{{row.paidBranch}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                            (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                        (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+
+</arb-table-panel>
+

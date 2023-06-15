@@ -1,0 +1,459 @@
+<arb-breadcrumb [routes]="[
+	['public.accounts'],
+	['customer-documents.customerDocs'],
+	['customer-documents.request-new.requestNew']]">
+</arb-breadcrumb>
+
+<arb-steps
+        [steps]="['customer-documents.request-new.stepper.choose','customer-documents.request-new.stepper.details', 'public.summary', 'public.finish']"
+        [currentStep]="wizardStep">
+</arb-steps>
+
+
+<div *ngIf="wizardStep == 1">
+    <arb-panel-title [title]="'customer-documents.request-new.requestDoc'"></arb-panel-title>
+
+    <arb-panel>
+        <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.document' | translate }}
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'customer-documents.request-new.selectDoc' | translate }}</label>
+                    <ng-select [notFoundText]="'public.noData' | translate" class="form-control" (change)="inquireEligibilityAndBuildForm($event)">
+                        <ng-option *ngFor="let docType of docTypes" [value]="docType">
+                            {{docType.value}}
+                        </ng-option>
+                    </ng-select>
+                    <div *ngIf="!isEligible"
+                         class="alert alert-danger">
+                        <small>{{'customer-documents.request-new.notEligible' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 2">
+    <arb-panel-title [title]="'customer-documents.request-new.requestDoc'"></arb-panel-title>
+
+    <arb-panel>
+
+        <!-- Bank Certificate  -->
+        <form *ngIf="isEligible && selectedDocType.key == '01'" autocomplete="off"  class="sme-form__form" novalidate>
+            <fieldset [formGroup]="formModel">
+                <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.docDetails' | translate }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <app-select-account [accounts]="accounts" [useOldDesign]="true"
+                                            [selectedFullAccountNumber]="formModel.controls['acctNum'].value"
+                                            (onAccountChange)="selectAccount($event)">
+                        </app-select-account>
+                        <div *ngIf="(formModel.controls.acctNum.hasError('required') || formModel.controls.acctNum.invalid) && formModel.controls.acctNum.touched"
+                             class="alert alert-danger">
+                            <small>{{'customer-documents.request-new.account' | translate }}{{ 'error.required' | translate }}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <div>
+                                <label>{{ 'customer-documents.request-new.date' | translate }}</label>
+                                <input type="text" #balanceDate="bsDatepicker"
+                                       bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                       [maxDate]="yesterday"
+                                       [minDate]="oneYearAgo" (bsValueChange)="balanceDateChange($event)"
+                                       formControlName="balanceDate"
+                                       name="balanceDate" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12"><div class="form-group">
+                        <label>{{'customer-documents.request-new.docLang' | translate }}</label>
+
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" formControlName="language" [value]="'EN'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.english' | translate }}
+                                </span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" formControlName="language" [value]="'AR'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.arabic' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <!-- Account Statement  -->
+        <form *ngIf="isEligible && selectedDocType.key == '02'" autocomplete="off"  class="sme-form__form" novalidate>
+            <fieldset [formGroup]="formModel">
+                <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.docDetails' | translate }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <app-select-account [accounts]="accounts" [useOldDesign]="true"
+                                            [selectedFullAccountNumber]="formModel.controls['acctNum'].value"
+                                            (onAccountChange)="selectAccount($event)">
+                        </app-select-account>
+                        <div *ngIf="(formModel.controls.acctNum.hasError('required') || formModel.controls.acctNum.invalid) && formModel.controls.acctNum.touched"
+                             class="alert alert-danger">
+                            <small>{{'customer-documents.request-new.account' | translate }}{{ 'error.required' | translate }}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <div>
+                                <label>{{ 'customer-documents.request-new.dateFrom' | translate }}</label>
+                                <input type="text" #balanceDate="bsDatepicker"
+                                       bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                       [maxDate]="today"
+                                       formControlName="fromDate"
+                                       name="fromDate" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <div>
+                                <label>{{ 'customer-documents.request-new.dateTo' | translate }}</label>
+                                <input type="text" #balanceDate="bsDatepicker"
+                                       bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                       [isDisabled]="!this.formModel.controls['fromDate'].valid"
+                                       [minDate]="this.formModel.controls['fromDate'].value"
+                                       [maxDate]="today"
+                                       formControlName="toDate"
+                                       name="toDate" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div *ngIf="formModel.controls.fromDate.invalid && formModel.controls.toDate.touched"
+                             class="alert alert-danger">
+                            <small>{{'customer-documents.request-new.fromDateErr' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12"><div class="form-group">
+                        <label>{{'customer-documents.request-new.docLang' | translate }}</label>
+
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" formControlName="language" [value]="'EN'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.english' | translate }}
+                                </span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" formControlName="language" [value]="'AR'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.arabic' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <!-- IBAN Certificate  -->
+        <form *ngIf="isEligible && selectedDocType.key == '05'" autocomplete="off"  class="sme-form__form" novalidate>
+            <fieldset [formGroup]="formModel">
+                <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.docDetails' | translate }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <app-select-account [accounts]="accounts" [useOldDesign]="true"
+                                            [selectedFullAccountNumber]="formModel.controls['acctNum'].value"
+                                            (onAccountChange)="selectAccount($event)">
+                        </app-select-account>
+                        <div *ngIf="(formModel.controls.acctNum.hasError('required') || formModel.controls.acctNum.invalid) && formModel.controls.acctNum.touched"
+                             class="alert alert-danger">
+                            <small>{{'customer-documents.request-new.account' | translate }}{{ 'error.required' | translate }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12"><div class="form-group">
+                        <label>{{'customer-documents.request-new.docLang' | translate }}</label>
+
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" formControlName="language" [value]="'EN'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.english' | translate }}
+                                </span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio">
+                            <label>
+                                <input type="radio" formControlName="language" [value]="'AR'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.arabic' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 3">
+    <arb-panel-title [title]="'public.summary'"></arb-panel-title>
+
+    <arb-panel>
+        <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.selectedDoc' | translate }}
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                    <label>{{ 'customer-documents.request-new.document' | translate }}</label>
+                    <h4 style="color: #d7dbe0; margin-top: 1rem">{{ selectedDocType.value }}</h4>
+                </div>
+            </div>
+        </div>
+
+    </arb-panel>
+
+    <arb-panel>
+
+        <!-- Bank Certificate  -->
+        <form *ngIf="selectedDocType.key == '01'" autocomplete="off"  class="sme-form__form" novalidate>
+            <fieldset [formGroup]="formModel">
+                <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.docDetails' | translate }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <app-select-account [accounts]="accounts" [selectedFullAccountNumber]="formModel.controls['acctNum'].value" [isDisabled]="true">
+                        </app-select-account>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <div>
+                                <label>{{ 'customer-documents.request-new.date' | translate }}</label>
+                                <input type="text" #balanceDate="bsDatepicker" disabled
+                                       bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                       [value]="this.formModel.controls['balanceDate'].value" [isDisabled]="true" formControlName="balanceDate"
+                                       name="balanceDate" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12"><div class="form-group">
+                        <label>{{'customer-documents.request-new.docLang' | translate }}</label>
+
+                        <div class="sme-radio radio">
+                            <label>
+                                <input [attr.disabled]="true" [checked]="this.formModel.controls['language'].value == 'EN'" type="radio" formControlName="language" [value]="'EN'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.english' | translate }}
+                                </span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio">
+                            <label>
+                                <input [attr.disabled]="true" [checked]="this.formModel.controls['language'].value == 'AR'" type="radio" formControlName="language" [value]="'AR'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.arabic' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <!-- Account Statement  -->
+        <form *ngIf="selectedDocType.key == '02'" autocomplete="off"  class="sme-form__form" novalidate>
+            <fieldset [formGroup]="formModel">
+                <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.docDetails' | translate }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <app-select-account [accounts]="accounts" [selectedFullAccountNumber]="formModel.controls['acctNum'].value" [isDisabled]="true">
+                        </app-select-account>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <div>
+                                <label>{{ 'customer-documents.request-new.dateFrom' | translate }}</label>
+                                <input type="text" #balanceDate="bsDatepicker"
+                                       bsDatepicker placement="top" [bsConfig]="bsConfig" disabled
+                                       [value]="this.formModel.controls['fromDate'].value" [isDisabled]="true" formControlName="fromDate"
+                                       name="fromDate" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="form-group">
+                            <div>
+                                <label>{{ 'customer-documents.request-new.dateTo' | translate }}</label>
+                                <input type="text" #balanceDate="bsDatepicker"
+                                       bsDatepicker placement="top" [bsConfig]="bsConfig" disabled
+                                       [value]="this.formModel.controls['toDate'].value" [isDisabled]="true" formControlName="toDate"
+                                       name="toDate" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <label>{{'customer-documents.request-new.docLang' | translate }}</label>
+
+                            <div class="sme-radio radio">
+                                <label>
+                                    <input [attr.disabled]="true" [checked]="this.formModel.controls['language'].value == 'EN'" type="radio" formControlName="language" [value]="'EN'">
+                                    <i aria-hidden="true"></i>
+                                    <span>
+                                        {{'customer-documents.request-new.english' | translate }}
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="sme-radio radio">
+                                <label>
+                                    <input [attr.disabled]="true" [checked]="this.formModel.controls['language'].value == 'AR'" type="radio" formControlName="language" [value]="'AR'">
+                                    <i aria-hidden="true"></i>
+                                    <span>
+                                        {{'customer-documents.request-new.arabic' | translate}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <!-- IBAN Certificate  -->
+        <form *ngIf="selectedDocType.key == '05'" autocomplete="off"  class="sme-form__form" novalidate>
+            <fieldset [formGroup]="formModel">
+                <div class="legend" style="margin-top: 15px;"> {{ 'customer-documents.request-new.docDetails' | translate }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <app-select-account [accounts]="accounts" [selectedFullAccountNumber]="formModel.controls['acctNum'].value" [isDisabled]="true">
+                        </app-select-account>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12"><div class="form-group">
+                        <label>{{'customer-documents.request-new.docLang' | translate }}</label>
+
+                        <div class="sme-radio radio">
+                            <label>
+                                <input [attr.disabled]="true" [checked]="this.formModel.controls['language'].value == 'EN'" type="radio" formControlName="language" [value]="'EN'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.english' | translate }}
+                                </span>
+                            </label>
+                        </div>
+                        <div class="sme-radio radio">
+                            <label>
+                                <input [attr.disabled]="true" [checked]="this.formModel.controls['language'].value == 'AR'" type="radio" formControlName="language" [value]="'AR'">
+                                <i aria-hidden="true"></i>
+                                <span>
+                                    {{'customer-documents.request-new.arabic' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep == 4">
+    <arb-panel *ngIf="isDocReqSucceeded">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -check -success ticks-success"></div>
+                <h2>{{'customer-documents.request-new.successHeader' | translate}}</h2>
+                <br>
+                <p>{{'customer-documents.request-new.successLine' | translate}}</p>
+            </div>
+        </div>
+    </arb-panel>
+
+    <arb-panel *ngIf="!isDocReqSucceeded">
+        <div class="final-step-message-container">
+            <div class="final-step-message">
+                <div class="icon -close icon-failure ticks-failure"></div>
+                <h2>{{'customer-documents.request-new.failureHeader' | translate}}</h2>
+                <br>
+                <p>{{'customer-documents.request-new.failureLine' | translate}}</p>
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<arb-buttons>
+
+    <div class="row" *ngIf="wizardStep < 4">
+        <div class="col-xs-12 col-sm-8" style="text-align: start">
+            <button style="margin-right: auto" class="btn btn-default btn-wide" type="button" (click)="cancel()">
+                {{ 'public.cancel' | translate}}
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <button [disabled]="!canGoBack()" (click)="back()" class=" btn btn-default btn-wide">
+                {{ 'public.back' | translate }}
+            </button>
+            <button [disabled]="!canGoNext()" (click)="next()" class="btn btn-primary btn-wide">
+                {{'public.proceed' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <button *ngIf="wizardStep == 4" class="btn btn-default btn-wide" (click)="goBackToDashboard()">
+        {{'customer-documents.goToDashboard' | translate}}
+    </button>
+    <button *ngIf="wizardStep == 4 && isDocReqSucceeded" class="btn btn-primary btn-wide" (click)="goToStatus()">
+        {{'public.finish' | translate}}
+    </button>
+    <button *ngIf="wizardStep == 4 && !isDocReqSucceeded" class="btn btn-primary btn-wide" (click)="finish()">
+    {{'customer-documents.makeNewRequest' | translate}}
+    </button>
+</arb-buttons>

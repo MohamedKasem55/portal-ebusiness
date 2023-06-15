@@ -1,0 +1,13 @@
+<div class="sme-range-slider-container">
+  <div class="sme-range-slider-header">
+    <div class="sme-range-slider-header-start">{{sliderHeaderStart}}</div>
+    <div class="sme-range-slider-header-end">{{sliderHeaderEnd}}</div>
+  </div>
+  <div class="sme-range-slider-body">
+    <input (change)="getValue($event)" type="range" name="width" id="formControlRange" [min]="min" [max]="max" [step]="step">
+  </div>
+  <div class="sme-range-slider-footer">
+    <div class="sme-range-slider-footer-satart"></div>
+    <div class="sme-range-slider-footer-end">{{sliderFooterEnd}}</div>
+  </div>
+</div>

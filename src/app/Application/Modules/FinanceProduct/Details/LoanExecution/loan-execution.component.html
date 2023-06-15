@@ -1,0 +1,143 @@
+<div class='sme-breadcrumb'>
+  <ol class='breadcrumb'>
+    <li>{{ 'financeProduct.menu' | translate }}</li>
+    <li>{{ 'financeProduct.posFinance' | translate }}</li>
+    <li *ngIf='POS_PRODUCT_CODE===productCode'
+        class='active'>{{ 'financeProduct.details.loanExecution' | translate }}</li>
+    <li *ngIf='MRCC_PRODUCT_CODE===productCode'
+        class='active'>{{ 'financeProduct.details.card-execution' | translate }}</li>
+  </ol>
+</div>
+
+<!--OTP-->
+<div class='container-fluid' *ngIf="pageName==='OTP'">
+  <div class='sme-head'>
+    <div class='sme-head__title'>
+      {{ 'financeProduct.newRequest.requestNewFinance' | translate }}
+    </div>
+  </div>
+  <arb-panel>
+    <app-secured-authentication [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                [requestValidate]='requestValidate' #authorization>
+    </app-secured-authentication>
+  </arb-panel>
+</div>
+<!--OTP-->
+
+
+<!--STEEPER-->
+<div class='container-fluid' *ngIf="pageName==='STEEPER'">
+  <arb-steps *ngIf="pageName==='STEEPER'" [currentStep]='wizardStep'
+             [steps]="['financeProduct.details.finalOffer',
+             'financeProduct.details.applicationStatus',
+             'financeProduct.details.contract',
+             'financeProduct.details.sellCommodity',
+             'financeProduct.details.finish']">
+    <!--     'financeProduct.details.promissory',-->
+
+  </arb-steps>
+</div>
+
+<div *ngIf="pageName==='STEEPER'" class='steeperClass'>
+  <finalOffer *ngIf='wizardStep===1' [formModel]='finalOfferFormModel'></finalOffer>
+  <application-status *ngIf='wizardStep===2' [formModel]='finalOfferFormModel'></application-status>
+  <contract *ngIf='wizardStep===3' [formModel]='commodityForm'></contract>
+  <sell-commodity *ngIf='wizardStep===4' [formModel]='commodityForm'></sell-commodity>
+<!--  <promissory-note *ngIf='wizardStep===5' [formModel]='commodityForm'></promissory-note>-->
+  <finish *ngIf='wizardStep===5' isSanad='isSanad'></finish>
+</div>
+
+<arb-buttons *ngIf="pageName==='STEEPER' || pageName==='OTP'">
+
+  <button class='btn btn-default btn-wide' *ngIf='wizardStep<5' type='button' (click)='cancel()'>
+    {{ 'financeProduct.cancel' | translate}}</button>
+
+  <button class='btn btn-primary btn-wide' *ngIf=' wizardStep>1 && wizardStep<5' type='button' (click)='next()'
+          [disabled]='canProceed()'>{{
+    'financeProduct.proceed' | translate}}</button>
+
+
+  <button class='btn btn-default btn-wide' type='button' (click)='reject()'
+          *ngIf='!hasDisbursmentDossier && wizardStep===1'>
+    {{ 'financeProduct.reject' | translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button' (click)='approved()'
+          *ngIf='!hasDisbursmentDossier && wizardStep===1'>{{
+    'financeProduct.approved' | translate}}</button>
+
+<!--  <button *ngIf='showSignAtBranch && wizardStep==5' class='btn btn-default btn-wide' type='button' (click)='setSanadPNCreation()'>-->
+<!--    {{ 'financeProduct.details.signAtBranch' | translate}}</button>-->
+
+<!--  <button class='btn btn-primary btn-wide' *ngIf='wizardStep==5' type='button' (click)='createSanadGroup()'>{{-->
+<!--    'financeProduct.details.digitalSignature' | translate}}</button>-->
+
+  <button class='btn btn-primary btn-wide' *ngIf='wizardStep==5'  type='button' (click)='finish()'>{{
+    'financeProduct.details.finish' | translate}}</button>
+
+</arb-buttons>
+<!--/STEEPER-->
+
+
+<!--IVR-->
+<ivr *ngIf="pageName==='IVR'" ></ivr>
+<arb-buttons *ngIf="pageName==='IVR'">
+  <button class='btn btn-default btn-wide' type='button' (click)='cancel()'>
+    {{ 'financeProduct.cancel' | translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button' (click)='callReceived()' [disabled]='!showIVRReceived'>{{
+    'financeProduct.details.callReceived' | translate}} </button>
+</arb-buttons>
+<!--/IVR-->
+
+<!--IVC-->
+<sellSuccess *ngIf="pageName==='IVC'"  [formModel]='commodityForm'></sellSuccess>
+<arb-buttons *ngIf="pageName==='IVC'">
+  <button class='btn btn-primary btn-wide' type='button' (click)='finish()'>{{
+    'financeProduct.details.finish' | translate}}</button>
+</arb-buttons>
+<!--IVC-->
+
+
+<!-- Reject Modal -->
+<div class='modal fade' bsModal #RejectConfirm='bs-modal' [config]="{ backdrop: 'static' }" role='dialog'>
+  <div class='modal-dialog'>
+    <!-- Modal content-->
+    <div class='modal-content'>
+      <div class='modal-body'>
+        <p>{{ 'financeProduct.details.dear' | translate }}</p>
+        <p class='rejectMsg'>{{ 'financeProduct.details.rejectMsg' | translate }}</p>
+        <p class='rejectNote'><small>{{ 'financeProduct.details.rejectNote' | translate }}</small></p>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' (click)='closeModal(false)' class='btn btn-default' data-dismiss='modal'>
+          {{ 'public.cancel' | translate }}
+        </button>
+        <button type='button' (click)='closeModal(true)' class='btn btn-default' data-dismiss='modal'>
+          {{ 'financeProduct.reject' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Error Modal-->
+<div class='modal fade' bsModal #errorModal='bs-modal' [config]="{ backdrop: 'static' }" role='dialog'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-body'>
+        <p>{{ 'financeProduct.details.readContract' | translate }}</p>
+      </div>
+      <div class='modal-footer'>
+        <arb-buttons>
+          <button type='button' (click)='closeErrorModal(false)' class='btn btn-default btn-wide' data-dismiss='modal'>
+            {{ 'public.cancel' | translate }}
+          </button>
+          <button type='button' (click)='closeErrorModal(true)' class='btn btn-primary btn-wide' data-dismiss='modal'>
+            {{ 'financeProduct.details.download' | translate }}
+          </button>
+        </arb-buttons>
+      </div>
+    </div>
+  </div>
+</div>

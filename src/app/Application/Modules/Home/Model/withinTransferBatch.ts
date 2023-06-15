@@ -1,0 +1,37 @@
+export class WithinTransferBatch {
+  account15Length: string
+  fullAccountNumber: string
+  accountFromFk: number
+  accountNumber: string
+  accountTo: string
+  accountTo15Length: string
+  active: string
+  amount: number
+  amountOptionDetails: number
+  authorizationResponseRecordWSDTO: any
+  batchPk: number
+  beneficiary: string
+  cic: string
+  companyFk: number
+  deleteStatus: boolean
+  email: string
+  futureSecurityLevelsDTOList: any[]
+  futureStatus: string
+  hostRequest: any
+  initiationDate: string
+  initiationResponseRecordWSDTO: any
+  max: number
+  nextStatus: string
+  offset: number
+  order: string
+  orderType: string
+  payLine: number
+  pdfSecurityLevelsDTOList: any[]
+  rejectedReason: string
+  remarks: string
+  securityLevelsDTOList: any[]
+  status: string
+  transferBatchPk: number
+  transferDate: string
+  type: string
+}

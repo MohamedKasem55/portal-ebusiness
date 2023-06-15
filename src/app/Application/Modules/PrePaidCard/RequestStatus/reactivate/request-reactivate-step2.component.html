@@ -1,0 +1,74 @@
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__head">{{'aramcoPayments.paymentDetails' | translate}}
+
+                    </div>
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset [disabled]="true">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4" *ngIf="!isReplaceMode">
+                                        <div class="form-group input-flex-width">
+                                            <label for="relatedAccount">{{
+                                                        'commercialCards.relatedAccount' | translate }}</label>
+                                            <div class="titlePin message" style="margin-top: 10px">
+                                                <span class="border-none">{{batch.accountNumber }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4" *ngIf="!isReplaceMode">
+                                        <div class="form-group">
+                                            <label for="aramcoPayments-amount"
+                                                class="required">{{ 'aramcoPayments.amount' | translate }}</label>
+                                            <div>
+                                                <input id="aramcoPayments-amount" class="form-control"
+                                                    formControlName="amount"
+                                                    inputPattern="onlyPositiveDecimalNumbers" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="organization-name-input">{{ 'myProfile.pending_actions.rejectedReason' |
+                                                translate }}</label>
+                                            <span class="form-control"
+                                                id="organization-name-input">{{batch.rejectedReason}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div *ngIf="generateChallengeAndOTP" class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

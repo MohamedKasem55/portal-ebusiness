@@ -1,0 +1,43 @@
+<div class="container-fluid" *ngFor="let file of sharedData.tableSelected let i = index">
+    <div class="sme-form__content">
+        <div class="sme-page-block sme-wizard-choices">
+            <div class="sme-form__form">
+                <div class="sme-form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__head">{{ 'public.file' | translate }} {{i+1}}
+                            <a class="sme-form__close btn" (click)="deleteFiles(i)"><span class="icon -close"></span></a>
+                        </div>
+                        <div class="sme-form__collapse">
+                            <div class="sme-form__form">
+                                <div class="sme-form__body">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ 'payroll.fileName' | translate }}
+                                                </label>
+                                                <div>
+                                                    <label>{{file["fileName"]}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label>
+                                                    {{ 'public.date' | translate }}
+                                                </label>
+                                                <div>
+                                                    <label>{{ file["dataReceived"] | date:'dd/MM/yyyy'}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    

@@ -1,0 +1,460 @@
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'payroll.uploadAFile' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="deduct-from-account-input">{{ 'payroll.batchName' | translate }}</label>
+                                        <span id="deduct-from-account-input" class="form-control">{{initPayment.payrollCardUploadBatch.batchName}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-levels-table
+            [futureSecurityLevels]="initPayment.payrollCardUploadBatch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'payroll.employeeList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export *ngIf="rol !='wps'" [dataTable]="uploadFilePageTable" [header]="'payroll.employeeList' | translate"
+                    [columns]="[
+{'title':'payroll.employeeName' | translate , 'dataKey': 'cardHolderName'},
+{'title':'payroll.cardNumber' | translate , 'dataKey': 'cardNumber'},
+{'title':'payroll.nationalId' | translate , 'dataKey': 'nationalId'},
+{'title':'payroll.employeeId' | translate , 'dataKey': 'memberId'},
+{'title':'payroll.management.amount' | translate, 'dataKey': 'totalAmount'},
+{'title':'public.date' | translate , 'dataKey': 'lineDate'},
+{'title':'payroll.operationType' | translate , 'dataKey': 'operationCode'}
+]"></table-export>
+
+<table-export *ngIf="rol=='wps'" [dataTable]="uploadFilePageTable" [header]="'payroll.employeeList' | translate"
+                    [columns]="[
+{'title':'payroll.employeeName' | translate , 'dataKey': 'cardHolderName'},
+{'title':'payroll.cardNumber' | translate , 'dataKey': 'cardNumber'},
+{'title':'payroll.nationalId' | translate , 'dataKey': 'nationalId'},
+{'title':'payroll.movilNumber' | translate , 'dataKey': 'mobileNumber'},
+{'title':'payroll.employeeId' | translate , 'dataKey': 'memberId'},
+{'title':'payroll.management.amount' | translate, 'dataKey': 'totalAmount'},
+{'title':'payroll.management.salaryBasic' | translate, 'dataKey': 'salaryBasis'},
+{'title':'payroll.management.housingAllowance' | translate, 'dataKey': 'homeAllowance'},
+{'title':'payroll.management.otherAllowance' | translate, 'dataKey': 'allowanceOthers'},
+{'title':'payroll.management.deduction' | translate, 'dataKey': 'deductions'},
+{'title':'public.date' | translate , 'dataKey': 'lineDate'},
+{'title':'payroll.operationType' | translate , 'dataKey': 'operationCode'}
+]"></table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #uploadFilePageTable class="material sme-table sme-table--responsive table"
+                    [rows]="uploadFilesPage.data"
+                    [columnMode]="defaultColumnMode"
+                    [headerHeight]="30"
+                    [footerHeight]="footerHeight"
+                    [rowHeight]="defaultHeight"
+                    [externalPaging]="false"
+                    [externalSorting]="false"
+                    [limit]="uploadFilesPage.page.pageSize"
+                    >
+
+                    <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.employeeName' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.cardHolderName }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.cardNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.cardNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.nationalId' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.nationalId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" *ngIf="rol == 'wps'">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.movilNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mobileNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" *ngIf="rol != 'wps'">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'payroll.employeeId' | translate }}</label>
+                                                    <div>
+                                                        <span>{{ row.memberId }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6" *ngIf="rol == 'wps'">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.employeeId' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.memberId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.management.amount' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.totalAmount | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" *ngIf="rol != 'wps'">
+                                                <!-- sme-form-group -->
+                                                <div class="form-group">
+                                                    <label
+                                                       >{{'public.date' | translate }}</label>
+                                                    <div>
+                                                        <span>{{row.lineDate | dateFormat:'dd/MM/yyyy'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row" *ngIf="rol == 'wps'">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.management.salaryBasic' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.salaryBasis | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.management.housingAllowance' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.homeAllowance | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row" *ngIf="rol == 'wps'">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.management.otherAllowance' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.allowanceOthers | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.management.deduction' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.deductions | amountCurrency}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6" *ngIf="rol == 'wps'">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'public.date' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.lineDate | dateFormat:'dd/MM/yyyy'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{'payroll.operationType' | translate }}</label>
+                                                <div>
+                                                    <span>{{'payrollcardsOperations' | modelPipe:row.operationCode}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                    </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="cardHolderName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.employeeName' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="cardNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.cardNumber' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="nationalId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.nationalId' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                         <ngx-datatable-column prop="mobileNumber" *ngIf="rol == 'wps'">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.movilNumber' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="memberId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.employeeId' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="totalAmount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.management.amount' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value"   ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="salaryBasis" *ngIf="rol == 'wps'">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.management.salaryBasic' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value"   ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="homeAllowance" *ngIf="rol == 'wps'">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.management.housingAllowance' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value"   ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="allowanceOthers" *ngIf="rol == 'wps'">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.management.otherAllowance' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value"   ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="deductions" *ngIf="rol == 'wps'">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.management.deduction' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value"   ngx-datatable-cell-template>
+                                <span>{{value | amountCurrency}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="lineDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.date' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value"   ngx-datatable-cell-template>
+                                <span>{{value | dateFormat:'dd/MM/yyyy'}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="operationCode">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'payroll.operationType' | translate }}
+                                </span>
+                            </ng-template>
+                             <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{ 'payrollcardsOperations' | modelPipe:value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')" [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')" [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')" [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')" [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)" (change)="uploadFilePageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount - ((curPage - 1) * pageSize) : pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                        <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                        <div class="sme-select form-control">
+                                            <select class="form-control" (change)="setPageSize($event)">
+                                                <option *ngFor="let opt of [10, 20, 50]" [value]="opt">
+                                                    {{opt}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                       </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'payroll.summaryAndFees' | translate}}</div>
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'payroll.numberCards' | translate }}</label>
+                                        <span class="form-control">{{initPayment.totalPayments}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'payroll.totalAmount' | translate }}</label>
+                                        <span class="form-control">{{initPayment.totalAmount | amountCurrency}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'payroll.expectedFees' | translate }}</label>
+                                        <span class="form-control">{{initPayment.cardsFeesInquiryDTO.fileFees | amountCurrency}}</span>
+                                        <app-vat-calculator [fee]="initPayment.cardsFeesInquiryDTO.fileFees"></app-vat-calculator>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.status' | translate }}</label>
+                                        <span class="form-control">{{initPayment.wsStatus}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                     
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="sme-head">
+    </div>
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                    <fieldset>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <app-secured-authentication [generateChallengeAndOTP]="initPayment.generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                    </div>
+                                </div>
+                            </div>
+                    </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

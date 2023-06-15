@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+                            <div *ngIf="operationType===stolenOpType" class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                {{'prePaidCard.stolenOk' | translate}}
+                                <small *ngIf="translate.currentLang === 'en'">{{'public.thanks' | translate }}</small>
+                            </div>
+                            <div *ngIf="operationType===replaceOpType" class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                {{'prePaidCard.replaceOk' | translate}}
+                                <small *ngIf="translate.currentLang === 'en'">{{'public.thanks' | translate }}</small>
+                            </div>
+                            <div *ngIf="operationType===closureOpType" class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                {{'prePaidCard.closureOk' | translate}}
+                                <small *ngIf="translate.currentLang === 'en'">{{'public.thanks' | translate }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+   <div class="sme-breadcrumb">
+       <ol class="breadcrumb">
+           <li class="active">{{ 'dashboard.payments' | translate }}</li>
+           <li class="active">{{ 'dashboard.invoiceHUB' | translate }}</li>
+       </ol>
+   </div>
+   	
+	<div class="container-fluid">	
+      <div class="sme-page-block">
+           <div class="sme-form">
+			<div class="sme-form__title"></div>
+
+                <div class="sme-form__content">
+					<form autocomplete="off" class="sme-form__form">
+						<div class="sme-form__body">
+						  <div class="row">
+                <ul>
+                    <li *ngIf="authenticationService.activateOption('EsalPayInvoice',[],[])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                        (click)="goPaySingleInvoice()">
+                            {{ 'invoiceHUB.paySingleInvoice' | translate }}
+                        </a>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('EsalPayMultiple',[],[])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                        (click)="goPayMultipleInvoice()">
+                            {{ 'invoiceHUB.payMultipleInvoice' | translate }}
+                        </a>
+                    </li>
+                    <li *ngIf="authenticationService.activateOption('EsalRequestStatus',[],[])">
+                        <a class="human-selectable" routerLinkActive="active" (click)="goRequestStatus()">
+                            {{ 'invoiceHUB.requestStatus' | translate }}
+                        </a>
+                    </li>
+                    <!-- <li *ngIf="authenticationService.activateOption('EsalFeedBackFiles',[],[])">
+                        <a class="human-selectable" routerLinkActive="active" (click)="goFeedBackFiles()">
+                            {{ 'invoiceHUB.feedbackFile' | translate }}
+                        </a>
+                    </li> -->
+                    <li *ngIf="authenticationService.activateOption('EsalInvoiceHistory',[],[])">
+                        <a class="human-selectable" routerLinkActive="active" (click)="goInvoiceHistory()">
+                            {{ 'invoiceHUB.invoiceHistory' | translate }}
+                        </a>
+                    </li>
+                                <li *ngIf="authenticationService.activateOption('EsalInvoiceHistory',[],[])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                        (click)="goProcessedTransactions()">
+                                        {{ 'menu.sadad.esal.processed_Transactions' | translate }}
+                                    </a>
+                                </li>
+                    <li *ngIf="authenticationService.activateOption('EsalDashboard',[],[])">
+                        <a class="human-selectable" routerLinkActive="active" (click)="goReports()">
+                            {{ 'invoiceHUB.reports' | translate }}
+                        </a>
+                    </li> 
+                </ul> 
+              </div>
+            </div>	
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

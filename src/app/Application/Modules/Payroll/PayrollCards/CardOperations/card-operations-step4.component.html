@@ -1,0 +1,120 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+
+                            <div class="sme-wizard__success" *ngIf="isOk() &&!isPending()">
+                                <span class="icon -check"></span>
+                                {{'public.requestOk' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+                            <div class="sme-wizard__success" *ngIf="isOk() && isPending()">
+                                <span class="icon -check"></span>
+                                {{'payments.sucessPendingRequest' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+                            <div class="sme-wizard__success" *ngIf="!isOk()">
+                                <span class="icon -close" style="color:red"></span>
+                                <p>{{ 'payments.failedRequest' | translate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-content-container container-fluid" *ngIf="!isOk()">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.detailResult' | translate }}</div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #reportErrorTable
+                class="material sme-table sme-table--responsive table" [rows]="sharedData.validation.details"
+                [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="50" [rowHeight]="defaultHeight"
+                [externalPaging]="false" [count]="sharedData.validation.details.length"
+                [limit]="(sharedData.validation.details.length < 5? sharedData.validation.details.length : 5)">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'payroll.cardNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.cardNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{'public.details' |translate }}</label>
+                                        <div>
+                                            <span
+                                                *ngIf="translate.currentLang != 'en'">{{ row.arabicDescription }}</span>
+                                            <span
+                                                *ngIf="translate.currentLang === 'en'">{{ row.englishDescription }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="cardNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'payroll.cardNumber' | translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="arabicDescription" *ngIf="translate.currentLang != 'en'">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.details' |translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="englishDescription" *ngIf="translate.currentLang === 'en'">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                            {{'public.details' |translate }}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)"
+                                [visiblePagesCount]="visiblePagesCount"
+                                (change)="reportErrorTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

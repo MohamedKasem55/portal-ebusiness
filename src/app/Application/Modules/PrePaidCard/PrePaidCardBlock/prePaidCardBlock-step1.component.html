@@ -1,0 +1,95 @@
+<div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div *ngIf="operationType!==closureOpType" class="legend" class="title-legend">
+                                    {{'prePaidCard.reasonTitle' | translate}}
+                                </div>
+                                <hr class="hr-title">
+                                <div class="page">
+                                    <div class="form-center">
+                                        <div class="head">
+                                            <div class="display-div-column blockCardNumber">
+                                                {{selectedPrepaidCard?.cardNumber}}
+                                            </div>
+                                            <div id="image" class="display-div-column">
+                                                <span class="image-target-prepaid"></span>
+                                            </div>
+                                            <div>
+                                                <!-- <span *ngIf="operationType !== closureOpType" -->
+                                                <span class="display-div-column card-message-margin">
+                                                    {{'prePaidCard.reasonText' | translate}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="body" *ngIf="operationType !== closureOpType && form" -->
+                                        <div class="body" [formGroup]="form">
+                                            <div class="titlePin message"> <span
+                                                    class="display-div-column new-pin">{{'prePaidCard.reasonTitle' |
+                                                    translate}}</span>
+                                            </div>
+                                            <div class="sme-select form-control select-flex-width">
+                                                <select id="reasons" class="form-control" name="reasons"
+                                                    formControlName="reason" required>
+                                                    <option selected value disabled>
+                                                        -- {{ 'commercialCards.selectReason' | translate }} --</option>
+                                                    <option *ngFor="let reason of reasonsCombo" [value]="reason.key">
+                                                        {{reason.value | titlecase}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="form.controls.reason.hasError('required') && form.controls.reason.touched"
+                                                    class="alert alert-danger">
+                                                    <small>{{'transfer.error.reasonRequired' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- <div *ngIf="replaceOpType === operationType"
+                                                [ngClass]="checkRequiredReason()">
+                                                <div class="titlePin message">
+                                                    <span class="display-div-column new-pin">
+                                                        {{'prePaidCard.accountTitle' | translate}}
+                                                    </span>
+                                                </div>
+                                                <div class="sme-select form-control select-flex-width">
+                                                    <select id="payment-options-accountFrom" class="form-control"
+                                                        formControlName="account">
+                                                        <option selected value disabled>
+                                                            -- {{ 'public.selectAccount' | translate }} --</option>
+                                                        <option *ngFor="let account of comboAccounts"
+                                                            [value]="account.value.fullAccountNumber">
+                                                            {{account.value.fullAccountNumber}}{{(account.value.alias !=
+                                                            '' ? ' - '+ account.value.alias : '')}}
+                                                            {{(account.value.inquiry ? (' - '
+                                                            +(account.value.availableBalance |
+                                                            amountCurrency:account.value.currency)) : '')}}
+                                                            {{(account.value.inquiry ? ('currencyIso' |
+                                                            modelPipe:account.value.currency) :'')}}
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="form.controls.account.hasError('requiredAccount') && form.controls.account.touched"
+                                                        class="alert alert-danger">
+                                                        <small>{{'transfer.error.accountRequired' | translate }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+                                        <div class="footer">
+                                            <div class="center-error">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<app-aramcopayments-table 
+    [items]="billsPagedResults.items"
+    [modal]="modalAuth"
+    [tableDisplaySize]="tableDisplaySize"
+    [totalSize]="billsPagedResults.total"
+    [futureLevels]="false"
+    [externalPagination]="true"
+    [selectable]="true"
+    (setPage)="setPage($event)"
+    (changeDisplaySize)="changeDisplayWithin($event)"
+    [step]="1"
+    [aproveFlow]="false" >
+</app-aramcopayments-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

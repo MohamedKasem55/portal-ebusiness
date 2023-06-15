@@ -1,0 +1,21 @@
+<div class="container-fluid docs-component" *ngIf="confirmPaymentResponse && confirmPaymentResponse.fileName">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <b>{{'payments.processedFile.fileReference' | translate}}</b> {{confirmPaymentResponse.fileName}}
+                    <br/>
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<arb-confirm-panel *ngIf="!(confirmPaymentResponse && confirmPaymentResponse.fileName)"
+                   [pending]="true"
+                   [hasFinishAction]="false">
+</arb-confirm-panel>

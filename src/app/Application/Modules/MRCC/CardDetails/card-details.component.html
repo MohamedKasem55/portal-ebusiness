@@ -1,0 +1,202 @@
+<arb-panel>
+  <form autocomplete='off' #posInitialOffer='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='mainLegend'>{{ 'mrcc.businessCreditCard' | translate }}</div>
+
+      <div class='legend'>{{ 'mrcc.creditCard' | translate }}</div>
+      <div class='row' *ngIf='!isSummary'>
+        <div class='col-xs-12 col-sm-12'>
+          <div class='form-group'>
+            <img class='mrccImg' src='assets/img/mrcc.png'>
+          </div>
+        </div>
+      </div>
+
+      <div class='row divPadding'>
+        <!-- Embossing Name -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'mrcc.embossingName' | translate }} </label>
+            <div class='form-control' *ngIf='embosingNameList.length>0'>
+
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='embossingName'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor='let item of embosingNameList' [value]='item'>
+                  {{item}}
+                </ng-option>
+              </ng-select>
+            </div>
+            <div class='input-group' *ngIf='embosingNameList.length==0'>
+              <input class='form-control' formControlName='embossingName' [maxLength]='30' />
+            </div>
+          </div>
+          <div
+            *ngIf="formModel.controls.embossingName.hasError('required') && formModel.controls.embossingName.touched"
+            class='alert alert-danger'>
+            <small> {{ 'mrcc.embossingName' | translate }} is required
+            </small>
+          </div>
+          <div *ngIf="formModel.controls.embossingName.hasError('pattern')
+                     && formModel.controls.embossingName.touched" class='alert alert-danger bottomAlert'>
+            <small>
+              {{'mrcc.embossingName' | translate}} {{'error.invalid' | translate }}
+            </small>
+          </div>
+        </div>
+        <!-- /Embossing Name -->
+
+        <!-- Embossing Company Name -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'mrcc.embossingCompanyName' | translate }} </label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='embossingCompanyName' [maxLength]='30' />
+            </div>
+          </div>
+          <div
+            *ngIf="formModel.controls.embossingCompanyName.hasError('required') && formModel.controls.embossingCompanyName.touched"
+            class='alert alert-danger'>
+            {{ 'mrcc.embossingCompanyName' | translate }} is required
+          </div>
+          <div *ngIf="formModel.controls.embossingCompanyName.hasError('pattern')
+                     && formModel.controls.embossingCompanyName.touched" class='alert alert-danger bottomAlert'>
+            <small>
+              {{'mrcc.embossingCompanyName' | translate}} {{'error.invalid' | translate }}
+            </small>
+          </div>
+        </div>
+        <!-- Embossing Company Name -->
+
+        <!-- Account -->
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'mrcc.account' | translate }} </label>
+            <div class='form-control'>
+
+              <ng-select bindLabel='value' [notFoundText]="'public.noData' | translate"
+                         formControlName='account'>
+                <ng-option selected='selected' value='' disabled='disabled'>
+                  --{{ 'public.selectOption' | translate }}--
+                </ng-option>
+                <ng-option *ngFor='let item of accounts' [value]='item'>
+                  {{item}}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="formModel.controls.account.hasError('required') && formModel.controls.account.touched"
+                   class='alert alert-danger'>
+                <small> {{ 'mrcc.account' | translate }} is required
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /Account -->
+
+
+        <!-- Amount -->
+
+        <div class='col-xs-12 col-sm-3'>
+          <div class='form-group'>
+            <label>{{ 'mrcc.amount' | translate }} </label>
+            <div class='input-group'>
+              <input class='form-control' formControlName='amount' [max]='maxAmount'
+                     inputPattern='onlyPositiveDecimalNumbers' decimal-precision />
+            </div>
+            <div *ngIf='!isSummary'>
+              <span class='glyphicon glyphicon-exclamation-sign hint'></span>
+              <span class='hintLabel'>{{ 'mrcc.financeLimit' | translate }} {{maxAmount | amountCurrency}} SAR </span>
+            </div>
+            <div
+              *ngIf="formModel.controls.amount.hasError('max') && formModel.controls.amount.touched"
+              class='alert alert-danger'>
+              <small> {{ 'mrcc.financeLimit' | translate }} {{maxAmount}} SAR
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- /Amount -->
+
+      </div>
+
+
+    </fieldset>
+  </form>
+
+  <div class='legend margin-top' *ngIf='mandatoryDocuments.length>0'>{{ 'mrcc.attachDocuments' | translate }}</div>
+
+  <div class='row divPadding' *ngIf='mandatoryDocuments.length>0'>
+    <div class='col-xs-12 col-sm-3' *ngFor='let item of mandatoryDocuments'>
+      <div class='form-group'>
+        <label>{{ item.name }}</label>
+        <div class='input-group'>
+          <input type='text' class='form-control' placeholder='Upload file' [disabled]='true'
+                 [(ngModel)]='item.file'>
+          <span class='input-group-btn' *ngIf='!isSummary'>
+                        <div class='fileUpload btn'>
+                            <span>{{'public.upload' | translate | uppercase}}</span>
+                            <input type='file' (change)='fileUploadChange($event,item)'
+                                   accept='.pdf,.png,.jpeg,.jpg,.gif'
+                                   class='upload'>
+                        </div>
+                    </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form autocomplete='off' #posInitialOffer='ngForm' class='sme-form__form' novalidate>
+    <fieldset [formGroup]='formModel'>
+      <div class='legend margin-top'>{{ 'mrcc.repaymentOptions' | translate }}</div>
+      <div class='row divPadding'>
+
+        <div class='col-xs-12 col-sm-3' [ngClass]="!isSummary ?
+                (formModel.controls['repaymentOption'].value =='5'? 'radioDiv blueDiv':'radioDiv'):'radioSummary'"
+             (click)='ChangeRepaymentOption(5)'
+             *ngIf="!(isSummary && formModel.controls['repaymentOption'].value !='5')">
+          <div class='sme-radio radio'>
+            <label>
+              <input type='radio' value='5' formControlName='repaymentOption'>
+              <i aria-hidden='true'></i>
+              <span>5% {{'mrcc.dueAmount' | translate }}</span>
+            </label>
+          </div>
+        </div>
+        <div class='col-xs-12 col-sm-3' [ngClass]="!isSummary ?
+                (formModel.controls['repaymentOption'].value =='100'? 'radioDiv blueDiv':'radioDiv'):'radioSummary'"
+             (click)='ChangeRepaymentOption(100)'
+             *ngIf="!(isSummary && formModel.controls['repaymentOption'].value !='100')">
+          <div class='sme-radio radio'>
+            <label>
+              <input type='radio' value='100' formControlName='repaymentOption'>
+              <i aria-hidden='true'></i>
+              <span>100% {{'mrcc.dueAmount' | translate }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+      <div class='legend'>{{ 'financeProduct.termsConditions.termsConditions' | translate }}</div>
+      <div class='row'>
+
+        <p class='margin-checBox'>
+          <label class='sme-checkbox checkbox-inline'>
+            <input type='checkbox' formControlName='termsAccept' />
+            <i aria-hidden='true'></i>
+            <span class='checkSpan'>{{ 'financeProduct.termsConditions.iAccept' | translate }}  </span>
+          </label>
+          <span class='link' (click)='openTermsConditions()'>{{
+            'financeProduct.termsConditions.termsConditions' | translate }}</span>
+        </p>
+        <!--        <p class='hint'>-->
+        <!--          {{'financeProduct.details.offerHint' | translate}}-->
+        <!--        </p>-->
+      </div>
+
+
+    </fieldset>
+  </form>
+</arb-panel>

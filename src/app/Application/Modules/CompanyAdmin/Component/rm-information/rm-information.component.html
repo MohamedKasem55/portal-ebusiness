@@ -1,0 +1,78 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div *ngIf="sharedData.relationshipManagerInfoDTO; else noRMInformationData">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'menu.company_admin.rmInformation.relationshipManager' | translate
+                                            }}</label>
+                                        <div>
+                                            <span class="form-control">{{
+                                                sharedData?.relationshipManagerInfoDTO?.userFullName
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'menu.company_admin.rmInformation.emailAddress' | translate }}</label>
+                                        <div>
+                                            <span class="form-control">{{ sharedData?.relationshipManagerInfoDTO?.mail
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'menu.company_admin.rmInformation.phoneNumber' | translate }}</label>
+                                        <div>
+                                            <span *ngIf="languaje!=='ar'" class="form-control">{{
+                                                sharedData?.relationshipManagerInfoDTO?.telephoneNumber
+                                                }}</span>
+                                            <span *ngIf="languaje==='ar'" dir="ltr" style="direction: ltr"
+                                                class="form-control RMarabicTelf">{{
+                                                sharedData?.relationshipManagerInfoDTO?.telephoneNumber
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noRMInformationData>
+                            <div class="row">
+
+                                <div style="text-align: center">
+                                    <img src="img/Search.png" />
+                                </div>
+                                <div class="col-xs-12 col-sm-12 RMImage">
+                                    <label class="RmMessageLabel">{{ 'menu.company_admin.rmInformation.firstmessage' |
+                                        translate }}</label>
+                                    <label class="RmMessageLabel">{{ 'menu.company_admin.rmInformation.secondmessage' |
+                                        translate }}</label>
+                                    <label class="RmNumberLabel">{{ 'menu.company_admin.rmInformation.reason' |
+                                        translate }}</label>
+                                </div>
+                                <!-- <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'menu.company_admin.rmInformation.corporateNumber' | translate  }}</label>
+                                        <div>
+                                            <!-- <span class="form-control">{{ this.contactNumber }}</span> comentado !!
+                                            <span class="form-control">{{ 'menu.company_admin.rmInformation.corporateNumberNum' | translate}}</span>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

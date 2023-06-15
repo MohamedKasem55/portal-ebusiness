@@ -1,0 +1,72 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li>{{ 'public.accounts'| translate }}</li>
+		<li class="active">{{ 'accounts.monthlyStatements.name'| translate }}</li>
+	</ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <label class="sme-form__title">
+                    <span>{{ 'accounts.monthlyStatements.name' | translate }}</span>
+                </label>
+
+                <div class="sme-form__body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="form-group">
+                                <label>{{ 'accounts.monthlyStatements.currentAccount' | translate }}</label>
+                                    <ng-select id="year" class="form-control" name="account" [(ngModel)]="account"  [placeholder]="canShowSelectPlaceHolder(account) ? ('-- '+('public.selectAccount' | translate )+' --'):''" (change)="accountSelected()" required>
+                                        <ng-option selected value disabled>-- {{ 'public.selectAccount' | translate }} --</ng-option>
+                                        <ng-option *ngFor="let account of accountFrom" [value]="account.value.fullAccountNumber"> {{account.value.fullAccountNumber}}{{(account.value.alias != '' ? ' - '+ account.value.alias : '')}} {{(account.value.inquiry ? (' - ' +(account.value.availableBalance | amountCurrency:account.value.currency)) : '')}} {{(account.value.inquiry ?  ('currencyIso' | modelPipe:account.value.currency) :'')}} </ng-option>
+                                    </ng-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-offset-3">
+
+
+                              <ngx-datatable [messages]="{emptyMessage: 'accounts.monthlyStatements.noStatements' | translate}" #monthlyStatementsTable
+                                  class="material sme-table sme-table--responsive table" [rows]="monthlyStatements.data"
+                                  [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="defaultHeight"
+                                  [rowHeight]="defaultHeight" [limit]="monthlyStatements.page.pageSize">
+
+                                  <ngx-datatable-column name="month">
+                                      <ng-template let-column="column" ngx-datatable-header-template>
+                                          {{ 'accounts.monthlyStatements.name' | translate }}
+                                      </ng-template>
+                                      <ng-template let-row="row" ngx-datatable-cell-template>
+                                          <span class="form-control human-selectable">
+                                            <a (click)="downloadFile(row)">{{ getMonthFullName(row.month) }} {{ row.year }}</a>
+                                          </span>
+                                      </ng-template>
+								  </ngx-datatable-column>
+
+                                  <ngx-datatable-column name="format">
+                                      <ng-template let-column="column" ngx-datatable-header-template>
+                                          {{ 'public.type' | translate }}
+                                      </ng-template>
+                                      <ng-template let-row="row" ngx-datatable-cell-template>
+                                          <ng-select [notFoundText]="'public.noData' | translate" [(ngModel)]="row.choosenFile" [markFirst]="true" style="min-width: 70px">
+
+											  <ng-option *ngIf="row.pathX" [value]="row.pathX">{{ 'public.xlsx' | translate }}</ng-option>
+											  <ng-option *ngIf="row.path" [value]="row.path">{{ 'public.pdf' | translate }}</ng-option>
+										  </ng-select>
+                                      </ng-template>
+                                  </ngx-datatable-column>
+
+                              </ngx-datatable>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

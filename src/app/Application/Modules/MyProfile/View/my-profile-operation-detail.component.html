@@ -1,0 +1,91 @@
+<arb-breadcrumb [routes]="[
+    ['myProfile.myProfile'],
+    ['myProfile.activityLogs.activityLogs','/myprofile/activityLogs'],
+    ['public.details'],
+    [ this.detailsData && this.detailsData['auditReport']? ('activityOperationLog' | modelPipe: this.detailsData['auditReport'].operation):'' ]
+]">
+</arb-breadcrumb>
+
+<div class="container-fluid" *ngIf="this.detailsData && this.detailsData['auditReport']">
+    <div class="detail-container">
+        <div class="activity-logs-detail">
+
+            <h3 class="title"> {{ 'activityOperationLog' | modelPipe: this.detailsData['auditReport'].operation }} </h3>
+
+            <div class="description-container">
+                <div class="info-container">
+                    <div>
+                        <strong>{{ 'public.name' | translate }}</strong>
+                        <span>{{ this.detailsData['auditReport'].userName }}</span>
+                    </div>
+                    <div>
+                        <strong>{{ 'public.userId' | translate }}</strong>
+                        <span>{{ this.detailsData['auditReport'].userId }}</span>
+                    </div>
+                    <div>
+                        <strong>{{ 'public.organizationId' | translate }}</strong>
+                        <span>{{ this.detailsData['auditReport'].companyId }}</span>
+                    </div>
+                    <div>
+                        <strong>{{ 'public.userType' | translate }}</strong>
+                        <span>{{ 'userType' | modelPipe: this.detailsData['auditReport'].userType }}</span>
+                    </div>
+                    <div>
+                        <strong>{{ 'payroll.operation' | translate }}</strong>
+                        <span>{{ 'activityOperationLog' | modelPipe: this.detailsData['auditReport'].operation }}</span>
+                    </div>
+                    <div>
+                        <strong>{{ 'public.time' | translate }}</strong>
+                        <span>{{ this.detailsData['auditReport'].timeStamp }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<arb-panel>
+    <fieldset [formGroup]="formModel">
+        <app-dynamic-simple-extras-form-fields *ngIf="operationId && formConfig"
+                                               [title]="'myProfile.activityLogs.activityLogs'"
+                                               [translate_prefix]="'public'"
+                                               [combosData]="[]"
+                                               [formModel]="formModel"
+                                               [fieldsConfigs]="formConfig"
+                                               (onAllFieldsCreated)="disableFormModel()">
+        </app-dynamic-simple-extras-form-fields>
+    </fieldset>
+</arb-panel>
+-->
+
+<arb-table-panel
+        *ngIf="this.detailsData && this.detailsData.auditDetailLines && this.detailsData.auditDetailLines.items">
+
+    <ngx-datatable class="material sme-table sme-table--responsive table"
+                   [rows]="this.detailsData.auditDetailLines.items"
+                   [headerHeight]="30"
+                   [footerHeight]="50"
+                   [limit]="this.detailsData.auditDetailLines.items.length">
+
+        <ngx-datatable-column prop="fieldCode" name="Field Code" [width]="300">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{ 'auditReports' | modelPipe: getCodeValue(value) }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="fieldValue" name="Field Value" [width]="400">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span *ngIf="checkCoding(value)">{{ getPipeType(value) | modelPipe: getValue(value) }}</span>
+                <span *ngIf="!checkCoding(value)">{{ value }}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+    </ngx-datatable>
+
+</arb-table-panel>
+
+<arb-panel-buttons>
+    <button class="btn btn-default btn-wide" (click)="back()">
+        {{'public.back' | translate }}
+    </button>
+</arb-panel-buttons>

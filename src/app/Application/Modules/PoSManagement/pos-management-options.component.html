@@ -1,0 +1,36 @@
+   <div class="sme-breadcrumb">
+       <ol class="breadcrumb">
+         <li>{{ 'companyAdmin.companyAdmin'| translate }}</li>
+         <li class="active">{{ 'posManagement.name' | translate }}</li>
+       </ol>
+   </div>
+   	
+	<div class="container-fluid">	
+      <div class="sme-page-block">
+           <div class="sme-form">
+			<div class="sme-form__title"></div>
+
+                <div class="sme-form__content">
+					<form autocomplete="off" class="sme-form__form">
+						<div class="sme-form__body">
+						  <div class="row">
+                <ul>
+                    <li>
+                        <a class="human-selectable" routerLinkActive="active" (click)="goPoSManagementUserList()">
+                            {{ 'posManagement.posUserList'| translate }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="human-selectable" routerLinkActive="active" (click)="goPoSManagementTerminalAsign()">
+                            {{ 'posManagement.posTerminalAsign'| translate }}
+                        </a>
+                    </li>
+                   
+                </ul> 
+              </div>
+            </div>	
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

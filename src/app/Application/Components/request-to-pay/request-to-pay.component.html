@@ -1,0 +1,23 @@
+<div class='modal fade' bsModal #RTPCompanyModal='bs-modal' [config]="{backdrop: 'static',  keyboard: false}"
+     role='dialog'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-title'>
+                <button type="button" class="close" (click)="close()">
+                    <span aria-hidden="true" class="icon -close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class='modal-header-img'>
+                    <img src="assets/img/notify.png">
+                </div>
+                <h1> {{'rtp.rtp' | translate}}</h1>
+                <h3 [innerHtml]="getTranslatedText('rtp.notification-msg')"></h3>
+            </div>
+            <div class='modal-footer'>
+                <button class=" btn btn-primary btn-wide"
+                        (click)="goTo()">{{'rtp.goTo' | translate}}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-initiator-wizard-modify *ngIf="suspendData && suspendData.lockBoxUser"
+                             [title]="selectedActionMsg"
+                             [currentItem]="suspendData.lockBoxUser"
+                             [entityName]="null"
+                             [entityProperties]="entityProperties"
+                             [service]="changeStatusService"
+                             [translate_prefix]="'lockbox.cdmUsers'"
+                             [backUrl]="getBackUrl()"
+                             [combosKeys]="combosKeys"
+                             [combosData]="combosData"
+                             (onAllFieldsCreated)="initFormCreated($event)"
+                             [pending]="false">
+</app-initiator-wizard-modify>

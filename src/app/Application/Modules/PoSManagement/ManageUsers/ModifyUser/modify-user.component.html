@@ -1,0 +1,31 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{ 'companyAdmin.companyAdmin'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/companyadmin/pos']">{{ 'posManagement.name'| translate }}</a></li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/companyadmin/pos/user-list']">{{ 'posManagement.posUserList'| translate }}</a></li>
+        <li class="active">{{ 'posManagement.detailEmployee'| translate }}</li>
+    </ol>
+</div>
+        
+    
+<app-modify-user-step1 *ngIf="step === 1"
+[selectedUser]="selectedUser">
+	
+</app-modify-user-step1>
+
+<app-modify-user-step2 *ngIf="step === 2"
+[selectedUser]="selectedUser"
+[form]="passwordForm">
+	
+</app-modify-user-step2>
+
+<app-modify-user-step3 *ngIf="step === 3">
+	
+</app-modify-user-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="delete()" *ngIf="step == 1">{{'posManagement.delete' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="resetPassword()" *ngIf="step == 1">{{'posManagement.resetPassword' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="confirmResetPassword()" *ngIf="step == 2" [disabled]="!passwordForm.valid">{{'posManagement.resetPassword' | translate}}</button>
+</div>

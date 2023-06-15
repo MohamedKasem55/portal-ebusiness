@@ -1,0 +1,23 @@
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div *ngIf="this.sharedData && this.sharedData['batchList'].toAuthorize.length > 0" class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'workflow.successPendingRequest' | translate }}</p>
+                </div>
+
+                <div *ngIf="this.sharedData && this.sharedData['batchList'].toProcess.length > 0" class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'workflow.succesRequest' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button"
+                            class="btn btn-primary btn-wide">{{ 'public.finish' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

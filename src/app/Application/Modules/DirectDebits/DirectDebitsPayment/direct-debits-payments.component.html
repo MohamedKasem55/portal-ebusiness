@@ -1,0 +1,77 @@
+
+<!-- breadcrumb --> 
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+         <li>{{ 'dashboard.payments'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/direct-debits']">{{ 'dashboard.directDebits'| translate }}</a></li>
+        <li class="active">{{ 'directDebits.generateClaimFile'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+	<div class="sme-page-block">
+				<ul class="sme-box sme-wizard__steps">
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+						<span>
+							<span class="num">1</span>
+							<span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+						</span>
+					</li>
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+						<span>
+							<span class="num">2</span>
+							<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+						</span>
+					</li>
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+						<span>
+							<span class="icon -check"></span>
+							<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+						</span>
+					</li>
+				</ul>
+	</div>
+</div>
+
+<div class="container-fluid" *ngIf="validData?.errors?.length > 0 || validData?.warnings?.length > 0">
+	<div class="sme-page-block">
+		<div  class="alert alert-danger" *ngFor="let err of validData?.errors">
+			<small>{{err}}</small>
+		</div>
+		<div  class="alert alert-warning" *ngFor="let err of validData?.warnings ">
+			<small>{{err}}</small>
+		</div>
+	</div>
+</div>
+
+<app-direct-debits-payments-step1 *ngIf="step === 1"
+[form]="form"
+[tableSelectedRows]="tableSelectedRows"
+(onInit)="onInitStep1($event)">
+
+	
+</app-direct-debits-payments-step1>
+
+<app-direct-debits-payments-step2 *ngIf="step === 2"
+[validData]="validData"	
+[tableSelectedRows]="tableSelectedRows"
+[form]="form"
+[bank]="bank"
+[generateChallengeAndOTP]="generateChallengeAndOTP"
+[requestValidate]="requestValidate"
+(onInit)="onInitStep2($event)">
+
+</app-direct-debits-payments-step2>
+
+<app-direct-debits-payments-step3 *ngIf="step === 3"
+[fileSystemName]="fileSystemName" 
+[generateChallengeAndOTP]="generateChallengeAndOTP"
+>
+	
+</app-direct-debits-payments-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide"  (click)="next()" *ngIf="step < 3" [disabled]="isValidForm()"> {{'public.next' | translate}}</button>
+    <button class="btn btn-primary btn-wide"  (click)="next()" *ngIf="step == 3" [disabled]="isValidForm()">{{'public.finish' | translate}}</button>
+</div>

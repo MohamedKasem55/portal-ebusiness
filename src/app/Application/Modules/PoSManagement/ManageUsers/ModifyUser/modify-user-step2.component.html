@@ -1,0 +1,85 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'posManagement.changePassword' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posManagement.userId' | translate }}</label>
+                                        <span class="form-control">{{selectedUser.userId}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posManagement.userName' |
+                                            translate }}</label>
+                                        <span class="form-control">{{selectedUser.userName}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posManagement.mobile' |
+                                            translate }}</label>
+                                        <span class="form-control">{{selectedUser.mobile}}</span>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'companyAdmin.user.password' | translate }}</label>
+                                        <input type="password" class="form-control" name="password"
+                                               formControlName="password"
+                                               pattern="{{authenticationService.getPasswordInputPattern()}}"
+                                               maxlength=14 required inputPattern="notArabic">
+                                        <div *ngIf="form.controls.password.hasError('pattern')"
+                                             class="alert alert-danger">
+                                            {{ 'error.passwordRule' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'companyAdmin.user.confirmationPassword' | translate }}</label>
+                                        <input type="password" class="form-control" name="confirmationPassword"
+                                               formControlName="confirmationPassword"
+                                               pattern="^{{this.form.controls['password'].value}}$" maxlength=14
+                                               required inputPattern="notArabic">
+                                        <div *ngIf="form.controls.confirmationPassword.hasError('pattern')"
+                                             class="alert alert-danger">
+                                            {{ 'error.passwordMatch' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

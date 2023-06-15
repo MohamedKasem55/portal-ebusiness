@@ -1,0 +1,263 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{'menu.collections_management.menu' | translate}}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/posstatement']">{{ 'posStatement.name' | translate }}</a></li>
+        <li class="active">{{ 'posStatement.posStatements' | translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+
+    <div class="sme-page-block">
+
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <a (click)="isSearchCollapsed = !isSearchCollapsed"
+                   class="sme-form__head human-selectable sme-form__title" [ngClass]="{'collapsed': isSearchCollapsed}">
+                    <span>{{ 'public.search' | translate }}</span>
+                </a>
+                <div class="sme-form__collapse" id="sme-demo--form--search-criteria-" [collapse]="isSearchCollapsed">
+
+                    <form autocomplete="off" #posRequest="ngForm" (ngSubmit)="filtered(posRequest.value)"
+                          class="sme-form__form" novalidate>
+
+                        <div class="sme-form__body">
+
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'accounts.pos.terminal_id' | translate }} </label>
+                                        <ng-select class="form-control" [(ngModel)]="model.terminalId"
+                                                   #terminalId="ngModel" name="terminalId">
+                                            <ng-option selected value disabled>
+                                                -- {{ 'public.selectDropdown' | translate }} --
+                                            </ng-option>
+                                            <ng-option *ngFor="let terminalid of terminalIds" form>
+                                                {{ terminalid }}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <!-- fin Terminal id -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- date Received -->
+                                    <div class="form-group">
+                                        <label>{{ 'accounts.pos.dateFrom' | translate }} </label>
+                                        <div class="sme-date">
+                                            <div class="input-group">
+                                                <span class=" input-group-addon icon -calendar"
+                                                      (click)="datefrom.show()"></span>
+                                                <input type="text" style="z-index: 1000;" [(ngModel)]="model.datefrom"
+                                                       #datefrom="bsDatepicker" name="datefrom" class="form-control  "
+                                                       placement="left" bsDatepicker
+                                                       [bsConfig]="bsConfig"/>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- /Region -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- date Received -->
+                                    <div class="form-group">
+                                        <label>{{ 'accounts.pos.dateTo' | translate }} </label>
+
+                                        <div class="sme-date">
+                                            <div class="input-group">
+                                                <span class=" input-group-addon icon -calendar"
+                                                      (click)="dateTo.show()"></span>
+                                                <input type="text" style="z-index: 1000;" [(ngModel)]="model.dateTo"
+                                                       #dateTo="bsDatepicker" name="dateTo" class="form-control  "
+                                                       placement="left" bsDatepicker
+                                                       [bsConfig]="bsConfig"/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- /Region -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'accounts.pos.period' | translate }} </label>
+
+                                        <!-- Terminal ID -->
+                                        <ng-select id="peroId" class="form-control" [(ngModel)]="model.peroIds"
+                                                   name="peroIds">
+                                            <ng-option selected value disabled>
+                                                -- {{ 'public.selectDropdown' | translate }} --
+                                            </ng-option>
+                                            <ng-option *ngFor="let peroId of peroIds" [value]="peroId">
+                                                {{peroId}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <!-- fin Terminal id -->
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="sme-form__actions">
+
+                            <button type="reset" class="btn btn-default btn-wide" [routerLink]="['./']"
+                                    (click)="reset()"> {{ 'public.reset' | translate }}</button>
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-wide">{{ 'public.search' | translate }} </button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+
+        <div class="sme-data-table">
+
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'accounts.pos.name'| translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="accountsPosSearchPanelTable" [header]="'accounts.pos.name' | translate"
+                                  [columns]="
+                    [{'title':'accounts.pos.terminal_id' | translate | uppercase,'dataKey':'terminalId'},
+                    {'title': 'public.type' | translate | uppercase,'dataKey':'type'},
+                    {'title': 'accounts.pos.dateReceived' |  translate | uppercase,'dataKey':'dataReceived'},
+                    {'title': 'accounts.pos.download_statement' |  translate | uppercase,'dataKey': 'fileName'}
+                                     
+                    ]">
+
+                        >
+                    </table-export>
+                </div>
+            </div>
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #accountsPosSearchPanelTable
+                           class="material sme-table sme-table--responsive table" [rows]="posTable"
+                           [columnMode]="defaultColumnMode" [headerHeight]="30"
+                           [footerHeight]="footerHeight"
+
+                           [rowHeight]="defaultHeight"
+                           [limit]="posPage.page.pageSize"
+                           [externalPaging]="false"
+                           [externalSorting]="false"
+                           [selectionType]="defaultSelectionType"
+                           [selected]="selected"
+                           (select)="onSelect($event)">
+                <!-- lo quito de arriba y debo ponerlo       (sort)="setSort($event)" -->
+                <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+                                      [resizeable]="false" [headerCheckboxable]="true"
+                                      [checkboxable]="true">
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="terminalId" [width]="100">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'accounts.pos.terminal_id' | translate }}
+								</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="type" [width]="100">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'public.type' | translate }}
+								</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="dataReceived" [width]="100">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                {{'accounts.pos.dateReceived' | translate }}
+                            </span>
+
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | date:'dd/MM/yyyy' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="fileName" [width]="300">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()" class="datatable-header-cell-wrapper">
+									{{'accounts.pos.download_statement' | translate }}
+								</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span><a class="human-selectable" (click)="dowload($event, value )"> {{ value }} </a></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount"
+                                 let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [hidden]="!((rowCount / pageSize) > 1)"
+                                    [visiblePagesCount]="visiblePagesCount"
+                                    (change)="accountsPosSearchPanelTable.onFooterPage($event)">
+                            </app-datatable-pager>
+
+                            <div class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="posPage.page.pageSize">
+                                            <option [value]="10">10</option>
+                                            <option [value]="20">20</option>
+                                            <option [value]="50">50</option>
+                                            <option [value]="100">100</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="sme-form__actions">
+                            <button class="btn btn-primary btn-wide" (click)=multipleflies($event)
+                                    [disabled]="selected.length == 0">
+                                {{'accounts.pos.download' | translate }} </button>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+
+            </ngx-datatable>
+
+        </div>
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+            <button type="button" [routerLink]="['../pos']" class=" btn btn-default btn-wide">
+                {{ 'public.back' | translate }}
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+

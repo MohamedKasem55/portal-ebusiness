@@ -1,0 +1,169 @@
+<form autocomplete="off" class="sme-wizard" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="sme-form__content">
+        <div class="sme-form__body">
+            <fieldset>
+
+                <arb-panel>
+                    <div class="row">
+                        <div class="line"></div>
+                        <img src="assets/img/SARIE.png">
+                    </div>
+                </arb-panel>
+
+                <arb-panel>
+                    <div class="row">
+                        <p class="modal-title">{{ 'transfer.details' | translate }}</p>
+                        <div class="line"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.accountFrom' | translate }}</label>
+                                <br/><br/>
+                                <label> {{form.controls.accountFrom?.value?.value?.fullAccountNumber}} </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.bankTo' | translate }}</label>
+                                <br/><br/>
+                                <label> {{form.controls.bankTo?.value?.participantFullName}} </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.beneficiaryName' | translate }}</label>
+                                <span *ngIf="!isIBAN" style="margin: 5px" class="icon -info" (click)="showNameInfo()"></span>
+                                <br/><br/>
+                                <label >{{transferData.beneficiary}}</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.amount' | translate }}</label>
+                                <br/><br/>
+                                <label >{{form.controls.ipsAmount.value}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.ips.fees' | translate }}</label>
+                                <br/><br/>
+                                <label >{{transferData.feesAmount}}</label>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.ips.selectChannel' | translate }}</label>
+                                <br/><br/>
+                                <label >{{form.controls.proxyTypeSelected?.value?.value | translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.ips.purpose' | translate }}</label>
+                                <br/><br/>
+                                <label  *ngIf="translate.currentLang !== 'en'">{{form.controls.transferPurpose?.value?.purposeDescriptionAr}}</label>
+                                <label  *ngIf="translate.currentLang === 'en'">{{form.controls.transferPurpose?.value?.purposeDescriptionEn}}</label>
+                            </div>
+                        </div>
+                        <div *ngIf="isIBAN" class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'public.firstName' | translate }}</label>
+                                <br/><br/>
+                                <label >{{form.controls.firstName.value}}</label>
+                            </div>
+                        </div>
+                        <div *ngIf="isIBAN" class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'public.lastName' | translate }}</label>
+                                <br/><br/>
+                                <label >{{form.controls.lastName.value}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{form.controls.proxyTypeSelected?.value?.value | translate}}</label>
+                                <br/><br/>
+                                <label >{{form.controls.proxyTypeValue.value}}</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label class="labelInfo">{{'transfer.totalAmount' | translate }}</label>
+                                <br/><br/>
+                                <label >{{totalAmount}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </arb-panel>
+            </fieldset>
+        </div>
+    </div>
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide"
+                (click)="onConfirmCancel()">{{'public.cancel' | translate }}</button>
+
+        <button type="submit" class=" btn btn-primary btn-wide" [disabled]="!isValid()">{{buttonLabel}}</button>
+    </div>
+
+
+</form>
+
+
+<arb-panel>
+    <div class="row" *ngIf="generateChallengeAndOTP">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="requestValidate"
+                                            #authorization></app-secured-authentication>
+            </div>
+        </div>
+    </div>
+
+</arb-panel>
+
+
+<div class="modal fade" bsModal #nameInfoModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content__stretched">
+            <div class="modal-header">
+                <p class="modal-title">{{'transfer.ips.modal.messageHeader' | translate}}</p>
+            </div>
+            <div class="modal-body modal-side-align-text">
+                <p>{{ 'transfer.ips.beneficiaryNameNote' | translate }}
+              </div>
+          <div class="modal-footer modal-side-align-button">
+            <button type="button" (click)="hideNameInfo()" class="btn btn-default"
+                    data-dismiss="modal">{{ 'public.cancel' | translate }}</button>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" bsModal #confirmCancelModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content__stretched">
+            <div class="modal-header">
+                <p class="modal-title">{{'transfer.ips.confirm.title' | translate}}</p>
+            </div>
+            <div class="modal-body modal-side-align-text">
+                <p>{{ 'transfer.ips.confirm.cancel' | translate }}
+            </div>
+            <div class="modal-footer modal-side-align-button">
+                <button type="button" (click)="hideCancelModal()" class="btn btn-default"
+                        data-dismiss="modal">{{ 'transfer.ips.confirm.No' | translate }}</button>
+                <button class="btn btn-primary btn-wide" (click)="cancel()">{{ 'transfer.ips.confirm.Yes' | translate }}</button>
+
+            </div>
+        </div>
+    </div>
+</div>

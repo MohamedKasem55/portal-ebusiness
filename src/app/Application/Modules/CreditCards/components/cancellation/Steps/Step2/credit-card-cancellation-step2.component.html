@@ -1,0 +1,19 @@
+<arb-panel>
+    <h3>{{ 'accounts.creditCards.cancellationStep2Title' | translate }}</h3>
+    <hr>
+    <app-credit-card-cancellation-form [formModel]="formModel"
+                                       [cards]="cards">
+    </app-credit-card-cancellation-form>
+</arb-panel>
+
+<arb-panel>
+    <div>
+        <div>
+            <label><span class="icon -help"></span> {{ 'accounts.creditCards.cancellationStep2HelpTitle' | translate }}
+            </label>
+        </div>
+        <div>
+            {{ 'accounts.creditCards.cancellationStep2HelpText' | translate }}
+        </div>
+    </div>
+</arb-panel>

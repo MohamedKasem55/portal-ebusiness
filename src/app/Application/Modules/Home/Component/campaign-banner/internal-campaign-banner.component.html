@@ -1,0 +1,12 @@
+<div class="banner-container">
+  <ngb-carousel ngbSlide *ngIf="banner && banner.length > 0" style="outline:none">
+    <h2>for</h2>
+    <ng-template ngbSlide *ngFor="let hero of bannerMenuTrue">
+      <div class="picsum-img-wrapper">
+        <a [href]="hero.hyperlink" target="_blank">
+          <img src="{{ 'data:image/jpg;base64,' + hero.image.content }}" height="168px" />
+        </a>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>

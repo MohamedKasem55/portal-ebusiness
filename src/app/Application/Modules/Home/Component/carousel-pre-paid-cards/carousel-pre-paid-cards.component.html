@@ -1,0 +1,69 @@
+<div class="sme-table table headerDataTable">
+    <br />
+    <div class="sme-form__body" *ngIf="slides.length>0; else noData">
+        <ngb-carousel [showNavigationArrows]="showArrowsOption()" [interval]=0 [pauseOnHover]="false"
+                      class="carousel-own-styles">
+            <ng-template ngbSlide *ngFor="let prePaidCardListArray of slides">
+                <div class="flex-wrap">
+                    <div class="list-line" (click)="infoDetails(prePaidCardItem)"
+                         *ngFor="let prePaidCardItem of prePaidCardListArray;let i=index">
+                        <div class="head-list" style="margin-top: 5px; cursor:pointer">
+                            <div id="image" class="display-div-column">
+                                <img *ngIf="prePaidCardItem.cardIcon; else imageCard"
+                                     [src]="prePaidCardItem.cardIcon" class="image-little-target" />
+                                <ng-template #imageCard>
+                                    <span class="image-little-target-prepaid"></span>
+                                </ng-template>
+
+                            </div>
+                        </div>
+                        <div class="cap-targets-list-home" style="height: 60%;margin-top: 1%;" >
+                            <div class="body-list">
+                                <div class="message">
+                                                                <span
+                                                                        class="display-div-column">{{prePaidCardItem.embossingName}}</span>
+                                </div>
+                                <div class="message medium-font">
+                                                                <span
+                                                                        class="display-div-column navy-bold">{{prePaidCardItem.cardNumber
+                                                                    | hiddenCardNumber:'7to12' }} -
+                                                                    {{prePaidCardItem.prodDesc}}</span>
+
+                                </div>
+                                <div class="titlePin message">
+                                    <div class="body-list-details">
+                                        <div class="titlePin message little-font" style="
+                                                            margin-top: 10px"> <span
+                                                class="display-div-column">{{'prePaidCard.status'
+                                            | translate | uppercase}}</span>
+                                        </div>
+                                        <div class="message medium-font"> <span
+                                                class="display-div-column navy">{{prePaidCardItem.cardStatus
+                                            |businessCardStatus}} </span>
+                                        </div>
+                                    </div>
+                                    <div class="body-list-details line-separator">
+                                        <div class="titlePin message little-font" style="
+                                                            margin-top: 10px"> <span
+                                                class="display-div-column">{{'prePaidCard.cardBalance'
+                                            | translate | uppercase}}</span>
+                                        </div>
+                                        <div class="message medium-font"> <span
+                                                class="display-div-column navy">{{prePaidCardItem.availableCredit
+                                            | amountCurrency}} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+    </div>
+    <ng-template #noData>
+        <div class="noTargetsData">
+            <span class="text-legend">{{'prePaidCard.noTargetsData' | translate }}</span>
+        </div>
+    </ng-template>
+</div>

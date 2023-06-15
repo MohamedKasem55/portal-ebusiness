@@ -1,0 +1,347 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'posRequest.addRequest' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.account' | translate }}</label>
+                                        <ng-select class="form-control" formControlName="accountNumber">
+                                            <ng-option selected value disabled>
+                                                -- {{ 'public.selectDropdown' | translate }} --
+                                            </ng-option>
+                                            <ng-option *ngFor="let account of accounts"
+                                                       [value]="account.key">{{account.value.fullAccountNumber}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="!form.controls.accountNumber.valid && form.controls.accountNumber.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'public.account' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.typeOfRequest' | translate }}</label>
+                                        <ng-select class="form-control"
+                                                   formControlName="requestType">
+                                            <ng-option selected value disabled>
+                                                -- {{ 'public.selectDropdown' | translate }} --
+                                            </ng-option>
+                                            <ng-option *ngFor="let type of types"
+                                                       [value]="type.key">{{type.value}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="!form.controls.requestType.valid && form.controls.requestType.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.typeOfRequest' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.city' | translate }}</label>
+                                        <ng-select class="form-control"
+                                                   formControlName="city">
+                                            <ng-option selected value disabled>
+                                                -- {{ 'public.selectDropdown' | translate }} --
+                                            </ng-option>
+                                            <ng-option *ngFor="let city of cities"
+                                                       [value]="city.key">{{city.value}}
+                                            </ng-option>
+                                        </ng-select>
+                                        <div *ngIf="!form.controls.city.valid && form.controls.city.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.city' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row" *ngIf="!isFirstForm()">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'posRequest.contactName' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="contactName" class="form-control"/>
+                                        <div *ngIf="!form.controls.contactName.valid && form.controls.contactName.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.contactName' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.mobileNumber' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="mobile" class="form-control" maxlength="15"
+                                               inputPattern="onlyMobileNumbers"/>
+                                        <div *ngIf="!form.controls.mobile.valid && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile.hasError('maxlength') && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.maxlength' | translate:{size: 15} }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile.hasError('pattern') && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <!-- <label>{{ 'wpspayroll.uploadFile' |
+                                            translate }}</label> -->
+                                        <label>{{ 'posRequest.fileUpload' |
+                                            translate }}</label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Upload file"
+                                                   [disabled]="true" formControlName="fileName">
+                                            <span class="input-group-btn">
+                                                <div class="fileUpload btn">
+                                                    <span>{{'public.upload' | translate | uppercase}}</span>
+                                                    <input type="file" (change)="fileChange($event)" accept=".txt"
+                                                           class="upload">
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row" *ngIf="isFirstForm()">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.mobileNumber' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="mobile" class="form-control" maxlength="15"
+                                               inputPattern="onlyMobileNumbers"/>
+                                        <div *ngIf="!form.controls.mobile.valid && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile.hasError('maxlength') && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.maxlength' | translate:{size: 15} }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile.hasError('pattern') && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.mobileNumber' |
+                                            translate }} 2</label>
+                                        <input type="text" formControlName="mobile2" class="form-control" maxlength="15"
+                                               inputPattern="onlyMobileNumbers"/>
+                                        <div *ngIf="!form.controls.mobile2.valid && form.controls.mobile2.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile2.hasError('maxlength') && form.controls.mobile2.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.maxlength' | translate:{size: 15} }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile2.hasError('pattern') && form.controls.mobile2.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.mobileNumber' | translate }}{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.feesAmount' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="feesAmount" class="form-control"
+                                               maxlength="15" inputPattern="onlyPositiveDecimalNumbers"/>
+                                        <div *ngIf="!form.controls.feesAmount.valid && form.controls.feesAmount.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.feesAmount' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.numberTerminals' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="numberTerminals" class="form-control"
+                                               maxlength="2" inputPattern="onlyPositiveDecimalNumbers"/>
+                                        <div *ngIf="!form.controls.numberTerminals.valid && form.controls.numberTerminals.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.numberTerminals' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row" *ngIf="isFirstForm()">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.address' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="address" class="form-control"
+                                               maxlength="100"/>
+                                        <div *ngIf="!form.controls.address.valid && form.controls.address.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.address' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.fullAddress' |
+                                            translate }} 2</label>
+                                        <input type="text" formControlName="fullAddress" class="form-control"
+                                               maxlength="15"/>
+                                        <div *ngIf="!form.controls.fullAddress.valid && form.controls.fullAddress.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.fullAddress' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.phoneNumber' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="mobile" class="form-control" maxlength="15"
+                                               inputPattern="onlyMobileNumbers"/>
+                                        <div *ngIf="!form.controls.mobile.valid && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.phoneNumber' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile.hasError('maxlength') && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.phoneNumber' | translate }}{{ 'error.maxlength' | translate:{size: 15} }}</small>
+                                        </div>
+                                        <div *ngIf="form.controls.mobile.hasError('pattern') && form.controls.mobile.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.phoneNumber' | translate }}{{ 'error.format' | translate:{format: '+9665xxxxxxxx/05xxxxxxxx'} }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-1">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.pobox' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="pobox" class="form-control" maxlength="15"
+                                               inputPattern="onlyPositiveDecimalNumbers"/>
+                                        <div *ngIf="!form.controls.pobox.valid && form.controls.pobox.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.pobox' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-2">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.postalCode' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="postalCode" class="form-control"
+                                               maxlength="5" inputPattern="onlyPositiveDecimalNumbers"/>
+                                        <div *ngIf="!form.controls.postalCode.valid && form.controls.postalCode.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.postalCode' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row" *ngIf="isFirstForm()">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-2">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label class="required">{{ 'posRequest.posBranchNumber' |
+                                            translate }}</label>
+                                        <input type="text" formControlName="posBranchNumber" class="form-control"/>
+                                        <div *ngIf="!form.controls.posBranchNumber.valid && form.controls.posBranchNumber.touched"
+                                             class="alert alert-danger">
+                                            <small>{{'posRequest.posBranchNumber' | translate }}{{ 'error.required' | translate }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <!-- <label>{{ 'wpspayroll.uploadFile' |
+                                            translate }}</label> -->
+                                        <label>{{ 'posRequest.fileUpload' |
+                                            translate }}</label>
+
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Upload file"
+                                                   [disabled]="true" formControlName="fileName">
+                                            <span class="input-group-btn">
+                                                <div class="fileUpload btn">
+                                                    <span>{{'public.upload' | translate | uppercase}}</span>
+                                                    <input type="file" (change)="fileChange($event)" accept=".txt"
+                                                           class="upload">
+                                                </div>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="sme-breadcrumb">
+        <ol class="breadcrumb">
+             <li class="active">{{ 'dashboard.payments' | translate }}</li>
+           <li class="active"><a class="human-selectable" href="#" [routerLink]="['/invoiceHUB']">{{ 'dashboard.invoiceHUB' | translate }}</a></li>
+            <li class="active">{{ 'invoiceHUB.payMultipleInvoice'| translate }}</li>
+        </ol>
+    </div>
+<div class="sme-content-container container-fluid">
+
+	<div class="sme-page-block">
+		<ul class="sme-box sme-wizard__steps">
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+					<span class="num">1</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.select' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>1}"><span>
+					<span class="num">2</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.select' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>2}"><span>
+					<span class="num">3</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+				</span>
+			</li>
+			<li class="sme-wizard__step" [ngClass]="{'current': wizardStep==4, 'completed' : wizardStep>4}"><span>
+					<span class="num">4</span>
+				<span class="text">{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div>
+		<router-outlet (activate)="componentAdded($event)"></router-outlet>
+</div>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+		<button *ngIf="wizardStep==1" class="btn btn-default btn-wide" type="button" [routerLink]="['/invoiceHUB']">{{ 'public.back' | translate}}</button>
+		<button *ngIf="wizardStep>1 && wizardStep<4" (click)="backButton()" class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+		<button class="btn btn-primary btn-wide" (click)="nextStep()" *ngIf="wizardStep < 4" [disabled]="isDisabled()">{{'public.proceed' | translate}}</button>
+		<button class="btn btn-primary btn-wide" (click)="finish()" *ngIf="wizardStep == 4" >{{'public.finish' | translate}}</button>
+		
+</div>

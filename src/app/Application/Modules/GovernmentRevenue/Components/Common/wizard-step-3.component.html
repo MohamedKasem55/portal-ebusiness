@@ -1,0 +1,20 @@
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                    <small *ngIf="confirmResponse.processedBatch">{{'payments.moiPayments.request.referenceNumber' | translate}}:{{ confirmResponse?.processedBatch[0].reference }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-gov-revenue-payment-step2 *ngIf="confirmResponse.processedBatch" [sharedForm]="formModel"
+                               [revenueAccounts]="govRevenueAccountsList"
+                                [securityLevelsDTOList]="null">
+</app-gov-revenue-payment-step2>

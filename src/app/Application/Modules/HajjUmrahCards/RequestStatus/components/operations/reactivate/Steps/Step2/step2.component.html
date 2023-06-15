@@ -1,0 +1,25 @@
+<app-card-operation-reactivate-form [readonly]="true">
+</app-card-operation-reactivate-form>
+<app-levels-table *ngIf="action !== 'D'" [futureSecurityLevels]="futureSecurityLevels">
+</app-levels-table>
+<div class="sme-content-container container-fluid" *ngIf="generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

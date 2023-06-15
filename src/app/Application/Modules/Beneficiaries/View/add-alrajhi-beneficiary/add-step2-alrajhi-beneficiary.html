@@ -1,0 +1,85 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary',['/beneficiaries/AddBeneficiaries']],
+                        ['beneficiaries.beneficiaryTypes.addAlRajhiBeneficiary']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]"
+           [currentStep]="2">
+</arb-steps>
+
+<arb-panel>
+    <form autocomplete="off" #detailAlrajhiBeneficiary="ngForm" class="sme-form__form" novalidate>
+        <fieldset>
+            <div class="legend" style="margin-top: 15px;">{{ 'beneficiaries.beneficiaryBankDetails' | translate }}</div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <!-- ACCOUNT -->
+                    <div class="form-group">
+                        <label class="required">
+                            {{ 'public.account' | translate }}
+                        </label>
+                        <div>
+                            <input type="text" class="form-control" name="account"
+                                   placeholder="{{ 'beneficiaries.AccountNo-IBAN' | translate }}"
+                                   [(ngModel)]="this.formData.account" #account="ngModel" required
+                                   maxlength="24" minlength="15"
+                                   pattern="(?:^[0-9]{15}$)|(?:^[0-9]{21}$)|(?:^[0-9]{24}$)|(?:^[SA]{2}([0-9]){22}$)"/>
+                            <p *ngIf="account.errors?.pattern && account.touched"
+                               class="alert alert-danger">
+                                {{ 'accounts.accountIBANLengthIncorrect' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'accounts.accountNickname' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="nickname"
+                                   placeholder="{{ 'accounts.accountNickname' | translate }}" maxlength="60"
+                                   [(ngModel)]="formData.nickName" #nickname="ngModel"
+                                   />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-3">
+                    <div class="form-group">
+                        <label>{{ 'public.email' | translate }}</label>
+                        <div>
+                            <input type="text" class="form-control" name="email"
+                                   placeholder="{{ 'public.emailPlaceHolder' | translate }}"
+                                   [(ngModel)]="formData.email" #email="ngModel" email
+                                   inputPattern="notArabic"/>
+                            <p *ngIf="email.touched && email.invalid" class="alert alert-danger">
+                                {{ 'public.emailVerification' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+<arb-panel-buttons>
+    <button type="button" (click)="goBack()"
+            class=" btn btn-default btn-wide">
+        {{ 'public.back' | translate }}
+    </button>
+    <button class=" btn btn-primary btn-wide"
+            [disabled]="!detailAlrajhiBeneficiary.form.valid"
+            (click)="validateAddAlrajhiBeneficiary(detailAlrajhiBeneficiary.value)">
+        {{ 'public.next' | translate }}
+    </button>
+</arb-panel-buttons>
+
+

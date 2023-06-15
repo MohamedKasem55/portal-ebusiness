@@ -1,0 +1,35 @@
+<div class="container-fluid">
+<div class="sme-page-block">
+    <div class="sme-form">
+
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+             <div class="sme-form__body">
+				<div>
+					<div class="sme-wizard__success" *ngIf="this.option == this.DeleteOption">
+						<span class="icon -check"></span>
+						{{'wmspayroll.deleteFilesSuccesfully' | translate}}
+						<small *ngIf="fileSystemName">{{ 'wmspayroll.management.systemFileName' | translate }} {{ fileSystemName }}</small>
+						<small>{{'public.thanks' | translate }}</small>
+					</div>
+					<div class="sme-wizard__success" *ngIf="isPending() && this.option == this.InitiateOption">
+      					  <span class="icon -check"></span>
+							{{'payments.sucessPendingRequest' | translate}}
+							<small *ngIf="fileSystemName">{{ 'wmspayroll.management.systemFileName' | translate }} {{ fileSystemName }}</small>
+            			  <small>{{'public.thanks' | translate }}</small>		
+    				</div>
+    				<div class="sme-wizard__success" *ngIf="!isPending() && this.option == this.InitiateOption">
+
+      					  <span class="icon -check"></span>
+							{{'public.requestOk' | translate}}
+							<small *ngIf="fileSystemName">{{ 'wmspayroll.management.systemFileName' | translate }} {{ fileSystemName }}</small>
+            			  <small>{{'public.thanks' | translate }}</small>		
+    				</div>
+
+				</div>
+			</div>	
+			</div>
+		</div>
+	</div>
+</div>
+</div>

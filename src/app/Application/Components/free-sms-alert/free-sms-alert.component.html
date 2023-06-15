@@ -1,0 +1,110 @@
+<div class='modal fade' bsModal #FreeSmsAlertModal='bs-modal' [config]="{backdrop: 'static',  keyboard: false}"
+     role='dialog'>
+    <div class='modal-dialog' style="width: 70%;">
+        <div class='modal-content'>
+            <div class='modal-header-img'>
+                <span *ngIf='showSuccess' class='successIcon icon -check'></span>
+            </div>
+            <div class='modal-title'>
+
+            </div>
+            <div *ngIf='showSuccess === null' class="modal-body">
+                <img class='vatImg' src='img/mobile_note.svg' alt=''/>
+                <br>
+                <br>
+                <br>
+                <div class='modal-msg'>
+                    <h1>
+                        <b style="font-size: xxx-large;">
+                            {{'companyAdmin.alerts.modalTitle'  | translate}}
+                        </b>
+                    </h1>
+                    <br>
+                    <br>
+                    <br>
+                    <h3>
+                        <b>
+                            {{'companyAdmin.alerts.modalDescription'  | translate}}
+
+                        </b>
+                    </h3>
+                    <br>
+                </div>
+            </div>
+            <div *ngIf='showSuccess' class="modal-body">
+                <img class='vatImg' src='img/check.svg' alt=''/>
+                <br>
+                <br>
+                <br>
+                <div class='modal-msg'>
+                    <h1>
+                        <b style="font-size: xxx-large;">
+                            {{'companyAdmin.alerts.modalTitleSuccess'  | translate}}
+                        </b>
+                    </h1>
+                    <br>
+                    <br>
+                    <br>
+                    <h3>
+                        <b>
+                            {{'companyAdmin.alerts.modalDescriptionSuccess'  | translate}}
+
+                        </b>
+                    </h3>
+                    <h4>
+                        <b>
+                            {{'companyAdmin.alerts.modalDescriptionSuccess1'  | translate}}
+
+                        </b>
+                    </h4>
+                    <br>
+                </div>
+            </div>
+            <div *ngIf='showSuccess===false' class="modal-body">
+                <img class='vatImg' src='img/error.svg' alt=''/>
+                <br>
+                <br>
+                <br>
+                <div class='modal-msg'>
+                    <h1>
+                        <b style="font-size: xxx-large;">
+                            {{'companyAdmin.alerts.modalTitleError'  | translate}}
+
+                        </b>
+                    </h1>
+                    <br>
+                    <br>
+                    <br>
+                    <h3>
+                        <b>
+                            {{'companyAdmin.alerts.modalDescriptionError'  | translate}}
+                        </b>
+                    </h3>
+                </div>
+            </div>
+
+            <div class='modal-footer' *ngIf='showSuccess === null' >
+                <div style="text-align: end;">
+                    <button type='button' (click)='later()'
+                            class='btn btn-default'>{{'vat-company.later'  | translate}}</button>
+                    <button type='button' (click)='agree()' class='btn btn-primary'
+                    >{{'vat-company.confirm'  | translate}}</button>
+                </div>
+            </div>
+            <div class='modal-footer' *ngIf='showSuccess' >
+                <div style="text-align: end;">
+                    <button type='button' (click)='later()'
+                            class='btn btn-default'>{{'vat-company.later'  | translate}}</button>
+                    <button type='button' (click)='configure()' class='btn btn-primary'
+                    >{{'companyAdmin.alerts.configure'  | translate}}</button>
+                </div>
+            </div>
+            <div class='modal-footer' *ngIf='showSuccess === false' >
+                <div style="text-align: end;">
+                    <button type='button' (click)='close()'
+                            class='btn btn-default'>{{'companyAdmin.alerts.dialogue-close'  | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

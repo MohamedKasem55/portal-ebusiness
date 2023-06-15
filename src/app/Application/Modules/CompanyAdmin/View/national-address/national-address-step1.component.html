@@ -1,0 +1,149 @@
+<div class="container-fluid">
+
+	<div class="sme-page-block">
+		<div class="sme-form">
+
+			<label class="sme-form__title">
+				<span>{{ 'companyAdmin.nationalAddress.name' | translate }}</span>
+			</label>
+			<form autocomplete="off" #nationalAddress="ngForm" class="sme-form__form" [formGroup]="formNational" autocomplete="off">
+
+				<div class="sme-form__content">
+					<div class="sme-wizard__content">
+						<div class="sme-form__body">
+							<fieldset>
+								<div class="row">
+
+									<div class="col-xs-12 col-sm-3">
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="country">{{'companyAdmin.nationalAddress.country' | translate }}</label>
+											
+												<input type="text" class="form-control" id="country" formControlName="country" placeholder="Kingdom of Saudi Arabia">
+											
+										</div>
+
+										<!-- ./sme-form-group -->
+
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="region" class="required">{{'companyAdmin.nationalAddress.region' | translate }}</label>
+											<div class="form-control  sme-select">
+												<select id="region" class="form-control" name="region" formControlName="region" (change)="getCities($event)">
+													<option value selected disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+													<option *ngFor="let region of regions" [value]="region.key">{{ region.value }}</option>
+												</select>
+												<div *ngIf="formNational.controls.region.hasError('required') && formNational.controls.region.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.region' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											</div>
+										</div>
+										<!-- ./sme-form-group -->
+
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="city">{{'companyAdmin.nationalAddress.city' | translate }}</label>
+											<div class="form-control  sme-select">
+												<select id="city" class="form-control" name="city" formControlName="city">
+													<option value [selected]="!this.formNational.controls.city.value || this.formNational.controls.city.value===''" disabled> -- {{ 'public.selectDropdown' | translate }} -- </option>
+													<option *ngFor="let city of cities" [value]="city.key">{{ city.value }}</option>
+												</select>
+												<div *ngIf="formNational.controls.city.hasError('required') && formNational.controls.city.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.city' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											</div>
+										</div>
+										<!-- ./sme-form-group -->
+
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="district" class="required">{{'companyAdmin.nationalAddress.district' | translate }}</label>
+											
+												<input type="text" class="form-control" id="district" maxlength="32" formControlName="district">
+												<div *ngIf="formNational.controls.district.hasError('required') && formNational.controls.district.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.district' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											
+										</div>
+										<!-- ./sme-form-group -->
+
+									</div>
+
+
+									<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="streetName" class="required">{{'companyAdmin.nationalAddress.streetName' | translate }}</label>
+											
+												<input type="text" class="form-control" id="streetName" maxlength="64" formControlName="streetName">
+												<div *ngIf="formNational.controls.streetName.hasError('required') && formNational.controls.streetName.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.streetName' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											
+										</div>
+										<!-- ./sme-form-group -->
+
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="postal-code" class="required">{{'companyAdmin.nationalAddress.postalCode' | translate }}</label>
+											
+												<input type="text" class="form-control" id="postal-code" maxlength="5" formControlName="postalCode" inputPattern="onlyDigits">
+												<div *ngIf="formNational.controls.postalCode.hasError('required') && formNational.controls.postalCode.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.postalCode' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											
+										</div>
+										<!-- ./sme-form-group -->
+
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="additional-code" class="required">{{'companyAdmin.nationalAddress.additionalCode' | translate }}</label>
+											
+												<input type="text" class="form-control" id="additional-code" maxlength="4" formControlName="additionalCode" inputPattern="onlyDigits">
+												<div *ngIf="formNational.controls.additionalCode.hasError('required') && formNational.controls.additionalCode.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.additionalCode' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											
+										</div>
+										<!-- ./sme-form-group -->
+
+										<!-- sme-form-group -->
+
+										<div class="form-group">
+											<label for="building-no" class="required">{{'companyAdmin.nationalAddress.buildingNo' | translate }}</label>
+											
+												<input type="yrxt" class="form-control" id="building-no" maxlength="4" formControlName="buildingNo" inputPattern="onlyDigits">
+												<div *ngIf="formNational.controls.buildingNo.hasError('required') && formNational.controls.buildingNo.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.buildingNo' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											
+										</div>
+
+										<div class="form-group">
+											<label for="unitNo" class="required">{{'companyAdmin.nationalAddress.unitNo' | translate }}</label>
+											
+												<input type="text" class="form-control" id="unitNo" maxlength="4" formControlName="unitNo" inputPattern="onlyDigits">
+												<div *ngIf="formNational.controls.unitNo.hasError('required') && formNational.controls.unitNo.touched" class="alert alert-danger">
+													<small>{{'companyAdmin.nationalAddress.unitNo' | translate }}{{ 'error.required' | translate }}</small>
+												</div>
+											
+										</div>
+										<!-- ./sme-form-group -->
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>

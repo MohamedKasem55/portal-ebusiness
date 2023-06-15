@@ -1,0 +1,99 @@
+<div class="sme-breadcrumb focus_index " tabindex="-1">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'menu.company_admin.menu' | translate }}</li>
+        <li class="active">{{ 'menu.company_admin.alias-management.menu' | translate }}</li>
+    </ol>
+</div>
+
+
+<div class="sme-content-container container-fluid">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'menu.company_admin.alias-management.menu' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2 }"><span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'menu.company_admin.alias-management.confirmation' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current': wizardStep==3, 'completed' : wizardStep>3 }"><span>
+                    <span class="icon -check"></span> <span class="text">{{'menu.company_admin.alias-management.finish'
+                        | translate |
+                        uppercase }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<app-alias-management-unlink *ngIf="wizardStep === 1 && type==='DELINK_ALL'" (action)="unLinkAction($event)">
+
+</app-alias-management-unlink>
+
+
+<app-alias-management-step1 [form]="this.form" *ngIf="wizardStep === 1 && type==='LINK'" (action)="step1Action($event)">
+
+</app-alias-management-step1>
+
+<app-alias-management-step2 [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate"
+    [aliasDetails]="aliasManagement" *ngIf=" wizardStep===2" (action)="step2Action($event)">
+
+</app-alias-management-step2>
+
+<app-alias-management-step3 [aliasDetails]="aliasManagement" *ngIf="wizardStep === 3">
+
+</app-alias-management-step3>
+
+<!-- Sarie Modal -->
+<div class="modal fade" bsModal #IPSTCStatusModal="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="headerDiv">
+                    <h4 class="ips-modal-title">{{ 'menu.company_admin.alias-management.menu' | translate }}</h4>
+                </div>
+                <div class="headerDiv headerImg">
+                    <img class="sarieImg" src="assets/img/SARIE.png">
+                </div>
+            </div>
+            <div class="ips-modal-title2">
+                <p>{{ 'menu.company_admin.alias-management.link_alias' | translate }}</p>
+            </div>
+            <div class="ips-modal-body">
+                <p>{{ 'menu.company_admin.alias-management.modelText' | translate }}</p>
+            </div>
+            <div class="modal-icons">
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/phone.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.mobile' | translate }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/email.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.email' | translate }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/store.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.comercialRegistration' | translate
+                            }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="ellips"> <img class="iconImg" src="img/group.svg"> </div>
+                    <div class="icoText"> <span>{{ 'menu.company_admin.alias-management.unn' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                 <button type="button" (click)="ipSLater()" class="btn btn-default" data-dismiss="modal">{{
+                    'menu.company_admin.alias-management.later' | translate }}</button>
+                <button type="button" (click)="IPSagree()" class="btn btn-primary" data-dismiss="modal">{{
+                    'menu.company_admin.alias-management.accepet' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

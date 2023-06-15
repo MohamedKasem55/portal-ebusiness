@@ -1,0 +1,61 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="page">
+                                    <div class="form-center">
+                                        <div class="head">
+                                            <div><span
+                                                    class="display-div-column card-message-margin">{{'commercialCards.reasonText' | translate}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="body">
+                                            <div class="titlePin message"> <span
+                                                    class="display-div-column new-pin">{{'commercialCards.reasonTitle' | translate}}</span>
+                                            </div>
+
+
+                                            <div class="sme-select form-control">
+                                                <select id="reasons" class="form-control" name="reasons"
+                                                    formControlName="reason" required
+                                                    (change)="onChangeReason($event.target.value)">
+                                                    <option selected value disabled>
+                                                        -- {{ 'commercialCards.selectReason' | translate }} --</option>
+                                                    <!-- <option *ngFor="let reason of reasonsCombo" [ngValue]="reason">
+                                                        {{ reason }} </option> -->
+                                                    <option [ngValue]="'Lost'">
+                                                        {{ 'commercialCards.lost' | translate }}
+                                                    </option>
+                                                    <option [ngValue]="'Theft'">
+                                                        {{ 'commercialCards.theft' | translate }}
+                                                    </option>
+                                                    <option [ngValue]="'Damaged'">
+                                                        {{ 'commercialCards.damaged' | translate }}</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="footer">
+                                            <div class="center-error">
+
+                                                <!-- <p *ngIf="!validatePin()" class="alert alert-danger"
+                                                    style="margin:10px;">
+                                                    {{ 'commercialCards.errorPin' | translate }}
+                                                </p> -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

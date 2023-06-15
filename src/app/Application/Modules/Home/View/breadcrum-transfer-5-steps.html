@@ -1,0 +1,32 @@
+ <ul class="sme-wizard__steps">
+                            <li class="sme-wizard__step step1" [ngClass]="{'current' : currentStep >= 1}">
+                                <span>
+                                    <span class="num">1</span>
+                                    <span class="text">{{'transfer.type' | translate | uppercase}}</span>
+                                </span>
+                            </li>
+                            <li class="sme-wizard__step step2" [ngClass]="{'current' : currentStep >= 2}">
+                                <span>
+                                    <span class="num">2</span>
+                                    <span class="text">{{'transfer.beneficiary' | translate | uppercase}}</span>
+                                </span>
+                            </li>
+                            <li class="sme-wizard__step step3" [ngClass]="{'current' : currentStep >= 3}">
+                                <span>
+                                    <span class="num">3</span>
+                                    <span class="text">{{'transfer.details' | translate | uppercase}}</span>
+                                </span>
+                            </li>
+                            <li class="sme-wizard__step step4" [ngClass]="{'current' : currentStep >= 4}">
+                                <span>
+                                    <span class="num">4</span>
+                                    <span class="text">{{'transfer.summary' | translate | uppercase}}</span>
+                                </span>
+                            </li>
+                            <li class="sme-wizard__step step5" [ngClass]="{'current' : currentStep >= 5}">
+                                <span>
+                                    <span class="icon -check"></span>
+                                    <span class="text">{{'transfer.finish' | translate | uppercase}}</span>
+                                </span>
+                            </li>
+                        </ul>

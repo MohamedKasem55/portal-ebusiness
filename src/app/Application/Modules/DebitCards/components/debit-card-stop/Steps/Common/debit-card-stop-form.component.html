@@ -1,0 +1,29 @@
+<ng-container [formGroup]="formModel">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-cardNumberDisplay">{{ 'accounts.debitCards.cardNumberDisplay' | translate }}</label>
+                <span id="search-cardNumberDisplay" class="form-control" name="cardNumberDisplay">
+                        {{ card?.cardNum }}
+                    </span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-2">
+
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-suspensionReason">{{ 'accounts.debitCards.suspensionReason' | translate }}</label>
+                <select id="search-suspensionReason" class="form-control" name="suspensionReason" formControlName="suspensionReason">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of reasonList; " [value]="item.value"
+                            [innerHTML]="item['reason'] | translate">
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

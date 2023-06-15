@@ -1,0 +1,20 @@
+
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<ng-container>
+        <arb-panel>
+                <fieldset [formGroup]="formModel">
+                        <app-dynamic-simple-extras-form-fields [fieldsConfigs]="entityProperties"
+                                [formModel]="formModel" [combosData]="combosData"
+                                [translate_prefix]="'workflow'">
+                        </app-dynamic-simple-extras-form-fields>
+                </fieldset>
+        </arb-panel>
+</ng-container>
+
+<arb-buttons>
+        <button *ngIf="isBackAllowed()" class="btn btn-default btn-wide" [routerLink]="['/companyadmin/workflow/requestStatus']">
+                {{ 'public.back' | translate }}
+        </button>
+</arb-buttons>

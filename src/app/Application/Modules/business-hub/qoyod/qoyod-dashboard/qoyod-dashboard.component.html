@@ -1,0 +1,182 @@
+<arb-breadcrumb
+        [routes]="[['business-hub.businessHub'], ['business-hub.invoicing.invoicing']]">
+</arb-breadcrumb>
+
+
+<arb-panel *ngIf="subscriptionExpiryNotice">
+    <div style="display: flex; flex-flow: row">
+        <p style="color: red; margin-top: 8px">
+            {{ 'business-hub.shared.dashboard.aboutToExpireIntro' | translate}}
+            <span style="color: #595e72">{{ 'business-hub.shared.dashboard.aboutToExpire' | translate}}</span>
+        </p>
+        <button [ngClass]="{'renew-sub-ltr': currentLang == 'en', 'renew-sub-rtl': currentLang == 'ar'}"
+                class="btn btn-primary" (click)="renewSubscription()">{{ 'business-hub.shared.dashboard.renew' | translate}}</button>
+    </div>
+</arb-panel>
+
+<arb-panel>
+    <div style="display: flex; flex-flow: row wrap; justify-content: space-around">
+        <div [attr.disabled]="isTabActive(1)" class="tab" [ngClass]="{'active-tab': isTabActive(1)}" (click)="switchTab(1)">
+            <h2>{{ 'business-hub.invoicing.bills' | translate}}</h2>
+        </div>
+        <div [attr.disabled]="isTabActive(2)" class="tab" [ngClass]="{'active-tab': isTabActive(2)}" (click)="switchTab(2)">
+            <h2>{{ 'business-hub.invoicing.invoices' | translate}}</h2>
+        </div>
+    </div>
+
+    <hr [ngClass]="{'half-hr-first': isTabActive(1) && getCurrentLang() == 'en',
+                    'half-hr-first-rtl': isTabActive(1) && getCurrentLang() == 'ar',
+                    'half-hr-second': isTabActive(2) && getCurrentLang() == 'en',
+                    'half-hr-second-rtl': isTabActive(2) && getCurrentLang() == 'ar'}">
+
+    <div *ngIf="isTabActive(1)" style="margin: 0 auto; padding: 0;">
+        <div  class="row">
+            <div class="col-xs-12 col-sm-4">
+                <app-collapse-card title="business-hub.invoicing.dashboard.billsOverview"
+                                   [containActions]="true" [actions]="getChartOverviewDropdownItems(billsOverviewChartData)"
+                                   (onSelectAction)="switchBillsOverviewYear(billsOverviewChartData , $event)">
+                    <div class="container-fluid">
+                        <app-bar-chart #billsOverviewBarChartComponent
+                                [chartType]="'bar'"
+                                [chartData]="billsOverviewChart"
+                                [useDefaultStyles]="false"
+                                (onRefresh)="initiateBillsOverview()">
+                        </app-bar-chart>
+                    </div>
+                </app-collapse-card>
+            </div>
+            <div class="col-xs-12 col-sm-8">
+                <app-collapse-card title="business-hub.invoicing.dashboard.billsAgingSum">
+                    <div class="container-fluid multiple-charts-parent">
+                        <app-bar-chart class="multiple-charts-major" [chartType]="'bar'"
+                                       [chartData]="billsAgingSummaryChart"
+                                       (onRefresh)="initiateBillsAgingSummary()">
+                        </app-bar-chart>
+                        <app-doughnut-chart class="multiple-charts-minor" [chartType]="'doughnut'"
+                                            [chartData]="billsAgingSummaryChart"
+                                            [valueText]="billsAgingSummaryChart.innerValue | digitsLetterFormatterPipe"
+                                            [titleText]="billsAgingSummaryChart.innerTitle"
+                                            (onRefresh)="initiateBillsAgingSummary()">
+                        </app-doughnut-chart>
+                    </div>
+                </app-collapse-card>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                <app-collapse-card title="business-hub.invoicing.dashboard.top5InvoicesByBills"
+                                   >
+
+                    <app-retry-action *ngIf="!topBills" (onRetry)="initiateTopBills()">
+                    </app-retry-action>
+                    <table *ngIf="topBills" class="table table-striped table-styles">
+                        <thead>
+                        <tr>
+                            <th scope="col">{{"business-hub.invoicing.dashboard.vendorName" | translate}}</th>
+                            <th scope="col">{{"business-hub.invoicing.dashboard.billReference" | translate}}</th>
+                            <th scope="col">{{"business-hub.invoicing.dashboard.amount" | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let row of topBills; index as i">
+                            <td>{{ row?.vendorName | translate }}</td>
+                            <td>{{ row?.billReference  }}</td>
+                            <td>{{ row?.amount | amountCurrency }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </app-collapse-card>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <app-collapse-card title="business-hub.invoicing.dashboard.top5VendorsByBills">
+                    <div class="container-fluid">
+                        <app-doughnut-chart [chartType]="'doughnut'"
+                                            [chartData]="topVendorsChart"
+                                            [valueText]="topVendorsChart.innerValue | digitsLetterFormatterPipe"
+                                            [titleText]="topVendorsChart.innerTitle"
+                                            [useDefaultLegend]="false" (onRefresh)="initiateBillsTopVendors()">
+                        </app-doughnut-chart>
+                    </div>
+                </app-collapse-card>
+
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isTabActive(2)" style="margin: 0 auto; padding: 0;">
+        <div  class="row">
+            <div class="col-xs-12 col-sm-4">
+                <app-collapse-card title="business-hub.invoicing.dashboard.invoiceOverview"
+                                   [containActions]="true" [actions]="getChartOverviewDropdownItems(invoicesOverviewChartData)"
+                                   (onSelectAction)="switchInvoicesOverviewYear(invoicesOverviewChartData , $event)">
+                    <div class="container-fluid">
+                        <app-bar-chart #invoicesOverviewBarChartComponent
+                                [chartType]="'bar'"
+                                [chartData]="invoicesOverviewChart"
+                                [useDefaultStyles]="false"
+                                (onRefresh)="initiateInvoicesOverview()">
+                        </app-bar-chart>
+                    </div>
+                </app-collapse-card>
+            </div>
+            <div class="col-xs-12 col-sm-8">
+                <app-collapse-card title="business-hub.invoicing.dashboard.invoicesAgingSum">
+                    <div class="container-fluid multiple-charts-parent">
+                        <app-bar-chart class="multiple-charts-major" [chartType]="'bar'"
+                                       [chartData]="invoicesAgingSummaryChart"
+                                       (onRefresh)="initiateInvoicingAgingSummary()">
+                        </app-bar-chart>
+                        <app-doughnut-chart class="multiple-charts-minor" [chartType]="'doughnut'"
+                                            [chartData]="invoicesAgingSummaryChart"
+                                            [valueText]="invoicesAgingSummaryChart.innerValue | digitsLetterFormatterPipe"
+                                            [titleText]="invoicesAgingSummaryChart.innerTitle"
+                                            (onRefresh)="initiateInvoicingAgingSummary()">
+                        </app-doughnut-chart>
+                    </div>
+                </app-collapse-card>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                <app-collapse-card title="business-hub.invoicing.dashboard.top5InvoicesByInvoice">
+                    <app-retry-action *ngIf="!topInvoices" (onRetry)="initiateTopInvoices()">
+                    </app-retry-action>
+                    <table *ngIf="topInvoices" class="table table-striped table-styles" >
+                        <thead>
+                        <tr>
+                            <th scope="col">{{"business-hub.invoicing.dashboard.customerName" | translate}}</th>
+                            <th scope="col">{{"business-hub.invoicing.dashboard.invoiceNumber" | translate}}</th>
+                            <th scope="col">{{"business-hub.invoicing.dashboard.amount" | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let row of topInvoices; index as i">
+                            <td>{{ row?.custName | translate }}</td>
+                            <td>{{ row?.invoiceRef  }}</td>
+                            <td>{{ row?.amt | amountCurrency }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </app-collapse-card>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <app-collapse-card title="business-hub.invoicing.dashboard.top5CustomerByInvoice">
+                    <div class="container-fluid">
+                        <app-doughnut-chart [chartType]="'doughnut'"
+                                            [chartData]="topCustomerChart"
+                                            [valueText]="topCustomerChart.innerValue | digitsLetterFormatterPipe"
+                                            [titleText]="topCustomerChart.innerTitle"
+                                            [useDefaultLegend]="false"
+                                            (onRefresh)="initiateInvoicesTopCustomers()">
+                        </app-doughnut-chart>
+                    </div>
+                </app-collapse-card>
+
+            </div>
+        </div>
+    </div>
+</arb-panel>
+
+<br>

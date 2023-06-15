@@ -1,0 +1,145 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                            <div class="form-group">
+                                <label class="required">{{ 'public.account' |
+                                            translate }}</label> 
+                                <ng-select [notFoundText]="'public.noData' | translate" class="form-control" [(ngModel)]="selected" name="selectedAccount"  #selectedAccount="ngModel" required (change)="changeAccount($event)">
+                                            <ng-option *ngFor="let aco of accounts" [value]="aco.key">
+                                                {{aco.value.fullAccountNumber}}{{(aco.value.alias != null && aco.value.alias != '' ? ' - '+ aco.value.alias : '')}} - {{ aco.value.availableBalance | amountCurrency:aco.value.currency}} {{ 'currencyIso' | modelPipe:aco.value.currency}}</ng-option>
+                                </ng-select>
+                                 <div *ngIf="selectedAccount.hasError('required') && selectedAccount.touched" class="alert alert-danger">
+                                                    <small>{{'public.account' | translate }}{{ 'error.required' | translate }} </small>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>      
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                    <div class="row">
+                        <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.invoiceId' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.invoiceId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierName' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.billerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierId' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.billerId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.amountDue' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.amountDue | amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                        </fieldset>        
+                        
+                    </div>
+                     <div class="row">
+                        <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.dateDue' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.dateDue | date:"dd/MM/yyyy"  }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.additionalDetails' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.additionalDetails }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.buyerName' |
+                                            translate }}</label> 
+                                       <span type="text" class="form-control">{{ batch.buyerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'invoiceHUB.pay' |
+                                            translate }}</label> 
+                                       <input type="text" class="form-control" [(ngModel)]="batch.amountPayment" inputPattern="onlyPositiveDecimalNumbers" maxlength="18" pattern="[0-9]{0,5}\.?[0-9]{0,2}$" required [lte]="(batch.amountRangeTo ? +batch.amountRangeTo :batch.amountDue)" name="pay" #pay="ngModel" [disabled]="batch.billCategory != 'PARTIAL'" [gte]="batch.amountRangeFrom ? +batch.amountRangeFrom:batch.amountDue"/>
+                                       <div *ngIf="pay.hasError('maxLength') && pay.touched" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.pay' | translate }} {{ 'error.maxlength' | translate:{size:18} }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('pattern') && pay.touched" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.pay' | translate }} {{ 'error.numericDecimal' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('lte') && batch.amountRangeTo" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.pay' | translate }} {{ 'error.maxValue' | translate:{value:batch.amountRangeTo } }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('gte') && batch.amountRangeFrom" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.pay' | translate }} {{ 'error.minValue' | translate:{value:batch.amountRangeFrom} }} </small>
+                                        </div>
+                                        <div *ngIf="(pay.hasError('gte') || pay.hasError('lte')) && (!batch.amountRangeTo && !batch.amountRangeFrom)" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.pay' | translate }} {{ 'error.equalValue' | translate:{ value: batch.amountDue} }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('required') && pay.touched" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.pay' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>      
+                                    </div>
+                                </div>
+                        </fieldset>        
+                        
+                    </div> 
+                            <div class="row">
+                    <fieldset>
+<div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.rejectedReason' |
+                                            translate }}</label> 
+                                        <span  class="form-control">{{batch.rejectedReason}}</span>
+                                         
+                                    </div>  
+                                </div>
+
+                            </fieldset>           
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>
+
+

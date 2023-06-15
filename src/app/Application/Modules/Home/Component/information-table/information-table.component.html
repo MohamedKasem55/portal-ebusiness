@@ -1,0 +1,19 @@
+<div class="sme-table table headerDataTable">
+    <table class="material sme-table sme-table--responsive table ngx-datatable virtualized">
+        <thead class="datatable-header ">
+        <tr class="datatable-row-center datatable-header-cell">
+            <td colspan="2"><span class="datatable-header-cell-wrapper "></span></td>
+
+        </tr>
+        </thead>
+        <tr *ngFor="let row of filteredTableData" class="datatable-body datatable-row-wrapper datatable-body-row">
+            <td class="datatable-body-cell datatable-body-cell-label" style="width: 60%;padding-left: 10px;">
+                {{ row.name | translate}}
+            </td>
+            <td class="datatable-body-cell datatable-body-cell-label" style="width: 40%;">
+                {{row.value}}
+            </td>
+        </tr>
+    </table>
+    <br/>
+</div>

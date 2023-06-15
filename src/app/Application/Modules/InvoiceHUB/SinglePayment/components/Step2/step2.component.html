@@ -1,0 +1,149 @@
+<div class="container-fluid" *ngIf="this.sharedData?.errors">
+    <div class="sme-page-block">
+        <div class="alert alert-danger">
+            <small>{{this.sharedData?.errors[0]}}</small>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <!-- sme-form-group -->
+                                <div class="form-group">
+                                    <label class="required">{{ 'public.account' |
+                                        translate }}</label>
+                                    <select class="form-control" [(ngModel)]="sharedData.selectedAccount" name="selectedAccount"
+                                        #selectedAccount="ngModel" required>
+                                        <option selected value disabled>--{{ 'public.selectAccount' | translate }}--</option>
+                                        <option *ngFor="let aco of sharedData.accounts" [value]="aco.key">
+                                            {{aco.value.fullAccountNumber}}{{(aco.value.alias != null &&
+                                            aco.value.alias != '' ? ' - '+ aco.value.alias : '')}}{{
+                                            (aco.value.inquiry ? ' - ' + (aco.value.availableBalance | amountCurrency:aco.value.currency) : '')}}
+                                            {{(aco.value.inquiry ? ('currencyIso' | modelPipe:aco.value.currency) : '')}}</option>
+                                    </select>
+                                    <div *ngIf="selectedAccount.hasError('required') && selectedAccount.touched" class="alert alert-danger">
+                                        <small>{{'public.account' | translate }}{{ 'error.required' | translate }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <form autocomplete="off" class="sme-form__form">
+                <div class="sme-form__content">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.invoiceId' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoiceId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierName' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoice.billerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.supplierId' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoice.billerId }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.amountDue' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoice.amountDue |
+                                            amountCurrency}} {{'currencyIso' | modelPipe: '608'}}</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                        </div>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.dateDue' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoice.dateDue |
+                                            date:"dd/MM/yyyy" }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.additionalDetails' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoice.additionalDetails
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{ 'invoiceHUB.buyerName' |
+                                            translate }}</label>
+                                        <span type="text" class="form-control">{{ sharedData.invoice.buyerName }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'invoiceHUB.amountToPay' |
+                                            translate }} </label>
+                                        <input type="text" class="form-control" [(ngModel)]="sharedData.invoice.amountPayment "
+                                            inputPattern="onlyPositiveDecimalNumbers" maxlength="18" pattern="[0-9]{0,5}\.?[0-9]{0,2}$"
+                                            required [lte]="(sharedData.invoice.amountRangeTo ? +sharedData.invoice.amountRangeTo :0)"
+                                            name="pay" #pay="ngModel" [disabled]="sharedData.invoice.billCategory != 'PARTIAL'"
+                                            [gte]="(sharedData.invoice.amountDue < +sharedData.invoice.amountRangeFrom ? +sharedData.invoice.amountDue : +sharedData.invoice.amountRangeFrom)" />
+                                        <div *ngIf="pay.hasError('maxLength') && pay.touched" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.amountToPay' | translate }} {{ 'error.maxlength' |
+                                                translate:{size:18} }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('pattern') && pay.touched" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.amountToPay' | translate }} {{ 'error.numericDecimal' |
+                                                translate }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('lte')" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.amountToPay' | translate }} {{ 'error.maxValue' |
+                                                translate:{value:sharedData.invoice.amountRangeTo} }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('gte')" class="alert alert-danger">
+                                            <small>{{ 'error.minValue' |
+                                                translate:{value:(sharedData.invoice.amountDue < +sharedData.invoice.amountRangeFrom ? +sharedData.invoice.amountDue : +sharedData.invoice.amountRangeFrom)} }} </small>
+                                        </div>
+                                        <div *ngIf="pay.hasError('required') && pay.touched" class="alert alert-danger">
+                                            <small>{{'invoiceHUB.amountToPay' | translate }} {{ 'error.required' | translate }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

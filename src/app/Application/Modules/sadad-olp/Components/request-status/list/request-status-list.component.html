@@ -1,0 +1,20 @@
+<arb-breadcrumb [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+	['sadadOLP.requestStatus.menu']
+]">
+</arb-breadcrumb>
+
+<span class="form-control">
+    <label class="sme-form__form">{{'sadadOLP.requestStatus.adviceTxt' | translate}}</label>
+</span>
+
+<app-request-status-refunds-list-form></app-request-status-refunds-list-form>
+<app-request-status-disputes-list-form></app-request-status-disputes-list-form>
+
+<div class="sme-form__actions">
+    <button class="btn btn-primary btn-wide" [routerLink]="['/sadadOLP/olp-request-action']"
+        [disabled]="childRefunds.tableSelectedRows.length == 0 && childDisputes.tableSelectedRows.length == 0">
+        <span class="text">{{'public.proceed' | translate }}</span>
+    </button>
+</div>

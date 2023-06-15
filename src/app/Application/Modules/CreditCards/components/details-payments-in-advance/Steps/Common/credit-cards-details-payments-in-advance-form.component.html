@@ -1,0 +1,41 @@
+<ng-container [formGroup]="formModel">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label for="search-cardNumberDisplay">{{ 'accounts.creditCards.pidCardNumberDisplay' | translate }}</label>
+                <span id="search-cardNumberDisplay" class="form-control" name="cardNumberDisplay">
+                        {{ card?.cardNumberDisplay }}
+                    </span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-3">
+            <div class="form-group">
+                <label for="search-currentCycleAmount">{{ 'accounts.creditCards.pidCurrentCycleAmount' | translate }}</label>
+                <span id="search-currentCycleAmount" class="form-control" name="currentCycleAmount">
+                        {{ paymentData?.currentCycleAmount | amountCurrency }}
+                    </span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-cardAccount">{{ 'accounts.creditCards.pidSelectAccount' | translate }}</label>
+                <select id="search-cardAccount" class="form-control" name="cardAccount" formControlName="account">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of accountList; index as i" [value]="i"
+                            [innerHTML]="item['fullAccountNumber']+' - '+item['alias']">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <div class="form-group">
+                <label for="search-amount">{{ 'accounts.creditCards.pidAmount' | translate }}</label>
+                <input id="search-amount" class="form-control" name="amount" formControlName="amount" decimal-precision
+                       inputPattern="onlyPositiveDecimalNumbers"/>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

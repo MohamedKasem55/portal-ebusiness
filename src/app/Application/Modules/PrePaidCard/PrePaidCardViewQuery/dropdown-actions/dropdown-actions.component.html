@@ -1,0 +1,143 @@
+<div *ngIf="translate.currentLang === 'en'" ngbDropdown class="d-inline-block posit-top dropdown-menu-show"
+    placement="bottom-right">
+        <button class="btn btn-default btn-primary btn-prepaid" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="meatballs-menu-prepaid">
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsPaymentsGroup'])" (click)="goLoadFundsCard()" ngbDropdownItem class="options-target options-target-prepaid-fund-en">
+            {{'prePaidCard.loadFundsOnCard'| translate}}
+            <span class="icon -payment-options"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsPaymentsGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsPaymentsGroup'])" (click)="goRefundOfFunds()" ngbDropdownItem class="options-target options-target-prepaid-refund-en">
+            {{'prePaidCard.refundOfFunds'| translate}}
+            <span class="icon -payment-options"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsPaymentsGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsSetResetPINGroup'])" (click)="goPinManagement()" ngbDropdownItem class="options-target">
+            {{'prePaidCard.pinManagement'| translate}}
+            <span class="icon -restore"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsSetResetPINGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsClosureRequestReplacementGroup'])" (click)="goCardClosureRequest()" ngbDropdownItem
+            class="options-target">
+            {{'prePaidCard.cardClosureRequest'| translate}}
+            <span class="icon -unlock"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsClosureRequestReplacementGroup'])" class="divider dropdown-divider">
+        </div>
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsManage', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsLostStolenGroup'])" (click)="goCardLostStolen()" ngbDropdownItem class="options-target">
+            {{'prePaidCard.cardLostStolen'| translate}}
+            <span class="icon -lock"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+            ('PrepaidCardsManage', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsLostStolenGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsClosureRequestReplacementGroup'])" (click)="goCardReplacement()" ngbDropdownItem
+            class="options-target">
+            {{ 'prePaidCard.cardReplacement'| translate }}
+            <span class="icon -paddlock"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsClosureRequestReplacementGroup']) && selectedPrepaidCard?.cardStatus === inactiveStatus"
+            class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+            ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+            ['PrepaidCardsRequestActivateGroup']) && selectedPrepaidCard?.cardStatus === inactiveStatus"
+            (click)="goActivationCard()" ngbDropdownItem class="options-target">
+            {{'prePaidCard.cardActivation'| translate}}
+            <span class="icon -active-card"></span>
+        </button>
+    </div>
+</div>
+<div *ngIf="translate.currentLang === 'ar'" ngbDropdown class="d-inline-block posit-top my-drop-down"
+    placement="bottom-right">
+    <button class="btn btn-default btn-primary btn-prepaid " id="dropdownBasic1" ngbDropdownToggle>المزيد</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="meatballs-menu-prepaid">
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsPaymentsGroup'])" (click)="goLoadFundsCard()" ngbDropdownItem class="options-target options-target-prepaid-fund-ar">
+            {{'prePaidCard.loadFundsOnCard'| translate}}
+            <span class="icon -payment-options"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsPaymentsGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsPaymentsGroup'])" (click)="goRefundOfFunds()" ngbDropdownItem class="options-target options-target-prepaid-refund-ar">
+            {{'prePaidCard.refundOfFunds'| translate}}
+            <span class="icon -payment-options"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsPaymentsGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsSetResetPINGroup'])" (click)="goPinManagement()" ngbDropdownItem class="options-target">
+            {{'prePaidCard.pinManagement'| translate}}
+            <span class="icon -restore"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsSetResetPINGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsClosureRequestReplacementGroup'])" (click)="goCardClosureRequest()" ngbDropdownItem
+            class="options-target">
+            {{'prePaidCard.cardClosureRequest'| translate}}
+            <span class="icon -unlock" style="padding-right: 8px"></span>
+                    </button>
+        <div *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsClosureRequestReplacementGroup'])" class="divider dropdown-divider">
+        </div>
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsManage', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsLostStolenGroup'])" (click)="goCardLostStolen()" ngbDropdownItem class="options-target">
+            {{'prePaidCard.cardLostStolen'| translate}}
+            <span class="icon -lock"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+        ('PrepaidCardsManage', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsLostStolenGroup'])" class="divider dropdown-divider"></div>
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsClosureRequestReplacementGroup'])" (click)="goCardReplacement()" ngbDropdownItem
+            class="options-target">
+            {{ 'prePaidCard.cardReplacement'| translate }}
+            <span class="icon -paddlock"></span>
+        </button>
+        <div *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsPaymentsGroup']) && selectedPrepaidCard?.cardStatus === inactiveStatus"
+            class="divider dropdown-divider">
+        </div>
+        <button *ngIf="authenticationService.activateOption
+        ('PrepaidCardsMenu', ['PREPAID_CARDS_PRIVILEGE'],
+        ['PrepaidCardsRequestActivateGroup']) && selectedPrepaidCard?.cardStatus === inactiveStatus"
+            (click)="goActivationCard()" ngbDropdownItem class="options-target">
+            {{'prePaidCard.cardActivation'| translate}}
+            <span class="icon -active-card"></span>
+        </button>
+    </div>
+</div>

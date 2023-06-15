@@ -1,0 +1,186 @@
+<arb-breadcrumb [routes]="[
+    ['companyAdmin.companyAdmin'],
+	['menu.company_admin.saudi-payments.account-verify.accountVerify'],
+	['menu.company_admin.saudi-payments.account-verify.accountVerifyList']]">
+</arb-breadcrumb>
+
+<div class="container-fluid" style="display: flex; justify-content: flex-end">
+    <button type="submit" class="btn btn-primary btn-wide" (click)="routeToNewRequest()">
+        {{ 'saudiPayments.accountVerify.new' | translate }}
+    </button>
+</div>
+
+<arb-colapsable-panel [title]="'public.search'" [isCollapsedContent]="false">
+    <div class="sme-form">
+        <div class="sme-form__content">
+            <div class="sme-form__form" id="sme-demo--form--search-criteria-">
+                <form autocomplete="off" #searchForm="ngForm" [formGroup]="formModel"
+                      class="sme-wizard">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group">
+                                <label>{{ 'saudiPayments.accountVerify.reqStatus' | translate }}</label>
+                                <ng-select [notFoundText]="'public.noData' | translate" formControlName="status" class="form-control">
+                                    <ng-option *ngFor="let status of statusValues" [value]="status.key">
+                                        {{status.value}}
+                                    </ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <arb-buttons>
+                    <button type="submit" class="btn btn-default btn-wide" (click)="resetForm()">
+                        {{ 'public.reset' | translate }}
+                    </button>
+                    <button [disabled]="!canFilter()" type="submit" class="btn btn-primary btn-wide" (click)="setPageOffset(0)">
+                        {{ 'public.search' | translate }}
+                    </button>
+                </arb-buttons>
+            </div>
+        </div>
+    </div>
+</arb-colapsable-panel>
+
+
+<arb-table-panel [title]="'saudiPayments.accountVerify.header'">
+    <table-export
+            [dataTable]="table" [header]="'saudiPayments.accountVerify.header' | translate"
+            [columns]="[
+                {'title': 'saudiPayments.accountVerify.reqDate' | translate, 'dataKey':'creationDate'},
+                {'title': 'saudiPayments.accountVerify.beneficiaryIban' | translate, 'dataKey':'beneficiaryIban'},
+                {'title': 'saudiPayments.accountVerify.disclaimerTitle' | translate, 'dataKey': 'disclaimer'}]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                   [rows]="pagedData.data" class="material sme-table sme-table--responsive table"
+                   [columnMode]="defaultColumnMode" [headerHeight]="40" [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight" [count]="pagedData.page.totalElements" [offset]="pagedData.page.pageNumber"
+                   [limit]="pageSize" [externalPaging]="true" (page)='setPage($event)'
+                   [externalSorting]="false">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'saudiPayments.accountVerify.reqDate' | translate }}</label>
+                                <div>
+                                    <span>
+                                        {{ row?.creationDate | date: 'yyyy/MM/dd -'}}
+                                        {{ row?.creationDate | date: 'mediumTime'}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'saudiPayments.accountVerify.beneficiaryIban' | translate }}</label>
+                                <div>
+                                    <span>
+                                        <a (click)="routeToDetails(row.messageId)" style="cursor: pointer;">
+                                            {{ row.beneficiaryIban }}
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'saudiPayments.accountVerify.disclaimerTitle' | translate }}</label>
+                                <div>
+                                    <span>{{ 'saudiPayments.accountVerify.disclaimer' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="creationDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'saudiPayments.accountVerify.reqDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    {{ value | date: 'yyyy/MM/dd -'}}
+                    {{ value | date: 'mediumTime'}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="beneficiaryIban">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'saudiPayments.accountVerify.beneficiaryIban' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    <a (click)="routeToDetails(row.messageId)" style="cursor: pointer;">
+                        {{ value }}
+                    </a>
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column >
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'saudiPayments.accountVerify.disclaimerTitle' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    <span>{{ 'saudiPayments.accountVerify.disclaimer' | translate }}</span>
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+                         let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                         [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                         [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                         [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                         [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                                         [visiblePagesCount]="visiblePagesCount"
+                                         (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{(pageSize > rowCount ? rowCount : pageSize)}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="pagedData.page.pageSize" (ngModelChange)="setPageSize($event)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="30">30</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

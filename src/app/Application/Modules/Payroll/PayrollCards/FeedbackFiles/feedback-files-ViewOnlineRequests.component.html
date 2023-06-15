@@ -1,0 +1,313 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">
+            {{ 'payroll.feedBackFiles.payroll' | translate }}
+        </li>
+        <li class="active">
+            <a href="#" routerLinkActive="active" class="active"
+                [routerLink]="['/payroll/payroll-cards']">{{ 'payroll.feedBackFiles.payrollCards' | translate }}</a>
+        </li>
+        <li class="active">
+            <a href="#" routerLinkActive="active" class="active"
+                [routerLink]="['/payroll/payroll-cards/feedback-files']">{{ 'payroll.feedBackFiles.feedBackFilesBB' | translate }}</a>
+        </li>
+        <li class="active">
+            {{ 'payroll.feedBackFiles.viewOnlineRequest' | translate }}
+        </li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                {{ 'payroll.feedBackFiles.viewOnlineRequestMenu' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+
+            <div class="sme-form__content">
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <form autocomplete="off" #stepForm="ngForm" class="sme-form__form">
+                            <div class="row">
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label
+                                            for="operation-type-input-type">{{ 'payroll.feedBackFiles.institutionNameViewOn' | translate }}</label>
+                                        <div>
+                                            <input [(ngModel)]="institutionName" name="institutionName" type="text"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label
+                                            for="operation-type-input-type">{{ 'payroll.feedBackFiles.organizationName' | translate }}</label>
+                                        <div>
+                                            <input [(ngModel)]="organizationName" name="organizationName" type="text"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label
+                                            for="operation-type-input-type">{{ 'payroll.feedBackFiles.cic' | translate }}</label>
+                                        <div>
+                                            <input [(ngModel)]="cic" name="cic" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__actions">
+
+            </div>
+            <div class="sme-form__content">
+
+                <a (click)="isCollapsedContentDetails = !isCollapsedContentDetails"
+                    class="sme-form__head human-selectable" role="button"
+                    [ngClass]="{'collapsed': isCollapsedContentDetails}"> <span>{{ 'public.search' | translate }}</span>
+                </a>
+
+                <div class="sme-form__collapse collapse" [collapse]="isCollapsedContentDetails">
+                    <form autocomplete="off" class="sme-form__form" #formDetail>
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- date Received -->
+                                    <div class="form-group">
+                                        <label
+                                            for="search-criteria-collapsed-input-operations">{{ 'payroll.feedBackFiles.systemFileName' | translate }}
+                                        </label>
+                                        <input type="text" class="form-control" [(ngModel)]="search.fileName"
+                                            #name="ngModel" name="fileName" />
+
+                                    </div>
+                                    <!-- /Region -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- date Received -->
+                                    <div class="form-group">
+                                        <label
+                                            for="search-criteria-collapsed-input-operations">{{ 'payroll.feedBackFiles.batchNameTable' | translate }}
+                                        </label>
+                                        <input type="text" class="form-control" [(ngModel)]="search.batchName"
+                                            #name="ngModel" name="batchName" />
+
+                                    </div>
+                                    <!-- /Region -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- date Received -->
+                                    <div class="form-group">
+                                        <label
+                                            for="search-criteria-collapsed-input-operations">{{ 'accounts.pos.dateFrom' | translate }}
+                                        </label>
+                                        <input type="text" style="z-index: 1000;" [(ngModel)]="search.dateFrom"
+                                            #dateFrom="bsDatepicker" name="dateFrom" class="form-control  " bsDatepicker
+                                            [bsConfig]="bsConfig" />
+
+
+                                    </div>
+                                    <!-- /Region -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- date Received -->
+                                    <div class="form-group">
+                                        <label
+                                            for="search-criteria-collapsed-input-operations">{{ 'accounts.pos.dateTo' | translate }}
+                                        </label>
+                                        <input type="text" style="z-index: 1000;" [(ngModel)]="search.dateTo"
+                                            #dateTo="bsDatepicker" name="dateTo" class="form-control  " bsDatepicker
+                                            [bsConfig]="bsConfig" />
+
+                                    </div>
+                                    <!-- /Region -->
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide"
+                                (click)=reset()>{{'public.reset' | translate }}</button>
+                            <button (click)="searchData()"
+                                class="btn btn-primary btn-wide">{{'public.search' | translate }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'payroll.feedBackFiles.onlineResquestList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="onlineRequestTable"
+                        [header]="'payroll.feedBackFiles.onlineRequestTable' | translate" [columns]="[
+{'title':'payroll.feedBackFiles.systemFileName' | translate, 'dataKey': 'fileName'},
+{'title':'payroll.feedBackFiles.batchNameTable' | translate, 'dataKey': 'batchName'},
+{'title':'payroll.feedBackFiles.dataReceived' | translate, 'dataKey': 'dataReceived'}
+]"></table-export>
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #onlineRequestTable
+                        class="material sme-table sme-table--responsive table" [rows]="onlineRequest.data"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+                        [count]="onlineRequest.page.totalElements" [offset]="onlineRequest.page.pageNumber-1"
+                        [limit]="onlineRequest.page.pageSize"  (page)="setPage($event)">
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'payroll.feedBackFiles.systemFileName' | translate }}</label>
+                                                <div>
+                                                    <span class="human-selectable"><a
+                                                            (click)="showFile(row)">{{ row.fileName }}</a></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'payroll.feedBackFiles.batchNameTable' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.batchName }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                   >{{ 'payroll.feedBackFiles.dataReceived' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.dataReceived | date:"dd/MM/yyyy" }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <ngx-datatable-column prop="fileName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{ 'payroll.feedBackFiles.systemFileName' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <span class="human-selectable"><a (click)="downloadFile(value)"> {{value}}</a></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="batchName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{ 'payroll.feedBackFiles.batchNameTable' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="dataReceived">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{ 'payroll.feedBackFiles.dataReceived' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | date:"dd/MM/yyyy" }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="onlineRequestTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{this.onlineRequest.data?.length}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="this.onlineRequest.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,152 @@
+<arb-breadcrumb [routes]="[
+['companyAdmin.companyAdmin'],
+['companyAdmin.user.management',['/companyadmin/manage/user']],
+['companyAdmin.user.details']
+]">
+</arb-breadcrumb>
+
+<arb-panel *ngIf="messageError?.code">
+    <div class="alert alert-danger">
+        <small>{{messageError['code']}} {{messageError['description']}}</small>
+    </div>
+</arb-panel>
+
+<company-admin-user-management-edit-form [formModel]="formModel" [userData]="userData" [formAction]="'details'"
+    [combosData]="combosData" [messageError]="messageError" [enabled]="false">
+</company-admin-user-management-edit-form>
+
+<arb-panel-buttons>
+
+    <a href="#" class="btn btn-default btn-wide" routerLinkActive="active" [routerLink]="['/companyadmin/manage/user']">
+        {{'public.back' | translate }}</a>
+
+    <button type="button" class="btn btn-primary btn-wide" (click)="edit()" *ngIf="!hiddeEditButton()">
+        {{'public.edit' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary btn-wide" (click)="showNoAuth('reset')" *ngIf="!hiddeResetPassword()">
+        {{'public.reset-password' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary btn-wide" (click)="showNoAuth('block')" *ngIf="!hideBlockButton()">
+        {{'public.block' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary btn-wide" (click)="showNoAuth('unblock')" *ngIf="!hiddeUnblockButton()">
+        {{'public.unblock' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary btn-wide" (click)="showNoAuth('delete')" *ngIf="!hideDeleteButton()">
+        {{'public.delete' | translate }}
+    </button>
+</arb-panel-buttons>
+
+<div class="modal fade" bsModal #requestPassSubmittedModal="bs-modal" tabindex="-1" role="dialog"
+    aria-labelledby="requestPassSubmittedModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="icon-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="icon -check icon-success"></span>
+                <p>{{ 'companyAdmin.user.modalresetBlockOK' | translate }}</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-wide" [routerLink]="['/companyadmin/manage/user']"
+                    data-dismiss="modal" aria-label="Close">{{ 'public.finish' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" bsModal #requestSubmittedModal="bs-modal" tabindex="-1" role="dialog"
+    aria-labelledby="requestSubmittedModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="icon-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="icon -check icon-success"></span>
+                <p *ngIf="hideBlockButton() && !this.company.dualAuthorization">{{ 'companyAdmin.user.modalUnBlockOK' | translate }}</p>
+                <p *ngIf="hideBlockButton() && this.company.dualAuthorization">{{ 'public.requestOk' | translate }}</p>
+                <p *ngIf="hideBlockButton() && this.company.dualAuthorization">{{ 'public.requestPendingOk' | translate}}</p>
+                <p *ngIf="hiddeUnblockButton()">{{ 'companyAdmin.user.modalBlockOK' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-wide" [routerLink]="['/companyadmin/manage/user']"
+                    data-dismiss="modal" aria-label="Close">{{ 'public.finish' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="modal fade" bsModal #blockMail="bs-modal" tabindex="-1" role="dialog" aria-labelledby="blockMail"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="icon-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'companyAdmin.user.askSendMail' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-wide"
+                        (click)="sendMailAndBlock();blockMail.hide()" data-dismiss="modal" aria-label="Close">
+                    {{'public.yes' | translate }}
+                </button>
+                <button type="button" class="btn btn-default btn-wide" (click)="onlyBlock();blockMail.hide()"
+                        data-dismiss="modal" aria-label="Close">
+                    {{'public.no' | translate }}
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal fade" bsModal #noAuthModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="blockMail"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="icon-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p *ngIf="!this.company.dualAuthorization || (isBlock && this.company.dualAuthorization) ">{{ 'companyAdmin.user.askAction' | translate }} </p>
+                <p *ngIf="this.company.dualAuthorization && !isBlock">{{ 'companyAdmin.user.askActionApprove' | translate }} </p>
+            </div>
+
+            <arb-panel *ngIf="this.generateChallengeAndOTP !== null">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="form-group">
+                            <app-secured-authentication [generateChallengeAndOTP]="this.generateChallengeAndOTP"
+                                                        [requestValidate]="this.requestValidate"
+                                                        #authorization>
+                            </app-secured-authentication>
+                        </div>
+                    </div>
+                </div>
+            </arb-panel>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-wide" (click)="onConfirmNoAuth()" data-dismiss="modal"
+                    aria-label="Close"  [disabled]="!enableButton()">
+                    {{'public.confirm' | translate }}
+                </button>
+                <button type="button" class="btn btn-default btn-wide" (click)="onCancelNoAuth()" data-dismiss="modal"
+                    aria-label="Close">
+                    {{'public.cancel' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

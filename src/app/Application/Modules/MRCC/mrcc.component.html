@@ -1,0 +1,57 @@
+<div class='sme-breadcrumb'>
+  <ol class='breadcrumb'>
+    <li>{{ 'mrcc.cards' | translate }}</li>
+    <li>{{ 'mrcc.businessCreditCard' | translate }}</li>
+    <li class='active'>{{ 'mrcc.name' | translate }}</li>
+  </ol>
+</div>
+
+
+<div class='container-fluid' *ngIf="pageName==='OTP'">
+  <div class='sme-head'>
+    <div class='sme-head__title'>
+      {{ 'mrcc.otp' | translate }}
+    </div>
+  </div>
+  <arb-panel>
+    <app-secured-authentication *ngIf='generateChallengeAndOTP' [generateChallengeAndOTP]='generateChallengeAndOTP'
+                                [requestValidate]='requestValidate'></app-secured-authentication>
+  </arb-panel>
+</div>
+
+<div class='container-fluid' *ngIf="pageName==='STEPER'">
+
+  <arb-steps [currentStep]='wizardStep' [steps]="['mrcc.cardDetails','mrcc.summary','mrcc.finish']">
+  </arb-steps>
+  <br>
+  <div class='sme-head'>
+    <div class='sme-head__title'>
+      {{ 'mrcc.apply' | translate }}
+    </div>
+  </div>
+
+  <card-details *ngIf='wizardStep === 1 || wizardStep === 2' [formModel]='cardDetailsFormModel' [accounts]='accounts'
+                [mandatoryDocuments]='mandatoryDocuments' [isSummary]='isSummary'>
+  </card-details>
+  <mrcc-finish *ngIf='wizardStep === 3' [formModel]=' cardDetailsFormModel' [mandatoryDocuments]='mandatoryDocuments'>
+  </mrcc-finish>
+</div>
+
+<arb-buttons *ngIf='wizardStep<3'>
+  <button class='btn btn-default btn-wide' type='button' *ngIf='wizardStep>1'
+          (click)='goBack()'>{{ 'financeProduct.back' |
+    translate}}</button>
+
+  <button class='btn btn-default btn-wide' type='button' *ngIf='wizardStep<3'
+          (click)='cancel()'>{{ 'financeProduct.cancel' |
+    translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button' [disabled]='canProceed()' (click)='proceed()'>{{
+    'financeProduct.proceed' |
+      translate}}</button>
+</arb-buttons>
+
+<arb-buttons *ngIf='wizardStep==3'>
+  <button class='btn btn-default btn-wide' type='button' (click)='cancel()'>{{
+    'mrcc.finish' | translate}}</button>
+</arb-buttons>

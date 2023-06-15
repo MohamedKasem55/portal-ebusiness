@@ -1,0 +1,97 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'accounts.accounts'| translate }}</li>
+        <li class="active">
+            <a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a>
+        </li>
+        <li class="active">{{ 'accounts.chequeBook.request' | translate }}</li>
+    </ol>
+</div>
+
+
+<div class="container-fluid">
+    <div class="sme-page-block sme-wizard-steps">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'accounts.chequeBook.details' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step current">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'accounts.chequeBook.confirmation' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'accounts.chequeBook.summary' | translate }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <form autocomplete="off" #detailAlrajhiBeneficiary="ngForm" class="sme-form__form" novalidate>
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <fieldset>
+                        <div class="legend">{{ 'chequebook.chequeBookDetails' | translate }}</div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'public.account' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="account"
+                                               [ngModel]="formData.batch.accountNumber" disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'chequebook.bookType' | translate }}</label>
+                                    <div>
+
+                                        <span class="form-control" *ngIf="formData.batch.typeCheck == '0'" disabled>
+                                            {{ 'accounts.chequeBook.10Pages' | translate }}
+                                        </span>
+                                        <span class="form-control" *ngIf="formData.batch.typeCheck == '2'" disabled>
+                                            {{ 'accounts.chequeBook.25Pages' | translate }}
+                                        </span>
+                                        <span class="form-control" *ngIf="formData.batch.typeCheck == '3'" disabled>
+                                            {{ 'accounts.chequeBook.50Pages' | translate }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <app-levels-table [futureSecurityLevels]="formData.batch.futureSecurityLevelsDTOList">
+                </app-levels-table>
+
+                <arb-panel *ngIf="formData.generateChallengeAndOTP">
+                    <app-secured-authentication
+                            [generateChallengeAndOTP]="formData.generateChallengeAndOTP"
+                            [requestValidate]="requestValidate" #authorization>
+                    </app-secured-authentication>
+                </arb-panel>
+
+                <!-- Bottoms -->
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                    <button type="button" (click)="goBack()" class=" btn btn-default btn-wide">
+                        {{ 'public.back' | translate }}
+                    </button>
+                    <button class="btn btn-primary btn-wide" (click)="step3ChequeBook()"
+                            [disabled]="!valid()">
+                        {{ 'public.proceed' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

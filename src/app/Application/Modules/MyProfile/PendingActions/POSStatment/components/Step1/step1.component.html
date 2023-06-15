@@ -1,0 +1,58 @@
+<app-new-request-table
+        [items]="listNewRequest.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableNewRequestLimit"
+        [totalSize]="listNewRequest.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectedList]="this.sharedData.newRequestSelected"
+        [selectable]="true"
+        (setPage)="setPageNewRequest($event)"
+        (onSelect)="onSelectNewRequest($event)"
+        (changeDisplaySize)="changeDisplaySizeNewRequest($event)">
+</app-new-request-table>
+
+<app-management-table
+        [items]="listPOSManagement.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tablePOSManagementLimit"
+        [totalSize]="listPOSManagement.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectedList]="this.sharedData.posManagementSelected"
+        [selectable]="true"
+        (setPage)="setPagePOSManagement($event)"
+        (onSelect)="onSelectPOSManagement($event)"
+        (changeDisplaySize)="changeDisplaySizePOSManagement($event)">
+</app-management-table>
+
+<app-maintenance-table
+        [items]="listPOSMaintenance.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tablePOSMaintenanceLimit"
+        [totalSize]="listPOSMaintenance.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectedList]="this.sharedData.posMaintenanceSelected"
+        [selectable]="true"
+        (setPage)="setPagePOSMaintenance($event)"
+        (onSelect)="onSelectPOSMaintenance($event)"
+        (changeDisplaySize)="changeDisplaySizePOSMaintenance($event)">
+</app-maintenance-table>
+
+<app-claim-table
+        *ngIf="authenticationService.activateOption('AccountsMenu',['POS_MANAGEMENT_PRIVILEGE'],['posManagementGroup'])"
+        [items]="listClaim.items"
+        [modal]="modalAuth"
+        [tableDisplaySize]="tableClaimLimit"
+        [totalSize]="listClaim.total"
+        [futureLevels]="false"
+        [externalPagination]="true"
+        [selectedList]="this.sharedData.claimSelected"
+        [selectable]="true"
+        (setPage)="setPageClaim($event)"
+        (onSelect)="onSelectClaim($event)"
+        (changeDisplaySize)="changeDisplaySizeClaim($event)">
+</app-claim-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>

@@ -1,0 +1,88 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'payroll.deleteEmployee' | translate}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid" formArrayName="employees" *ngFor="let employee of employees; let i=index">
+        <div [formGroupName]="i">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <a class="sme-form__close btn" (click)="removeEmployee(i)"><span class="icon -close"></span></a>
+                            <div class="sme-form__body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'payroll.employeeNumber' |
+                                                translate }}</label>
+                                            <span class="form-control disabled">{{employee.controls.employeeNumber?.value}}</span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'payroll.employeeName'
+                                                | translate }}</label>
+                                            <span class="form-control disabled">{{employee.controls.employeeName?.value}}</span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{
+                                                'payroll.civilianID' | translate }}</label>
+                                            <span class="form-control disabled">{{employee.controls.civilianId?.value}}</span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{
+                                                'public.bank' | translate }}</label>
+                                            <span class="form-control disabled"
+                                                  [innerHTML]="banksMap.get(employee.controls.bank?.value)"></span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'companyAdmin.user.account' |
+                                                translate }}</label>
+                                            <span class="form-control disabled">{{employee.controls.account?.value}}</span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'payroll.salary'
+                                                | translate }}</label>
+                                            <span class="form-control disabled">{{employee.controls.salary?.value | amountCurrency}}</span>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>	

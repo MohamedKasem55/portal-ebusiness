@@ -1,0 +1,173 @@
+<form autocomplete="off" #stepForm="ngForm">
+
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__title">
+                    <div class="col-xs-12 col-sm-6 text-left">
+                        {{ 'payroll.newBatchName' | translate}}
+                    </div>
+                    <div class="col-xs-12 col-sm-6 text-right">
+
+                    </div>
+                </div>
+                <div class="sme-panel">
+                    <div class="sme-panel__body">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{ 'payroll.batchName' | translate }}</label>
+                                        <input name="batchName" [(ngModel)]="sharedData.batchName" type="text"
+                                               class="form-control" required maxlength='60'>
+                                        <p [translate]="'registration.validationMaxX'"
+                                           [translateParams]="{characters: '60'}"
+                                           *ngIf="stepForm.controls.batchName && stepForm.controls.batchName.hasError('pattern')"
+                                           class="alert alert-danger"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__title">
+                    <div class="col-xs-12 col-sm-6 text-left">
+                        {{ 'payroll.employeeDetails' | translate}}
+                    </div>
+                    <div class="col-xs-12 col-sm-6 sme-page-block sme-wizard__navigation sme-form__actions"
+                         style="padding: 0 0 0 0">
+
+                        <a class="btn btn-default btn-wide" (click)="clearEmployees()">
+                            <span>{{'public.clear' | translate }}</span></a>
+                        <a (click)="addEmployee()" class="btn btn-primary btn-wide">
+                            <span class="icon -plus"></span>
+                            <span>{{'payroll.addEmployee' | translate }}</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngFor="let employeeAdded of employeesNumber" class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <a (click)="removeEmployee(employeeAdded)" class="sme-form__close btn">
+                            <span class="icon -close"></span>
+                        </a>
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'payroll.employeeId' | translate }}</label>
+                                        <input name="menberId-{{employeeAdded}}"
+                                               [(ngModel)]="sharedData.employees[employeeAdded].menberId" type="text"
+                                               class="form-control" pattern="^\d{1,12}$" required maxlength='12'
+                                               inputPattern="onlyDigits">
+                                    </div>
+                                    <p [translate]="'registration.validationMaxXdigits'"
+                                       [translateParams]="{digits: '12'}"
+                                       *ngIf="stepForm.controls['menberId-'+employeeAdded] && stepForm.controls['menberId-'+employeeAdded].hasError('pattern')"
+                                       class="alert alert-danger"></p>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'payroll.employeeName' | translate }}</label>
+                                        <!--		                                <input name="employeeName-{{employeeAdded}}" [(ngModel)]="sharedData.employees[employeeAdded].employeeName" type="text" class="form-control" pattern="^.{1,50}$" required maxlength='50'>-->
+                                        <input name="employeeName-{{employeeAdded}}"
+                                               [(ngModel)]="sharedData.employees[employeeAdded].employeeName"
+                                               type="text" class="form-control"
+                                               inputPattern="onlyAlphabetics" required maxlength='50'>
+                                    </div>
+                                    <p [translate]="'registration.validationMaxX'"
+                                       [translateParams]="{characters: '50'}"
+                                       *ngIf="stepForm.controls['employeeName-'+employeeAdded] && stepForm.controls['employeeName-'+employeeAdded].hasError('pattern')"
+                                       class="alert alert-danger"></p>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'payroll.civilianID' | translate}}</label>
+                                        <input name="nationalID-{{employeeAdded}}"
+                                               [(ngModel)]="sharedData.employees[employeeAdded].nationalID" type="text"
+                                               class="form-control" pattern="^\d{10}$"
+                                               required maxlength='10' inputPattern="onlyDigits">
+                                    </div>
+                                    <p *ngIf="stepForm.controls['nationalID-'+employeeAdded] && stepForm.controls['nationalID-'+employeeAdded].hasError('pattern')"
+                                       class="alert alert-danger">
+                                        {{'registration.validation10DigitsNumber' | translate }}
+                                    </p>
+                                </div>
+                                <div *ngIf="sharedData.institutionDTO.layout === 'wps'" class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'payroll.movilNumber' | translate}}</label>
+                                        <input name="mobileNumber-{{employeeAdded}}"
+                                               [(ngModel)]="sharedData.employees[employeeAdded].mobileNumber"
+                                               type="text" class="form-control" pattern="^05\d{8}$" required
+                                               maxlength='10' inputPattern="onlyDigits">
+                                    </div>
+                                    <p [translate]="'registration.validationMobile'"
+                                       *ngIf="stepForm.controls['mobileNumber-'+employeeAdded] && stepForm.controls['mobileNumber-'+employeeAdded].hasError('pattern')"
+                                       class="alert alert-danger"></p>
+                                </div>
+                                <div *ngIf="sharedData.institutionDTO.layout != 'wps'" class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{'payroll.movilNumber' | translate}}</label>
+                                        <input name="mobileNumber-{{employeeAdded}}"
+                                               [(ngModel)]="sharedData.employees[employeeAdded].mobileNumber"
+                                               type="text" class="form-control" pattern="^05\d{8}$" maxlength='10'
+                                               inputPattern="onlyDigits">
+                                    </div>
+                                    <p [translate]="'registration.validationMobile'"
+                                       *ngIf="stepForm.controls['mobileNumber-'+employeeAdded] && stepForm.controls['mobileNumber-'+employeeAdded].hasError('pattern')"
+                                       class="alert alert-danger"></p>
+                                </div>
+                                <div *ngIf="'group'===sharedData.institutionDTO.layout || ('group'===sharedData.institutionDTO.institutionType && 'wps'===sharedData.institutionDTO.layout)"
+                                     class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{'payroll.departmentId' | translate}}</label>
+                                        <div class="sme-select form-control dropdown" dropdown>
+                                            <button dropdownToggle type="button" class="form-control">
+                                                <span [innerHTML]="sharedData.employees[employeeAdded].departmentId | keyValuePipe:sharedData.departments"></span>
+                                            </button>
+                                            <ul *dropdownMenu class="dropdown-menu">
+                                                <li *ngFor="let department of sharedData.departments">
+                                                    <a class="human-selectable"
+                                                       (click)="sharedData.employees[employeeAdded].departmentId=department.key">
+                                                        <span [innerHTML]="department.value"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="'group'=== sharedData.institutionDTO.layout" class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="required">{{'payroll.userReference' | translate}}</label>
+                                        <input name="userReference-{{employeeAdded}}"
+                                               [(ngModel)]="sharedData.employees[employeeAdded].userReference"
+                                               type="text" class="form-control" pattern="^\d*$" required
+                                               inputPattern="onlyDigits">
+                                    </div>
+                                    <p *ngIf="stepForm.controls['userReference-'+employeeAdded] && stepForm.controls['userReference-'+employeeAdded].hasError('pattern')"
+                                       class="alert alert-danger">
+                                        {{'registration.validationNumber' | translate }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

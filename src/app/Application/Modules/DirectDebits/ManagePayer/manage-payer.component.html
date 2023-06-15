@@ -1,0 +1,356 @@
+<!-- sme-breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'dashboard.payments'| translate }}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/direct-debits']">{{ 'dashboard.directDebits'|
+                translate }}</a></li>
+        <li class="active">{{ 'directDebits.directDebitsCustomers'| translate }}</li>
+    </ol>
+</div>
+
+<arb-panel-buttons
+    *ngIf="authenticationService.activateOption('DirectDebitUploadClaimFile', ['DIRECTDEBITS_PRIVILEGE'], ['DirectDebitsGroup'])">
+    <a class="btn btn-primary btn-wide" [routerLink]="'/direct-debits/payer-upload-file'">{{
+        'directDebits.uploadPayer' | translate }}
+    </a>
+</arb-panel-buttons>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+
+                <div class="col-xs-12 col-sm-6">
+                    {{ 'directDebits.directDebitsCustomers' | translate}}
+                </div>
+                <div class="col-xs-12 col-sm-6 sme-form__actions" style="padding: 0px 0px">
+
+                    <a class="btn btn-primary btn-wide" (click)="goAddPayer()">{{
+                        'directDebits.addPayer' | translate }}</a>
+                    <a class="btn btn-primary btn-wide" [routerLink]="['/direct-debits/payer-upload-file']">{{
+                        'directDebits.uploadPayerFile' | translate }}</a>
+
+                </div>
+
+            </div>
+
+            <form autocomplete="off" class="sme-form__form" [formGroup]="searchForm" (ngSubmit)="search()">
+                <div class="sme-form__content">
+                    <a class="sme-form__head collapsed" role="button"
+                        (click)="isCollapsedContent = !isCollapsedContent"> <span>{{
+                            'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent">
+
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="payer-mandateReference">{{ 'directDebits.mandateReference' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control" id="payer-mandateReference"
+                                            formControlName="mandateNumber" maxlength="21">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="payer-personalName">{{ 'directDebits.personalName'
+                                            | translate }}</label>
+                                        <input type="text" class="form-control" id="payer-personalName"
+                                            formControlName="payerName" maxlength="60">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="banks">{{
+                                            'directDebits.bank' | translate }}</label>
+
+                                        <ng-select class="form-control" name="banks" formControlName="bank">
+                                            <ng-option selected value disabled>
+                                                --{{ 'public.selectDropdown' | translate }}--
+                                            </ng-option>
+                                            <ng-option *ngFor="let bank of banks" [value]="bank.key">
+                                                {{bank['value']}}
+                                            </ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="payer-payerAccount">{{
+                                            'directDebits.payerAccount' | translate }}</label>
+                                        <input type="text" class="form-control" id="payer-payerAccount"
+                                            formControlName="payerAccount" maxlength="24" inputPattern="onlyDigits">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="payer-amountFrom">{{ 'directDebits.amountFrom' |
+                                            translate }}</label>
+                                        <input type="text" class="form-control" id="payer-amountFrom"
+                                            formControlName="amountFrom" inputPattern="onlyPositiveDecimalNumbers">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label for="payer-amountTo">{{ 'directDebits.amountTo'
+                                            | translate }}</label>
+                                        <input type="text" class="form-control" id="payer-amountTo"
+                                            formControlName="amountTo" inputPattern="onlyPositiveDecimalNumbers">
+                                    </div>
+                                    <!-- ./sme-form-group -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sme-form__actions">
+                            <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                                'public.reset' | translate }}</button>
+                            <button type="submit" class="btn btn-primary btn-wide">{{
+                                'public.search' | translate }}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-demo--table--activity-logs-list -->
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{'directDebits.payerList' | translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <table-export [dataTable]="listPageTable" [header]="'directDebits.payerList' | translate" [columns]="[
+        {'title':'directDebits.mandateReference' | translate,'dataKey':'mandate'},
+        {'title':'directDebits.personalName' |translate ,'dataKey':'personalName'},
+        {'title':'directDebits.bank' | translate,'dataKey':'bankDirect'},
+        {'title':'directDebits.payerAccount' | translate,'dataKey':'account'},
+        {'title':'directDebits.amount' | translate,'dataKey':'amount'}
+        ]"></table-export>
+
+                </div>
+            </div>
+            <div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #listPageTable
+                        class="material sme-table sme-table--responsive table" [rows]="listPage.data"
+                        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                        [rowHeight]="defaultHeight" [externalPaging]="true" [externalSorting]="true"
+                        [count]="listPage.page.totalElements" [offset]="listPage.page.pageNumber-1"
+                        [limit]="listPage.page.pageSize" [selectionType]="defaultSelectionType"
+                        [selected]="tableSelectedRows" [rowIdentity]="getIdFunction()" (page)="setPage($event)"
+                        (sort)="setSort($event)" (select)='onSelect($event)'>
+
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                            (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>
+                                                    {{'directDebits.mandateReference' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mandate }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.personalName' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.personalName }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.bank' | translate }}</label>
+                                                <div>
+                                                    <span>{{ 'payrollBankCode' | modelPipe:row.bankDirect }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.payerAccount' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.account }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'directDebits.amount' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.amount | amountCurrency }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+
+                        <!--                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"-->
+                        <!--                                              [draggable]="false" [resizeable]="false" [headerCheckboxable]="true"-->
+                        <!--                                              [checkboxable]="true">-->
+                        <!--                        </ngx-datatable-column> -->
+
+                        <!--                          checkbox- defaul select all resete preview item selected with extern pagination&ndash;&gt;-->
+                        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false"
+                            [draggable]="false" [resizeable]="false">
+                            <ng-template ngx-datatable-header-template let-value="value">
+                                <label class="datatable-checkbox">
+                                    <input type="checkbox" [checked]="selectAllOnPage[listPage.page.pageNumber]"
+                                        (change)="selectAll($event)" />
+                                </label>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                                <label class="datatable-checkbox">
+                                    <input type="checkbox" [checked]="isSelected"
+                                        (change)="onCheckboxChangeFn($event)" />
+                                </label>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <!--end custom checkbox-->
+
+
+                        <ngx-datatable-column prop="mandate" [width]="160">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.mandateReference' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="personalName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.personalName' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column prop="bankDirect">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.bank' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span [innerHTML]="'payrollBankCode' | modelPipe:value"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column prop="account" [width]="290">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.payerAccount' | translate }}
+                                </span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column prop="amount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'directDebits.amount' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                <span>{{ value | amountCurrency }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                        [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                        [hidden]="!((rowCount / pageSize) > 1)" [visiblePagesCount]="visiblePagesCount"
+                                        (change)="listPageTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' |
+                                            translate}} {{this.listPage.page.size}}
+                                            {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="this.listPage.page.pageSize"
+                                                    (change)="this.setPage(null)">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                    <option [value]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                        </ngx-datatable-footer>
+
+                    </ngx-datatable>
+                    <div class="sme-form__actions">
+                        <a href="#" class="btn btn-default btn-wide" [routerLink]="['/direct-debits']">
+                            {{'public.back' | translate }}</a>
+                        <button class="btn btn-default btn-wide" (click)="goDeletePayer()"
+                            [disabled]="tableSelectedRows.length == 0">{{
+                            'public.delete' | translate }}</button>
+                        <button class="btn btn-primary btn-wide" (click)="goModifyPayer()"
+                            [disabled]="tableSelectedRows.length == 0">
+
+                            <span class="text">{{'public.edit' | translate }}</span></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

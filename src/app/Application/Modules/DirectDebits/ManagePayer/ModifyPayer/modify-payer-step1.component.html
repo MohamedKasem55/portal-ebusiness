@@ -1,0 +1,175 @@
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title">
+				<div class="col-xs-12 col-sm-6 text-left">
+					{{ 'directDebits.editPayer' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+<form autocomplete="off" [formGroup]="form">
+<div class="container-fluid" formArrayName="elements">
+<div *ngFor="let element of form.controls.elements['controls']; let i=index">	
+	<div [formGroupName]="i">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__form">
+			<div class="sme-form__content">
+				<a class="sme-form__close btn" (click)="removeElement(i)"><span class="icon -close"></span></a>
+					<div class="sme-form__body">
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-mandateReference" class="required">{{ 'directDebits.mandateReference' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="payer-mandateReference" formControlName="mandate" maxlength="21">
+										<div *ngIf="element.controls.mandate.hasError('required') && element.controls.mandate.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.mandateReference' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="element.controls.mandate.hasError('maxLength') && element.controls.mandate.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.mandateReference' | translate }} {{ 'error.maxlength' | translate:{size:12} }} </small>
+                                        </div>
+                                    </div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-personalName" class="required">{{ 'directDebits.personalName'
+											| translate }}</label> 
+										<input type="text" class="form-control" id="payer-personalName" formControlName="personalName" maxlength="60">
+										<div *ngIf="element.controls.personalName.hasError('required') && element.controls.personalName.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.personalName' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="element.controls.personalName.hasError('maxLength') && element.controls.personalName.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.employeeName' | translate }} {{ 'error.maxlength' | translate:{size:60} }} </small>
+                                        </div>  
+									</div>
+									<!-- ./sme-form-group -->
+								</div>
+							</fieldset>
+							</div>
+							<div class="row">
+							<fieldset>	
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="account-input" class="required">{{ 'directDebits.payerAccount' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="account-input" formControlName="account" maxlength="24" inputPattern="notArabic" >
+										<div *ngIf="element.controls.account.hasError('required') && element.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.payerAccount' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="element.controls.account.hasError('maxLength') && element.controls.account.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.payerAccount' | translate }} {{ 'error.maxlength' | translate:{size:24} }} </small>
+                                        </div>
+                                    </div>
+									<!-- ./sme-form-group -->
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="bank-input" class="required">{{
+											'public.bank' | translate }}</label>
+										<select class="form-control" name="banks" formControlName="bank">
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let bank of banks" [selected]="bank == element.controls.bank.value" [ngValue]="bank.key">
+                                                {{bank['value']}}
+                                            </option>
+                                        </select>	 
+									</div>
+									<!-- ./sme-form-group -->
+								</div>	
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-amount" class="required">{{ 'directDebits.amount'
+											| translate }}</label> 
+										<input type="text" class="form-control" id="payer-amount" formControlName="amount" maxlength="15" inputPattern="onlyDecimalNumbers" pattern="[0-9]+\.?[0-9]{0,2}$">
+										
+                                        <div *ngIf="element.controls.amount.hasError('maxLength') && element.controls.amount.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.amount' | translate }} {{ 'error.maxlength' | translate:{size:15} }} </small>
+                                        </div>
+                                        <div *ngIf="element.controls.amount.hasError('pattern') && element.controls.amount.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.amount' | translate }} {{ 'error.numericDecimal' | translate }} </small>
+                                        </div>   
+									</div>
+									<!-- ./sme-form-group -->
+								</div>							
+							</fieldset>	
+							</div>
+							<div class="row">
+							<fieldset>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-personalAddress1" class="required">{{ 'directDebits.personalAddress1' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="payer-personalAddress1" formControlName="personalAddress1" maxlength="50"  >
+										<div *ngIf="element.controls.personalAddress1.hasError('required') && element.controls.personalAddress1.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.personalAddress1' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="element.controls.personalAddress1.hasError('maxLength') && element.controls.personalAddress1.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.personalAddress1' | translate }} {{ 'error.maxlength' | translate:{size:50} }} </small>
+                                        </div>
+                                    </div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-personalAddress2" >{{ 'directDebits.personalAddress2' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="payer-personalAddress2" formControlName="personalAddress2" maxlength="50"  >
+										<div *ngIf="element.controls.personalAddress2.hasError('maxLength') && element.controls.personalAddress2.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.personalAddress2' | translate }} {{ 'error.maxlength' | translate:{size:50} }} </small>
+                                        </div>
+                                    </div>
+								</div>
+								
+							</fieldset>
+							</div>
+							<div class="row">
+							<fieldset>
+								
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-description1" class="required">{{ 'directDebits.description1' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="payer-description1" formControlName="description1" maxlength="50"  >
+										<div *ngIf="element.controls.description1.hasError('required') && element.controls.description1.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.description1' | translate }} {{ 'error.required' | translate }} </small>
+                                        </div>
+                                        <div *ngIf="element.controls.description1.hasError('maxLength') && element.controls.description1.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.description1' | translate }} {{ 'error.maxlength' | translate:{size:50} }} </small>
+                                        </div>
+                                    </div>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<!-- sme-form-group -->
+									<div class="form-group">
+										<label for="payer-description2" >{{ 'directDebits.description2' |
+											translate }}</label> 
+										<input type="text" class="form-control"	id="payer-description2" formControlName="description2" maxlength="50"  >
+										<div *ngIf="element.controls.description2.hasError('maxLength') && element.controls.description2.touched" class="alert alert-danger">
+                                                    <small>{{'directDebits.description2' | translate }} {{ 'error.maxlength' | translate:{size:50} }} </small>
+                                        </div>
+                                    </div>
+								</div>
+							</fieldset>
+							</div>
+					</div>			
+				
+			</div>	
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
+</form>	

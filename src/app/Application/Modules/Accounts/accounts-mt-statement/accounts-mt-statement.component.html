@@ -1,0 +1,226 @@
+<div class="sme-breadcrumb">
+  <ol class="breadcrumb">
+    <li>{{ 'public.accounts' | translate }}</li>
+    <li class="active">{{ 'accounts.mtStatements' | translate }}</li>
+  </ol>
+</div>
+
+<div class="container-fluid">
+  <div class="sme-page-block">
+    <div class="sme-form">
+      <form autocomplete="off" #m="ngForm">
+        <div class="sme-form__content">
+          <div class="sme-form__body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <label>{{ 'accounts.account' | translate }}</label>
+                  <div class="form-control">
+                    <ng-select
+                      [notFoundText]="'public.noData' | translate"
+                      name="account"
+                      [(ngModel)]="selectedaccount"
+                      (ngModelChange)="doChangeAccount($event)"
+                      required
+                    >
+                      <ng-option [value]="">{{
+                        'accounts.allac' | translate
+                      }}</ng-option>
+                      <ng-option
+                        *ngFor="let account of accounts"
+                        [value]="account.fullAccountNumber"
+                      >
+                        {{ account.fullAccountNumber }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="sme-form__body sme-form"
+            style="background-color: #2b4499"
+          >
+            <div class="row">
+              <fieldset>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label></label>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label style="color: #fff; font-weight: 400">{{
+                      'accounts.frequency' | translate
+                    }}</label>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label style="color: #fff; font-weight: 400">{{
+                      'accounts.datemt' | translate
+                    }}</label>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label></label>
+                    <div>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div
+            class="sme-form__body sme-form"
+            style="border-bottom: 2px solid #f9f9f9"
+          >
+            <div class="row">
+              <fieldset>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <!-- sme-select -->
+                    <div
+                      class="form-control"
+                      style="border-bottom: 0px; margin-bottom: 0px"
+                    >
+                      <div class="sme-radio radio">
+                        <label>
+                          <input
+                            type="radio"
+                            [(ngModel)]="freq"
+                            value="daily"
+                            #showCtrl="ngModel"
+                            name="frequ"
+                            required
+                          />
+                          <i aria-hidden="true"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label style="margin-top: 8%">{{
+                      'accounts.dailyfile' | translate
+                    }}</label>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <div class="form-control">
+                      <ng-select
+                        [notFoundText]="'public.noData' | translate"
+                        name="selectdayates"
+                        [(ngModel)]="selectedDay"
+                        required
+                      >
+                        <ng-option
+                          *ngFor="let day of datedrpdwn"
+                          [value]="day.date"
+                        >
+                          {{ day.formated }}
+                        </ng-option>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label></label>
+                    <div>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div
+            class="sme-form__body sme-form"
+            style="background-color: #f9f9f9"
+          >
+            <div class="row">
+              <fieldset>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <!-- sme-select -->
+                    <div
+                      class="form-control"
+                      style="border-bottom: 0px; margin-bottom: 0px"
+                    >
+                      <div class="sme-radio radio">
+                        <label>
+                          <input
+                            type="radio"
+                            [(ngModel)]="freq"
+                            value="Monthly"
+                            #showCtrl="ngModel"
+                            name="frequ"
+                            required
+                          />
+                          <i aria-hidden="true"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label style="margin-top: 8%">{{
+                      'accounts.monthfile' | translate
+                    }}</label>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <div class="form-control">
+                      <ng-select
+                        [notFoundText]="'public.noData' | translate"
+                        name="selectdmonth"
+                        [(ngModel)]="selectedMonth"
+                        required
+                      >
+                        <ng-option
+                          *ngFor="let month of monthdrpdwn"
+                          [value]="month.date"
+                        >
+                          {{ month.formated }}
+                        </ng-option>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                  <div class="form-group">
+                    <label></label>
+                    <div>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+  <button
+    class="btn btn-default btn-wide"
+    type="button"
+    (click)="downloadFile()"
+    [disabled]="!m.valid"
+  >
+    {{ 'accounts.downfile' | translate }}
+  </button>
+</div>

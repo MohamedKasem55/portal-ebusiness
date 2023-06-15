@@ -1,0 +1,65 @@
+@import "./src/scss/theme/css/vendor/_directional.scss";
+
+.modal-widget-wrapper {
+    // overflow-y: auto;
+}
+
+.modal-widget-content {
+    // height: 95%;
+}
+
+.xl-dialog {
+    width: 95%;
+    // max-height: 90%;
+    // max-width: 1200px;
+    height: 95%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    overflow-y: auto;
+    margin: 0px;
+}
+
+@media screen and (max-width: 767px) {
+    .table-within-dialog {
+        display: block;
+    }
+}
+
+.cancelButton,
+.saveButton {
+    margin-bottom: 0px;
+}
+
+.manage-accounts-body {
+    text-align: unset;
+    text-transform: capitalize;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    // max-height: calc(100% - 120px);
+    // overflow-y: scroll;
+}
+
+.manage-accounts-title {
+    // width: 728px;
+    // height: 30px;
+    font-family: 'noto-sans-en',"noto-sans-ar";
+    @if $dir != ltr {
+        font-family: "noto-sans-ar",'noto-sans-en';
+    }
+    font-size: 26px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.43px;
+    color: #18272e;
+    padding-left: 43px;
+    margin-top: 33px;
+    text-transform: capitalize;
+}
+
+.viewAll-icon {
+    font-size: 10px !important;
+    height: unset !important;
+    width: unset !important;
+}

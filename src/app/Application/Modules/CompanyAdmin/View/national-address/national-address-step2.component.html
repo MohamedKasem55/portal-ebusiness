@@ -1,0 +1,128 @@
+<div class="container-fluid">
+
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <label class="sme-form__title">
+                    <span>{{ 'companyAdmin.nationalAddress.name' | translate }}</span>
+                </label>
+                <form autocomplete="off" #nationalAddress="ngForm" class="sme-form__form" [formGroup]="formNational">
+                    <div class="sme-wizard__content">
+                        <div class="sme-form__body">
+                            <div>
+                                <fieldset>
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-sm-4">
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                
+                                                    <label for="country" class="required">{{'companyAdmin.nationalAddress.country' | translate }}</label>
+                                                    <span class="form-control" id="country">
+                                                        {{ this.formNational.controls['country'].value }}
+                                                    </span>
+                                                
+                                            </div>
+
+                                            <!-- ./sme-form-group -->
+
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                
+                                                    <label for="region" class="required">{{'companyAdmin.nationalAddress.region' | translate }}</label>
+                                                    <span id="region" class="form-control">
+                                                        {{ getRegion(this.formNational.controls['region'].value) }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                    <label for="city">{{'companyAdmin.nationalAddress.city' | translate }}</label>
+                                                    <span id="city" class="form-control">
+                                                        {{ getCity(this.formNational.controls['city'].value) }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                    <label for="distric" class="required">{{'companyAdmin.nationalAddress.district' | translate }}</label>
+                                                    <span id="distric" class="form-control">
+                                                        {{ this.formNational.controls['district'].value }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-4 col-sm-offset-1">
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                    <label for="streetName" class="required">{{'companyAdmin.nationalAddress.streetName' | translate }}</label>
+                                                    <span class="form-control" id="streetName">
+                                                        {{ this.formNational.controls['streetName'].value }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                    <label for="postal-code" class="required">{{'companyAdmin.nationalAddress.postalCode' | translate }}</label>
+                                                    <span class="form-control" id="postal-code">
+                                                        {{ this.formNational.controls['postalCode'].value }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                    <label for="additional-code" class="required">{{'companyAdmin.nationalAddress.additionalCode' | translate }}</label>
+                                                    <span class="form-control" id="additional-code">
+                                                        {{ this.formNational.controls['additionalCode'].value }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+
+                                            <!-- sme-form-group -->
+
+                                            <div class="form-group">
+                                                    <label for="building-no" class="required">{{'companyAdmin.nationalAddress.buildingNo' | translate }}</label>
+                                                    <span class="form-control" id="building-no">
+                                                        {{ this.formNational.controls['buildingNo'].value }}
+                                                    </span>
+                                                
+                                            </div>
+
+                                            <div class="form-group">
+                                                    <label for="unitNo" class="required">{{'companyAdmin.nationalAddress.unitNo' | translate }}</label>
+                                                    <span class="form-control" id="unitNo">
+                                                        {{ this.formNational.controls['unitNo'].value }}
+                                                    </span>
+                                                
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

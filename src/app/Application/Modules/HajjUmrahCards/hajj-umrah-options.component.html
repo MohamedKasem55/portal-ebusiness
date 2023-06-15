@@ -1,0 +1,55 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'menu.payments.hajjumrahcards.menu' | translate }}</li>
+    </ol>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title"></div>
+            <div class="sme-form__content">
+                <form autocomplete="off" class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <ul>
+                                <li
+                                    *ngIf="this.authenticationService.activateOption('HajjUmrahCardList', ['HAJJUMRAHCARDS_PRIVILEGE'], ['HajjUmrahCardsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goCardInquires()">
+                                        {{ 'menu.payments.hajjumrahcards.list_of_cards' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                    *ngIf="this.authenticationService.activateOption('HajjUmrahAllocationCards', ['HAJJUMRAHCARDS_PRIVILEGE'], ['HajjUmrahCardsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                        (click)="goCardAllocationRequest()">
+                                        {{ 'menu.payments.hajjumrahcards.allocate_card' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                    *ngIf="this.authenticationService.activateOption('HajjUmrahCardOperations', ['HAJJUMRAHCARDS_PRIVILEGE'], ['HajjUmrahCardsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goCardOperation()">
+                                        {{ 'menu.payments.hajjumrahcards.operations' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                    *ngIf="this.authenticationService.activateOption('HajjUmrahCardsListReports', ['HAJJUMRAHCARDS_PRIVILEGE'], ['HajjUmrahCardsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active" (click)="goCardReports()">
+                                        {{ 'menu.payments.hajjumrahcards.reports' | translate }}
+                                    </a>
+                                </li>
+                                <li
+                                    *ngIf="this.authenticationService.activateOption('HajjUmrahRequestStatus', ['HAJJUMRAHCARDS_PRIVILEGE'], ['HajjUmrahCardsGroup'])">
+                                    <a class="human-selectable" routerLinkActive="active"
+                                        (click)="goCardRequestStatus()">
+                                        {{ 'menu.payments.hajjumrahcards.request_status' | translate }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

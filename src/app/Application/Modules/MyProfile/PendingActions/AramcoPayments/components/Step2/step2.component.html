@@ -1,0 +1,96 @@
+<app-aramcopayments-table *ngIf="sharedData.tableSelected.length > 0
+    && !sharedData.aproveFlow"
+                          [items]="sharedData.tableSelected"
+                          [modal]="modalAuth"
+                          [futureLevels]="false"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [step]="2"
+                          [aproveFlow]="sharedData.aproveFlow">
+</app-aramcopayments-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-aramcopayments-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toAuthorize.length>0"
+                          [items]="sharedData.validate.toAuthorize"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [step]="2"
+                          [aproveFlow]="sharedData.aproveFlow">
+</app-aramcopayments-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-aramcopayments-table *ngIf="sharedData.aproveFlow
+    && sharedData.tableSelected.length > 0
+    && sharedData.validate
+    && sharedData.validate.toProcess.length>0"
+                          [items]="sharedData.validate.toProcess"
+                          [modal]="modalAuth"
+                          [futureLevels]="true"
+                          [externalPagination]="false"
+                          [selectable]="false"
+                          [step]="2"
+                          [aproveFlow]="sharedData.aproveFlow">
+</app-aramcopayments-table>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+<div class="sme-content-container container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'myProfile.pending_actions.totalAmountToProcess' | translate }}</label>
+                                    <p> {{ amountToProcess | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</p>
+                                </div>
+                            </div>
+                            <div *ngIf="sharedData.aproveFlow" class="col-xs-12 col-sm-3">
+                                <div class="form-group" *ngIf="generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="container">
+  <div class="row">
+    <div class="  col-xs-12 col-md-12">
+      <form autocomplete="off" [formGroup]="FormMonth" novalidate>
+        <div class="form-group">
+          <div class="col-xs-3">
+            <label>{{'public.selectMonth' | translate}}</label>
+            <div class="form-control">
+              <ng-select [notFoundText]="'public.noData' | translate" formControlName="Monthly" #t (change)="callType($event)">
+                <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                <ng-option *ngFor="let mont of Monthly" [value]="mont.year+mont.month">{{mont.month}}/{{mont.year}}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-xs-3">
+
+            <label>{{'transfer.totalAmount' | translate}}</label>
+            <div class="form-control">
+              <span>{{totalAmount | amountCurrency}}</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-9"></div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-6">
+      <div style="display: block">
+        <arb-table-panel>
+          <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tableMonthlyStatistics
+            [rows]="monthlyStatisticsPage.data" class="material  sme-table sme-table--responsive table"
+            [columnMode]="defaultColumnMode" [headerHeight]="30" [rowHeight]="defaultHeight"
+            [limit]="monthlyStatisticsPage.page.pageSize" [externalPaging]="false" [externalSorting]="false"
+            >
+
+            <ngx-datatable-column prop="billerCode">
+              <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                  {{'payments.bill-code' | translate }}
+                </span>
+              </ng-template>
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="descriptionBillerCode" [width]="250">
+              <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                  {{'payments.moiPayments.feedBack.billName' | translate }}
+                </span>
+              </ng-template>
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="numberBills">
+              <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                  {{'payments.numberBillPaid' | translate }}
+                </span>
+              </ng-template>
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column prop="amount">
+              <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                  {{'public.amount' | translate }}
+                </span>
+              </ng-template>
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value | amountCurrency}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+        </arb-table-panel>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div style="display: block" class="chart">
+        <canvas *ngIf="true" baseChart width="50" height="50" [datasets]="lineChartData" [labels]="lineChartLabels"
+          [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+          [chartType]="lineChartType"></canvas>
+      </div>
+
+    </div>
+    <div class="col-md-6">
+      <div style="width:80%;display: block" class="chart">
+        <canvas *ngIf="loadedDoughnut" baseChart width="50" height="50" [data]="doughnutChartData" [colors]="colors"
+          [options]="DonutChartOptions" [labels]="lineChartLabels" [chartType]="doughnutChartType" [legend]="true"
+          (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+      </div>
+
+      <div id="js-legend" class="chart-legend"></div>
+    </div>
+  </div>
+</div>

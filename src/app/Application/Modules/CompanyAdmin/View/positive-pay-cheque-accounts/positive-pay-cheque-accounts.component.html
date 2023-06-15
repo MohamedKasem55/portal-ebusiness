@@ -1,0 +1,68 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'companyAdmin.companyAdmin' | translate }}</li>
+        <li class="active">{{ 'companyAdmin.positivePayChequeAccounts.activationPositivePayChequeAccounts' | translate }}</li>
+        <!-- <li class="active">
+            <a href="#" [routerLink]="['/companyadmin/PositivePayChequeAccounts']">{{ 'companyAdmin.positivePayChequeAccounts.activationPositivePayChequeAccounts' | translate }}</a>
+        </li> -->
+        <!--	<li class="active">{{ 'companyAdmin.positivePayChequeAccounts.positivePayChequeAccounts'| translate }}</li> -->
+
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+				<span>
+					<span class="num">1</span>
+					<span class="text">{{ 'public.completeDetails' | translate | uppercase }}</span>
+				</span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+				<span>
+					<span class="num">2</span>
+					<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+				</span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+				<span>
+					<span class="icon -check"></span>
+					<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+				</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<app-positive-pay-cheque-accounts-step1 [hidden]="step !== 1"
+                                        [form]="this.form"
+                                        [tableSelected]="this.tableSelected"
+                                        (onInit)="onInitStep1($event)">
+</app-positive-pay-cheque-accounts-step1>
+
+<app-positive-pay-cheque-accounts-step2 *ngIf="step === 2"
+                                        [form]="this.form"
+                                        [tableAccounts]="this.valActivData"
+                                        [accountNotSelected]="this.accountNotSelected"
+                                        (onInit)="onInitStep2($event)">
+</app-positive-pay-cheque-accounts-step2>
+
+<app-positive-pay-cheque-accounts-step3 *ngIf="step === 3"
+                                        [form]="this.form"
+                                        (onInit)="onInitStep3($event)">
+</app-positive-pay-cheque-accounts-step3>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class="tn btn-default btn-wide" (click)="previous()"
+            *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+
+    <button class="btn btn-default btn-wide" (click)="finish()"
+            *ngIf="step == 3"> {{'public.finish' | translate}}</button>
+    <!-- <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step > 1 && step < 3" [disabled]="isDisabled()">{{'public.proceed' | translate}}</button> -->
+    <button class="btn btn-primary btn-wide" (click)="next()"
+            *ngIf="step == 1">{{'public.proceed' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 2">{{'public.update' | translate}}</button>
+</div>

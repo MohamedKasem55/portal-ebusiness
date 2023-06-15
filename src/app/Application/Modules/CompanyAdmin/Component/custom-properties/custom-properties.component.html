@@ -1,0 +1,169 @@
+<div class='sme-breadcrumb focus_index ' tabindex='-1'>
+  <ol class='breadcrumb'>
+    <li class='active'>{{ 'menu.company_admin.menu' | translate }}</li>
+    <li class='active'>{{ 'menu.company_admin.custom_properties.menu' | translate }}</li>
+  </ol>
+</div>
+
+<div class='sme-page-block'>
+  <ul class='sme-box sme-wizard__steps'>
+    <li class='sme-wizard__step' [ngClass]="{'current': wizardStep==1, 'completed' : wizardStep>1}"><span>
+        <span class='num'>1</span>
+        <span class='text'>{{ 'myProfile.pending_actions.steps.select' | translate }}</span>
+      </span>
+    </li>
+    <li class='sme-wizard__step' [ngClass]="{'current': wizardStep==2, 'completed' : wizardStep>2}"><span>
+        <span class='num'>2</span>
+        <span class='text'>{{ 'myProfile.pending_actions.steps.confirm' | translate }}</span>
+      </span>
+    </li>
+    <li class='sme-wizard__step' [ngClass]="{'current': wizardStep===3, 'completed' : wizardStep>3}"><span>
+        <span class='num'>3</span>
+        <span class='text'>{{ 'myProfile.pending_actions.steps.summary' | translate }}</span>
+      </span>
+    </li>
+  </ul>
+</div>
+
+<br>
+
+<arb-panel *ngIf="wizardStep === 3">
+  <div class='container-fluid'>
+    <div class='sme-form'>
+      <div class='sme-form__content'>
+        <div style="margin-bottom: 5%" class='sme-form__body'>
+
+          <div class='sme-wizard__success' *ngIf='wizardStep===3'>
+            <span class='icon -check'></span>
+            <div *ngIf="generateChallengeAndOTP else notOTP">
+            <span *ngIf="isSolePropietorCompany(generateChallengeAndOTP)">
+              {{'menu.company_admin.custom_properties.soleMessage' | translate}}</span>
+              <span *ngIf="!isSolePropietorCompany(generateChallengeAndOTP)">
+              {{'menu.company_admin.custom_properties.multiMessage' | translate}}</span>
+              </div>
+          </div>
+          <ng-template #notOTP>
+            <span>
+              {{'preferences.updateDone' | translate}}</span>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</arb-panel>
+
+<arb-panel-title *ngIf="wizardStep < 3" [title]="translate.instant('menu.company_admin.custom_properties.config-settings')"></arb-panel-title>
+
+<arb-panel *ngIf="wizardStep < 3">
+  <form autocomplete='off' [formGroup]='manageCompanyForm'>
+
+    <div class="setting-container">
+      <div [ngClass]="{'setting-title-ltr': currentLang == 'en', 'setting-title-rtl': currentLang == 'ar'}">
+        <h3>{{'menu.company_admin.custom_properties.reset-password-notification' | translate}}</h3>
+        <div class='icon -help icon-help-container'
+          tooltip="{{'menu.company_admin.custom_properties.reset-password-notification-tooltip' | translate}}"></div>
+      </div>
+      <div class="setting-value" style="text-align: end">
+        <input style='margin: 5px; width: 25px; height: 25px' type='checkbox'
+          formControlName='resetPasswordNotification'
+          (change)="this.manageCompanyForm.controls['resetPasswordNotification'].markAsTouched()">
+      </div>
+    </div>
+
+    <div class="setting-container">
+      <div [ngClass]="{'setting-title-ltr': currentLang == 'en', 'setting-title-rtl': currentLang == 'ar'}">
+        <h3>{{'menu.company_admin.custom_properties.change-daily-limit' | translate}}</h3>
+        <div class='icon -help icon-help-container'
+          tooltip="{{'menu.company_admin.custom_properties.change-daily-limit-tooltip' | translate}}"></div>
+      </div>
+      <div class="setting-value" style="text-align: end">
+        <input style='margin: 5px; width: 25px; height: 25px' type='checkbox' (change)="changeCompanyLimitChange()"
+          [disabled]="wizardStep !== 1">
+      </div>
+    </div>
+
+    <div class="companyLimitsContainer" *ngIf="showCompanyLimitFlag">
+      <div class="setting-value" style="width: 20%">
+        <h3>{{'menu.company_admin.custom_properties.maximum-amount' | translate}}</h3>
+        <input type='text' class='form-control' [value]="maximumAmount" disabled>
+        <!--        <div *ngIf="manageCompanyForm.controls['dailyLimit'].touched && manageCompanyForm.controls['dailyLimit'].invalid"-->
+        <!--             class="alert alert-danger">-->
+        <!--          <small>{{'menu.company_admin.custom_properties.change-daily-limit-error' | translate }}</small>-->
+        <!--        </div>-->
+      </div>
+
+      <div class="setting-value" style="width: 20%; margin-left: 15px">
+        <h3>{{'menu.company_admin.custom_properties.current-amount' | translate}}</h3>
+        <input type='number' class='form-control' formControlName='dailyLimit' inputPattern='onlyPositiveNumbers'>
+        <div *ngIf="manageCompanyForm.controls['dailyLimit']?.invalid
+              || this.manageCompanyForm.controls['dailyLimit']?.value > this.maximumAmount" class="alert alert-danger">
+          <small>{{'menu.company_admin.custom_properties.change-daily-limit-error' | translate }}</small>
+        </div>
+      </div>
+    </div>
+
+
+    <hr *ngIf="authenticationService.activateOption('CompanyWorkflowTypeSetting', [], [])">
+
+    <div class="setting-container" *ngIf="authenticationService.activateOption('CompanyWorkflowTypeSetting', [], [])">
+      <div [ngClass]="{'setting-title-ltr': currentLang == 'en', 'setting-title-rtl': currentLang == 'ar'}">
+        <h3>{{'menu.company_admin.custom_properties.company-workflow-type' | translate}}</h3>
+        <div class='icon -help icon-help-container'
+          tooltip="{{'menu.company_admin.custom_properties.company-workflow-type-tooltip' | translate}}"></div>
+      </div>
+      <div class="setting-value">
+        <div class="form-group">
+          <ng-select formControlName="companyWorkflowType" [notFoundText]="'public.noData' | translate"
+            class="form-control">
+            <ng-option *ngFor="let workflowType of companyWorkflowTypes" [value]="workflowType.key">
+              {{workflowType.value}}
+            </ng-option>
+          </ng-select>
+          <div
+            *ngIf="manageCompanyForm.controls['companyWorkflowType'].touched && manageCompanyForm.controls['companyWorkflowType'].invalid"
+            class="alert alert-danger">
+            <small>{{'menu.company_admin.custom_properties.company-workflow-type-error' | translate }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="setting-container">
+      <div [ngClass]="{'setting-title-ltr': currentLang == 'en', 'setting-title-rtl': currentLang == 'ar'}">
+        <h3>{{ 'vat-company.registrationNumber' | translate }}</h3>
+      </div>
+      <div class="setting-value">
+        <input type='text' class='form-control' name='registrationNumber'
+          placeholder='{{ "vat-company.enter" | translate }}' inputPattern='onlyNumbers' maxlength='15'
+          formControlName='registrationNumber' />
+        <div *ngIf="manageCompanyForm.controls['registrationNumber'].invalid" class="alert alert-danger">
+          <small>{{'menu.company_admin.custom_properties.vat-error' | translate }}</small>
+        </div>
+      </div>
+    </div>
+
+  </form>
+  <br>
+
+</arb-panel>
+
+<arb-panel *ngIf="this.wizardStep === 2 && generateChallengeAndOTP">
+  <div class="otp-container" style="width: 50%">
+    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP" [requestValidate]="requestValidate"
+      #authorization>
+    </app-secured-authentication>
+  </div>
+</arb-panel>
+
+<div class='sme-form__actions'>
+  <button class='btn btn-default btn-wide' (click)='back()' *ngIf='wizardStep != 3'>
+    {{'public.back' | translate }}</button>
+  <button (click)='next()' [disabled]='!isDisabled()' *ngIf='wizardStep != 3' class='btn btn-primary btn-wide'>{{
+    'public.proceed' | translate }}</button>
+  <button (click)='next()' *ngIf='wizardStep === 3' class='btn btn-primary btn-wide'>{{ 'public.finish' | translate
+    }}</button>
+</div>

@@ -1,0 +1,169 @@
+<app-billpayment-table *ngIf="sharedData.tableSelected.length > 0 
+&& !sharedData.approveFlow"
+                       [items]="sharedData.tableSelected"
+                       [modal]="modalAuth"
+                       [futureLevels]="false"
+                       [externalPagination]="false"
+                       [selectable]="false"
+                       [selected]="sharedData.tableSelected">
+</app-billpayment-table>
+
+<app-bill-table *ngIf="sharedData.tableBillerSelected.length > 0
+&& !sharedData.approveFlow"
+                [items]="sharedData.tableBillerSelected"
+                [modal]="modalAuth"
+                [futureLevels]="false"
+                [externalPagination]="false"
+                [selectable]="false"
+                [billCodes]="this.sharedData.billCodes"
+                [selected]="sharedData.tableBillerSelected">
+</app-bill-table>
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.approveFlow
+&& sharedData.tableSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toAuthorize'].length>0)
+||
+(sharedData.approveFlow
+&& sharedData.tableBillerSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toAuthorize'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+<app-billpayment-table *ngIf="sharedData.approveFlow
+&& sharedData.tableSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toAuthorize'].length>0"
+                       [items]="sharedData.responseValidate.batchList.toAuthorize"
+                       [modal]="modalAuth"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false"
+                       [selected]="sharedData.tableSelected">
+</app-billpayment-table>
+
+<app-bill-table *ngIf="sharedData.approveFlow
+&& sharedData.tableBillerSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toAuthorize'].length>0"
+                [items]="sharedData.responseValidate.batchList.toAuthorize"
+                [modal]="modalAuth"
+                [futureLevels]="true"
+                [externalPagination]="false"
+                [selectable]="false"
+                [billCodes]="this.sharedData.billCodes"
+                [selected]="sharedData.tableBillerSelected">
+</app-bill-table>
+
+<!-- to process ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="(sharedData.approveFlow
+&& sharedData.tableSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toProcess'].length>0)
+||
+(sharedData.approveFlow
+&& sharedData.tableBillerSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toProcess'].length>0)">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                {{ 'pendingActions.general.wizardStep2TextTransactionsToBeProcessed' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to process -->
+
+<app-billpayment-table *ngIf="sharedData.approveFlow
+&& sharedData.tableSelected.length > 0 
+&& sharedData.responseValidate.batchList 
+&& sharedData.responseValidate.batchList['toProcess'].length>0"
+                       [items]="sharedData.responseValidate.batchList.toProcess"
+                       [modal]="modalAuth"
+                       [futureLevels]="true"
+                       [externalPagination]="false"
+                       [selectable]="false"
+                       [selected]="sharedData.tableSelected">
+</app-billpayment-table>
+
+<app-bill-table *ngIf="sharedData.approveFlow
+&& sharedData.tableBillerSelected.length > 0
+&& sharedData.responseValidate.batchList
+&& sharedData.responseValidate.batchList['toProcess'].length>0"
+                [items]="sharedData.responseValidate.batchList.toProcess"
+                [modal]="modalAuth"
+                [futureLevels]="true"
+                [externalPagination]="false"
+                [selectable]="false"
+                [billCodes]="this.sharedData.billCodes"
+                [selected]="sharedData.tableBillerSelected">
+</app-bill-table>
+
+<div class="sme-content-container container-fluid" *ngIf="sharedData.tableSelected.length > 0">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'payments.without-vat-amount' | translate }} </label>
+                                    <span>  {{ amountWithouVatTotal | amountCurrency }} </span>
+
+                                    <label> {{ 'public.vat' | translate }} </label>
+                                    <span>  {{ amountVatTotal | amountCurrency }} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{ 'myProfile.pending_actions.totalAmountToProcess' | translate }}</label>
+                                    <span>   {{ amountToProcess | amountCurrency }} {{'currencyIso' | modelPipe: '608'}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<div class="sme-content-container container-fluid">
+    <div *ngIf="sharedData.approveFlow" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group"
+                                     *ngIf="sharedData.responseValidate && sharedData.responseValidate.generateChallengeAndOTP">
+                                    <app-secured-authentication
+                                            [generateChallengeAndOTP]="sharedData.responseValidate.generateChallengeAndOTP"
+                                            [requestValidate]="sharedData.requestValidate" #authorization>
+                                    </app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

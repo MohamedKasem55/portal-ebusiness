@@ -1,0 +1,51 @@
+<arb-panel>
+
+    <ul class="nav nav-pills">
+
+        <li [class.active]="isActiveTab(1)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(1)">
+                {{'accounts.debitCards.pos_limit' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(2)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(2)">
+                {{'accounts.debitCards.reset_pin' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(3)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(3)">
+                {{'accounts.debitCards.suspend_card' | translate}}
+            </a>
+        </li>
+        <li [class.active]="isActiveTab(4)">
+            <a data-toggle="tab" class="human-selectable" (click)="setActiveTab(4)">
+                {{'accounts.debitCards.e_commerce' | translate}}
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="tab1" class="tab-pane fade" [class.active]="isActiveTab(1)" [class.in]="isActiveTab(1)">
+            <app-debit-card-adjust-pos [selectedCard]="carouselDisplayingCard">
+            </app-debit-card-adjust-pos>
+        </div>
+        <div id="tab2" class="tab-pane fade" [class.active]="isActiveTab(2)" [class.in]="isActiveTab(2)">
+            <app-debit-card-change-pin [selectedCard]="carouselDisplayingCard">
+            </app-debit-card-change-pin>
+        </div>
+        <div id="tab3" class="tab-pane fade" [class.active]="isActiveTab(3)" [class.in]="isActiveTab(3)">
+            <app-debit-card-stop [selectedCard]="carouselDisplayingCard">
+            </app-debit-card-stop>
+        </div>
+        <div id="tab4" class="tab-pane fade" [class.active]="isActiveTab(4)" [class.in]="isActiveTab(4)">
+            <app-debit-card-e-commerce [selectedCard]="carouselDisplayingCard">
+            </app-debit-card-e-commerce>
+        </div>
+    </div>
+
+
+</arb-panel>
+
+<arb-buttons>
+    <button class="btn btn-default btn-wide" type="button" (click)="back()">{{ 'public.back' | translate}}</button>
+</arb-buttons>

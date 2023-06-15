@@ -1,0 +1,47 @@
+<form autocomplete="off" [formGroup]="form">
+    <arb-panel-title [title]="'sadadOLP.testing.menuView'">
+    </arb-panel-title>
+    <arb-panel>
+        <div class="row">
+            <fieldset [disabled]="true">
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="testRqId-input">{{ 'sadadOLP.testing.testRqId' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="testRqId-input" formControlName="testRqId">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="bopVersion-input">{{ 'sadadOLP.testing.bopVersion' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="bopVersion-input" formControlName="bopVersion">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label for="requestedDate-input">{{ 'sadadOLP.testing.requestedDate' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="requestedDate-input"
+                            formControlName="requestedDate">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label>{{ 'sadadOLP.testing.status' |
+                                            translate }}</label>
+                        <input type="text" class="form-control" id="status-input" formControlName="status">
+                    </div>
+                    <!-- ./sme-form-group -->
+                </div>
+            </fieldset>
+        </div>
+    </arb-panel>
+</form>

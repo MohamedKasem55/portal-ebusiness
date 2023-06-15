@@ -1,0 +1,472 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>{{ 'companyAdmin.companyAdmin' | translate }}</li>
+        <li><a class="human-selectable" href="#" routerLinkActive="active"
+               [routerLink]="['/companyadmin/alerts']">{{ 'companyAdmin.alerts.sms' |
+            translate }}</a></li>
+        <li class="active">{{'companyAdmin.alerts.smsReport' | translate}}</li>
+    </ol>
+</div>
+<div class="container-fluid" *ngIf="messageError?.code">
+    <div class="sme-page-block">
+        <div class="alert alert-danger">
+            <small>{{messageError['code']}} {{messageError['description']}}</small>
+        </div>
+    </div>
+</div>
+<form autocomplete="off" [formGroup]="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{'companyAdmin.alerts.feeAmountForEach' | translate}}</label>
+                                        <span class="form-control">{{form.controls.feeAmountEachReg.value | amountCurrency}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label>{{'companyAdmin.alerts.maxSMSForEach' | translate}}</label>
+                                        <span class="form-control">{{form.controls.maxSmsEachReg.value}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <a class="sme-form__head collapsed" role="button"
+                       (click)="isCollapsedContent = !isCollapsedContent"> <span>{{
+                        'public.search' | translate }}</span>
+                    </a>
+                    <div class="sme-form__collapse collapse"
+                         [collapse]="isCollapsedContent">
+                        <div class="sme-form__form">
+                            <div class="sme-form__body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.user.user-id' |
+                                                translate }}</label> <input type="text" class="form-control"
+                                                                            id="user1-input-user-id"
+                                                                            [(ngModel)]="model.userId"
+                                                                            #operation="ngModel" name="operation"
+                                                                            value=""
+                                                                            [ngModelOptions]="{standalone: true}">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.user.name'
+                                                | translate }}</label> <input type="text" class="form-control"
+                                                                              id="user1-input-user-name"
+                                                                              [(ngModel)]="model.userName"
+                                                                              #operation="ngModel" name="operation"
+                                                                              value=""
+                                                                              [ngModelOptions]="{standalone: true}">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{
+                                                'login.user-mobile-number' | translate }}</label> <input type="text"
+                                                                                                         class="form-control"
+                                                                                                         id="user1-input-user-name"
+                                                                                                         [(ngModel)]="model.mobileNumber"
+                                                                                                         #operation="ngModel"
+                                                                                                         name="number"
+                                                                                                         value=""
+                                                                                                         [ngModelOptions]="{standalone: true}"
+                                                                                                         inputPattern="onlyPositiveNumbers">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.alerts.maxSmsCountFrom' |
+                                                translate }}</label> <input type="text" class="form-control"
+                                                                            id="user1-input-user-id"
+                                                                            [(ngModel)]="model.maxSMSCountFrom"
+                                                                            #operation="ngModel" name="operation"
+                                                                            value=""
+                                                                            [ngModelOptions]="{standalone: true}"
+                                                                            inputPattern="onlyPositiveNumbers">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.alerts.maxSmsCountTo'
+                                                | translate }}</label> <input type="text" class="form-control"
+                                                                              id="user1-input-user-name"
+                                                                              [(ngModel)]="model.maxSMSCountTo"
+                                                                              #operation="ngModel" name="operation"
+                                                                              value=""
+                                                                              [ngModelOptions]="{standalone: true}"
+                                                                              inputPattern="onlyPositiveNumbers">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{
+                                                'companyAdmin.alerts.smsReachedFrom' | translate }}</label> <input
+                                                type="text"
+                                                class="form-control" id="user1-input-user-name"
+                                                [(ngModel)]="model.SMSReachedFrom" #operation="ngModel" name="number"
+                                                value="" [ngModelOptions]="{standalone: true}"
+                                                inputPattern="onlyPositiveNumbers">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{
+                                                'companyAdmin.alerts.smsReachedTo' | translate }}</label> <input
+                                                type="text"
+                                                class="form-control" id="user1-input-user-name"
+                                                [(ngModel)]="model.SMSReachedTo" #operation="ngModel" name="number"
+                                                value="" [ngModelOptions]="{standalone: true}"
+                                                inputPattern="onlyPositiveNumbers">
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.alerts.registrationDateFrom' |
+                                                translate }}</label>
+                                            <input type="text" #expiryDateFrom="bsDatepicker" bsDatepicker
+                                                   placement="top" [bsConfig]="bsConfig"
+                                                   [(bsValue)]="model.registrationDateFrom"
+                                                   value="{{ model.registrationDateFrom | date:'dd/MM/yyyy' }}"
+                                                   name="registrationDateFrom" class="form-control" [readOnly]="true"
+                                                   [maxDate]="getMaxDateToday(model.registrationDateTo)"/>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.alerts.registrationDateTo'
+                                                | translate }}</label> <input type="text" #expiryDateTo="bsDatepicker"
+                                                                              bsDatepicker placement="top"
+                                                                              [bsConfig]="bsConfig"
+                                                                              [(bsValue)]="model.registrationDateTo"
+                                                                              value="{{ model.registrationDateTo | date:'dd/MM/yyyy' }}"
+                                                                              name="registrationDateTo"
+                                                                              class="form-control" [readOnly]="true"
+                                                                              [minDate]="model.registrationDateFrom"
+                                                                              [maxDate]="today"/>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.alerts.expiryDateFrom' |
+                                                translate }}</label>
+                                            <input type="text" #expiryDateFrom="bsDatepicker" bsDatepicker
+                                                   placement="top" [bsConfig]="bsConfig"
+                                                   [(bsValue)]="model.expiryDateFrom"
+                                                   value="{{ model.expiryDateFrom | date:'dd/MM/yyyy' }}"
+                                                   name="expiryDateFrom" class="form-control" [readOnly]="true"
+                                                   [maxDate]="getMaxDate(model.expiryDateTo)"/>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label for="user1-input-user-id">{{ 'companyAdmin.alerts.expiryDateTo'
+                                                | translate }}</label> <input type="text" #expiryDateTo="bsDatepicker"
+                                                                              bsDatepicker placement="top"
+                                                                              [bsConfig]="bsConfig"
+                                                                              [(bsValue)]="model.expiryDateTo"
+                                                                              value="{{ model.expiryDateTo | date:'dd/MM/yyyy' }}"
+                                                                              name="expiryDateTo" class="form-control"
+                                                                              [readOnly]="true"
+                                                                              [minDate]="model.expiryDateFrom"/>
+                                        </div>
+                                        <!-- ./sme-form-group -->
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="sme-form__actions">
+                                <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{
+                                    'public.reset' | translate }}</button>
+                                <button type="button" class="btn btn-primary btn-wide" (click)="search()">{{
+                                    'public.search' | translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-data-table">
+                <div class="sme-data-table__head">
+                    <div class="sme-data-table__export">
+                        <table-export [dataTable]="userAlertTable"
+                                      [header]="'companyAdmin.alerts.smsReport' | translate" [columns]="[
+								{'title':'public.userId' | translate,'dataKey':'userId'},
+								{'title':'public.name' | translate,'dataKey':'userName'},
+								{'title':'beneficiaries.beneficiaryListFields.mobileNumber' | translate,'dataKey':'mobileNumber'},
+								{'title':'companyAdmin.alerts.expiryDate' | translate,'dataKey':'expiryDate'},
+{'title':'companyAdmin.alerts.alertPrivilege' | translate,'dataKey':'alertPrivileges'},
+{'title':'companyAdmin.alerts.registrationDate' | translate,'dataKey':'registrationDate'},
+
+								{'title':'companyAdmin.alerts.maxSmsCount' | translate,'dataKey':'maxSmsCount'},
+								{'title':'companyAdmin.alerts.smsReached' | translate,'dataKey':'smsReached'}
+
+						       ]"></table-export>
+                    </div>
+                </div>
+                <div class="sme-table table headerDataTable">
+                    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #userAlertTable
+                                   class="material sme-table sme-table--responsive table" [rows]="userAlerts"
+                                   [columnMode]="defaultColumnMode"
+                                   [headerHeight]="30"
+                                   [footerHeight]="footerHeight"
+                                   [rowHeight]="defaultHeight"
+                                   [externalPaging]="false"
+                                   [externalSorting]="false"
+                                   [limit]="pageSizeAlert">
+                        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow
+                                                  (toggle)="onDetailToggle($event)">
+                            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                <!-- <div style="padding-left:60px; font-size:14px">
+                                  <div>{{row.date}}, {{row.time}}</div>
+                                </div> -->
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label> {{'public.userId' | translate }} </label>
+                                                <div>
+                                                    <span>{{ row.userId }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'public.userName' | translate }}</label>
+                                                <div>
+                                                    <span>{{row.userName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.mobileNumber }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'companyAdmin.alerts.expiryDate' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.expiryDate | date:"dd/MM/yyyy"  }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'companyAdmin.alerts.alertPrivilege' | translate }}</label>
+                                                <div>
+                                                    <input type="checkbox" [checked]="isChecked(row.alertPrivileges)"
+                                                           disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'companyAdmin.alerts.registrationDate' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.registrationDate | date:"dd/MM/yyyy"  }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'companyAdmin.alerts.maxSmsCount' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.maxSmsCount  }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label>{{'companyAdmin.alerts.smsReached' | translate }}</label>
+                                                <div>
+                                                    <span>{{ row.smsReached }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+
+                            </ng-template>
+                        </ngx-datatable-row-detail>
+                        <ngx-datatable-column prop="userId">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'public.userId' | translate }}
+						</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="userName">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'companyAdmin.user.name' | translate }}
+						</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="mobileNumber">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'beneficiaries.beneficiaryListFields.mobileNumber' | translate }}
+						</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="alertPrivileges">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'companyAdmin.alerts.alertPrivilege' | translate }}
+						</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <input class="mobile-hidden" type="checkbox" [checked]="isChecked(value)" disabled>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="registrationDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'companyAdmin.alerts.registrationDate' | translate }}
+						</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | date:"dd/MM/yyyy" }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="expiryDate">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'companyAdmin.alerts.expiryDate' | translate }}
+						</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value | date:"dd/MM/yyyy" }}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="maxSmsCount">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'companyAdmin.alerts.maxSmsCount' | translate }}
+						</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column prop="smsReached">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+								{{'companyAdmin.alerts.smsReached' | translate }}
+						</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            [visiblePagesCount]="visiblePagesCount"
+                                            (change)="userAlertTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+                                    <div [hidden]="!((rowCount / pageSize) > 1)"
+                                         class="sme-data-table__actions form-inline">
+                                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{pageSize > rowCount - ((curPage - 1) * pageSize) ? rowCount - ((curPage - 1) * pageSize) : pageSize}} {{ 'public.ofLabel' | translate}} {{userAlerts.length}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" [(ngModel)]="pageSizeAlert"
+                                                        (change)="setPageSize($event)"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                    <option [value]="10">10</option>
+                                                    <option [value]="20">20</option>
+                                                    <option [value]="50">50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+        <div class="sme-form__actions">
+            <a href="#" class="btn btn-default btn-wide" [routerLink]="['/companyadmin/alerts']">
+                {{'public.back' | translate }}</a>
+        </div>
+    </div>
+</form>

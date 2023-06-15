@@ -1,0 +1,943 @@
+<arb-breadcrumb [routes]="[
+                            ['public.accounts'],
+                            ['accounts.currentAccounts.name',['/accounts/currentAccounts']],
+                            ['accounts.onlineStatement.name']
+                        ]">
+</arb-breadcrumb>
+
+<arb-panel>
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-6">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.accountAlias' | translate }}</label>
+                    <div class="form-control">
+                        <ng-select [(ngModel)]="selectedAccount" [clearable]="false" (change)="doChangeAccount()">
+                            <ng-option *ngFor="let account of accounts" [value]="account" [innerHTML]="account['fullAccountNumber'] + ' - ' + (account['alias']? (account['alias']+' - '): '' )+ (account['availableBalance'] | amountCurrency) + ' ' +
+                                     service.transformComboValue('currencyIso', account['currency'])">
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.customerName' | translate }}</label>
+                    <div>
+                        <span>{{customerName}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.ibanNumber' | translate }}</label>
+                    <div>
+                        <span>{{data.ibanNumber}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.type' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="'accountType' | modelPipe:data.typeAccount"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.balance' | translate }}</label>
+                    <div>
+                        <span [ngStyle]="{color: (data.availableBalance < 0 )? 'red' : 'green'}">
+                            {{(data.availableBalance !== null ? (data.availableBalance | amountCurrency) + ' ' +
+                            ('currencyIso' | modelPipe:data.currency) : '')}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.unclearBalnce' | translate }}</label>
+                    <div>
+                        <span>{{(data.unclearedBalance !== null ? (data.unclearedBalance | amountCurrency) + ' ' +
+                            ('currencyIso' | modelPipe:data.currency) : '')}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.currency' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="'currencyType' | modelPipe:data.currency"></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="row">
+        <fieldset>
+            <div class="col-xs-12 col-sm-3">
+                <!-- sme-form-group -->
+                <div class="form-group">
+                    <label>{{'accounts.branchid' | translate }}</label>
+                    <div>
+                        <span [innerHTML]="'branchRbs5' | modelPipe:data.branchid"></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</arb-panel>
+
+<arb-panel>
+    <a class="sme-form__head collapsed" role="button" (click)="isCollapsedFilter = !isCollapsedFilter">
+        <span>{{
+            'accounts.filter' | translate }}</span>
+    </a>
+    <div class="sme-form__collapse collapse" [collapse]="isCollapsedFilter">
+        <form autocomplete="off" class="sme-form__form" (ngSubmit)="filters()">
+            <div class="sme-form__body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label>{{ 'accounts.pos.amountFrom' | translate }}</label>
+                                <div class="form-control">
+                                    <div>
+                                        <input type="text" class="form-control"
+                                            style="background-color:transparent;border:0;box-shadow:none;"
+                                            name="amountFrom" [(ngModel)]="amountFrom" #amountFromCtrl="ngModel"
+                                            inputPattern="onlyPositiveDecimalNumbers" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label></label>
+                                <div class="form-control">
+                                    <div class="col-xs-1">
+                                        <span class="icon -arrow-right"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>{{ 'accounts.pos.amountTo' | translate }}</label>
+                                <div class="form-control">
+                                    <div>
+                                        <input type="text" class="form-control"
+                                            style="background-color:transparent;border:0;box-shadow:none;"
+                                            name="amountTo" [(ngModel)]="amountTo" #amountToCtrl="ngModel"
+                                            inputPattern="onlyPositiveDecimalNumbers" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!amountValid()">
+                            <p class="alert alert-danger">
+                                {{ 'error.amountRangeInvalid' | translate }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label>{{ 'accounts.pos.dateFrom' | translate }}</label>
+                                <!-- sme-date-range -->
+                                <div class="form-control">
+                                    <div>
+                                        <input type="text" #accountDateFrom="bsDatepicker" bsDatepicker placement="top"
+                                            [bsConfig]="bsConfig" [maxDate]="getMaxDate()" [(bsValue)]="dateFrom"
+                                            value="{{ dateFrom | date:'dd/MM/yyyy' }}" style="border:0px;z-index:1000"
+                                            name="accountDateFrom" class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label></label>
+                                <!-- sme-date-range -->
+                                <div class="form-control">
+                                    <div class="col-xs-1">
+                                        <span class="icon -arrow-right"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>{{ 'accounts.pos.dateTo' | translate }}</label>
+                                <!-- sme-date-range -->
+                                <div class="form-control">
+                                    <div>
+                                        <input type="text" #accountDateTo="bsDatepicker" bsDatepicker placement="top"
+                                            [bsConfig]="bsConfig" [maxDate]="maxDate" [minDate]="dateFrom"
+                                            [(bsValue)]="dateTo" value="{{ dateTo | date:'dd/MM/yyyy' }}"
+                                            style="border:0px;z-index:1000" name="accountDateTo" class="form-control" />
+                                    </div>
+
+                                </div>
+                                <!-- ./sme-date-range -->
+                            </div>
+                        </div>
+                        <!-- ./sme-form-group -->
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'public.filterBy' | translate }}</label>
+                            <!-- sme-select -->
+                            <div class="form-control">
+                                <ng-select [(ngModel)]="filterBy" #filterByCtrl="ngModel" name="filterBy">
+                                    <ng-option selected value disabled>
+                                        --{{ 'public.selectDropdown' | translate }}--
+                                    </ng-option>
+                                    <ng-option *ngFor="let op of filtersType" [value]="op.key">
+                                        {{op.value}}</ng-option>
+                                </ng-select>
+                            </div>
+                            <!-- ./sme-select -->
+                        </div>
+                        <!-- ./sme-form-group -->
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <!-- sme-form-group -->
+                        <div class="form-group">
+                            <label>{{ 'public.show' | translate }}</label>
+                            <!-- sme-select -->
+                            <div class="form-control" style="border-bottom:0px;margin-bottom:40px">
+                                <div class="sme-radio radio">
+                                    <label>
+                                        <input type="radio" [(ngModel)]="show" value="0" #showCtrl="ngModel"
+                                            name="show">
+                                        <i aria-hidden="true"></i>
+                                        <span>{{'accounts.showAll' | translate }}</span>
+                                    </label>
+                                </div>
+                                <div class="sme-radio radio">
+                                    <label>
+                                        <input type="radio" [(ngModel)]="show" value="1" #showCtrl="ngModel"
+                                            name="show">
+                                        <i aria-hidden="true"></i>
+                                        <span>{{'accounts.showCredit' | translate }}</span>
+                                    </label>
+                                </div>
+                                <div class="sme-radio radio">
+                                    <label>
+                                        <input type="radio" [(ngModel)]="show" value="2" #showCtrl="ngModel"
+                                            name="show">
+                                        <i aria-hidden="true"></i>
+                                        <span>{{'accounts.showDebit' | translate }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- ./sme-select -->
+                        </div>
+                        <!-- ./sme-form-group -->
+                    </div>
+                </div>
+            </div>
+            <div class="sme-form__actions">
+                <button type="button" class="btn btn-default btn-wide" (click)="reset()">{{ 'public.reset' | translate
+                    }}</button>
+                <button class="btn btn-primary btn-wide" (click)=search() [disabled]="!amountValid()">{{ 'public.search'
+                    | translate }}</button>
+            </div>
+        </form>
+    </div>
+</arb-panel>
+
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <!-- sme-data-table -->
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-data-table__title">
+                    {{ 'accounts.onlineStatement.name'| translate }}
+                </div>
+                <div class="sme-data-table__export">
+                    <div class="sme-data-table__export" style="display: block;">
+                        <a class="btn btn-export btn-send--email" (click)="sendEmail()"> <span
+                                class="icon -email"></span> <span class="text">{{'public.email' | translate}}</span>
+                        </a>
+                        <a class="btn btn-export btn-export--print" (click)="printPdf()"> <span
+                                class="icon -print"></span> <span class="text">{{'public.print' | translate}}</span>
+                        </a> <a class="btn btn-export btn-export--xlsx" (click)="getXlsx()"> <span
+                                class="icon -excel"></span> <span class="text">{{'public.xlsx' | translate}}</span>
+                        </a> <a class="btn btn-export btn-export--pdf" (click)="getPdf()"> <span
+                                class="icon -pdf"></span> <span class="text">{{'public.pdf' | translate}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="sme-data-table__advisory">
+                {{ 'accounts.stmadvisory'| translate }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<arb-panel id="onLineStatementTablePanel">
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #statmentTable
+        class="material  sme-table sme-table--responsive table" style="overflow: visible !important;"
+        [rows]="accountBalancePage.data" [columnMode]="defaultColumnMode" [scrollbarH]="true" [headerHeight]="30"
+        [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [externalPaging]="true"
+        [count]="accountBalancePage.page.totalElements" [offset]="accountBalancePage.page.pageNumber-1"
+        [limit]="accountBalancePage.page.pageSize" [groupExpansionDefault]="true" [groupRowsBy]="'dateGroup'"
+        (page)="setPage($event)">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template let-group="group">
+                <div *ngFor="let subRow of row.value" class="desktop-hidden">
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'accounts.dateTime' | translate }}</label>
+                                    <div>
+                                        <span>{{subRow.hour}}</span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'accounts.details' | translate }}</label>
+                                    <div>
+                                        <a> <span *ngIf="subRow.description"
+                                                (click)="onClick(subRow.txId+''+subRow.date,subRow)"
+                                                [innerHTML]="subRow.description"></span></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>{{'accounts.amount' | translate }}</label>
+                                    <div>
+                                        <span
+                                            [ngStyle]="{'color': (subRow.amount < 0 ? 'red':'green')}">{{(subRow.amount
+                                            != '' ? (subRow.amount | amountCurrency) : subRow.amount)}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'dashboard.balance' | translate }}</label>
+                                    <div>
+                                        <span>{{(subRow.balance != '' ? (subRow.balance | amountCurrency) :
+                                            subRow.balance)}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>{{'accounts.channel' | translate }}</label>
+                                    <div>
+                                        <span>{{'channelType' | modelPipe:subRow.channelType}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>{{'accounts.remarks' | translate }}</label>
+                                    <div>
+                                        <span>{{(subRow.remarks != '' ? (subRow.remarks) : '')}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+
+                                    <div>
+                                        <div *ngIf="visible == subRow.txId+''+subRow.date" class="desktop-hidden"
+                                            style="border:solid 1px;background-color:white;z-index:1000;width:30%">
+                                            <div class="sme-form__title">
+                                                <div class="col-xs-12 col-sm-12">
+                                                    {{'accounts.popupTitle' | translate }}</div>
+                                                <a class="sme-form__close btn"
+                                                    (click)="onClick(subRow.txId+''+subRow.date,subRow)"><span
+                                                        class="icon -close"></span></a>
+                                            </div>
+
+                                            <div class="row">
+                                                <fieldset>
+                                                    <div class="col-xs-7 col-sm-7">
+                                                        <div class="form-group">
+                                                            <label>{{'accounts.date' | translate }}</label>
+                                                            <div>
+                                                                <span>{{subRow.date | date:'dd/MM/yyyy'}}
+                                                                    -
+                                                                    {{subRow.hijraDate |date: 'dd/MM/yyyy'}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-5 col-sm-5">
+                                                        <div class="form-group">
+                                                            <label>{{'accounts.time' | translate }}</label>
+                                                            <div>
+                                                                <span>{{subRow.hour}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </fieldset>
+                                            </div>
+                                            <div class="row">
+                                                <fieldset>
+                                                    <div class="col-xs-7 col-sm-7">
+                                                        <div class="form-group">
+                                                            <label>{{'accounts.amount' | translate }}</label>
+                                                            <div>
+                                                                <span>{{(subRow.amount != '' ? (subRow.amount |
+                                                                    amountCurrency) : subRow.amount)}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-5 col-sm-5">
+                                                        <div class="form-group">
+                                                            <label>{{'accounts.details' | translate }}</label>
+                                                            <div>
+                                                                <span>{{subRow.description}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="form-group">
+                                                            <label>{{'accounts.channelType' | translate }}</label>
+                                                            <div>
+                                                                <span *ngIf="subRow.channelType">
+                                                                    {{'channelType' |
+                                                                    modelPipe:subRow.channelType}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="row">
+                                                <fieldset>
+                                                    <div class="col-xs-12 col-sm-12">
+                                                        <div class="form-group">
+                                                            <label>{{'accounts.otherInfo' | translate }}</label>
+                                                            <div>
+                                                                <span>{{subRow.remarks}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="row">
+                                                <fieldset>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode1 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode1 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue1}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode2 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode2 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue2}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode3 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode3 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue3}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode4 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode4 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue4}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode5 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode5 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue5}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode6 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode6 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue6}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode7 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode7 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue7}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode8 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode8 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue8}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode9 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode9 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue9}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode10 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode10 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue10}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode11 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode11 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue11}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-12"
+                                                        *ngIf="stmtDetails.fieldCode12 != ''">
+                                                        <div class="form-group">
+                                                            <label>{{ 'accountStmtDetailsFieldName' |
+                                                                modelPipe:stmtDetails.fieldCode12 }}</label>
+                                                            <div>
+                                                                <span>{{stmtDetails.fieldValue12}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="row">
+                                                <div class="sme-data-table__export">
+                                                    <div class="sme-data-table__export" style="display: block;">
+                                                        <a class="btn btn-export btn-send--email"
+                                                            (click)="sendDetailEmail(subRow)"> <span
+                                                                class="icon -email"></span> <span
+                                                                class="text">{{'public.email' | translate}}</span>
+                                                        </a>
+                                                        <a class="btn btn-export btn-export--print"
+                                                            (click)="printDetailPdf(subRow)"> <span
+                                                                class="icon -print"></span> <span
+                                                                class="text">{{'public.print' | translate}}</span>
+                                                        </a> <a class="btn btn-export btn-export--pdf"
+                                                            (click)="getDetailPdf(subRow)"> <span
+                                                                class="icon -pdf"></span> <span
+                                                                class="text">{{'public.pdf' | translate}}</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-group-header [rowHeight]="50" #myGroupHeader>
+            <ng-template let-group="group" let-expanded="expanded" ngx-datatable-group-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    <span style="font-size:14px;font-weight:700;color:#595e72;display:block;padding-left:5px">
+                        {{group.value[0].date | dateFormat:'LLLL d EEEE yyyy'}} -
+                        {{group.value[0].hijraMonthText}} {{group.value[0].hijraDate | date: 'd' }}
+                        {{group.value[0].weekDay}},
+                        {{group.value[0].hijraDate | date: 'yyyy' }}
+                        ({{group.value.length}})
+                    </span>
+                </span>
+            </ng-template>
+        </ngx-datatable-group-header>
+
+        <ngx-datatable-column [width]="35" prop="hour">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{'accounts.dateTime' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template let-group="group">
+                <!--<span>{{value | date:'HH:mm'}}</span>-->
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="60" prop="amount">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{'accounts.amount' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-group="group">
+                <span [ngStyle]="{'color': (value < 0 ? 'red':'green')}">
+                    {{(value != '' ? (value | amountCurrency) : value)}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="60" prop="balance">
+            <ng-template let-value="value" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{ 'dashboard.balance' | translate}}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-group="group">
+                <span>
+                    {{(value != '' ? (value | amountCurrency) : value)}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="60" prop="channelType">
+            <ng-template let-value="value" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{ 'accounts.channel' | translate}}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-group="group">
+                <span>
+                    {{'channelType' | modelPipe:value}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="80" prop="description">
+            <ng-template let-value="name" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{'accounts.details' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template let-group="group">
+                <a class="mobile-hidden"> <span style="white-space: pre-line" *ngIf="value"
+                        (click)="onClick(row.txId+''+row.date,row)" [innerHTML]="value"></span></a>
+                <div *ngIf="visible == row.txId+''+row.date"
+                    style="border:solid 1px;background-color:white;position:absolute;z-index:1000;width:30%;overflow-x:auto"
+                    class="col-sm-5 mobile-hidden">
+                    <div class="sme-form__title">
+                        <div class="col-xs-12 col-sm-12">{{'accounts.popupTitle' | translate }}</div>
+                        <a class="sme-form__close btn" (click)="onClick(row.txId+''+row.date,row)"><span
+                                class="icon -close"></span></a>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-5">
+                                <div class="form-group">
+                                    <label>{{'accounts.date' | translate }}</label>
+                                    <div>
+                                        <span style="white-space: pre-line">{{row.date | date:'dd/MM/yyyy'}}
+                                            -
+                                            {{row.hijraDate |date: 'dd/MM/yyyy'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <label>{{'accounts.time' | translate }}</label>
+                                    <div>
+                                        <span>{{row.hour}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{'accounts.amount' | translate }}</label>
+                                    <div>
+                                        <span>{{(row.amount != '' ? (row.amount | amountCurrency) : row.amount)}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group">
+                                    <label>{{'accounts.details' | translate }}</label>
+                                    <div>
+                                        <span style="white-space: pre-line">{{row.description}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{'accounts.channelType' | translate }}</label>
+                                    <div>
+                                        <span style="white-space: pre-line" *ngIf="row.channelType">
+                                            {{'channelType' | modelPipe:row.channelType}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-12">
+                                <div class="form-group">
+                                    <label>{{'accounts.otherInfo' | translate }}</label>
+                                    <div>
+                                        <span style="white-space: pre-line">{{row.remarks}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode1 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode1
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue1}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode2 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode2
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue2}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode3 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode3
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue3}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode4 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode4
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue4}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode5 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode5
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue5}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode6 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode6
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue6}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode7 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode7
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue7}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode8 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode8
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue8}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode9 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode9
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue9}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode10 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode10
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue10}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode11 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode11
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue11}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12" *ngIf="stmtDetails.fieldCode12 != ''">
+                                <div class="form-group">
+                                    <label>{{ 'accountStmtDetailsFieldName' | modelPipe:stmtDetails.fieldCode12
+                                        }}</label>
+                                    <div>
+                                        <span>{{stmtDetails.fieldValue12}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <div class="sme-data-table__export">
+                            <div class="sme-data-table__export" style="display: block;">
+                                <a class="btn btn-export btn-send--email" (click)="sendDetailEmail(row)"> <span
+                                        class="icon -email"></span>
+                                    <span class="text">{{'public.email' | translate}}</span> </a>
+                                <a class="btn btn-export btn-export--print" (click)="printDetailPdf(row)"> <span
+                                        class="icon -print"></span>
+                                    <span class="text">{{'public.print' | translate}}</span>
+                                </a> <a class="btn btn-export btn-export--pdf" (click)="getDetailPdf(row)"> <span
+                                        class="icon -pdf"></span>
+                                    <span class="text">{{'public.pdf' | translate}}</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="220" prop="remarks">
+            <ng-template let-value="remark" ngx-datatable-header-template>
+                <span class="datatable-header-cell-wrapper">
+                    {{'accounts.remarks' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-group="group">
+                <span style="white-space: pre-line">{{(value != '' ? (value) : value)}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / (pageSize)) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="statmentTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{this.accountBalancePage.page.size}} {{ 'public.ofLabel' | translate}}
+                            {{this.accountBalancePage.page.totalElements}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.accountBalancePage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <!-- <option [value]="50">50</option>
+                                    <option [value]="100">100</option> -->
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+
+</arb-panel>
+
+<arb-panel-buttons id="onLineStatementButtonPanel">
+    <button class="btn btn-default btn-wide" style="display:inherit" [routerLink]="['/accounts/currentAccounts']">
+        {{ 'public.back' | translate }}
+    </button>
+</arb-panel-buttons>

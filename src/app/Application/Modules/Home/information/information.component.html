@@ -1,0 +1,40 @@
+<arb-colapsable-panel [title]="getTitleToUpperCase('public.information')" [isCollapsedContent]="true">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <!-- sme-panel -->
+            <div class="sme-panel">
+
+                <div class="sme-panel__body">
+                    <div class="sme-panel__body">
+                        <!-- <div class="row">
+                            <div class="col col-sm-6">
+                                <app-information-table [tableData]="userDataTable"></app-information-table>
+                            </div>
+                            <div class="col col-sm-6">
+                                <div class="row">
+                                    <div class="col col-sm-12">
+                                        <app-information-table [tableData]="limitsDataTable"></app-information-table>
+                                    </div>
+                                </div>
+                                <div class="row"
+                                    *ngIf="_authService.activateOption('AlertsMenu', [],['AlertsUserGroup'])">
+                                    <div class="col col-sm-12">
+                                        <app-information-table [tableData]="smsDataTable"></app-information-table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div>
+                                <app-information-data [userDataTable]="userDataTable"
+                                    [limitsDataTable]="limitsDataTable" [smsDataTable]="smsDataTable">
+                                </app-information-data>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</arb-colapsable-panel>

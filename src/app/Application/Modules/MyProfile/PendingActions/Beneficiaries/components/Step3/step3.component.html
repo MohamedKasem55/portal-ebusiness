@@ -1,0 +1,750 @@
+<div class="container-fluid docs-component">
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block; position: static;">
+        <div class="" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body" *ngIf="(
+                        (!sharedData.responseMultipleAuthorizeConfirm.errorListWithin || sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length == 0)
+						&& 
+                        (!sharedData.responseMultipleAuthorizeConfirm.errorListLocal ||
+                        sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length ==0 ) 
+                        &&
+                        (!sharedData.responseMultipleAuthorizeConfirm.errorListInternational ||
+                        sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length == 0))">
+                    <span class="icon -check icon-success"></span>
+                    <p>{{ 'payments.successRequest' | translate }}</p>
+                </div>
+                <div class="modal-body"
+                     *ngIf="(sharedData.responseMultipleAuthorizeConfirm.errorListWithin && sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length > 0) ||
+						(sharedData.responseMultipleAuthorizeConfirm.errorListLocal && sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length > 0) ||
+						(sharedData.responseMultipleAuthorizeConfirm.errorListInternational && sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length > 0)">
+                    <span class="icon -close icon-failure"></span>
+                    <p>{{ 'payments.failedRequest' | translate }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button (click)="finish()" type="button"
+                            class="btn btn-primary btn-wide">{{ 'public.finish' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid"
+     *ngIf="(sharedData.responseMultipleAuthorizeConfirm.errorListWithin && sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length > 0) ||
+						(sharedData.responseMultipleAuthorizeConfirm.errorListLocal && sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length > 0) ||
+						(sharedData.responseMultipleAuthorizeConfirm.errorListInternational && sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length > 0)">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                <div class="col-xs-12 col-sm-6 text-left">
+                    {{ 'myProfile.pending_actions.errorList' | translate }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid"
+     *ngIf="sharedData.responseMultipleAuthorizeConfirm.errorListWithin && sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length > 0">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-data-table__title">
+                {{ 'myProfile.pending_actions.pending_al_rajhi_beneficiaries' | translate }}
+            </div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="withinTable"
+                              [header]="'myProfile.pending_actions.pending_al_rajhi_beneficiaries' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'myProfile.pending_actions.beneficiary_name' | translate ,'dataKey':'beneficiaryFullName'},
+                        {'title':'myProfile.pending_actions.accountBeneficiary' | translate,'dataKey':'beneficiaryAccount'},
+                        {'title':'myProfile.pending_actions.email' | translate,'dataKey':'email'},
+                        {'title':'pendingActions.general.rejectedReason' | translate,'dataKey':'rejectedReason'}]">
+                </table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #withinTable
+                           class="material sme-table sme-table--responsive table"
+                           [rows]="sharedData.responseMultipleAuthorizeConfirm.errorListWithin"
+                           [columnMode]="defaultColumnMode"
+                           [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                           [count]="sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length"
+                           [limit]="withinDisplaySize"
+                           [externalPaging]="false" [externalSorting]="false">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <!-- <div style="padding-left:60px; font-size:14px">
+                            <div>{{row.date}}, {{row.time}}</div>
+                            </div> -->
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.initiationDate' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.initiationDate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.beneficiary_name' | translate }}</label>
+                                        <div>
+                                            <span>{{row.beneficiaryFullName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.accountBeneficiary' | translate }}</label>
+                                        <div>
+                                            <span>{{row.beneficiaryAccount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.email' | translate }}</label>
+                                        <div>
+                                            <span>{{row.email}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                        <div>
+                                            <span>{{row.rejectedReason}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+
+                <ngx-datatable-column prop="initiationDate" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{ value | date:'dd/MM/yyyy' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="beneficiaryFullName" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.beneficiary_name' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="beneficiaryAccount" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.accountBeneficiary' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="email" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.email' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="rejectedReason" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'pendingActions.general.rejectedReason' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [visiblePagesCount]="visiblePagesCount" (change)="withinTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length > pageSize ? pageSize : sharedData.responseMultipleAuthorizeConfirm.errorListWithin.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="withinDisplaySize">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid"
+     *ngIf="sharedData.responseMultipleAuthorizeConfirm.errorListLocal && sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length > 0">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-data-table__title">
+                {{ 'myProfile.pending_actions.pending_al_rajhi_beneficiaries_Local' | translate }}
+            </div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="localTable"
+                              [header]="'myProfile.pending_actions.pending_al_rajhi_beneficiaries_Local' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'myProfile.pending_actions.beneficiary_name' | translate ,'dataKey':'beneficiaryFullName'},
+                        {'title':'myProfile.pending_actions.accountBeneficiary' | translate,'dataKey':'beneficiaryAccount'},
+                        {'title':'myProfile.pending_actions.bank' | translate,'dataKey':'bankCode'},
+                        {'title':'myProfile.pending_actions.phoneNumber' | translate,'dataKey':'phoneNumber'},
+                        {'title':'myProfile.pending_actions.email' | translate,'dataKey':'email'},
+                        {'title':'pendingActions.general.rejectedReason' | translate,'dataKey':'rejectedReason'}]">
+                </table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #localTable
+                           class="material sme-table sme-table--responsive table"
+                           [rows]="sharedData.responseMultipleAuthorizeConfirm.errorListLocal"
+                           [columnMode]="defaultColumnMode"
+                           [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                           [count]="sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length"
+                           [limit]="localDisplaySize"
+                           [externalPaging]="false" [externalSorting]="false">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <!-- <div style="padding-left:60px; font-size:14px">
+								<div>{{row.date}}, {{row.time}}</div>
+								</div> -->
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.initiationDate' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.initiationDate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.beneficiary_name' | translate }}</label>
+                                        <div>
+                                            <span>{{row.beneficiaryFullName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.accountBeneficiary' | translate }}</label>
+                                        <div>
+                                            <span>{{row.beneficiaryAccount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.bank' | translate }}</label>
+                                        <div>
+                                            <span>{{'bankCode' | modelPipe: row.bankCode }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.phoneNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.phoneNumber }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.email' | translate }}</label>
+                                        <div>
+                                            <span>{{row.email}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                        <div>
+                                            <span>{{row.rejectedReason}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+
+                <ngx-datatable-column prop="initiationDate" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{ value | date:'dd/MM/yyyy' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="beneficiaryFullName" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.beneficiary_name' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="beneficiaryAccount" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.accountBeneficiary' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="bankCode" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.bank' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="'bankCode' | modelPipe: value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="phoneNumber" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.phoneNumber' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="email" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.email' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="rejectedReason" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'pendingActions.general.rejectedReason' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [visiblePagesCount]="visiblePagesCount" (change)="localTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length > pageSize ? pageSize : sharedData.responseMultipleAuthorizeConfirm.errorListLocal.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="localDisplaySize">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid"
+     *ngIf="sharedData.responseMultipleAuthorizeConfirm.errorListInternational && sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length > 0">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-data-table__title">
+                {{ 'myProfile.pending_actions.pending_al_rajhi_beneficiaries_International' | translate }}
+            </div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="internationalTable"
+                              [header]="'myProfile.pending_actions.pending_al_rajhi_beneficiaries_International' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'myProfile.pending_actions.beneficiary_name' | translate ,'dataKey':'beneficiaryFullName'},
+                        {'title':'myProfile.pending_actions.country' | translate ,'dataKey':'countryCode'},
+                        {'title':'myProfile.pending_actions.accountBeneficiary' | translate,'dataKey':'beneficiaryAccount'},
+                        {'title':'myProfile.pending_actions.bank' | translate,'dataKey':'bankName'},
+                        {'title':'myProfile.pending_actions.phoneNumber' | translate,'dataKey':'phoneNumber'},
+                        {'title':'myProfile.pending_actions.category' | translate,'dataKey':'beneficiaryCategory'},
+                        {'title':'myProfile.pending_actions.currency' | translate,'dataKey':'currencyCode'},
+                        {'title':'myProfile.pending_actions.swiftCode' | translate,'dataKey':'bankSwiftCode'},
+                        {'title':'myProfile.pending_actions.phoneNumber' | translate,'dataKey':'mobileNo'},
+                        {'title':'myProfile.pending_actions.email' | translate,'dataKey':'email'},
+                        {'title':'pendingActions.general.rejectedReason' | translate,'dataKey':'rejectedReason'}]">
+                </table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #internationalTable
+                           class="material sme-table sme-table--responsive table"
+                           [rows]="sharedData.responseMultipleAuthorizeConfirm.errorListInternational"
+                           [columnMode]="defaultColumnMode"
+                           [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+                           [count]="sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length"
+                           [limit]="internationalDisplaySize" [externalPaging]="false" [externalSorting]="false">
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <!-- <div style="padding-left:60px; font-size:14px">
+								<div>{{row.date}}, {{row.time}}</div>
+								</div> -->
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.initiationDate' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.initiationDate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.beneficiary_name' | translate }}</label>
+                                        <div>
+                                            <span>{{row.beneficiaryName1}} {{row.beneficiaryName2}}
+                                                {{row.beneficiaryName3}} {{row.beneficiaryName4}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.country' | translate }}</label>
+                                        <div>
+                                            <span>{{'countryName' | modelPipe: row.countryCode}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.accountBeneficiary' | translate }}</label>
+                                        <div>
+                                            <span>{{row.beneficiaryAccount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.bank' | translate }}</label>
+                                        <div>
+                                            <span>{{row.bankName}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.category' | translate }}</label>
+                                        <div>
+                                            <span *ngIf="row.beneficiaryCategory =='I'">{{ 'beneficiaries.selectIndividual' | translate }}</span>
+                                            <span *ngIf="row.beneficiaryCategory =='C'">{{ 'beneficiaries.selectCompany' | translate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.currency' | translate }}</label>
+                                        <div>
+                                            <span>{{'currency' | modelPipe: row.currencyCode}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.swiftCode' | translate }}</label>
+                                        <div>
+                                            <span>{{row.bankSwiftCode}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.phoneNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.mobileNo}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.email' | translate }}</label>
+                                        <div>
+                                            <span>{{row.email}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'pendingActions.general.rejectedReason' | translate }}</label>
+                                        <div>
+                                            <span>{{row.rejectedReason}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column prop="initiationDate" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | date:'dd/MM/yyyy' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.beneficiary_name' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="row.beneficiaryName1"></span>
+                        <span class="mobile-hidden" [innerHTML]="row.beneficiaryName2"></span>
+                        <span class="mobile-hidden" [innerHTML]="row.beneficiaryName3"></span>
+                        <span class="mobile-hidden" [innerHTML]="row.beneficiaryName4"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="countryCode" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.country' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="'countryName' | modelPipe: value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="beneficiaryAccount" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.accountBeneficiary' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="bankName" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.bank' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="beneficiaryCategory" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.category' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden"
+                              *ngIf="value=='I'">{{ 'beneficiaries.selectIndividual' | translate }}</span>
+                        <span class="mobile-hidden"
+                              *ngIf="value=='C'">{{ 'beneficiaries.selectCompany' | translate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="currencyCode" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.currency' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden" [innerHTML]="'currency' | modelPipe: value"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="bankSwiftCode" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.swiftCode' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="mobileNo" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.phoneNumber' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="email" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.email' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="rejectedReason" class="mobile-hidden">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'pendingActions.general.rejectedReason' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span class="mobile-hidden">{{value}}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager
+                                    [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                    [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                    [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                    [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                    [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                    [visiblePagesCount]="visiblePagesCount"
+                                    (change)="internationalTable.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length > pageSize ? pageSize : sharedData.responseMultipleAuthorizeConfirm.errorListInternational.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="internationalDisplaySize">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

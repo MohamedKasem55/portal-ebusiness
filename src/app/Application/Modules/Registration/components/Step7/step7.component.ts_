@@ -1,0 +1,29 @@
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
+
+@Component({
+    templateUrl: './step7.component.html',
+    styleUrls: ['../../registration.component.scss']
+})
+export class Step7Component {
+
+    @ViewChild('stepForm', { static: false }) stepForm: NgForm;
+
+    step = 7;
+    formData: any;
+    buttonLabel: any;
+
+    submit() {
+
+        /// sin implementar
+    }
+
+    valid() {
+        return true;
+    }
+
+    isPrint(){
+        return false;
+    }
+}

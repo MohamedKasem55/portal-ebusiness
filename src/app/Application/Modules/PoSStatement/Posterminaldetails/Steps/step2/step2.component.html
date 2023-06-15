@@ -1,0 +1,114 @@
+<div class="container-fluid">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                  <div class="sme-form__body">
+                        <div class="sme-form__title">
+                            <div class="col-xs-12 col-sm-6">{{ 'posStatement.posTerminal' | translate }}</div>
+                        </div>
+                   
+                    <form autocomplete="off" [formGroup]="form">
+                            <div class="row">
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label>{{ 'posStatement.terminal_id' | translate }}</label>
+                                            <span class="form-control disabled">{{batch.terminalId}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                            <div class="form-group">
+                                                <label>{{ 'posStatement.region' | translate }}</label>
+                                                <span class="form-control disabled">{{ 'terminalRegion' | modelPipe: batch.region }}</span>
+                                            </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                            <div class="form-group">
+                                                <label>{{ 'posStatement.account' | translate }}</label>
+                                                <span class="form-control disabled">{{batch.account}}</span>
+                                            </div>
+                                    </div>
+                                   
+                         </div>
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                                <label>{{ 'posStatement.terminal_name' | translate }} </label>
+                                               <span class="form-control disabled">{{this.form.controls['name'].value}}</span>
+                                        </div>
+                                           
+                                </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ 'posStatement.city' | translate }} </label>
+                                    <span class="form-control disabled">{{'cityType'| modelPipe:this.form.controls['city'].value}}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                        <label>{{ 'posStatement.location' | translate }} *</label>
+                                        <span class="form-control disabled">{{this.form.controls['location'].value}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                     <label>{{ 'posStatement.location2' | translate }} *</label>
+                                     <span class="form-control disabled">{{this.form.controls['location2'].value}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                         <label>{{ 'posStatement.phone' | translate }} *</label>
+                                         <span class="form-control disabled">{{this.form.controls['telephone'].value}}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-xs-12 col-sm-4">
+                                            <div class="form-group">
+                                             <label>{{ 'posStatement.mobile_number' | translate }} *</label>
+                                             <span class="form-control disabled">{{this.form.controls['mobile'].value}}</span>
+                                            </div>
+                                    </div>
+                        </div>
+
+                        <div class="row">
+
+                                <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                         <label>{{ 'posStatement.fax_number' | translate }} </label>
+                                            <span class="form-control disabled">{{this.form.controls['fax'].value}}</span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="form-group">
+                                     <label>{{ 'posStatement.email' | translate }} *</label>
+                                     <span class="form-control disabled">{{this.form.controls['email'].value}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-4">
+                                        <div class="form-group">
+                                         <label>{{ 'posStatement.pobox' | translate }} </label>
+                                         <span class="form-control disabled">{{this.form.controls['pobox'].value}}</span>
+                                        </div>
+                                   
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                            <div class="col-xs-12 col-sm-4">
+                                                <div class="form-group">
+                                                        <label>{{ 'posStatement.Zipcode' | translate }} </label>
+                                                        <span class="form-control disabled">{{this.form.controls['zipCode'].value}}</span>
+                                                </div>
+                                            </div>
+                            </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+        <li>{{'menu.collections_management.menu' | translate}}</li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/posstatement']">{{ 'posStatement.name' | translate }}</a></li>
+        <li><a class="human-selectable" href="#" [routerLink]="['/posstatement/pos-maintenance-request']">{{ 'posStatement.posMaintenanceRequest'| translate }}</a></li>
+        <li class="active">{{ 'posRequest.addRequest'| translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid">	
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__form">
+                <div class="sme-form__actions">
+                    <a class="btn btn-primary btn-wide" 
+                        (click)="goRequestStatus()">{{
+                        'posRequest.requestStatus' | translate }}</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid docs-component">
+	<div class="sme-panel">
+		<div class="sme-panel__body">
+			<div class="sme-wizard">
+				<ul class="sme-wizard__steps">
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+						<span>
+							<span class="num">1</span>
+							<span class="text">{{ 'posRequest.completeDetails' | translate | uppercase }}</span>
+						</span>
+					</li>
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+						<span>
+							<span class="num">2</span>
+							<span class="text">{{ 'public.confirm' | translate | uppercase}}</span>
+						</span>
+					</li>
+					<li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+						<span>
+							<span class="icon -check"></span>
+							<span class="text">{{ 'public.summary' | translate | uppercase }}</span>
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<app-add-request-step1 *ngIf="step === 1"
+[form]="element"
+[types]="types"
+[cities]="cities"
+[terminals]="terminals"
+[mobile]="mobile"
+>
+	
+</app-add-request-step1
+>
+
+<app-add-request-step2 *ngIf="step === 2"
+[form]="element"
+[types]="types"
+[cities]="cities"
+[terminals]="terminals">
+
+	
+</app-add-request-step2>
+
+<app-add-request-step3 *ngIf="step === 3"
+[generateChallengeAndOTP]="response.generateChallengeAndOTP">
+	
+</app-add-request-step3>
+
+<app-levels-table *ngIf="step ==2"
+    [futureSecurityLevels]="batchList[0].futureSecurityLevelsDTOList">
+</app-levels-table> 
+
+<div class="sme-content-container container-fluid" *ngIf="response.generateChallengeAndOTP && step == 2">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="response.generateChallengeAndOTP" [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+        <button type="button" class=" btn btn-default btn-wide" (click)="goBack()" *ngIf="step == 1">{{'public.back' | translate }}</button>
+	<button type="button" class=" btn btn-default btn-wide" (click)="previous()" *ngIf="step > 1 && step < 3">{{'public.back' | translate }}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step < 3" [disabled]="!isValid()">{{'public.next' | translate}}</button>
+    <button class="btn btn-primary btn-wide" (click)="next()" *ngIf="step == 3">{{'public.finish' | translate}}</button>
+</div>

@@ -1,0 +1,246 @@
+<form autocomplete="off" [formGroup]="viewForm">
+    <arb-panel>
+        <div class="row" *ngIf="pageErrorMessage">
+            <div class="alert alert-danger text-align-center">
+                <small>{{pageErrorMessage['description']}}</small>
+            </div>
+        </div>
+        <span class="sme-form__head">{{ 'governmentRevenue.bulkUploadFile.headerDetail' | translate }}</span>
+        <div class="sme-form__collapse">
+            <div class="sme-form__body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label for="profileNumber"> {{ 'governmentRevenue.profileNumber' | translate }}</label>
+                    <span id="profileNumber" class="form-control">{{ company?.profileNumber }}</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label for="customerName">{{ 'governmentRevenue.customerName' | translate }}</label>
+                    <span id="customerName" class="form-control">{{ company?.companyName }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required">{{ 'governmentRevenue.accountFrom' | translate }}</label>
+                    <div>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control" name="accountFrom"
+                            formControlName="accountFrom" required>
+                            <ng-option  selected value disabled>--{{ 'public.selectAccount' | translate }}--</ng-option>
+
+                            <ng-option *ngFor="let account of accounts" [value]="account.fullAccountNumber">
+                                {{account.fullAccountNumber}}{{(account.alias != '' ? ' - ' + account.alias : '')}}
+                                <span *ngIf="!detailsView">
+                                    {{(account.inquiry ? (' - ' + (account.availableBalance |
+                                    amountCurrency:account.currency)) : '')}} {{(account.inquiry ? ('currencyIso' |
+                                    modelPipe:account.currency) : '')}}
+                                </span>
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="viewForm.controls.accountFrom.hasError('required') && viewForm.controls.accountFrom.touched"
+                            class="alert alert-danger">
+                            <small>{{'transfer.error.accountFromRequired' | translate }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required">{{ 'governmentRevenue.bank' | translate }}</label>
+                    <div>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            name="beneficiaryBank" formControlName="beneficiaryBank" required>
+                            <ng-option selected value disabled>--{{ 'governmentRevenue.selectBank' | translate }}--
+                            </ng-option>
+                            <ng-option *ngFor="let bank of banks" [value]="bank.key">
+                                {{ bank.value }}
+                            </ng-option>
+                        </ng-select>
+                        <div *ngIf="viewForm.controls.beneficiaryBank.hasError('required') && viewForm.controls.beneficiaryBank.touched"
+                            class="alert alert-danger">
+                            <small>{{ 'governmentRevenue.bank' | translate }} {{ 'governmentRevenue.error.required' |
+                                translate }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required" for="totalAmount">{{ 'governmentRevenue.totalAmount' | translate }}</label>
+                    <input id="totalAmount" class="form-control" formControlName="totalAmount"
+                        inputPattern="onlyPositiveDecimalNumbers">
+                    <div *ngIf="viewForm.controls.totalAmount.hasError('required') && viewForm.controls.totalAmount.touched"
+                        class="alert alert-danger">
+                        <small>{{'transfer.amount' | translate }}{{ 'error.required' | translate }} </small>
+                    </div>
+                    <div *ngIf="viewForm.controls.totalAmount.hasError('min') && viewForm.controls.totalAmount.touched"
+                        class="alert alert-danger">
+                        <small>{{'transfer.amount' | translate }}{{ 'error.minValue' | translate: {value: 0} }} </small>
+                    </div>
+                    <div *ngIf="viewForm.controls.totalAmount.hasError('pattern') && viewForm.controls.totalAmount.touched"
+                        class="alert alert-danger">
+                        <small>{{'transfer.amount' | translate }}{{ 'error.positiveNumeric' | translate }} </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required" for="letterNumber">{{ 'governmentRevenue.letterNumber' | translate
+                        }}</label>
+                    <input id="letterNumber" class="form-control" inputPattern="notArabic"
+                        formControlName="letterNumber">
+                    <div *ngIf="viewForm.controls.letterNumber.hasError('required') && viewForm.controls.letterNumber.touched"
+                        class="alert alert-danger">
+                        <small>{{ 'governmentRevenue.letterNumber' | translate }} {{ 'governmentRevenue.error.required'
+                            | translate }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required">{{ 'governmentRevenue.letterDate' | translate }}</label>
+                    <input *ngIf="viewForm.get('letterDate').disabled" [id]="'letterDate'" class="form-control"
+                        [value]="getDateControlValue('letterDate')" disabled />
+                    <div class="form-control" *ngIf="!viewForm.get('letterDate').disabled">
+                        <ngbd-datepicker-calendars [id]="'letterDate'" formControlName="letterDate" [mindate]="false"
+                            [maxdate]="true">
+                        </ngbd-datepicker-calendars>
+                    </div>
+                    <div *ngIf="viewForm.controls.letterDate.invalid && viewForm.controls.letterDate.touched"
+                        class="alert alert-danger">
+                        <small>{{ 'governmentRevenue.letterDate' | translate }} {{ 'governmentRevenue.error.required' |
+                            translate }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required">{{ 'governmentRevenue.letterPeriodFrom' | translate }}</label>
+                    <input *ngIf="viewForm.get('letterPeriodFrom').disabled" [id]="'letterDate'" class="form-control"
+                        [value]="getDateControlValue('letterPeriodFrom')" disabled />
+                    <div class="form-control" *ngIf="!viewForm.get('letterPeriodFrom').disabled">
+                        <ngbd-datepicker-calendars [id]="'letterPeriodFrom'" formControlName="letterPeriodFrom"
+                            [maxdate]="viewForm.controls.letterPeriodTo.value" [mindate]="false">
+                        </ngbd-datepicker-calendars>
+                    </div>
+                    <div *ngIf="viewForm.controls.letterPeriodFrom.invalid && viewForm.controls.letterPeriodFrom.touched"
+                        class="alert alert-danger">
+                        <small>{{ 'governmentRevenue.letterPeriodFrom' | translate }} {{
+                            'governmentRevenue.error.required' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label class="required">{{ 'governmentRevenue.letterPeriodTo' | translate }}</label>
+                    <input *ngIf="viewForm.get('letterPeriodTo').disabled" [id]="'letterDate'" class="form-control"
+                        [value]="getDateControlValue('letterPeriodTo')" disabled />
+                    <div class="form-control" *ngIf="!viewForm.get('letterPeriodTo').disabled">
+                        <ngbd-datepicker-calendars [id]="'letterPeriodTo'" formControlName="letterPeriodTo"
+                            [mindate]="viewForm.controls.letterPeriodFrom.value" [maxdate]="false">
+                        </ngbd-datepicker-calendars>
+                    </div>
+                    <div *ngIf="viewForm.controls.letterPeriodTo.invalid && viewForm.controls.letterPeriodTo.touched"
+                        class="alert alert-danger">
+                        <small>{{ 'governmentRevenue.letterPeriodTo' | translate }} {{
+                            'governmentRevenue.error.required' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label >{{ 'governmentRevenue.closingDateFinancial' | translate }}</label>
+                    <input [id]="'finclosingyear'" class="form-control" inputPattern="notArabic" maxlength="10"
+                        formControlName="finclosingyear">
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="viewForm.get('bankReference')">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label >{{ 'governmentRevenue.processed_operations.bankReference' | translate }}</label>
+                    <input [id]="'bankReference'" class="form-control"
+                        formControlName="bankReference">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label class="required">{{ 'companyAdmin.beneficiaryOriginator.depositorOriginatorName' | translate
+                        }}</label>
+                    <div>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            name="beneficiaryOriginator" bindLabel="depositorOriginatorName"
+                            formControlName="beneficiaryOriginator" (change)="onBeneficiaryChange($event)" required>
+                            <ng-option selected value disabled>--{{ 'governmentRevenue.selectBeneficiary' | translate }}
+                                --
+                            </ng-option>
+                            <ng-option *ngFor="let beneficiary of beneficiaryOriginators" [value]="beneficiary">{{
+                                beneficiary.depositorOriginatorName }}</ng-option>
+                            <ng-template ng-label-tmp let-item="item">
+                                <span>{{showLabelSelect(item, 'governmentRevenue.selectBeneficiary')}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="viewForm.controls.beneficiaryOriginator.hasError('required') && viewForm.controls.beneficiaryOriginator.touched"
+                        class="alert alert-danger">
+                        <small>{{ 'companyAdmin.beneficiaryOriginator.depositorOriginatorName' | translate }} {{
+                            'governmentRevenue.error.required' | translate }}</small>
+                    </div>
+                    <app-originator-table [originator]="viewForm.get('beneficiaryOriginator').value"
+                        [type]="OriginatorType.BENEFICIARY"></app-originator-table>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label class="required">{{ 'governmentRevenue.depositorOrigName' | translate }}</label>
+                    <div>
+                        <ng-select [notFoundText]="'public.noData' | translate" class="form-control"
+                            name="depositorOriginator" bindLabel="depositorOriginatorName"
+                            formControlName="depositorOriginator" required>
+                            <ng-option selected value disabled> --{{ 'governmentRevenue.selectDepositor' | translate }}
+                                --
+                            </ng-option>
+                            <ng-option *ngFor="let depositor of filteredOriginators" [value]="depositor">{{
+                                depositor.depositorOriginatorName }}</ng-option>
+                            <ng-template ng-label-tmp let-item="item">
+                                <span>{{showLabelSelect(item, 'governmentRevenue.selectDepositor')}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="viewForm.controls.depositorOriginator.hasError('required') && viewForm.controls.depositorOriginator.touched"
+                        class="alert alert-danger">
+                        <small>{{ 'governmentRevenue.depositorOrigName' | translate }} {{
+                            'governmentRevenue.error.required' | translate }}</small>
+                    </div>
+                    <app-originator-table [originator]="viewForm.controls.depositorOriginator.value"
+                        [type]="OriginatorType.DEPOSITOR"></app-originator-table>
+                </div>
+            </div>
+        </div>
+
+        <app-revenue-accounts-table [mainForm]="viewForm" [revenueAccounts]="revenueAccounts"
+            [subAccountAmounts]="subAccountAmounts" (addRow)="addSubAccount.emit($event)"
+            (removeRow)="removeSubAccount.emit($event)" [editView]="revenueAccounteditView">
+        </app-revenue-accounts-table>
+        <div *ngIf="viewForm.get('rejectedReason')" class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label>{{ 'governmentRevenue.rejectionReason' | translate }}</label>
+                    <span class="form-control" style="color: red">{{ viewForm.controls.rejectedReason.value }}</span>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </arb-panel>
+</form>
+<app-levels-table *ngIf="securityLevelsDTOList" [futureSecurityLevels]="securityLevelsDTOList">
+</app-levels-table>

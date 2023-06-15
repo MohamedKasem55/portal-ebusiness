@@ -1,0 +1,370 @@
+<arb-breadcrumb *ngIf="this.mainList" [routes]="[
+['dashboard.sadad'],
+	['sadadOLP.menu'],
+	['sadadOLP.notifications.menu']
+]">
+</arb-breadcrumb>
+<arb-searchable-panel [searchForm]="searchForm" (searchAction)="search()" (resetAction)="reset()" *ngIf="this.mainList">
+    <ng-container [formGroup]="searchForm">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="actionTypeSelect">{{ 'sadadOLP.notifications.actionType' | translate }}</label>
+                    <ng-select class="form-control" name="actionTypeSelect" id="actionTypeSelect"
+                        formControlName="actionType">
+                        <ng-option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</ng-option>
+                        <ng-option *ngFor="let actionTypeSelectValue of actionTypeSelect"
+                            [value]="actionTypeSelectValue['key']">
+                            {{actionTypeSelectValue['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label for="referenceTypeSelect">{{ 'sadadOLP.notifications.referenceType' | translate }}</label>
+                    <ng-select class="form-control" name="referenceTypeSelect" id="referenceTypeSelect"
+                        formControlName="referenceType">
+                        <ng-option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</ng-option>
+                        <ng-option *ngFor="let referenceTypeSelectValue of referenceTypeSelect"
+                            [value]="referenceTypeSelectValue['key']">
+                            {{referenceTypeSelectValue['value']}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{'sadadOLP.notifications.dateFrom' | translate }}</label>
+                    <input type="text" #dateFrom bsDatepicker formControlName="dateFrom" class="form-control"
+                        [bsConfig]="bsConfig" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <label>{{
+                        'sadadOLP.notifications.dateTo' | translate }}</label>
+                    <input type="text" #dateTo bsDatepicker formControlName="dateTo" class="form-control"
+                        [bsConfig]="bsConfig" />
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</arb-searchable-panel>
+
+
+<arb-table-panel *ngIf="this.mainList" [title]="'sadadOLP.notifications.menu'">
+    <table-export [dataTable]="elementsTable" [header]="'sadadOLP.notifications.menu' | translate" [columns]="[
+          {'title':'sadadOLP.notifications.actionType' | translate ,'dataKey':'customerType'},
+          {'title':'sadadOLP.notifications.referenceType' | translate,'dataKey':'refIdType'},
+          {'title':'sadadOLP.notifications.date' | translate,'dataKey':'notificationDate'},
+          {'title':'sadadOLP.notifications.notificationMessage' | translate,'dataKey':'notificationMsg'}
+          ]">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table sme-table--responsive table" [rows]="elementsPage.data"
+        [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight"
+        [externalPaging]="true" [externalSorting]="true" [count]="elementsPage.page.totalElements"
+        [offset]="elementsPage.page.pageNumber-1" [limit]="elementsPage.page.pageSize"
+        [selectionType]="defaultSelectionType" [selected]="tableSelectedRows" [rowIdentity]="getIdFunction()"
+        (page)='setPage($event)' (sort)="setSort($event)" (select)='onSelect($event)'>
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="action-type">{{'sadadOLP.notifications.actionType' | translate }}</label>
+                                <div>
+                                    <span id="action-type"
+                                        *ngIf="row.customerType !== ''">{{'sadadOLPNotificationsActionType' |
+                                        modelPipe:row.customerType }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="reference-type">{{'sadadOLP.notifications.referenceType' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="reference-type">{{'sadadOLPNotificationsReferenceType' |
+                                        modelPipe:row.refIdType }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="notification-date">{{'sadadOLP.notifications.date' | translate }}</label>
+                                <div>
+                                    <span id="notification-date">{{row.notificationDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="notification-message">{{'sadadOLP.notifications.notificationMessage' |
+                                    translate }}</label>
+                                <div>
+                                    <span id="notification-message">{{row.notificationMsg}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!--custom checkbox- defaul select all resete preview item selected with extern pagination-->
+        <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+            [resizeable]="false">
+            <ng-template ngx-datatable-header-template let-value="value">
+                <label class="datatable-checkbox">
+                    <input type="checkbox" [checked]="selectAllOnPage[elementsPage.page.pageNumber]"
+                        (change)="selectAll($event)" />
+                </label>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <label class="datatable-checkbox">
+                    <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+                </label>
+            </ng-template>
+        </ngx-datatable-column>
+        <!--end custom checkbox-->
+
+        <ngx-datatable-column prop="notificationType" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.actionType' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span *ngIf="value !== ''">{{'sadadOLPNotificationsActionType' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="refIdType" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.referenceType' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{'sadadOLPNotificationsReferenceType' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="notificationDate" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.date' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="notificationMsg" [width]="500" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.notificationMessage' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+
+<arb-table-panel *ngIf="!this.mainList" [title]="'sadadOLP.notifications.menu'">
+    <table-export [dataTable]="elementsTable" [header]="'sadadOLP.notifications.menu' | translate" [columns]="[
+        {'title':'sadadOLP.notifications.actionType' | translate ,'dataKey':'customerType'},
+        {'title':'sadadOLP.notifications.referenceType' | translate,'dataKey':'refIdType'},
+        {'title':'sadadOLP.notifications.date' | translate,'dataKey':'notificationDate'},
+        {'title':'sadadOLP.notifications.notificationMessage' | translate,'dataKey':'notificationMsg'}
+        ]">
+    </table-export>
+
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #elementsTable
+        class="material sme-table--responsive table" [rows]="elementsPage.data" [columnMode]="defaultColumnMode"
+        [headerHeight]="30" [footerHeight]="footerHeight" [rowHeight]="defaultHeight" [externalPaging]="false"
+        [externalSorting]="false" [count]="elementsPage.page.totalElements" [limit]="elementsPage.page.pageSize">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="action-type">{{'sadadOLP.notifications.actionType' | translate }}</label>
+                                <div>
+                                    <span id="action-type"
+                                        *ngIf="row.customerType !== ''">{{'sadadOLPNotificationsActionType' |
+                                        modelPipe:row.customerType }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="reference-type">{{'sadadOLP.notifications.referenceType' | translate
+                                    }}</label>
+                                <div>
+                                    <span id="reference-type">{{'sadadOLPNotificationsReferenceType' |
+                                        modelPipe:row.refIdType }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="notification-date">{{'sadadOLP.notifications.date' | translate }}</label>
+                                <div>
+                                    <span id="notification-date">{{row.notificationDate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+
+                            <div class="form-group">
+                                <label for="notification-message">{{'sadadOLP.notifications.notificationMessage' |
+                                    translate }}</label>
+                                <div>
+                                    <span id="notification-message">{{row.notificationMsg}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column *ngIf="this.mainList" [width]="50" [sortable]="false" [canAutoResize]="false"
+            [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="notificationType" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.actionType' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span *ngIf="value !== ''">{{'sadadOLPNotificationsActionType' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="refIdType" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.referenceType' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <span>{{'sadadOLPNotificationsReferenceType' | modelPipe:value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="notificationDate" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.date' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span>{{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="notificationMsg" [width]="500" [sortable]="false" [draggable]="false">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'sadadOLP.notifications.notificationMessage' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span> {{value}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager
+                        [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                        [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                        [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                        [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                        [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                        [visiblePagesCount]="visiblePagesCount" (change)="elementsTable.onFooterPage($event)">
+                    </app-datatable-pager>
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                            {{elementsPage.page.size}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="this.elementsPage.page.pageSize"
+                                    (change)="this.setPage(null)">
+                                    <option [value]="10">10</option>
+                                    <option [value]="20">20</option>
+                                    <option [value]="50">50</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>
+
+<div class="sme-form__actions" *ngIf="this.mainList">
+    <button class="btn btn-primary btn-wide" [routerLink]="['/sadadOLP/olp-close-notifications']"
+        [disabled]="tableSelectedRows.length == 0">
+        <span class="text">{{'sadadOLP.notifications.closeNotifications' | translate }}</span>
+    </button>
+</div>

@@ -1,0 +1,352 @@
+// Position
+
+@mixin position($top: 0, $right: $top, $bottom: $top, $left: $right) {
+  top: $top;
+  bottom: $bottom;
+
+  left: if-ltr($left, $right);
+  right: if-ltr($right, $left);
+}
+
+@mixin absolute($top: 0, $right: $top, $bottom: $top, $left: $right) {
+  @include position($top, $right, $bottom, $left);
+  position: absolute;
+}
+
+// Center
+
+@mixin center-x($position: absolute) {
+  position: $position;
+  left: 50%;
+  transform: translateX(-50%);
+}
+@mixin center-y($position: absolute) {
+  position: $position;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin center($position: absolute) {
+  position: $position;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+@mixin reset-center-x($position: relative) {
+  position: $position;
+  left: 0;
+  transform: none;
+}
+@mixin reset-center-y($position: relative) {
+  position: $position;
+  top: auto;
+  transform: none;
+}
+
+@mixin reset-center($position: relative) {
+  position: $position;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+@mixin cover() {
+  @include center();
+  min-width: 101%;
+  min-height: 101%;
+  width: auto !important; // Override inline width
+  height: auto !important; // Override inline height
+}
+
+@mixin contains() {
+  @include center();
+  max-width: 101%;
+  max-height: 101%;
+  width: auto !important; // Override inline width
+  height: auto !important; // Override inline height
+}
+
+@mixin cover-override() {
+  min-width: 101%;
+  min-height: 101%;
+  max-width: none;
+  max-height: none;
+}
+
+@mixin contains-override() {
+  min-width: 0;
+  min-height: 0;
+  max-width: 101%;
+  max-height: 101%;
+}
+
+@mixin relative-height($height) {
+  padding-top: $height;
+  height: 0;
+}
+
+// Before & After
+
+@mixin before($content: '') {
+  &:before {
+    content: $content;
+    display: block;
+
+    @content;
+  }
+}
+
+@mixin after($content: '') {
+  &:after {
+    content: $content;
+    display: block;
+
+    @content;
+  }
+}
+
+// List
+
+@mixin list-unstyled {
+  padding-left: 0;
+  padding-right: 0;
+  list-style: none;
+}
+
+@mixin list-inline {
+  @include list-unstyled();
+
+  > li {
+    display: inline-block;
+  }
+}
+
+@mixin list-table {
+  @include list-unstyled();
+
+  display: table;
+  width: 100%;
+
+  > li {
+    display: table-cell;
+    /*float:left;*/
+    vertical-align: top;
+
+    > a {
+      display: block;
+    }
+  }
+}
+
+// Icons
+
+@mixin append-icon($size, $content: $icon-empty) {
+  &:before {
+    @include icon-size($size);
+
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    content: $content;
+    display: inline-block;
+    font-family: 'icons';
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    speak: none;
+    text-transform: none;
+
+    @content;
+  }
+}
+
+@mixin icon-badged-size($badge-size, $icon-size: $badge-size) {
+  @include square($size);
+  position: relative;
+
+  .icon {
+    @include icon-size($icon-size);
+    @include center();
+  }
+}
+
+@mixin icon-size($size) {
+  @include square($size);
+  font-size: $size;
+  @media screen and (max-width: $max-width) {
+    font-size: $size * $factor;
+  }
+  @media screen and (max-width: $max-width2) {
+    font-size: $size * $factor2;
+  }
+  line-height: 1;
+}
+
+@mixin anchor() {
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    @content;
+  }
+}
+
+@mixin anchor-hover() {
+  &:hover,
+  &:focus,
+  &:active {
+    @content;
+  }
+}
+
+@mixin button() {
+  &,
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+// Bootstrap
+@mixin remove-collapse() {
+  &.collapse,
+  &.collapsing {
+    height: auto !important; // Override inline height
+    max-height: none;
+    visibility: visible;
+    display: block;
+  }
+}
+
+// Text direction
+//@mixin all-direction {
+//    html.ltr &, html.rtl & {
+//        @content;
+//    }
+//}
+//
+//@mixin rtl {
+//    html.rtl & {
+//        @content;
+//    }
+//}
+//
+//@mixin ltr {
+//    html.ltr & {
+//        @content;
+//    }
+//}
+
+@mixin font-base() {
+  font-family: $font-base;
+
+  @if $dir != ltr {
+    font-family: $font-base-rtl;
+  }
+}
+
+@mixin font-headings() {
+  font-family: $font-headings;
+
+  @if $dir != ltr {
+    font-family: $font-headings-rtl;
+  }
+}
+
+@mixin font($font-size: $font-size-base, $line-height: $line-height-base) {
+  font-size: $font-size;
+
+  @if $dir != ltr {
+    font-size: $font-size + 1;
+    @media screen and (max-width: $max-width) {
+      font-size: $font-size * $factor + 1 * $factor;
+    }
+    @media screen and (max-width: $max-width2) {
+      font-size: $font-size * $factor2 + 1 * $factor2;
+    }
+  }
+}
+
+@mixin heading1() {
+  font-family: $font-headings;
+  font-weight: 300;
+  font-size: $font-size-26;
+  @media screen and (max-width: $max-width) {
+    font-size: $font-size-26 * $factor;
+  }
+  @media screen and (max-width: $max-width2) {
+    font-size: $font-size-26 * $factor2;
+  }
+  line-height: 32px;
+
+  @if $dir != ltr {
+    font-family: $font-headings-rtl;
+    font-size: $font-size-27;
+    @media screen and (max-width: $max-width) {
+      font-size: $font-size-27 * $factor;
+    }
+    @media screen and (max-width: $max-width2) {
+      font-size: $font-size-27 * $factor2;
+    }
+    line-height: 34px;
+  }
+}
+
+@mixin heading2() {
+  font-family: $font-headings;
+  font-size: $font-size-16;
+  @media screen and (max-width: $max-width) {
+    font-size: $font-size-16 * $factor;
+  }
+  @media screen and (max-width: $max-width2) {
+    font-size: $font-size-16 * $factor2;
+  }
+  font-weight: 600;
+
+  @if $dir != ltr {
+    font-family: $font-headings-rtl;
+    font-size: $font-size-17;
+    @media screen and (max-width: $max-width) {
+      font-size: $font-size-17 * $factor;
+    }
+    @media screen and (max-width: $max-width2) {
+      font-size: $font-size-17 * $factor2;
+    }
+    font-weight: 300;
+  }
+}
+
+@mixin font-weight($weight) {
+  $weights: (
+    thin: 100,
+    extra-light: 200,
+    ultra-light: 200,
+    light: 300,
+    normal: 400,
+    book: 400,
+    regular: 400,
+    medium: 500,
+    semi-bold: 600,
+    demi-bold: 600,
+    bold: 700,
+    extra-bold: 800,
+    ultra-bold: 900,
+    heavy: 900,
+    black: 900,
+    ultra: 900,
+    ultra-black: 900,
+    extra-ultra: 900,
+  );
+
+  $output: $weight;
+  @if map-has-key($weights, $weight) {
+    $output: map-get($weights, $weight);
+  }
+
+  font-weight: $output;
+}
+
+// Vendor mixins
+
+@import 'vendor/bootstrap/mixins';

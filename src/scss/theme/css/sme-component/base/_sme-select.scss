@@ -1,0 +1,91 @@
+.sme-select {
+  $caret-size: 14px;
+  $padding: $padding-base-horizontal;
+
+  position: relative;
+  padding: 0;
+
+  border: 0;
+  background: #fff;
+
+  @include icon($icon-chevron-down) {
+    @include center-y;
+    @include icon-size($caret-size);
+    #{$right}: $padding;
+    z-index: 0;
+  }
+
+  &.open {
+    &:before {
+      content: $icon-chevron-up;
+    }
+  }
+
+  select {
+    z-index: 1;
+    position: relative;
+    background: none;
+    height: $input-height-base; // remove container border
+    width: 100%;
+    border: 0;
+    padding-#{$right}: $padding + $caret-size;
+
+    // Remove defult select arrow
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+
+    text-indent: 0;
+    opction {
+      padding: 0;
+    }
+  }
+
+  // Remove defult select arrow on ie
+  select::-ms-expand {
+    display: none;
+  }
+
+  select[required] [data-placeholder] {
+    display: none;
+  }
+
+  &.sme-select--placeholder {
+    select {
+      color: $input-color-placeholder;
+
+      option {
+        color: $input-color;
+      }
+    }
+  }
+
+  button {
+    text-align: $left;
+    z-index: 1;
+    text-align: $left;
+    padding-#{$left}: 0;
+    background: none;
+  }
+
+  .dropdown-menu {
+    min-width: 100%;
+  }
+
+  @if $dir != ltr {
+    &,
+    button,
+    select {
+      font-size: $font-size-13;
+      @media screen and (max-width: $max-width) {
+        font-size: $font-size-13 * $factor;
+      }
+      @media screen and (max-width: $max-width2) {
+        font-size: $font-size-13 * $factor2;
+      }
+      line-height: 14px;
+    }
+  }
+}

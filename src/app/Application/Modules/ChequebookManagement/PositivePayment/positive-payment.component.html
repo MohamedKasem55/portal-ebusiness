@@ -1,0 +1,47 @@
+<!-- breadcrumb -->
+<div class="sme-breadcrumb">
+	<ol class="breadcrumb">
+		<li class="active">{{ 'dashboard.accounts' | translate }}</li>
+		<li class="active">
+			<a href="#" [routerLink]="['/accounts/chequebook']">{{ 'dashboard.chequebook' | translate }}</a>
+		</li>
+		<li class="active">{{ 'chequebook.positivePayment'| translate }}</li>
+
+	</ol>
+</div>
+
+<div class="container-fluid">
+	<div class="sme-page-block">
+		<div class="sme-form">
+			<div class="sme-form__title"></div>
+			<div class="sme-form__content">
+				<div class="sme-form__body">
+					<div class="row">
+						<ul>
+							<li>
+								<a routerLinkActive="active" (click)="goNewCheque()">
+									{{ 'chequebook.addpositivePayment' | translate }}
+								</a>
+							</li>
+							<li>
+								<a routerLinkActive="active" (click)="goSearchChequeNumber()">
+									{{ 'chequebook.searchByNumber' | translate }}
+								</a>
+							</li>
+							<li>
+								<a routerLinkActive="active" (click)="goHistoricalData()">
+									{{ 'chequebook.processedOperations' | translate }}
+								</a>
+							</li>
+							<li>
+								<a routerLinkActive="active" (click)="goRequestStatus()">
+									{{ 'chequebook.requestStatus' | translate }}
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

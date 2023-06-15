@@ -1,0 +1,186 @@
+<div class='container-fluid'>
+  <div class='sme-head' *ngIf='pageType!=PageType.VIEW'>
+    <div class='sme-head__title'>
+      {{ 'represented.informationDetails' | translate }}
+    </div>
+  </div>
+
+  <arb-panel>
+    <form autocomplete='off' #InfoForm='ngForm' class='sme-form__form' novalidate>
+      <fieldset [formGroup]='formModel'>
+
+        <!-- Information-->
+        <div class='legend underLine'>
+          <div class='col-xs-12 col-sm-11'>
+            {{ 'represented.repInfo' | translate }}
+          </div>
+          <div class='col-xs-12 col-sm-1' *ngIf='pageType==PageType.VIEW'>
+          <span class='statusSpan' [ngClass]="repStatus=='ACTIVE'? 'greenSpan':'yellowSpan'">
+                   {{'represented.' + repStatus | translate}}  </span>
+          </div>
+        </div>
+
+        <div class='row'>
+          <!-- FName -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'represented.fName' | translate }} *</label>
+              <div class='input-group'>
+                <input class='form-control' formControlName='repGivenName' inputPattern='onlyAlphabetics' />
+              </div>
+            </div>
+            <div *ngIf="formModel.controls.repGivenName.hasError('required') && formModel.controls.repGivenName.touched"
+                 class='alert alert-danger'>
+              {{ 'represented.fName' | translate }} {{ 'represented.required' | translate}}
+            </div>
+          </div>
+          <!-- /FName -->
+
+          <!-- MName -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'represented.mName' | translate }}</label>
+              <div class='input-group'>
+                <input class='form-control' formControlName='repMiddleName' inputPattern='onlyAlphabetics' />
+              </div>
+            </div>
+          </div>
+          <!-- /MName -->
+
+          <!-- PName -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'represented.pName' | translate }}</label>
+              <div class='input-group'>
+                <input class='form-control' formControlName='repPaternalName' inputPattern='onlyAlphabetics' />
+              </div>
+            </div>
+          </div>
+          <!-- /PName -->
+
+          <!-- LName -->
+          <div class='col-xs-12 col-sm-3'>
+            <div class='form-group'>
+              <label>{{ 'represented.lName' | translate }} *</label>
+              <div class='input-group'>
+                <input class='form-control' formControlName='repFamilyName' inputPattern='onlyAlphabetics' />
+              </div>
+            </div>
+            <div
+              *ngIf="formModel.controls.repFamilyName.hasError('required') && formModel.controls.repFamilyName.touched"
+              class='alert alert-danger'>
+              {{ 'represented.lName' | translate }} {{ 'represented.required' | translate}}
+            </div>
+          </div>
+          <!-- /LName -->
+        </div>
+        <div class='row'>
+          <!-- Mobile -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.mobile' | translate }} *</label>
+              <div class='input-group'>
+                <input type='text' formControlName='repPhone' class='form-control'
+                       maxlength='10' inputPattern='onlyMobileNumbers' />
+              </div>
+            </div>
+            <div *ngIf="formModel.controls.repPhone.hasError('required') && formModel.controls.repPhone.touched"
+                 class='alert alert-danger'>
+              {{ 'represented.mobile' | translate }} {{ 'represented.required' | translate}}
+            </div>
+            <div *ngIf="formModel.controls.repPhone.hasError('pattern') && formModel.controls.repPhone.touched"
+                 class='alert alert-danger'>
+              {{ 'represented.mobileInValid' | translate }}
+            </div>
+          </div>
+          <!-- /Mobile -->
+
+          <!-- Birth Date -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.birthDate' | translate }} *</label>
+              <div class='input-group calendar'>
+                <input type='text' class='form-control onTop' placement='top' #dateFrom='bsDatepicker'
+                       bsDatepicker formControlName='repBirthDt' [bsConfig]='bsConfig' [maxDate]='today' />
+                <span class=' input-group-addon icon -calendar' (click)='dateFrom.show()'></span>
+              </div>
+            </div>
+          </div>
+          <!-- /Birth Date -->
+        </div>
+        <!-- /Information-->
+
+        <!--Document-->
+        <div class='legend underLine marginTop'>{{ 'represented.doc-info' | translate }}</div>
+        <div class='row'>
+          <!-- idNumber -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.idNumber' | translate }} *</label>
+              <div class='input-group'>
+                <input class='form-control' maxlength='10' formControlName='repIDNum' inputPattern='onlyDigits' />
+              </div>
+            </div>
+            <div *ngIf="formModel.controls.repIDNum.hasError('incorrecId-Iqama') && formModel.controls.repIDNum.touched"
+                 class='alert alert-danger'>
+              {{'companyAdmin.user.iquama' | translate }} {{ 'error.formatNotValid' | translate }}
+            </div>
+            <div *ngIf="formModel.controls.repIDNum.hasError('required') && formModel.controls.repIDNum.touched"
+                 class='alert alert-danger'>
+              {{ 'represented.idNumber' | translate }} {{ 'represented.required' | translate}}
+            </div>
+          </div>
+          <!-- /idNumber -->
+
+          <!-- issuedBy -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.issuedBy' | translate }} *</label>
+              <div class='input-group'>
+                <input class='form-control' formControlName='repIDIssuerName' maxlength='30' />
+              </div>
+            </div>
+            <div
+              *ngIf="formModel.controls.repIDIssuerName.hasError('required') && formModel.controls.repIDIssuerName.touched"
+              class='alert alert-danger'>
+              {{ 'represented.issuedBy' | translate }} {{ 'represented.required' | translate}}
+            </div>
+          </div>
+          <!-- /issuedBy -->
+
+          <!-- issue Date -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.issueDate' | translate }} *</label>
+              <div class='input-group calendar'>
+                <input type='text' class='form-control onTop' placement='top' #issueDateFrom='bsDatepicker'
+                       bsDatepicker formControlName='repIDIssueDt' [bsConfig]='bsConfig' [maxDate]='today' />
+                <span class=' input-group-addon icon -calendar' (click)='issueDateFrom.show()'></span>
+              </div>
+            </div>
+          </div>
+          <!-- /issue Date -->
+
+        </div>
+        <div class='row'>
+          <!-- expiry Date -->
+          <div class='col-xs-12 col-sm-4'>
+            <div class='form-group'>
+              <label>{{ 'represented.expiryDate' | translate }} *</label>
+              <div class='input-group calendar'>
+                <input type='text' class='form-control onTop' placement='top' #issueDateTo='bsDatepicker'
+                       [minDate]='issueDateMin'
+                       bsDatepicker formControlName='repIDExpDt' [bsConfig]='bsConfig' />
+                <span class=' input-group-addon icon -calendar' (click)='issueDateTo.show()'></span>
+              </div>
+            </div>
+          </div>
+          <!-- /expiry Date -->
+        </div>
+        <!--/Document-->
+
+
+      </fieldset>
+    </form>
+  </arb-panel>
+</div>

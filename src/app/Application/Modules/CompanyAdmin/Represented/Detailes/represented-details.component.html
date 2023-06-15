@@ -1,0 +1,80 @@
+<div class='sme-breadcrumb'>
+  <ol class='breadcrumb'>
+    <li>{{ 'represented.representatives' | translate }}</li>
+    <li class='active' *ngIf='this.pageType==PageType.ADD'>{{ 'represented.add' | translate }}</li>
+    <li class='active' *ngIf='this.pageType==PageType.VIEW'>{{ 'represented.repDetails' | translate }}</li>
+    <li class='active' *ngIf='this.pageType==PageType.EDIT'>{{ 'represented.repEdit' | translate }}</li>
+  </ol>
+</div>
+
+
+<div class='container-fluid'>
+
+  <arb-steps *ngIf='this.pageType==PageType.ADD' [currentStep]='wizardStep' [steps]="['represented.informationDetails','represented.powerSelection',
+        'represented.summary','represented.finish']">
+  </arb-steps>
+
+  <arb-steps *ngIf='this.pageType==PageType.EDIT' [currentStep]='wizardStep' [steps]="['represented.powerSelection',
+        'represented.summary','represented.finish']">
+  </arb-steps>
+
+  <div class='sme-head' *ngIf='this.pageType==PageType.VIEW'>
+    <div class='sme-head__title'>
+      {{ 'represented.repDetails' | translate }}
+    </div>
+  </div>
+
+</div>
+
+<information-details
+  *ngIf='detailsForm && ( (pageType==PageType.ADD && (wizardStep==1 || wizardStep==3)) || pageType==PageType.VIEW)'
+  [formModel]='detailsForm' [pageType]='pageType'></information-details>
+
+
+<power-selection [formModel]='powerForm' [pageType]='pageType'
+                 [powerList]='powerList' *ngIf='powerForm && ( (pageType==PageType.ADD && (wizardStep==2 || wizardStep==3)) ||
+  pageType==PageType.VIEW || (pageType==PageType.EDIT && wizardStep==1 || wizardStep==2) ) '></power-selection>
+
+<accounts [accounts]='accounts' [pageType]='pageType'
+          *ngIf='accounts && ((pageType==PageType.ADD && (wizardStep===1 || wizardStep===3)) || (pageType==PageType.EDIT && wizardStep<3) || pageType==PageType.VIEW)'
+          [disable]='(pageType==PageType.ADD && wizardStep==3) || (pageType==PageType.EDIT && wizardStep==2) ||(pageType==PageType.VIEW)'></accounts>
+
+<finish *ngIf='(pageType==PageType.ADD && wizardStep===4) || (pageType==PageType.EDIT && wizardStep===3)'
+        [formModel]='powerForm' [isSaudi]='isSaudi' [pageType]='pageType'></finish>
+
+<arb-buttons *ngIf='pageType==PageType.ADD || pageType==PageType.EDIT'>
+  <button class='btn btn-default btn-wide' type='button' *ngIf=' (pageType==PageType.ADD &&wizardStep>1 && wizardStep<4) ||
+          (pageType==PageType.EDIT &&wizardStep>1 && wizardStep<3)'
+          (click)='back()'>{{ 'represented.back' | translate}}</button>
+
+  <button class='btn btn-default btn-wide' type='button' *ngIf=' (pageType==PageType.ADD && wizardStep<4) ||
+          (pageType==PageType.EDIT && wizardStep<3)'
+          (click)='cancel()'>{{ 'represented.cancel' |translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button' *ngIf=' (pageType==PageType.ADD && wizardStep<4) ||
+          (pageType==PageType.EDIT && wizardStep<3)'
+          [disabled]='!valid()' (click)='next()'>{{ 'represented.proceed' |  translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button' *ngIf=' (pageType==PageType.ADD && wizardStep===4) ||
+          (pageType==PageType.EDIT && wizardStep===3)'
+          (click)='toDashboard()'>{{ 'represented.toDashboard' |  translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button' *ngIf=' (pageType==PageType.ADD && wizardStep===4) ||
+          (pageType==PageType.EDIT && wizardStep===3)'
+          (click)='cancel()'>{{ 'represented.toRepresentative' |  translate}}</button>
+
+</arb-buttons>
+
+<arb-buttons *ngIf='pageType==PageType.VIEW'>
+  <button class='btn btn-default btn-wide' type='button'
+          (click)='back()'>{{ 'represented.back' | translate}}</button>
+
+
+  <button class='btn btn-default btn-wide' type='button'
+          (click)='delete()'>{{ 'represented.delete' |  translate}}</button>
+
+  <button class='btn btn-primary btn-wide' type='button'
+          (click)='startEdit()'>{{  'represented.edit' |  translate}}</button>
+</arb-buttons>
+
+<represented-delete [show]='showDelete' (deleteAction)='deleteAction($event)'></represented-delete>

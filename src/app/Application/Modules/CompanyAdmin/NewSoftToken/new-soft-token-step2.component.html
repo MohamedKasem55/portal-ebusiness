@@ -1,0 +1,58 @@
+<arb-panel>
+    <h3>{{ 'companyAdmin.token.requestDetails' | translate }}</h3>
+    <hr>
+    <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{
+                            'companyAdmin.token.numSoftToken' | translate }}</label>
+                        <span class="form-control disabled">{{form.controls.numToken.value}}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <!-- sme-form-group -->
+                    <div class="form-group">
+                        <label>{{
+                            'companyAdmin.token.account' | translate }}</label>
+                        <span class="form-control disabled">
+                            {{form.controls.accountNumber.value.value.fullAccountNumber}}{{(form.controls.accountNumber.value.value.alias
+                            != '' ? ' - ' + form.controls.accountNumber.value.value.alias : '')}}
+                            {{(form.controls.accountNumber.value.value.inquiry ? (' - ' +
+                            (form.controls.accountNumber.value.value.availableBalance |
+                            amountCurrency:form.controls.accountNumber.value.value.currency)) : '')}}
+                            {{(form.controls.accountNumber.value.value.inquiry ? ('currencyIso' |
+                            modelPipe:form.controls.accountNumber.value.value.currency) : '')}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+<arb-panel>
+    <h3>{{ 'companyAdmin.token.tokenAmount' | translate }}</h3>
+    <hr>
+    <form autocomplete="off" class="sme-form__form" [formGroup]="form">
+        <fieldset>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="form-group">
+                        <label>{{
+                            'companyAdmin.token.totalFee' | translate }}</label>
+                        <span class="form-control disabled">{{form.controls.totalFee.value| amountCurrency}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</arb-panel>
+
+<arb-panel *ngIf="!isDual">
+    <div class="otp-container" style="width: 50%">
+        <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+            [requestValidate]="requestValidate" #authorization>
+        </app-secured-authentication>
+    </div>
+</arb-panel>

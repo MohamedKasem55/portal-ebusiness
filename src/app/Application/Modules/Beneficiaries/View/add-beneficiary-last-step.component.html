@@ -1,0 +1,20 @@
+<arb-breadcrumb [routes]="[
+                        ['public.transfers'],
+                        ['public.beneficiaries',['/beneficiaries/beneficiariesOptions']],
+                        ['beneficiaries.addBeneficiary']
+                    ]">
+</arb-breadcrumb>
+
+<arb-steps [steps]="[
+                   'beneficiaries.wizardSteps.beneficiaryType',
+                   'beneficiaries.wizardSteps.completeDetails',
+                   'beneficiaries.wizardSteps.confirmBeneficiary',
+                   'beneficiaries.wizardSteps.summary'
+                   ]"
+           [currentStep]="4">
+</arb-steps>
+
+<arb-confirm-panel [pending]="pending"
+                   [hasFinishAction]="true"
+                   (finishAction)="lastWizardStep()">
+</arb-confirm-panel>

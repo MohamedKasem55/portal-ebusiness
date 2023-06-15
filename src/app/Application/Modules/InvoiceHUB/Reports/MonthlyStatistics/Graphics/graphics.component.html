@@ -1,0 +1,120 @@
+<div  class="container-fluid">
+  <div class="row">
+<div  class="  col-xs-12 col-md-12"> 
+<form autocomplete="off"  [formGroup]="FormMonth"  novalidate>
+<div class="form-group"  >
+  <div class="col-xs-3">
+    <label>{{'public.selectMonth' | translate}}</label>
+	<div  class="sme-select form-control">
+    <select class="form-control"
+      formControlName="Monthly"
+       #t (change)="callType($event.target)">
+       <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+      <option *ngFor="let month of Monthly"
+              [value]="month.month+'-'+month.year">{{month.month}}/{{month.year}}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="col-xs-3">
+
+  <label>{{'transfer.totalAmount' | translate}}</label>
+  <div  class="form-control">
+    <span>{{totalAmount | amountCurrency}}</span>
+  </div></div>
+  </div>
+</form>
+</div><div  class="col-md-9"></div>
+</div>
+<div class="row">
+   <div class="col-md-6">
+    <div   >
+  <div style="display: block"  class="chart">
+   <canvas *ngIf="loadedBar" baseChart width="500" height="500"
+                [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"></canvas>
+  </div>
+  
+</div>
+  </div>
+   <div class="col-md-6" >
+   <div style="width:80%;display: block"   class="chart">
+		  <canvas  *ngIf="loadedDoughnut"  baseChart  width="400" height="400"
+		              [datasets]="doughnutChartData"
+		              [colors]="colors"
+		              [options]="DonutChartOptions"
+		              [labels]="lineChartLabels"
+		              [chartType]="doughnutChartType"
+		              [legend]="true"
+		              (chartHover)="chartHovered($event)"
+		              (chartClick)="chartClicked($event)"></canvas>
+		</div> 
+   
+   <div id="js-legend" class="chart-legend"></div>
+   </div>
+</div>
+</div>
+<div class="container-fluid">
+ <div class="row">
+     <div class="sme-page-block">
+         <div class="sme-page-block">
+             <!-- sme-data-table -->
+             <div class="sme-data-table">
+                 <div class="sme-data-table__head">
+<!--                     <div class="sme-data-table__title">-->
+<!--                         <span class="sme-header__user-name">{{ 'payments.monthly-stats' | translate }}</span>-->
+<!--                     </div>-->
+                 </div>
+
+                 <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table *ngIf="tableData && tableData.length > 0"
+                                [rows]="tableData" class="material sme-table sme-table--responsive table"
+                                [columnMode]="defaultColumnMode"
+                                [headerHeight]="30"
+                                [rowHeight]="defaultHeight"
+                                [count]="tableData.length"
+                                [externalPaging]="false"
+                                [externalSorting]="false"
+                 >
+                     <ngx-datatable-column prop="supplierName">
+                         <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'invoiceHUB.supplierName' | translate }}</span>
+                         </ng-template>
+                     </ngx-datatable-column>
+                     <ngx-datatable-column prop="supplierID">
+                             <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'invoiceHUB.supplierId' | translate }}</span>
+                             </ng-template>
+                             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                 <span>{{ value }}</span>
+                             </ng-template>
+                         </ngx-datatable-column>
+                        <ngx-datatable-column prop="numberBills">
+                             <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                    <span (click)="sort()"
+                                  class="datatable-header-cell-wrapper">{{ 'invoiceHUB.numberBillsPaid' | translate }}</span>
+                             </ng-template>
+                             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                                 <span>{{ value }}</span>
+                             </ng-template>
+                         </ngx-datatable-column>
+                     <ngx-datatable-column prop="amountPaid">
+                         <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'invoiceHUB.amountToPaid' | translate }}</span>
+                         </ng-template>
+                         <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                             <span>{{ value | amountCurrency }}</span>
+                         </ng-template>
+                     </ngx-datatable-column>
+                 </ngx-datatable>
+             </div>
+         </div>
+     </div>
+ </div>
+</div>

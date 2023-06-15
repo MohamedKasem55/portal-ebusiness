@@ -1,0 +1,16 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-initiator-wizard-modify
+        [title]="'lockbox.cdmAccounts.edit.menu'"
+        [currentItem]="editData"
+        [entityName]="null"
+        [markAllFormFieldAsTouched]="false"
+        [entityProperties]="entityProperties"
+        [service]="editService"
+        [translate_prefix]="'lockbox.cdmAccounts'"
+        [backUrl]="getBackUrl()"
+        [combosKeys]="[]"
+        [combosData]="[]"
+        [pending]="false">
+</app-initiator-wizard-modify>

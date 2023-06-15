@@ -1,0 +1,149 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <fieldset>
+                        <div class="legend" class="title-legend">
+                            {{'commercialCards.commercialCardDetails' | translate}}
+                        </div>
+                        <hr class="hr-title">
+                        <div class="payment-options-group">
+                            <div class="form-field-25">
+                                <div class="form-group input-flex-width">
+                                    <label for="cardHoldername">{{
+                                            'commercialCards.cardHolderName' | translate }}</label>
+                                    <!-- <div>
+                                            <input id="transfer-amount" class="form-control "
+                                                formControlName="cardHolderName" [readonly]="true">
+                                        </div> -->
+                                    <div class="titlePin message" style="margin-top: 10px">
+                                        <span class="border-none">{{ batch?.holderName }}</span>
+                                    </div>
+                                    <!-- <div class="titlePin message" style="margin-top: 10px">
+                                        <span class="border-none">{{batch.accountAlias}}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="form-field-25">
+                                <div class="form-group input-flex-width">
+                                    <label for="cardNumber">{{
+                                                'commercialCards.cardNumber' | translate }}</label>
+                                    <div class="titlePin message" style="margin-top: 10px">
+                                        <!-- <input id="reasons" class="form-control" formControlName="cardNumber"
+                                                [value]="form.get('cardNumber').value | hiddenCardNumber"
+                                                [readonly]="true"> -->
+                                        <span
+                                            class="border-none">{{batch.cardAccountNumber | hiddenCardNumber:'7to12' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field-25">
+                                <div class="form-group input-flex-width">
+                                    <label for="relatedAccount">{{
+                                                'commercialCards.relatedAccount' | translate }}</label>
+                                    <div class="titlePin message" style="margin-top: 10px">
+                                        <!-- <input id="reasons" class="form-control" formControlName="relatedAccount"
+                                                [readonly]="true"> -->
+                                        <span class="border-none">{{batch.accountNumber }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <fieldset style="margin-bottom: 20px">
+                        <div class="legend" class="title-legend">
+                            {{'commercialCards.paymentOptionDetails' | translate}}
+                        </div>
+                        <hr class="hr-title">
+                        <div class="payment-options-group">
+                            <div class="form-field-25">
+                                <div class="form-group" style="margin-bottom: 50px">
+                                    <label for="search-criteria--input-account-from"
+                                        class="required">{{'commercialCards.selectedAccount' | translate }}</label>
+                                    <!-- sme-select -->
+                                    <div class="sme-select form-control select-flex-width">
+                                        <input class="form-control" id="account" value="{{batch?.accountNumber}}"
+                                            disabled>
+                                    </div>
+                                    <!-- ./sme-select -->
+                                </div>
+                            </div>
+                            <div class="form-field-25">
+                                <div class="form-group">
+                                    <label
+                                        for="search-criteria-collapsed-input-operations">{{ 'commercialCards.paymentType' | translate }}</label>
+                                    <!-- sme-select -->
+                                    <div class="sme-select form-control select-flex-width">
+                                        <input class="form-control" id="paymentOption"
+                                            value="{{batch.paymentOption | cardPaymentType}}" disabled>
+                                    </div>
+                                    <!-- ./sme-select -->
+                                </div>
+                            </div>
+                            <div class="form-field-25">
+                                <div class="form-group" style="margin-left: 50px;">
+                                    <!-- *ngIf="form.controls.paymentType.value===2"> -->
+                                    <div>
+                                        <label for="relatedAccount">{{
+                                                    'commercialCards.amount' | translate }}</label>
+                                    </div>
+                                    <div class="sme-select form-control select-flex-width">
+                                        <input id="reasons" class="form-control" value="{{batch.amount}}" disabled>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-field-25">
+                                <div class="form-group">
+                                    <div>
+                                        <label
+                                            for="rejectedReason">{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                    </div>
+                                    <div class="sme-select form-control select-flex-width">
+                                        <input class="form-control" id="rejectedReason" value="{{batch.rejectedReason}}"
+                                            disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-levels-table *ngIf="batch.futureSecurityLevelsDTOList" [futureSecurityLevels]="batch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div *ngIf="generateChallengeAndOTP" class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

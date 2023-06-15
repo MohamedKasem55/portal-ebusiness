@@ -1,0 +1,13 @@
+<arb-panel *ngIf="this.currentAction !== 'DELETE'">
+    <arb-confirm-panel
+            [pending]="this.isPending()"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+</arb-panel>
+
+<arb-panel *ngIf="this.currentAction === 'DELETE'">
+    <arb-confirm-panel
+            [pending]="false"
+            [hasFinishAction]="false">
+    </arb-confirm-panel>
+</arb-panel>

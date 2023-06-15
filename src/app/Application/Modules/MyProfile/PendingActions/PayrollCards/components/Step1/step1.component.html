@@ -1,0 +1,903 @@
+<div class="sme-content-container container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.pendingPayrollCardOperations' | translate }}
+            </div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="tableOperations" *ngIf="futureLevels"
+                              [header]="'myProfile.pending_actions.pendingPayrollCardOperations' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'myProfile.pending_actions.employeeNumber' | translate,'dataKey':'employeeId'},
+                        {'title':'myProfile.pending_actions.employeeName' | translate ,'dataKey':'employeeName'},
+                        {'title':'myProfile.pending_actions.civilianID' | translate,'dataKey':'nationalId'},
+                        {'title':'myProfile.pending_actions.cardNumber' | translate,'dataKey':'cardNumber'},
+                        {'title':'payroll.operationType' | translate,'dataKey':'operation'},
+                        {'title':'public.statusIf' | translate,'dataKey':'statusTrans'},
+                        {'title':'myProfile.pending_actions.nextStatusIf' | translate,'dataKey':'nextStatusTrans'}
+                        ]"></table-export>
+                <table-export [dataTable]="tableOperations" *ngIf="!futureLevels"
+                              [header]="'myProfile.pending_actions.pendingPayrollCardOperations' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'myProfile.pending_actions.employeeNumber' | translate,'dataKey':'employeeId'},
+                        {'title':'myProfile.pending_actions.employeeName' | translate ,'dataKey':'employeeName'},
+                        {'title':'myProfile.pending_actions.civilianID' | translate,'dataKey':'nationalId'},
+                        {'title':'myProfile.pending_actions.cardNumber' | translate,'dataKey':'cardNumber'},
+                        {'title':'payroll.operationType' | translate,'dataKey':'operation'},
+                        {'title':'public.status' | translate,'dataKey':'statusTrans'},
+                        {'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusTrans'}
+                        ]"></table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tableOperations
+                           class="material sme-table sme-table--responsive table" [rows]="listOperationsDTO.items"
+                           [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                           [rowHeight]="defaultHeight"
+                           [count]="listOperationsDTO.total" [limit]="tableOperationsLimit" [externalPaging]="true"
+                           (page)='setPageOperations($event)' [externalSorting]="false" [rowIdentity]="getIdFunction()"
+                           [selected]="this.sharedData.operationsSelected"
+                           [selectionType]="defaultSelectionType" (select)='onSelectOperations($event)'>
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.initiationDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.employeeNumber' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.employeeId }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.employeeName' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.employeeName   }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.civilianID' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.nationalId }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.cardNumber' | translate }}</label>
+                                        <div>
+                                            <span>{{row.cardNumber}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'payroll.operationType' | translate }}</label>
+                                        <div>
+                                            <span>{{ 'payrollcardsOperations'| modelPipe:row.operation  }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'public.status' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'public.statusIf' | translate }}</label>
+                                        <div>
+                                            <span
+                                                    *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'status'}}</span>
+                                            <span
+                                                    *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'status'}}</span>
+                                            <span class="icon -info" (click)="openModal(row,modal)"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                        <div>
+                                            <span
+                                                    *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                            <span
+                                                    *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <ngx-datatable-column
+                        [width]="50"
+                        [sortable]="false"
+                        [canAutoResize]="false"
+                        [draggable]="false"
+                        [resizeable]="false">
+                    <ng-template ngx-datatable-header-template let-value="value">
+                        <label class="datatable-checkbox">
+                            <input type="checkbox" [checked]="selectAllOnPageOperations[tableOperations.offset]"
+                                   (change)="selectAllOperations($event)"/>
+                        </label>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-row="row"
+                                 let-value="value" let-isSelected="isSelected"
+                                 let-onCheckboxChangeFn="onCheckboxChangeFn">
+                        <label class="datatable-checkbox">
+                            <input
+                                    type="checkbox"
+                                    [checked]="isSelected"
+                                    (change)="onCheckboxChangeFn($event)"
+                            />
+                        </label>
+                    </ng-template>
+                </ngx-datatable-column>
+                <!--end custom checkbox-->
+
+                <ngx-datatable-column prop="initiationDate">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="employeeId">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.employeeNumber' | translate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="employeeName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.employeeName' | translate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="nationalId">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.civilianID' | translate }}</span>
+                    </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="cardNumber">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.cardNumber' | translate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="operation">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'payroll.operationType' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ 'payrollcardsOperations'| modelPipe:value  }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="!futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                 [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                 [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                 [pagerNextIcon]="'datatable-icon-skip'"
+                                                 [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                 [visiblePagesCount]="visiblePagesCount"
+                                                 (change)="tableOperations.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(listOperationsDTO.items.length > pageSize ? pageSize : listOperationsDTO.items.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="tableOperationsLimit">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.pendingPayrollCardPayments' | translate }}</div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="tablePayments"
+                              [header]="'myProfile.pending_actions.pendingPayrollCardPayments' | translate" [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'payroll.batchName' | translate ,'dataKey':'batchName'},
+                        {'title':'public.status' | translate,'dataKey':'statusTrans'},
+                        {'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusTrans'}
+                        ]"></table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tablePayments
+                           class="material sme-table sme-table--responsive table" [rows]="listPayrolCardPayment.items"
+                           [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                           [rowHeight]="defaultHeight"
+                           [count]="listPayrolCardPayment.total" [limit]="tablePaymentsLimit" [externalPaging]="true"
+                           (page)='setPagePayments($event)' [externalSorting]="false" [rowIdentity]="getIdFunction()"
+                           [selectionType]="defaultSelectionType" [selected]="this.sharedData.paymentsSelected"
+                           (select)='onSelectPayrolCardPayment($event)'>
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.initiationDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'payroll.batchName' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.batchName }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'public.status' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'public.statusIf' | translate }}</label>
+                                        <div>
+                                            <span
+                                                    *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'status'}}</span>
+                                            <span
+                                                    *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'status'}}</span>
+                                            <span class="icon -info" (click)="openModal(row,modal)"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                        <div>
+                                            <span *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                            <span *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+                <!--                <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"-->
+                <!--                    [resizeable]="false" [headerCheckboxable]="false" [checkboxable]="true">-->
+                <!--                </ngx-datatable-column>-->
+                <ngx-datatable-column
+                        [width]="50"
+                        [sortable]="false"
+                        [canAutoResize]="false"
+                        [draggable]="false"
+                        [resizeable]="false"
+                >
+                    <ng-template ngx-datatable-header-template let-value="value">
+                        <label class="datatable-checkbox">
+                            <input type="checkbox" [checked]="selectAllOnPagePayments[tablePayments.offset]"
+                                   (change)="selectAllPayments($event)"/>
+                        </label>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-row="row"
+                                 let-value="value" let-isSelected="isSelected"
+                                 let-onCheckboxChangeFn="onCheckboxChangeFn">
+                        <label class="datatable-checkbox">
+                            <input
+                                    type="checkbox"
+                                    [checked]="isSelected"
+                                    (change)="onCheckboxChangeFn($event)"
+                            />
+                        </label>
+                    </ng-template>
+                </ngx-datatable-column>
+                <!--end custom checkbox-->
+
+                <ngx-datatable-column prop="initiationDate">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="batchName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'payroll.batchName' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="!futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                 [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                 [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                 [pagerNextIcon]="'datatable-icon-skip'"
+                                                 [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                 [visiblePagesCount]="visiblePagesCount"
+                                                 (change)="tablePayments.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(listPayrolCardPayment.items.length > pageSize ? pageSize : listPayrolCardPayment.items.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="tablePaymentsLimit">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.pendingPayrollCardUplodFiles' | translate }}
+            </div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="tableUploadFiles"
+                              [header]="'myProfile.pending_actions.pendingPayrollCardUplodFiles' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'payroll.batchName' | translate ,'dataKey':'batchName'},
+                        {'title':'payroll.fileName' | translate ,'dataKey':'userFileName'},
+                        {'title':'public.status' | translate,'dataKey':'statusTrans'},
+                        {'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusTrans'}
+					]"></table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tableUploadFiles
+                           class="material sme-table sme-table--responsive table"
+                           [rows]="listPayrolCardUploadFile.items"
+                           [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                           [rowHeight]="defaultHeight"
+                           [count]="listPayrolCardUploadFile.total" [limit]="tableUploadFilesLimit"
+                           [externalPaging]="true"
+                           (page)='setPageUploadFiles($event)' [externalSorting]="false" [rowIdentity]="getIdFunction()"
+                           [selectionType]="defaultSelectionType" [selected]="this.sharedData.uploadFilesSelected"
+                           (select)='onSelectPayrolCardUploadFile($event)'>
+
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.initiationDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'payroll.batchName' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.batchName }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'public.status' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'public.statusIf' | translate }}</label>
+                                        <div>
+                                            <span *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'status'}}</span>
+                                            <span *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'status'}}</span>
+                                            <span class="icon -info" (click)="openModal(row,modal)"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                        <div>
+                                            <span *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                            <span *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+
+                <ngx-datatable-column
+                        [width]="50"
+                        [sortable]="false"
+                        [canAutoResize]="false"
+                        [draggable]="false"
+                        [resizeable]="false">
+                    <ng-template ngx-datatable-header-template let-value="value">
+                        <label class="datatable-checkbox">
+                            <input type="checkbox" [checked]="selectAllOnPageUploadFiles[tableUploadFiles.offset]"
+                                   (change)="selectAllUploadFiles($event)"/>
+                        </label>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-row="row"
+                                 let-value="value" let-isSelected="isSelected"
+                                 let-onCheckboxChangeFn="onCheckboxChangeFn">
+                        <label class="datatable-checkbox">
+                            <input type="checkbox"
+                                   [checked]="isSelected"
+                                   (change)="onCheckboxChangeFn($event)"/>
+                        </label>
+                    </ng-template>
+                </ngx-datatable-column>
+                <!--end custom checkbox-->
+
+                <ngx-datatable-column prop="initiationDate">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="batchName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'payroll.batchName' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="userFileName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'payroll.fileName' | translate }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="!futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                 [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                 [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                 [pagerNextIcon]="'datatable-icon-skip'"
+                                                 [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                 [visiblePagesCount]="visiblePagesCount"
+                                                 (change)="tableUploadFiles.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(listPayrolCardUploadFile.items.length > pageSize ? pageSize : listPayrolCardUploadFile.items.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="tableUploadFilesLimit">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+<div class="sme-content-container container-fluid">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title">{{ 'myProfile.pending_actions.pendingPayrollCardNewCardOnline' | translate }}
+            </div>
+            <div class="sme-data-table__export">
+                <table-export [dataTable]="tableNewCards"
+                              [header]="'myProfile.pending_actions.pendingPayrollCardNewCardOnline' | translate"
+                              [columns]="[
+                        {'title':'myProfile.pending_actions.initiationDate' | translate,'dataKey':'initiationDate'},
+                        {'title':'payroll.batchName' | translate ,'dataKey':'batchName'},
+                        {'title':'public.status' | translate,'dataKey':'statusTrans'},
+                        {'title':'myProfile.pending_actions.nextStatus' | translate,'dataKey':'nextStatusTrans'}
+                        ]"></table-export>
+            </div>
+        </div>
+        <div class="sme-table table headerDataTable">
+            <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #tableNewCards
+                           class="material  sme-table sme-table--responsive table" [rows]="listPayrolCard.items"
+                           [columnMode]="defaultColumnMode" [headerHeight]="30" [footerHeight]="footerHeight"
+                           [rowHeight]="defaultHeight"
+                           [count]="listPayrolCard.total" [limit]="tableNewCardsLimit" [externalPaging]="true"
+                           (page)='setPageNewCards($event)' [externalSorting]="false" [rowIdentity]="getIdFunction()"
+                           [selectionType]="defaultSelectionType" [selected]="this.sharedData.payrolCardsSelected"
+                           (select)='onSelectPayrolCard($event)'>
+                <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'myProfile.pending_actions.initiationDate' | translate }}
+                                        </label>
+                                        <div>
+                                            <span>{{ row.initiationDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>{{'payroll.batchName' | translate }}</label>
+                                        <div>
+                                            <span>{{ row.batchName }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'public.status' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'public.statusIf' | translate }}</label>
+                                        <div>
+                                            <span
+                                                    *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'status'}}</span>
+                                            <span
+                                                    *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'status'}}</span>
+                                            <span class="icon -info" (click)="openModal(row,modal)"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label *ngIf="!futureLevels">{{ 'myProfile.pending_actions.nextStatus' | translate }}</label>
+                                        <label *ngIf="futureLevels">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</label>
+                                        <div>
+                                            <span *ngIf="!futureLevels">{{row.securityLevelsDTOList | levels:'nextStatus'}}</span>
+                                            <span *ngIf="futureLevels">{{row.futureSecurityLevelsDTOList | levels:'nextStatus'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                <!--custom checkbox- defaul select all resete preview item selected with extern pagination-->
+                <ngx-datatable-column
+                        [width]="50"
+                        [sortable]="false"
+                        [canAutoResize]="false"
+                        [draggable]="false"
+                        [resizeable]="false">
+                    <ng-template ngx-datatable-header-template let-value="value">
+                        <label class="datatable-checkbox">
+                            <input type="checkbox" [checked]="selectAllOnPageNewCards[tableNewCards.offset]"
+                                   (change)="selectAllPayrollCards($event)"/>
+                        </label>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-row="row"
+                                 let-value="value" let-isSelected="isSelected"
+                                 let-onCheckboxChangeFn="onCheckboxChangeFn">
+                        <label class="datatable-checkbox">
+                            <input type="checkbox"
+                                   [checked]="isSelected"
+                                   (change)="onCheckboxChangeFn($event)"/>
+                        </label>
+                    </ng-template>
+                </ngx-datatable-column>
+                <!--end custom checkbox-->
+
+                <ngx-datatable-column prop="initiationDate">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.initiationDate' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="batchName">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'payroll.batchName' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.statusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="securityLevelsDTOList" [width]="50" class="mobile-hidden"
+                                      *ngIf="!futureLevels">
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                              class="datatable-header-cell-wrapper">{{ 'public.status' | translate }}</span>
+                    </ng-template>
+                    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                        <span>{{ value | levels:'status' }}</span>
+                        <span class="human-selectable icon -info" (click)="openModal(row,modal)"></span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="futureSecurityLevelsDTOList" *ngIf="futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()"
+                                          class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatusIf' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column prop="securityLevelsDTOList" *ngIf="!futureLevels">
+                      
+                    <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                        <span (click)="sort()"
+                                      class="datatable-header-cell-wrapper">{{ 'myProfile.pending_actions.nextStatus' | translate }}</span>
+                    </ng-template>
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <span>{{ value | levels:'nextStatus' }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                 let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div class="sme-data-table__footer">
+                            <app-datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                                                 [pagerRightArrowIcon]="'datatable-icon-right'"
+                                                 [pagerPreviousIcon]="'datatable-icon-prev'"
+                                                 [pagerNextIcon]="'datatable-icon-skip'"
+                                                 [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                                 [visiblePagesCount]="visiblePagesCount"
+                                                 (change)="tableNewCards.onFooterPage($event)">
+                            </app-datatable-pager>
+                            <div *ngIf="rowCount!=0" class="sme-data-table__actions form-inline">
+                                <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                    {{(listPayrolCard.items.length > pageSize ? pageSize : listPayrolCard.items.length)}}
+                                    {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                                <span class="hidden-xs"> | </span>
+                                <span class="sme-data-table__action-group">
+                                    <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                    <div class="sme-select form-control">
+                                        <select class="form-control" [(ngModel)]="tableNewCardsLimit">
+                                            <option [value]=10>10</option>
+                                            <option [value]=20>20</option>
+                                            <option [value]=50>50</option>
+                                        </select>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+<app-levels-popup #modalAuth></app-levels-popup>
+<app-levels-popup #modal></app-levels-popup>

@@ -1,0 +1,1030 @@
+<div class="container-fluid" *ngIf="batch && batch.beneficiaryType == 'rajhi'">
+	<div class="sme-head">
+        <div class="sme-head__title">{{ 'beneficiaries.beneficiaryTypes.AlRajhiBankBeneficiary' | translate}}</div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+    <div class="sme-page-block">
+		<div class="sme-form">		
+			<div class="sme-form__content">
+			<div class="sme-form__form">
+					<div class="sme-form__body">
+                        <div class="legend">{{ 'beneficiaries.beneficiaryBankDetails' | translate }}</div>
+                        <div class="row">
+                            <fieldset>
+                             <div class="col-xs-12 col-sm-3">
+                                    <!-- sme-form-group -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.account' | translate }}</label>
+                                            <div>
+                                                  <span class="form-control" style="color: #999999;opacity:.7;">
+                                                   {{batch.beneficiaryAccount}}</span>
+                                            </div>
+                                        </div>  
+                                               
+                                    <!-- ./sme-form-group -->
+                                </div>                                                      
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <!-- EMAIL -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.email' | translate }}</label>
+                                            <div>
+                                                  <input type="text" class="form-control" name="email"
+                                                    placeholder= "{{ 'public.emailPlaceHolder' | translate }}"
+                                                    [(ngModel)]="batch.newEmail"  #email="ngModel" email inputPattern="notArabic"/>
+                                                <p *ngIf="email.touched && email.invalid" class="alert alert-danger">
+                                                    {{ 'public.emailVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>  
+                                    <!-- /EMAIL -->
+                                    
+                                </div>  
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <!-- EMAIL -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}</label>
+                                            <div>
+                                                <span class="form-control" style="color: #999999;opacity:.7;">{{batch.beneficiaryName}}</span>
+                                            </div>
+                                        </div>  
+                                    <!-- /EMAIL -->
+                                    
+                                </div>       
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                                <fieldset>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                        <span  class="form-control">{{batch.rejectedReason}}</span>
+                                         
+                                    </div>  
+                                </div>
+                            </fieldset>
+                        </div>
+
+					</div>
+			</div>		
+			</div>
+		</div>
+    </div>
+    </form>
+</div>	
+
+<div class="container-fluid" *ngIf="batch && batch.beneficiaryType == 'local'">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'beneficiaries.beneficiaryTypes.LocalBeneficiary' | translate}}</div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+    <div class="sme-page-block">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                         <div class="legend">{{ 'beneficiaries.beneficiaryBankDetails' | translate }}</div>
+                         <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+
+                                    
+                                    <!-- ACCOUNT -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.ibanAccount' | translate }} *</label>
+                                            <div *ngIf="translate.currentLang != 'en'" class=" col-sm-11" style="padding: 0px;">
+                                               
+                                                <input  type="text" class="form-control" name="account" 
+                                                placeholder= "{{ 'beneficiaries.beneficiaryListFields.enterAccountPlaceHolder' | translate }}"
+                                                [(ngModel)]="batch.newBeneficiaryAccount" #account="ngModel" minlength="24" maxlength="24" 
+                                                (focusout)="focusOutIbanAccountEvent($event.target)" 
+                                                (focusin)="focusInIbanAccount($event.target)"
+                                                ngxIban  required inputPattern="notArabic" dir="ltr" style="text-align: right;"/>
+
+                                                <p *ngIf="account.touched && account.errors" class="alert alert-danger">                                                    
+                                                    {{ 'beneficiaries.ibanFrontValidation' | translate }}
+                                                </p>
+                                                <!-- Account server validation --> 
+                                                <p *ngIf="errorAccountValidation" class="alert alert-danger">
+                                                    {{ 'beneficiaries.beneficiaryAccountServerValidationError' | translate }}
+                                                </p>
+                                                 
+                                            </div>
+                                            <div *ngIf="translate.currentLang == 'en'" class=" col-sm-11" style="padding: 0px;">
+                                               
+                                                <input  type="text" class="form-control" name="account" 
+                                                placeholder= "{{ 'beneficiaries.beneficiaryListFields.enterAccountPlaceHolder' | translate }}"
+                                                [(ngModel)]="batch.newBeneficiaryAccount" #account="ngModel" minlength="24" maxlength="24" 
+                                                (focusout)="focusOutIbanAccountEvent($event.target)" 
+                                                (focusin)="focusInIbanAccount($event.target)"
+                                                ngxIban  required inputPattern="notArabic"/>
+
+                                                <p *ngIf="account.touched && account.errors" class="alert alert-danger">                                                    
+                                                    {{ 'beneficiaries.ibanFrontValidation' | translate }}
+                                                </p>
+                                                <!-- Account server validation --> 
+                                                <p *ngIf="errorAccountValidation" class="alert alert-danger">
+                                                    {{ 'beneficiaries.beneficiaryAccountServerValidationError' | translate }}
+                                                </p>
+                                                 
+                                            </div>
+                                            
+                                    </div>
+                                    <!-- /ACCOUNT -->
+                                </div>     
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- BANKS -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="bankName"
+                                                    [(ngModel)]="batch.newBankName" required disabled/>
+                                        </div>
+                                    </div>
+                                    <!-- /BANKS -->
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>    
+                    <div class="sme-form__body">
+                         <div class="legend">{{ 'beneficiaries.beneficiaryDetails' | translate }}</div>
+                         <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <!-- BENEFICIRY NAME -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }} *</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="beneficiaryName"
+                                                    placeholder= "{{ 'beneficiaries.beneficiaryListFields.enterBeneficiaryPlaceHolder' | translate }}"
+                                                    [(ngModel)]="batch.newBeneficiaryFirstName" #beneficiaryName="ngModel" required/>
+                                                    <!-- Comprobamos si el campo está modificado y es válido para mostrar un mensaje -->
+                                                <p *ngIf="!beneficiaryName.valid && beneficiaryName.touched" class="alert alert-danger">
+                                                    <span>{{ 'beneficiaries.beneficiaryListFields.nameVerification' | translate }}</span>
+                                                </p> 
+                                            </div>
+                                        </div>         
+                                    <!-- /BENEFICIRY NAME -->
+
+                                </div> 
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <!-- PHONE NUMBER -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.beneficiaryListFields.phoneNumber' | translate }} </label>
+                                            <div>
+                                                <input type="text" class="form-control" name="phoneNumber"
+                                                    placeholder= "{{ 'beneficiaries.beneficiaryListFields.enterPhonePlaceHolder' | translate }}"
+                                                    [(ngModel)]="batch.newPhoneNumber"  #phoneNumber="ngModel" pattern="^[0-9]{10}$" maxlength="10"  inputPattern="onlyDigits"/>
+                                                <p *ngIf="!phoneNumber.valid && phoneNumber.touched" class="alert alert-danger">
+                                                    {{ 'beneficiaries.beneficiaryListFields.phoneVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>  
+                                    <!-- /PHONE NUMBER -->
+
+                                </div> 
+                                <div class="col-xs-12 col-sm-3">
+
+                                    <!-- EMAIL -->
+                                        <div class="form-group">
+                                            <label>{{ 'public.email' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="email"
+                                                    placeholder= "{{ 'public.emailPlaceHolder' | translate }}"
+                                                    [(ngModel)]="batch.newEmail"  #email="ngModel" pattern="^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$" inputPattern="notArabic"/>
+                                                <p *ngIf="email.touched && email.invalid" class="alert alert-danger">
+                                                    {{ 'public.emailVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>  
+                                    <!-- /EMAIL -->
+                                    
+                                </div>                           
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                                <fieldset>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                        <span  class="form-control">{{batch.rejectedReason}}</span>
+                                         
+                                    </div>  
+                                </div>
+                            </fieldset>
+                        </div>
+
+                    </div>
+            </div>      
+            </div>
+        </div>
+    </div>
+    </form>
+</div>  
+
+
+<div class="container-fluid" *ngIf="batch && batch.beneficiaryType == 'international'">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'beneficiaries.beneficiaryTypes.InternationalBeneficiary' | translate}}</div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+    <div class="sme-page-block">
+        <div class="sme-form">      
+            <div class="sme-form__content">
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="legend" style="margin-bottom: 0px;">{{ 'beneficiaries.beneficiaryListFields.category' | translate }}</div>
+                                    <!-- CATEGORY -->
+                                    <span  class="form-control" *ngIf="batch.newBeneficiaryCategory == 'I'">{{ 'beneficiaries.selectIndividual' | translate }}</span>
+                                    <span  class="form-control" *ngIf="batch.newBeneficiaryCategory == 'C'">{{ 'beneficiaries.selectCompany' | translate }}</span>
+                                    
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+            </div>
+            <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div class="legend">
+                            {{ 'beneficiaries.beneficiaryBankDetails' | translate }}
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- COUNTRY -->
+                                <div class="form-group">
+                                    <label>{{ 'public.country' | translate }} *</label>
+                                    <div class="sme-select  col-xs-12 col-sm-12">
+                                        <select class="form-control" name="country" [(ngModel)]="batch.newCountryCode" #countryCode="ngModel" required (change)="onChangeCountry()">
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let countryBank of formData.countries" [selected]="countryBank.key == batch.newCountryCode" [value]="countryBank.key">
+                                                {{ countryBank.value }}
+                                            </option>
+                                        </select>
+                                        <p *ngIf="countryCode.errors && (countryCode.dirty || countryCode.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.selectCountry' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- /COUNTRY -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- BANK NAME -->
+                                <div class="form-group">
+                                    <label>{{ 'beneficiaries.beneficiaryListFields.bankName' | translate }} *</label>
+                                    <div class="sme-select  col-xs-12 col-sm-12">
+                                        <select class="form-control" #banks="ngModel" name="banks" [(ngModel)]="batch.newBankName" required (change)="onChangeBankName()">
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let bank of formData.banks" [selected]="bank['bankName'] == batch.newBankName" [ngValue]="bank['bankName']">
+                                                {{ bank['bankName'] }}
+                                            </option>
+                                        </select>
+                                        <p *ngIf="banks.errors && (banks.dirty || banks.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.selectBank' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- /BANK NAME -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- BRANCH NAME -->
+                                <div class="form-group">
+                                    <label>{{ 'beneficiaries.beneficiaryListFields.branchName' | translate }} *</label>
+                                    <div class="sme-select  col-xs-12 col-sm-12">
+                                        <select class="form-control" name="branchName" [(ngModel)]="branch" #branchCode="ngModel" required (change)="onChangeBranch()">
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let selbranch of formData.branchs" [selected]="selbranch == branch" [ngValue]="selbranch">
+                                                {{ selbranch['branchName'] }}
+                                            </option>
+                                        </select>
+                                        <p *ngIf="branchCode.errors && (branchCode.dirty || branchCode.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.selectbranch' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- /BRANCH NAME -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- CURRENCY -->
+                                <div class="form-group">
+                                    <label>{{ 'beneficiaries.currency' | translate }} *</label>
+                                    <div class="sme-select col-xs-12 col-sm-12">
+                                        <select class="form-control" name="currency" [(ngModel)]="batch.newCurrency" #currencyCode="ngModel" (change)="onChangeCurrency()" required>
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let currency of formData.currencyList" [ngValue]="currency['key']">
+                                                {{ currency["value"] }}
+                                            </option>
+                                        </select>
+                                        <p *ngIf="currencyCode.errors && (currencyCode.dirty || currencyCode.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.selectCurrency' | translate }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- /CURRENCY -->
+                            </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- SWIFT CODE -->
+                                <div class="form-group">
+                                    <label>{{ 'beneficiaries.beneficiaryListFields.swiftCode' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="swiftCode" placeholder="{{ 'beneficiaries.beneficiaryListFields.swiftCode' | translate }}"
+                                            value="{{this.batch.newSwiftCode}}{{batch.newBranchSwiftCode }}" disabled />
+                                    </div>
+                                </div>
+                                <!-- /SWIFT CODE -->
+                            </div>    
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- BANK ADDRESS -->
+                                <div class="form-group">
+                                    <label>{{ 'beneficiaries.beneficiaryListFields.bankAddress' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="bankAddress" placeholder="{{ 'beneficiaries.beneficiaryListFields.bankAddress' | translate }}"
+                                            [(ngModel)]="batch.newBankAddress" disabled />
+                                    </div>
+                                </div>
+                                <!-- /BANK ADDRESS -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- BRANCH ADDRESS -->
+                                <div class="form-group">
+                                    <label>{{ 'beneficiaries.beneficiaryListFields.branchAddress' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="branchAddress" placeholder="{{ 'beneficiaries.beneficiaryListFields.branchAddress' | translate }}"
+                                            [(ngModel)]="batch.newBranchAddress" disabled />
+                                    </div>
+                                </div>
+                                <!-- /BRANCH ADDRESS -->
+                            </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="sme-form__body" *ngIf="batch.newBeneficiaryCategory == 'I'">
+                        <div class="legend">
+                            {{ 'beneficiaries.beneficiaryBankDetails' | translate }}
+                        </div>
+                         <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- BENEFICIARY ACCOUNT -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="beneficiaryAccount" placeholder="{{ 'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}"
+                                                [(ngModel)]="batch.newBeneficiaryAccount" #beneficiaryAccount="ngModel" maxlength="35"
+                                                required pattern="^[a-zA-Z0-9]*$" inputPattern="notArabic" />
+                                        </div>
+                                        <p *ngIf="beneficiaryAccount.errors && (beneficiaryAccount.dirty || beneficiaryAccount.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.alfanumeric' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /BENEFICIARY ACCOUNT -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- RETYPE BENEFICIARY ACCOUNT -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.retypeBeneficiaryAccount' | translate }}
+                                            *
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control" name="retypeBeneficiaryAccount" placeholder="{{ 'beneficiaries.beneficiaryListFields.retypeBeneficiaryAccount' | translate }}"
+                                                [(ngModel)]="reBeneficiaryAccount" #retypeBeneficiaryAccount="ngModel"
+                                                maxlength="35" required inputPattern="notArabic" />
+                                        </div>
+                                        <p *ngIf="retypeBeneficiaryAccount.errors && (retypeBeneficiaryAccount.dirty || retypeBeneficiaryAccount.touched)" class="alert alert-danger">
+                                            {{ 'accounts.accountRetypeVerification' | translate }}
+                                        </p>
+                                        <p *ngIf="reBeneficiaryAccount != batch.newBeneficiaryAccount" class="alert alert-danger">
+                                            {{ 'beneficiaries.accountMatch' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /RETYPE BENEFICIARY ACCOUNT -->
+
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- FIRST NAME -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.firstName' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="firstName" placeholder="{{ 'public.firstName' | translate }}" [(ngModel)]="batch.newFirstName"
+                                                #firstName="ngModel" required/>
+                                        </div>
+                                        <p *ngIf="firstName.errors && (firstName.dirty || firstName.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.beneficiaryNameVerification' | translate }}
+                                        </p>
+                                        <p *ngIf="(batch.newFirstName?.length + batch.newSecondName?.length + batch.newMiddleName?.length + batch.newFamilyName?.length) > 100"
+                                            class="alert alert-danger">
+                                            {{ 'beneficiaries.sumToLong' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /FIRST NAME -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- SECOND NAME -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.secondName' | translate }}</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="secondName" placeholder="{{ 'public.secondName' | translate }}" [(ngModel)]="batch.newSecondName"
+                                                #secondName="ngModel" />
+                                        </div>
+                                    </div>
+                                    <!-- /SECOND NAME -->
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- MIDDLE NAME -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.middleName' | translate }}</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="middleName" placeholder="{{ 'public.middleName' | translate }}" [(ngModel)]="batch.newMiddleName"
+                                            />
+                                        </div>
+                                    </div>
+                                    <!-- /MIDDLE NAME -->
+                                </div>
+                                 <div class="col-xs-12 col-sm-3">
+                                    <!-- DATE OF BITH -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.dateBirth' | translate }} *</label>
+
+                                        <div class="input-group">
+                                            <input type="text" #dateBirth="bsDatepicker" bsDatepicker placement="top" [bsConfig]="bsConfig" [(bsValue)]="batch.newDateBirth"
+                                                value="{{ batch.newDateBirth | date:'dd/MM/yyyy' }}" name="dateBirth" class="form-control"
+                                                required/>
+                                            <span class=" input-group-addon icon -calendar" (click)="dateBirth.show()"></span>
+                                        </div>
+                                        <p *ngIf="dateBirth.errors && (dateBirth.dirty || dateBirth.touched)" class="alert alert-danger">{{'public.dateBirth' | translate }}{{ 'error.required' | translate }}</p>
+                                    </div>
+                                    <!-- /DATE OF BITH -->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- PLACE OF BIRTH -->
+                                    <div class="form-group">
+                                        <label for="search-criteria--input-personal-data-birth">{{ 'public.placeBirth' | translate }} *</label>
+                                        <div class="sme-select col-xs-12 col-sm-12">
+                                            <select class="form-control" name="placeBirth" [(ngModel)]="batch.newPlaceBirth" #placeBirth
+                                                required>
+                                                <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                                <option *ngFor="let countryBirth of formData.countries" [selected]="countryBirth.key == batch.newPlaceBirth" [value]="countryBirth.key">
+                                                    {{ countryBirth.value }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <p *ngIf="placeBirth.errors && (placeBirth.dirty || placeBirth.touched)" class="alert alert-danger">{{'public.placeBirth' | translate }}{{ 'error.required' | translate }}</p>
+                                    </div>
+                                    <!-- /PLACE OF BIRTH -->
+                                </div>
+                           
+                                 
+                            </fieldset>
+                        </div>            
+                         <div class="row">
+                            <fieldset>
+                             <div class="col-xs-12 col-sm-3">
+                                    <!-- BENEFICIARY MOBILE NUMBER -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryMobileNumber' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="beneficiaryMobileNumber" placeholder="{{ 'beneficiaries.beneficiaryMobileNumber' | translate }}"
+                                                [(ngModel)]="batch.newMobileNo" #beneficiaryMobileNumber="ngModel"
+                                                maxlength="12" inputPattern="onlyDigits" required/>
+                                        </div>
+                                        <p *ngIf="beneficiaryMobileNumber.errors && (beneficiaryMobileNumber.dirty || beneficiaryMobileNumber.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.beneficiaryListFields.phoneVerification' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /BENEFICIARY MOBILE NUMBER -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- EMAIL -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.email' | translate }} </label>
+                                        <div>
+                                            <input type="text" class="form-control" name="email" placeholder="{{ 'public.email' | translate }}" [(ngModel)]="batch.newEmail"
+                                                #emailBeneDetail="ngModel" maxlength="50" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                inputPattern="notArabic" />
+                                            <p *ngIf="emailBeneDetail.errors && (emailBeneDetail.errors.pattern || emailBeneDetail.dirty || emailBeneDetail.touched)" class="alert alert-danger">
+                                                {{ 'public.emailVerification' | translate }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- /EMAIL -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- SORT CODE -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.sortCode' | translate }}</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="sortCode" placeholder="{{ 'beneficiaries.beneficiaryListFields.sortCode' | translate }}"
+                                                [(ngModel)]="batch.newSortCode" #sortCode="ngModel" maxlength="11" />
+                                        </div>
+                                    </div>
+                                    <!-- /SORT CODE -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- NATIONALITY -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.nationality' | translate }} *</label>
+                                        <div class="sme-select col-xs-12 col-sm-12">
+                                            <select class="form-control" name="nationality" [(ngModel)]="batch.newNationality" required>
+                                                <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                                <option *ngFor="let nationality of formData.nationalities | values" [ngValue]="nationality">
+                                                    {{ formData.nationalities[nationality] }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- /NATIONALITY -->
+                                </div>   
+                            </fieldset>    
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                 <div class="col-xs-12 col-sm-3">
+                                    <div class="col-xs-12 col-sm-12" style="padding-left: 0px; padding-right: 0px;">
+                                        <label>{{ 'beneficiaries.telephoneNo' | translate }}</label>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Prefix  -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.prefix' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="prefix" style="height: 27px;" #prefix="ngModel" [(ngModel)]="batch.newTelephoneNoPrefix"
+                                                    maxlength="4" number inputPattern="onlyDigits" />
+                                                <p *ngIf="prefix.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Prefix  -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Area -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.area' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="area" style="height: 27px;" #area="ngModel" [(ngModel)]="batch.newTelephoneNoArea" maxlength="4"
+                                                    number inputPattern="onlyDigits" />
+                                                <p *ngIf="area.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Area -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Number -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.number' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="number" style="height: 27px;" #number="ngModel" [(ngModel)]="batch.telephoneNo"
+                                                    maxlength="4" number inputPattern="onlyDigits" />
+                                                <p *ngIf="number.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Number -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Extension  -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.extension' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="extension" style="height: 27px;" #extension="ngModel" [(ngModel)]="batch.newTelephoneNoExtension"
+                                                    maxlength="4" number inputPattern="onlyDigits" />
+                                                <p *ngIf="extension.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Extension  -->
+                                    </div>
+                                </div>    
+                            </fieldset>
+                        </div>       
+                    </div>
+                    <div class="sme-form__body" *ngIf="batch.newBeneficiaryCategory == 'C'">
+                        <div class="legend">
+                            {{ 'beneficiaries.beneficiaryBankDetails' | translate }}
+                        </div>        
+                        <div class="row">
+                                <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- BENEFICIARY ACCOUNT -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="beneficiaryAccount" placeholder="{{ 'beneficiaries.beneficiaryListFields.beneficiaryAccount' | translate }}"
+                                                [(ngModel)]="batch.newBeneficiaryAccount" #beneficiaryAccount="ngModel" maxlength="35"
+                                                required pattern="^[a-zA-Z0-9]*$" inputPattern="notArabic" />
+                                        </div>
+                                        <p *ngIf="beneficiaryAccount.errors && (beneficiaryAccount.dirty || beneficiaryAccount.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.alfanumeric' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /BENEFICIARY ACCOUNT -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- RETYPE BENEFICIARY ACCOUNT -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.retypeBeneficiaryAccount' | translate }}
+                                            *
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control" name="retypeBeneficiaryAccount" placeholder="{{ 'beneficiaries.beneficiaryListFields.retypeBeneficiaryAccount' | translate }}"
+                                                [(ngModel)]="reBeneficiaryAccount" #retypeBeneficiaryAccount="ngModel"
+                                                maxlength="35" required inputPattern="notArabic" />
+                                        </div>
+                                        <p *ngIf="retypeBeneficiaryAccount.errors && (retypeBeneficiaryAccount.dirty || retypeBeneficiaryAccount.touched)" class="alert alert-danger">
+                                            {{ 'accounts.accountRetypeVerification' | translate }}
+                                        </p>
+                                        <p *ngIf="reBeneficiaryAccount != batch.newBeneficiaryAccount" class="alert alert-danger">
+                                            {{ 'beneficiaries.accountMatch' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /RETYPE BENEFICIARY ACCOUNT -->
+
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- SORT CODE -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.sortCode' | translate }}</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="sortCode" placeholder="{{ 'beneficiaries.beneficiaryListFields.sortCode' | translate }}"
+                                                [(ngModel)]="batch.newSortCode" #sortCode="ngModel" maxlength="11" />
+                                        </div>
+                                    </div>
+                                    <!-- /SORT CODE -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- BENEFICIARY NAME -->
+                                    <div class="form-group">
+                                        <label for="search-criteria--input-personal-data-city">{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="beneficiaryName" placeholder="{{ 'beneficiaries.beneficiaryListFields.beneficiaryName' | translate }}"
+                                                [(ngModel)]="batch.newFirstName" #beneficiaryName="ngModel" maxlength="60" required
+                                            />
+                                            <p *ngIf="beneficiaryName.touched && beneficiaryName.invalid" class="alert alert-danger">
+                                                {{ 'beneficiaries.beneficiaryNameVerification' | translate }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- /BENEFICIARY NAME -->
+                                </div>
+
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- NATIONALITY -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryListFields.nationality' | translate }} *</label>
+                                        <div class="sme-select col-xs-12 col-sm-12">
+                                            <select class="form-control" name="nationality" [(ngModel)]="batch.newNationality" required>
+                                                <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                                <option *ngFor="let nationality of formData.nationalities | values" [ngValue]="nationality">
+                                                    {{ formData.nationalities[nationality] }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- /NATIONALITY -->
+                                </div>
+                                 <div class="col-xs-12 col-sm-3">
+                                    <!-- BENEFICIARY MOBILE NUMBER -->
+                                    <div class="form-group">
+                                        <label>{{ 'beneficiaries.beneficiaryMobileNumber' | translate }} *</label>
+                                        <div>
+                                            <input type="text" class="form-control" name="beneficiaryMobileNumber" placeholder="{{ 'beneficiaries.beneficiaryMobileNumber' | translate }}"
+                                                [(ngModel)]="batch.newMobileNo" #beneficiaryMobileNumber="ngModel"
+                                                maxlength="12" inputPattern="onlyDigits" required/>
+                                        </div>
+                                        <p *ngIf="beneficiaryMobileNumber.errors && (beneficiaryMobileNumber.dirty || beneficiaryMobileNumber.touched)" class="alert alert-danger">
+                                            {{ 'beneficiaries.beneficiaryListFields.phoneVerification' | translate }}
+                                        </p>
+                                    </div>
+                                    <!-- /BENEFICIARY MOBILE NUMBER -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!-- EMAIL -->
+                                    <div class="form-group">
+                                        <label>{{ 'public.email' | translate }} </label>
+                                        <div>
+                                            <input type="text" class="form-control" name="email" placeholder="{{ 'public.email' | translate }}" [(ngModel)]="batch.newEmail"
+                                                #emailBeneDetail="ngModel" maxlength="50" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                    inputPattern="notArabic" />
+                                            <p *ngIf="emailBeneDetail.errors && (emailBeneDetail.errors.pattern || emailBeneDetail.dirty || emailBeneDetail.touched)" class="alert alert-danger">
+                                                {{ 'public.emailVerification' | translate }}
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <!-- /EMAIL -->
+                                </div>
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="col-xs-12 col-sm-12" style="padding-left: 0px; padding-right: 0px;">
+                                        <label>{{ 'beneficiaries.telephoneNo' | translate }}</label>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Prefix  -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.prefix' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="prefix" style="height: 27px;" #prefix="ngModel" [(ngModel)]="batch.newTelephoneNoPrefix"
+                                                    maxlength="4" number inputPattern="onlyDigits" />
+                                                <p *ngIf="prefix.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Prefix  -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Area -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.area' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="area" style="height: 27px;" #area="ngModel" [(ngModel)]="batch.newTelephoneNoArea" maxlength="4"
+                                                    number inputPattern="onlyDigits" />
+                                                <p *ngIf="area.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Area -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Number -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.number' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="number" style="height: 27px;" #number="ngModel" [(ngModel)]="batch.telephoneNo"
+                                                    maxlength="4" number inputPattern="onlyDigits" />
+                                                <p *ngIf="number.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Number -->
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3" style="padding-left: 0px; padding-right: 0px;">
+                                        <!-- Extension  -->
+                                        <div class="form-group">
+                                            <label>{{ 'beneficiaries.extension' | translate }}</label>
+                                            <div>
+                                                <input type="text" class="form-control" name="extension" style="height: 27px;" #extension="ngModel" [(ngModel)]="batch.newTelephoneNoExtension"
+                                                    maxlength="4" number inputPattern="onlyDigits" />
+                                                <p *ngIf="extension.errors?.number" class="alert alert-danger">
+                                                    {{ 'accounts.numberVerification' | translate }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- /Extension  -->
+                                    </div>   
+                                </div>    
+                            </fieldset>
+                        </div>            
+
+                    </div>
+                    <div class="sme-form__body">
+                         <div class="legend"></div>
+                        <div class="legend">{{ 'beneficiaries.beneficiaryAddress' | translate }}</div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                <!-- BENEFICIARY ADDRESS 1 -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-beneficiary-add-international-address1">{{ 'beneficiaries.beneficiaryAddress1' | translate }} *</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="beneficiaryAddress1" placeholder="{{ 'beneficiaries.beneficiaryAddress1' | translate }}"
+                                            [(ngModel)]="batch.newAddressLine1" #beneficiaryAddress1="ngModel" maxlength="40"
+                                            required />
+                                    </div>
+                                    <p *ngIf="beneficiaryAddress1.errors && (beneficiaryAddress1.dirty || beneficiaryAddress1.touched)" class="alert alert-danger">
+                                        {{ 'public.addressVerification' | translate }}
+                                    </p>
+                                </div>
+                                <!-- /BENEFICIARY ADDRESS 1 -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- STREET / BUILDING NUMBER -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-personal-data-street">{{ 'beneficiaries.beneficiaryListFields.streetBuildingNumber' | translate }} *</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="streetBuildingNumber" placeholder="{{ 'beneficiaries.beneficiaryListFields.streetBuildingNumber' | translate }}"
+                                            [(ngModel)]="batch.newStreetNo" #streetBuildingNumber="ngModel" maxlength="7"
+                                            required />
+                                    </div>
+                                    <p *ngIf="streetBuildingNumber.errors && (streetBuildingNumber.dirty || streetBuildingNumber.touched)" class="alert alert-danger">
+                                        {{ 'beneficiaries.beneficiaryStreetBuldingVerification' | translate }}
+                                    </p>
+                                </div>
+                                <!-- /STREET / BUILDING NUMBER -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- BENEFICIARY ADDRESS 2 -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-beneficiary-add-international-address1">{{ 'beneficiaries.beneficiaryAddress2' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="beneficiaryAddress2" placeholder="{{ 'beneficiaries.beneficiaryAddress2' | translate }}"
+                                            [(ngModel)]="batch.newAddressLine2" #beneficiaryAddress2="ngModel" maxlength="40"
+                                        />
+                                    </div>
+                                </div>
+                                <!-- /BENEFICIARY ADDRESS 2 -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- POSTAL CODE -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-personal-data-po-box">{{ 'beneficiaries.beneficiaryListFields.postalCode' | translate }} *</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="postalCode" placeholder="{{ 'beneficiaries.beneficiaryListFields.postalCode' | translate }}"
+                                            [(ngModel)]="batch.newAddressPostalCode" #postalCode="ngModel" maxlength="5" required/>
+                                    </div>
+                                    <p *ngIf="postalCode.errors && (postalCode.dirty || postalCode.touched)" class="alert alert-danger">
+                                        {{ 'beneficiaries.beneficiaryListFields.beneficiaryPostalCodeVerification' | translate }}
+                                    </p>
+                                </div>
+                                <!-- /POSTAL CODE -->
+                            </div>    
+
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset>
+                                <div class="col-xs-12 col-sm-3">
+                                <!-- COUNTRY -->
+                                <div class="form-group">
+                                    <label for="search-criteria-input-personal-data-country-address">{{ 'public.country' | translate }} *</label>
+                                    <div class="sme-select col-xs-12 col-sm-12">
+                                        <select class="form-control" name="countryBeneficiary" [(ngModel)]="batch.addressCountry" required (change)="onchangeCountryAddress()" disabled>
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let country of formData.countries" [selected]="country.key == batch.addressCountry" [value]="country.key">
+                                                {{ country.value }}
+
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- /COUNTRY -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- PO BOX -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-personal-data-po-box">{{ 'beneficiaries.beneficiaryListFields.poBox' | translate }} *</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="poBox" placeholder="{{ 'beneficiaries.beneficiaryListFields.poBox' | translate }}"
+                                            [(ngModel)]="batch.newPobox" #poBox="ngModel" maxlength="30" required/>
+                                    </div>
+                                    <p *ngIf="poBox.errors && (poBox.dirty || poBox.touched)" class="alert alert-danger">
+                                        {{ 'beneficiaries.beneficiaryListFields.beneficiaryPoBoxVerification' | translate }}
+                                    </p>
+                                </div>
+                                <!-- /PO BOX -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- CITY / STATE -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-personal-data-city">{{ 'beneficiaries.beneficiaryListFields.cityState' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="cityState" placeholder="{{ 'beneficiaries.beneficiaryListFields.cityState' | translate }}"
+                                            [(ngModel)]="batch.newCityState" #cityState="ngModel" />
+                                    </div>
+                                </div>
+                                <!-- /CITY / STATE -->
+                            </div>
+                            </fieldset>
+                        </div>        
+                    </div>
+                    <div class="sme-form__body">
+                        <div class="legend">
+                            {{ 'beneficiaries.beneficiaryListFields.documentID' | translate }}
+                        </div>        
+                        <div class="row">
+                            <fieldset>
+                               <div class="col-xs-12 col-sm-3">
+                                <!-- ID Type -->
+                                <div class="form-group">
+
+                                    <label for="search-criteria--input-personal-data-street">{{ 'beneficiaries.beneficiaryListFields.idType' | translate }} *</label>
+                                    <div class="sme-select col-xs-12 col-sm-12">
+                                        <select class="form-control" name="individualIdType" [(ngModel)]="batch.newIdType" required>
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let idType of formData.idTypes | values" [ngValue]="idType">
+                                                {{ formData.idTypes[idType] }}
+
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- /ID Type -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- ID NUMBER -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-personal-data-city">{{ 'beneficiaries.beneficiaryListFields.idNumber' | translate }} *</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="idNumber" placeholder="{{ 'beneficiaries.beneficiaryListFields.idNumber' | translate }}"
+                                            [(ngModel)]="batch.newIdNumber" #idNumber="ngModel" maxlength="20" required/>
+                                    </div>
+                                    <p *ngIf="idNumber.errors && (idNumber.dirty || idNumber.touched)" class="alert alert-danger">
+                                        {{ 'beneficiaries.beneficiaryIDNumberVerification' | translate }}
+                                    </p>
+
+                                </div>
+                                <!-- /ID NUMBER -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- ISSUED AT -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-personal-data-po-box">{{ 'beneficiaries.beneficiaryListFields.issuedAt' | translate }}</label>
+                                    <div>
+                                        <input type="text" class="form-control" name="issuedAt" placeholder="{{ 'beneficiaries.beneficiaryListFields.issuedAt' | translate }}"
+                                            [(ngModel)]="batch.newIssueAt" #issuedAt="ngModel" maxlength="35" />
+                                    </div>
+                                </div>
+                                <!-- /ISSUED AT -->
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <!-- ISSUED DATE -->
+                                <div class="form-group">
+                                    <label for="value-date-issue-input">{{ 'beneficiaries.beneficiaryListFields.issueDate' | translate }}</label>
+                                    <div class="form-control">
+                                        <input type="text" id="value-date-issue-input" #issueDate="bsDatepicker" bsDatepicker placement="top" [bsConfig]="bsConfig"
+                                            [(bsValue)]="batch.newIssueDate" value="{{ batch.newIssueDate | date:'dd/MM/yyyy' }}"
+                                            style="border:0px;z-index:1000; width: 95%;" name="issueDate" />
+                                        <span [attr.disabled]="null" (click)="issueDate.show()"></span>
+                                    </div>
+                                </div>
+                                <!-- /ISSUED DATE -->
+                            </div>
+
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                                <fieldset>
+                                    <div class="col-xs-12 col-sm-3">
+                                <!-- COUNTRY OF ISSUE -->
+                                <div class="form-group">
+                                    <label for="search-criteria--input-beneficiary-add-international-address1">{{ 'public.country' | translate }} *</label>
+                                    <div class="sme-select col-xs-12 col-sm-12">
+                                        <select class="form-control" name="countryIssue" [(ngModel)]="batch.newCountryIssue" 
+                                            required>
+                                            <option selected value disabled>--{{ 'public.selectDropdown' | translate }}--</option>
+                                            <option *ngFor="let country of formData.countries" [selected]="country.key == formData.country" [value]="country.key">
+                                               {{ country.value }}
+
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- /COUNTRY OF ISSUE -->
+                            </div>
+                                </fieldset>
+                        </div>            
+                    </div>
+                    <div class="sme-form__body">
+                        <div class="row">
+                                <fieldset>
+                                <div class="col-xs-12 col-sm-4">
+                                    <!-- sme-form-group -->
+                                    <div class="form-group">
+                                        <label>{{ 'myProfile.pending_actions.rejectedReason' | translate }}</label>
+                                        <span  class="form-control">{{batch.rejectedReason}}</span>
+                                         
+                                    </div>  
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+                    </div>
+            </div>      
+            </div>
+        </div>
+    </div>
+    </form>
+</div>  
+
+<app-levels-table *ngIf="batch"
+    [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>

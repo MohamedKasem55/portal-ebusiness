@@ -1,0 +1,13 @@
+<div class="sme-box sme-wizard__content">
+    <div>
+        <div class="sme-wizard__success" *ngIf="!isPending()">
+            <span class="icon -check"></span> {{ 'transfer.complete' | translate }}
+        </div>
+        <div class="sme-wizard__success" *ngIf="isPending()">
+            <span class="icon -check"></span> {{ 'payments.sucessPendingRequest' | translate }}
+        </div>
+    </div>
+</div>
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+    <button class="btn btn-primary btn-wide" (click)="submit()">{{buttonLabel}}</button>
+</div>

@@ -1,0 +1,30 @@
+<company-admin-user-management-edit-form [formModel]="formModel"
+                                         [userData]="userData"
+                                         [formAction]="'edit'"
+                                         [combosData]="combosData"
+                                         [enabled]="false">
+</company-admin-user-management-edit-form>
+
+<app-levels-table *ngIf="batch.futureSecurityLevelsDTOList" [futureSecurityLevels]="batch.futureSecurityLevelsDTOList">
+</app-levels-table>
+
+<div *ngIf="generateChallengeAndOTP" class="sme-content-container container-fluid">
+    <div *ngIf="option == InitiateOption" class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="form-group">
+                                    <app-secured-authentication [generateChallengeAndOTP]="generateChallengeAndOTP"
+                                        [requestValidate]="requestValidate" #authorization></app-secured-authentication>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

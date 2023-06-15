@@ -1,0 +1,67 @@
+<div class="sme-page-block">
+    <div class="sme-form">
+        <form autocomplete="off" class="sme-form__form">
+            <div class='sme-head'>
+                <div class='sme-head__title'>
+                    {{ 'mada-cards.summary' | translate }}
+                </div>
+            </div>
+
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+                    <div class='sme-head'>
+                        <div class='sme-head__title'>
+                            {{ 'mada-cards.owner-details' | translate }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label for="linked-account">{{ 'mada-cards.linked-account' | translate }}</label>
+                                <select id="linked-account" class="form-control" disabled>
+                                    <option value="" disabled="disabled" selected="selected">
+                                       {{ applyMadaCardRequest.account['fullAccountNumber'] + ' - ' +
+                                    (applyMadaCardRequest.account['alias']? (applyMadaCardRequest.account['alias']+' - '): '' )+
+                                    (applyMadaCardRequest.account['availableBalance'] | amountCurrency)
+                                    }}
+
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label for="search-posDomesticLimit">{{ 'mada-cards.embossing-name' | translate }}</label>
+                                <select id="search-posDomesticLimit" class="form-control" disabled>
+                                    <option value="" disabled="disabled" selected="selected">
+                                        {{ applyMadaCardRequest.embossingName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class='sme-head'>
+                        <div class='sme-head__title'>
+                            {{ 'mada-cards.pick-up-office' | translate }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="form-group">
+                                <label for="selected-branch">{{ 'mada-cards.selected-branch' | translate }}</label>
+                                <select id="selected-branch" class="form-control" disabled>
+                                    <option value="" disabled="disabled" selected="selected">
+                                       {{applyMadaCardRequest.branch.branch}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

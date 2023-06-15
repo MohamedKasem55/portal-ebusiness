@@ -1,0 +1,220 @@
+<form autocomplete="off">
+<div class="sme-breadcrumb">
+</div>
+
+<div class="container-fluid">
+
+		<div class="sme-form__content">
+                <label class="sme-form__title">
+                    <span class="sme-data-table__title">{{ 'companyAdmin.positivePayChequeAccounts.positivePayChequeAccounts' | translate }}</span>
+                </label>
+                <div class="sme-form__form">
+                    <div class="sme-form__body">
+                        <div>
+
+                            <div class="sme-wizard__success">
+                                <span class="icon -check"></span>
+                                {{'public.requestOk' | translate}}
+                                <small>{{'public.thanks' | translate }}</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+	<!-- <div class="sme-data-table">
+		<div class="sme-data-table__head">
+			<div class="sme-data-table__title">{{'companyAdmin.positivePayChequeAccounts.positivePayChequeAccountsAdded' | translate }}</div>
+
+		</div>
+
+		<div class="sme-table table headerDataTable"></div>
+		<ngx-datatable 
+			[messages]="{emptyMessage: 'public.noData' | translate}" 
+			#table 
+			[rows]="accounts.accountList"
+			class="material" 
+			[columnMode]="defaultColumnMode"
+			[headerHeight]="30" 
+			[footerHeight]="50" 
+			[rowHeight]="defaultHeight" 
+			[count]="accounts.sizePage" 
+			[limit]="accounts.totalPage"
+			[externalPaging]="false" 
+			(page)='setPage($event)' 
+			[externalSorting]="false" 
+			[selectionType]="defaultSelectionType"
+			(select)="onSelect($event)">
+
+			<ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+			</ngx-datatable-column>
+
+			<ngx-datatable-column prop="fullAccountNumber">
+				<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+					<span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'companyAdmin.positivePayChequeAccounts.account' | translate }}</span>
+				</ng-template>
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+					<span>{{ value }}</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+			<ngx-datatable-column prop="fullAccountNumber">
+				<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+					<span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'companyAdmin.positivePayChequeAccounts.chequeStatus' | translate }}</span>
+				</ng-template>
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+					<span>{{ value }}</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+			<ngx-datatable-column prop="annualFee">
+				<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+					<span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'companyAdmin.positivePayChequeAccounts.positivePayChequeAnnualFee' | translate }}</span>
+				</ng-template>
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+					<span>{{ value }}</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+										
+			<ngx-datatable-footer>
+				<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+					let-curPage="curPage" let-offset="offset">
+					<div class="sme-datatable-footer">
+						<datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+							[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+							[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+							[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+							[page]="curPage" [size]="pageSize" [count]="rowCount" (change)="table.onFooterPage($event)">
+						</datatable-pager>
+						<div *ngIf="rowCount!=0" class="page-count">
+							<span>{{ 'public.showingLabel' | translate}} {{rowCount}} {{ 'public.ofLabel' | translate}}
+								{{accounts?.total}}
+							</span>
+							|
+							<span>{{ 'public.showRowsLabel' | translate}}</span>
+
+							<select [(ngModel)]="tableDisplaySize">
+								<option [value]=10>10</option>
+								<option [value]=20>20</option>
+								<option [value]=50>50</option>
+							</select>
+						</div>
+					</div>
+				</ng-template>
+			</ngx-datatable-footer>
+		</ngx-datatable>
+	</div> -->
+</div>
+
+<!-- <div class="container-fluid">
+	<div class="sme-data-table">
+		<div class="sme-data-table__head">
+			<div class="sme-data-table__title">{{'companyAdmin.positivePayChequeAccounts.positivePayChequeAccountsDeleted' | translate }}</div>
+
+		</div>
+
+		<div class="sme-table table headerDataTable"></div>
+		<ngx-datatable 
+			[messages]="{emptyMessage: 'public.noData' | translate}" 
+			#table 
+			[rows]="accounts.accountList"
+			class="material" 
+			[columnMode]="defaultColumnMode"
+			[headerHeight]="30" 
+			[footerHeight]="50" 
+			[rowHeight]="defaultHeight" 
+			[count]="accounts.sizePage" 
+			[limit]="accounts.totalPage"
+			[externalPaging]="false" 
+			(page)='setPage($event)' 
+			[externalSorting]="false" 
+			[selectionType]="defaultSelectionType"
+			(select)="onSelect($event)">
+
+			<ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+			</ngx-datatable-column>
+
+			<ngx-datatable-column prop="fullAccountNumber">
+				<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+					<span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'companyAdmin.positivePayChequeAccounts.account' | translate }}</span>
+				</ng-template>
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+					<span>{{ value }}</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+			<ngx-datatable-column prop="fullAccountNumber">
+				<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+					<span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'companyAdmin.positivePayChequeAccounts.chequeStatus' | translate }}</span>
+				</ng-template>
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+					<span>{{ value }}</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+			<ngx-datatable-column prop="annualFee">
+				<ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+					<span (click)="sort()" class="datatable-header-cell-wrapper">{{ 'companyAdmin.positivePayChequeAccounts.positivePayChequeAnnualFee' | translate }}</span>
+				</ng-template>
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+					<span>{{ accounts.value }}</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+										
+			<ngx-datatable-footer>
+				<ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+					let-curPage="curPage" let-offset="offset">
+					<div class="sme-datatable-footer">
+						<datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+							[pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+							[pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+							[pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+							[page]="curPage" [size]="pageSize" [count]="rowCount" (change)="table.onFooterPage($event)">
+						</datatable-pager>
+						<div *ngIf="rowCount!=0" class="page-count">
+							<span>{{ 'public.showingLabel' | translate}} {{rowCount}} {{ 'public.ofLabel' | translate}}
+								{{accounts?.total}}
+							</span>
+							|
+							<span>{{ 'public.showRowsLabel' | translate}}</span>
+
+							<select [(ngModel)]="tableDisplaySize">
+								<option [value]=10>10</option>
+								<option [value]=20>20</option>
+								<option [value]=50>50</option>
+							</select>
+						</div>
+					</div>
+				</ng-template>
+			</ngx-datatable-footer>
+		</ngx-datatable>
+	</div>
+</div> -->
+
+
+<!-- OVERLAY DELETE BENEFICIARY -->
+<div class="modal fade" bsModal #oppSuccess="bs-modal" tabindex="-1" role="dialog" aria-labelledby="requestSubmittedModal"
+ aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="oppSuccess.hide()">
+					<span class="icon -close"></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<span class="icon -check icon-success"></span>
+				<p>{{ 'public.requestOk' | translate }}</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-wide" data-dismiss="modal" aria-label="Close" (click)="oppSuccess.hide()">
+					{{ 'public.ok' | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+</form>

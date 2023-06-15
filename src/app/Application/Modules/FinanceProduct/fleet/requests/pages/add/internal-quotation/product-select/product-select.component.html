@@ -1,0 +1,230 @@
+<div class="container-fluid">
+  <sme-breadcrumb [list]="breadCrumb"></sme-breadcrumb>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">
+      {{ 'fleet.requests.requestQuotation' | translate }}
+    </p>
+    <p class="sme-page-info">
+      {{ 'fleet.requests.selectVehicleType' | translate }}
+    </p>
+  </div>
+</div>
+<div class="container-fluid form-container" [formGroup]="internalQuotationForm">
+  <sme-card [startTitle]="'Specifications'" [headerFontSize]="'default'">
+    <div class="card-body">
+      <sme-card-media>
+        <div class="media-start px-5">
+          <img src="assets/img/cars-select.png" />
+        </div>
+        <div class="media-content px-5">
+          <div class="sme-row-2-col">
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{
+                  'fleet.requests.brandName' | translate
+                }}</label>
+                <select
+                  (change)="getModelByBrandId($event.target['value'])"
+                  class="form-control"
+                  formControlName="brandName"
+                >
+                  <option
+                    *ngFor="let brand of brandList"
+                    [value]="brand.brandName"
+                  >
+                    {{ brand.brandName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{
+                  'fleet.requests.model' | translate
+                }}</label>
+                <select
+                  (change)="
+                    getVariantByBrandModel(
+                      internalQuotationForm.controls['brandName'].value,
+                      $event.target['value']
+                    )
+                  "
+                  class="form-control"
+                  formControlName="modelName"
+                >
+                  <option
+                    *ngFor="let model of modelList"
+                    [value]="model.modelName"
+                  >
+                    {{ model.modelName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="sme-row-2-col">
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{
+                  'fleet.requests.variant' | translate
+                }}</label>
+                <select class="form-control" formControlName="vehicleVariant" (change)="getvariantYearsandDefaultValues($event.target['value'])">
+                  <option
+                    [value]="variant.vehicleVariant"
+                    *ngFor="let variant of variantList"
+                  >
+                    {{ variant.vehicleVariant }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{
+                  'fleet.requests.dealershipName' | translate
+                }}</label>
+                <select class="form-control" formControlName="dealerName">
+                  <option
+                    [value]="dealer.dealerName"
+                    *ngFor="let dealer of dealersList"
+                  >
+                    {{ dealer.dealerName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="sme-row-2-col">
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label"
+                  >{{
+                    'fleet.requests.exteriorColor' | translate
+                  }}(Optional)</label
+                >
+                <select class="form-control" formControlName="vehicleColor">
+                  <option
+                    [value]="item.value"
+                    *ngFor="let item of colors; let i = index"
+                  >
+                    {{ item.txt|translate }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="yearsList.length > 0" class="form-group">
+            <label class="sme-form-group-label">{{
+              'fleet.requests.selectModelYear' | translate
+            }}</label>
+            <div  class="sme-row-default">
+              <div *ngFor="let element of yearsList" class="sme-border-wrap">
+                <div class="sme-radio radio">
+                  <label>
+                    <input 
+                      type="radio"
+                      [value]="element.modelYear"
+                      name="modelYear"
+                      formControlName="modelYear"
+                      (change)="getPrice(element.price)"
+                    />
+                    <i aria-hidden="true"></i>
+                    <span>{{ element.modelYear }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sme-row-2-col">
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{
+                  'fleet.requests.purposeUse' | translate
+                }}</label>
+                <select class="form-control" formControlName="purposeOfUse" (change)="calPurposeValueNTotalPrice('personalUseChange')">
+                  <option
+                    *ngFor="let item of purposeOfUseList"
+                    [value]="item.id"
+                  >
+                    {{ item.txt }}
+                  </option>
+                </select>
+                <span *ngIf="internalQuotationForm.controls['purposeOfUse'].value === 'MSB.FLEET.PERSONAL.VEH'" class="message message-warning">
+                 {{'fleet.requests.personalUseWarning' | translate}}
+                </span>
+              </div>
+            </div>
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{
+                  'fleet.requests.quantity' | translate
+                }}</label>
+                <input type="number" class="form-control" id="vehiclesNum" formControlName="vehiclesNum"  (focusout)="calPurposeValueNTotalPrice()"/>
+                <span class="message message-error" *ngIf="personalUse">{{'fleet.requests.personalUseError' | translate}} </span>
+                <span class="message message-error" *ngIf="internalQuotationForm.get('vehiclesNum').errors?.max && !personalUse">{{'fleet.requests.MaxQuantity' | translate}} 300 </span>
+                <span class="message message-error" *ngIf="internalQuotationForm.get('vehiclesNum').errors?.min && !personalUse">{{'fleet.requests.MinQuantity' | translate}} 1 </span>
+              </div>
+            </div>
+
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.tenure'| translate}} ({{'fleet.requests.months'| translate}})</label>
+                <input  type="number" class="form-control" id="tenure" formControlName="tenure" />
+                <div *ngIf="internalQuotationForm.get('tenure').errors?.validTenure == false" 
+                    class="invalid-feedback">
+                    <span class="message message-error">{{'fleet.requests.ErrorMin' | translate}} 12 {{'fleet.requests.ErrorMax' | translate}} {{maxFinanceTenure}}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="sme-col">
+              <div class="form-group">
+                <label class="sme-form-group-label">{{'fleet.requests.downPayment'| translate}} (%)</label>
+                <input type="number" class="form-control" id="downPmt" formControlName="downPmt"  />
+                <div *ngIf="internalQuotationForm.get('downPmt').errors?.validDownPayment == false" 
+                    class="invalid-feedback">
+                    <span class="message message-error">{{'fleet.requests.ErrorMin' | translate}} {{minDownPmt}} {{'fleet.requests.ErrorMax' | translate}} {{maxFinanceTenure}}</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </sme-card-media>
+    </div>
+  </sme-card>
+</div>
+
+<div class="container-fluid price-container">
+  <sme-card>
+    <div class="card-body text-center">
+      <h1>{{'fleet.requests.priceVehicle' | translate}}</h1>
+      <p>{{vehiclePrice}} SAR</p>
+      <div class="total-value">
+        <h1>{{'fleet.requests.totalValue' | translate}}</h1>
+        <p>{{purposeValue}} SAR</p>
+      </div>
+      <div class="container-fluid">
+        <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+          <button
+            class="btn btn-default btn-wide sme-back-btn"
+            (click)="navigateTo()"
+          >
+            {{ 'fleet.btn.back' | translate }}
+          </button>
+          <div>
+            <button
+              class="btn btn-primary btn-wide"
+              (click)="uploadCustomerQuotation(internalQuotationForm.value)"
+              [disabled]="personalUse || !internalQuotationForm.valid"
+            >
+              {{ 'fleet.btn.addRequestQuotation' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sme-card>
+</div>

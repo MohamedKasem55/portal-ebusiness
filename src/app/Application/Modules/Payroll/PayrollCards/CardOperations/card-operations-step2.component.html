@@ -1,0 +1,304 @@
+<div class="container-fluid">
+    <div class="sme-page-block">
+        <div class="sme-form">
+            <div class="sme-form__title">
+                {{ 'payroll.cardOperationsDetails' | translate}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<form autocomplete="off" #stepForm="ngForm">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group" *ngIf="!fourSteps()">
+                                        <label>{{'payroll.operationType' | translate }}</label>
+                                        <input type="text" class="form-control" name="operationType"
+                                               value="{{sharedData.operationsType[sharedData.operationCode]}}" disabled>
+
+
+                                    </div>
+                                    <div class="form-group" *ngIf="fourSteps()">
+                                        <label>{{'payroll.operationType' | translate }}</label>
+                                        <input type="text" class="form-control" name="operationType"
+                                               value="{{sharedData.operationsType[sharedData.operationCode]}}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3" *ngIf="!fourSteps()">
+                                    <div class="form-group">
+                                        <label>{{'payroll.expectedFees' | translate }}</label>
+                                        <input type="text" class="form-control" value="{{ fee | amountCurrency}}"
+                                               disabled>
+                                        <app-vat-calculator [fee]="fee"></app-vat-calculator>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngFor="let selectedRow of selectedRows; let i = index">
+        <div class="container-fluid">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__content">
+                        <a role="button" (click)="isCollapsedContent[i] = !isCollapsedContent[i]"
+                           class="sme-form__head human-selectable sme-form__title"
+                           [ngClass]="{'collapsed': isCollapsedContent[i]}">
+                            <span>{{ 'payroll.employee' | translate }}</span>
+                        </a>
+
+                        <div class="sme-form__collapse collapse" [collapse]="isCollapsedContent[i]">
+                            <div class="sme-form__form">
+                                <div class="sme-form__body">
+
+                                    <!-- INICIO CAMPOS FIJOS  -->
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.employeeName' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       value="{{ selectedRow['cardHolderNameOld'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.cardNumber' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       value="{{ selectedRow['cardNumber'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.civilianID' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       value="{{ selectedRow['nationalIdOld'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'accounts.balance' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       value="{{ selectedRow['currentBalance'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="movil-number-input">{{ 'payroll.movilNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="movil-number-input"
+                                                       value="{{ selectedRow['mobileNumber'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.employeeNumber' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       value="{{ selectedRow['memberIdOld'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label for="total-amount-load-input">{{ 'payroll.totalAmountLoad' | translate }}</label>
+                                                <input type="text" class="form-control" id="total-amount-load-input"
+                                                       value="{{ selectedRow['totalAmount'] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="form-group">
+                                                <label>{{ 'public.status' | translate }}</label>
+                                                <input type="text" class="form-control" id="status-input"
+                                                       value="{{ sharedData.coboStatus[selectedRow['status']] }}"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- FIN CAMPOS FIJOS  -->
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === 'C'">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.employeeName' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       name="cardHolderName"
+                                                       [(ngModel)]="sharedData.newValue[i].cardHolderName"
+                                                       maxlength="50" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === 'A'">
+                                            <div class="form-group">
+                                                <label>{{ 'payroll.employeeId' | translate }}</label>
+                                                <input type="text" class="form-control"
+                                                       [(ngModel)]="sharedData.newValue[i].employeeId" name="employeeId"
+                                                       maxlength="12" inputPattern="onlyNumbers" #employeeId="ngModel"
+                                                       required>
+                                                <div *ngIf="employeeId.errors && employeeId.errors.pattern"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.numericDecimal' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === 'B'">
+                                            <div class="form-group">
+                                                <label for="national-id-input">{{ 'payroll.nationalId' | translate }}</label>
+                                                <input type="text" class="form-control" id="national-id-input"
+                                                       [(ngModel)]="sharedData.newValue[i].nationalId" name="nationalId"
+                                                       maxlength="10" inputPattern="onlyNumbers" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '8'">
+                                            <div class="form-group">
+                                                <label>{{ 'public.amount' | translate }}</label>
+                                                <input class="form-control" [(ngModel)]="sharedData.newValue[i].ammount"
+                                                       name="ammount-{{i}}" type="text" min=1
+                                                       inputPattern="onlyPositiveDecimalNumbers" decimal-precision  #ammount="ngModel"
+                                                       required/>
+                                                <div *ngIf="validAmount(stepForm.controls['ammount-'+i])"
+                                                     class="alert alert-danger">
+                                                    <small>{{'public.amount' | translate }}{{ 'error.minValue' | translate:{value: 0} }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="sharedData.operationCode === '2'">
+                                            <div class="form-group">
+                                                <label>{{ 'public.amount' | translate }}</label>
+                                                <input class="form-control" [(ngModel)]="sharedData.newValue[i].ammount"
+                                                       name="ammount-{{i}}" type="text" min=1
+                                                       inputPattern="onlyPositiveDecimalNumbers" decimal-precision  maxlength="9"
+                                                       #ammount="ngModel" required/>
+                                                <div *ngIf="validAmount(stepForm.controls['ammount-'+i])"
+                                                     class="alert alert-danger">
+                                                    <small>{{'public.amount' | translate }}{{ 'error.minValue' | translate:{value: 0} }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                                            <div class="form-group">
+                                                <label for="basic-salary-input">{{ 'payroll.management.salaryBasic' | translate }}</label>
+                                                <input type="text" class="form-control" id="basic-salary-input"
+                                                       [(ngModel)]="sharedData.newValue[i].salaryBasis"
+                                                       name="salaryBasis" maxlength="9"
+                                                       inputPattern="onlyDecimalNumbers"
+                                                       pattern="^[0-9]{0,15}(\.[0-9]{1,2}$)?" #salaryBasis="ngModel">
+                                                <div *ngIf="salaryBasis.errors && salaryBasis.errors.pattern"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.numericDecimal' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                                            <div class="form-group">
+                                                <label for="housing-allowance-input">{{ 'payroll.housingAllowance' | translate }}</label>
+                                                <input type="text" class="form-control" id="housing-allowance-input"
+                                                       [(ngModel)]="sharedData.newValue[i].homeAllowance"
+                                                       name="homeAllowance" inputPattern="onlyDecimalNumbers"
+                                                       maxlength="9" pattern="^[0-9]{0,15}(\.[0-9]{1,2}$)?"
+                                                       #homeAllowance="ngModel">
+                                                <div *ngIf="homeAllowance.errors && homeAllowance.errors.pattern"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.numericDecimal' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                                            <div class="form-group">
+                                                <label for="other-allowance-input">{{ 'payroll.otherAllowance' | translate }}</label>
+                                                <input type="text" class="form-control" id="other-allowance-input"
+                                                       [(ngModel)]="sharedData.newValue[i].allowanceOthers"
+                                                       name="allowanceOthers" maxlength="9"
+                                                       inputPattern="onlyDecimalNumbers"
+                                                       pattern="^[0-9]{0,15}(\.[0-9]{1,2}$)?"
+                                                       #allowanceOthers="ngModel">
+                                                <div *ngIf="allowanceOthers.errors && allowanceOthers.errors.pattern"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.numericDecimal' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3"
+                                             *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps'">
+                                            <div class="form-group">
+                                                <label for="deduction-input">{{ 'payroll.deduction' | translate }}</label>
+                                                <input type="text" class="form-control" id="deduction-input"
+                                                       [(ngModel)]="sharedData.newValue[i].deductions" name="deductions"
+                                                       maxlength="9" inputPattern="onlyDecimalNumbers"
+                                                       pattern="^[0-9]{0,15}(\.[0-9]{1,2}$)?" #deductions="ngModel">
+                                                <div *ngIf="deductions.errors && deductions.errors.pattern"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.numericDecimal' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8" *ngIf="sharedData.operationCode === '2'">
+                                            <div class="form-group">
+                                                <div *ngIf="sharedData.operationCode === '2' && sharedData.layout==='wps' && !validAmountSalary(i)"
+                                                     class="alert alert-danger">
+                                                    <small>{{'error.payrollCardOperationAmount' | translate }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-levels-table [futureSecurityLevels]="getFromLevelsMap()"></app-levels-table>
+
+<div class="container-fluid" *ngIf="!fourSteps() && sharedData.generateChallengeAndOTP">
+    <div class="sme-page-block">
+        <div class="sme-form__content">
+            <div class="sme-form__form">
+                <div class="sme-form__body" style="padding: 15px;">
+                    <div class="sme-form__box sme-form__box--form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3">
+                                <form autocomplete="off" #password="ngForm" novalidate>
+                                    <div class="form-group">
+                                        <app-secured-authentication
+                                                [generateChallengeAndOTP]="sharedData.generateChallengeAndOTP"
+                                                [requestValidate]="sharedData.requestValidate"
+                                                #authorization></app-secured-authentication>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

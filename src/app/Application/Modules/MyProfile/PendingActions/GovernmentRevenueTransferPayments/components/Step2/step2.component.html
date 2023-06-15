@@ -1,0 +1,90 @@
+<ng-container *ngIf="sharedData.approveFlow">
+
+    <div class="sme-data-table">
+        <div class="sme-data-table">
+            <div class="sme-data-table__head">
+                <div class="sme-head__title" style="vertical-align: bottom;color: #8c3300;">
+                    {{ 'pendingActions.general.wizardStep2TextOperationsToBeProcessed' | translate }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- batchList Items to process -->
+
+    <app-government-revenue-transfer-payments-table *ngIf="batchListItems.length > 0"
+                                                    [items]="batchListItems"
+                                                    [modal]="modalAuth"
+                                                    [futureLevels]="true"
+                                                    [externalPagination]="false"
+                                                    [selectable]="false"
+                                                    [selected]="sharedData.govRevTransPayTableSelected">
+    </app-government-revenue-transfer-payments-table>
+
+    <app-government-revenue-file-transfer-payments-table *ngIf="batchFileListItems.length > 0"
+                                                         [items]="batchFileListItems"
+                                                         [modal]="modalAuth"
+                                                         [tableDisplaySize]="20"
+                                                         [totalSize]="batchFileListItems.length"
+                                                         [futureLevels]="true"
+                                                         [externalPagination]="false"
+                                                         [selectable]="false"
+                                                         [selected]="sharedData['govRevFileTransPayTableSelected']">
+    </app-government-revenue-file-transfer-payments-table>
+</ng-container>
+
+<ng-container *ngIf="!sharedData.approveFlow">
+    <app-government-revenue-transfer-payments-table *ngIf="sharedData?.govRevTransPayTableSelected.length > 0"
+                                                    [items]="sharedData?.govRevTransPayTableSelected"
+                                                    [modal]="modalAuth"
+                                                    [futureLevels]="false"
+                                                    [externalPagination]="false"
+                                                    [selectable]="false"
+                                                    [selected]="sharedData.govRevTransPayTableSelected">
+    </app-government-revenue-transfer-payments-table>
+
+    <app-government-revenue-file-transfer-payments-table *ngIf="sharedData?.govRevFileTransPayTableSelected.length > 0"
+                                                         [items]="sharedData?.govRevFileTransPayTableSelected"
+                                                         [modal]="modalAuth"
+                                                         [tableDisplaySize]="sharedData?.govRevFileTransPayTableSelected.length"
+                                                         [totalSize]="sharedData?.govRevFileTransPayTableSelected.length"
+                                                         [futureLevels]="false"
+                                                         [externalPagination]="false"
+                                                         [selectable]="false"
+                                                         [selected]="sharedData['govRevFileTransPayTableSelected']">
+    </app-government-revenue-file-transfer-payments-table>
+</ng-container>
+
+
+<!-- to authorize ----------------------------------------------------- -->
+<div class="sme-data-table" *ngIf="false">
+    <div class="sme-data-table">
+        <div class="sme-data-table__head">
+            <div class="sme-head__title" style="vertical-align: bottom">
+                {{ 'pendingActions.general.wizardStep2TextOperationsToBeAuthorized' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- to authorize -->
+
+
+<!-- to process ----------------------------------------------------- -->
+
+
+<app-levels-popup #modalAuth></app-levels-popup>
+
+<arb-panel
+        *ngIf="sharedData.approveFlow && sharedData.authorizeValidate && sharedData.authorizeValidate.generateChallengeAndOTP">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <app-secured-authentication
+                        [generateChallengeAndOTP]="sharedData.authorizeValidate.generateChallengeAndOTP"
+                        [requestValidate]="sharedData.requestValidate" #authorization>
+                </app-secured-authentication>
+            </div>
+        </div>
+    </div>
+</arb-panel>
+

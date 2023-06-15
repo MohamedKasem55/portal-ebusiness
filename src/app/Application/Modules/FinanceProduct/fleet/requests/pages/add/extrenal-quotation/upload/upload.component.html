@@ -1,0 +1,307 @@
+<div class="container-fluid">
+  <sme-breadcrumb 
+    [list]="breadCrumb"
+  ></sme-breadcrumb>
+</div>
+<div class="container-fluid">
+  <div class="sme-page-title-info">
+    <p class="sme-page-title">{{'fleet.requests.uploadExternalQuotation'|translate}}</p>
+  </div>
+</div>
+
+<form [formGroup]="quotationForm">
+  <div  id="quotation_{{i}}"
+    *ngFor="let quotation of Quotations.controls; let i = index"
+    formArrayName="quotations"
+  >
+    <ng-container [formGroupName]="i">
+      <ng-container formArrayName="purposes">
+        <div id="purpose_{{i}}_{{j}}"
+          *ngFor="let purpose of getPurposes(i).controls; let j = index"
+          class="container-fluid"
+        >
+          <sme-card
+            [startTitle]="
+              j === 0
+                ? title1 + (exQuotation !=null ? i + exQuotation.length + 1 : i+1 )
+                : title2 + ( j + 1)
+           "
+          >
+            <div class="end-header">
+              <img *ngIf="i!=0 || j!=0" class="delete-img" (click)="removePurpose(i,j)" src="assets//icons/delete.svg" />
+            </div>
+            <div class="card-body">
+              <ng-container [formGroupName]="j">
+                <div class="container-fluid">
+                  <div class="sme-row-4-col">
+                    <!--Purpose Of Use-->
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label"
+                          >{{'fleet.requests.purposeUse'|translate}}</label
+                        >
+                        <select
+                          formControlName="purposeOfUse"
+                          class="form-control"
+                          id="purposeUse"
+                          (change)="checkValidation($event.target.value,getPurposes(i).controls[j].value.vehiclesNum,i,j)"
+                        >
+                          <option *ngFor="let item of purposeOfUseList" [value]="item.id">{{item.txt}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--Brand-->
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.brandName'|translate}}</label>
+                        <select
+                          formControlName="brandName"
+                          class="form-control"
+                          id="brandName"
+                          (change)="getModelByBrandId($event.target.value,i,j)"
+                        >
+                          <option *ngFor="let brand of brandList" [value]="brand.brandName" >{{brand.brandName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.model'|translate}}</label>
+                        <select
+                          formControlName="modelName"
+                          class="form-control"
+                          id="modelName_{{i}}_{{j}}"
+                          (change)="getVariantByBrandModel(getPurposes(i).controls[j].value.brandName,getPurposes(i).controls[j].value.modelName,i,j)"
+                        >
+                        </select>
+                      </div>
+                    </div>
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.variant'|translate}}</label>
+                        <select
+                          formControlName="vehicleVariant"
+                          class="form-control"
+                          id="vehicleVariant_{{i}}_{{j}}"
+                          (change)="getvariantYears(getPurposes(i).controls[j].value.vehicleVariant,i,j)"
+                        >
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="container-fluid">
+                  <div class="sme-row-4-col">
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label"
+                          >{{'fleet.requests.selectModelYear' | translate}}</label
+                        >
+                        <select
+                          formControlName="modelYear"
+                          class="form-control"
+                          id="year_list{{i}}_{{j}}"
+
+                        >
+                          <!-- <option *ngFor="let element of yearsList" [value]="element.modelYear">{{element.modelYear}}</option> -->
+                        </select>
+                      </div>
+                    </div>
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.quantity'|translate}}</label>
+                        <input
+                          formControlName="vehiclesNum"
+                          type="number"
+                          class="form-control"
+                          id="vehiclesNum"
+                          (focusout)="calPurposeValue(getPurposes(i).controls[j].value.vehiclesNum,getPurposes(i).controls[j].value.vehiclePrice,i,j)"
+
+                        />
+                      </div>
+                      <span *ngIf="personalUse" class="sme-form-group-label validation-error">{{'fleet.requests.validationErrorForPersonalUse'|translate}}</span>
+                      <span *ngIf="getPurposes(i).controls[j].controls.vehiclesNum.errors?.max && !personalUse" class="sme-form-group-label validation-error">{{'fleet.requests.MaxQuantity' | translate}} 300</span>
+                      <span *ngIf="getPurposes(i).controls[j].controls.vehiclesNum.errors?.min && !personalUse" class="sme-form-group-label validation-error">{{'fleet.requests.MinQuantity' | translate}} 1</span>
+
+                    </div>
+                    <!--Tenure-->
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.tenure'| translate}} ({{'fleet.requests.months'| translate}})</label>
+                        <input  type="number" class="form-control" id="tenure" formControlName="tenure" />
+                        <div [hidden]="getPurposes(i).controls[j].controls.tenure.errors?.validTenure == null"
+                            class="invalid-feedback">
+                            <span class="sme-form-group-label validation-error" id="tenureError_{{i}}_{{j}}"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <!--DownPayment-->
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.downPayment'| translate}} (%)</label>
+                        <input type="number" class="form-control" id="downPmt" formControlName="downPmt"  />
+                        <div [hidden]="getPurposes(i).controls[j].controls.downPmt.errors?.validDownPayment == null"
+                            class="invalid-feedback">
+                            <span class="sme-form-group-label validation-error" id="paymentError_{{i}}_{{j}}"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--YearList && Dealer-->
+                <!--DealerList-->
+                <div class="container-fluid">
+                  <div class="sme-row-4-col">
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label"
+                          >{{'fleet.requests.vehiclePrice'|translate}}</label
+                        >
+                        <input
+                          formControlName="vehiclePrice"
+                          type="number"
+                          class="form-control"
+                          id="vehiclePrice"
+                          (focusout)="calPurposeValue(getPurposes(i).controls[j].value.vehiclesNum,getPurposes(i).controls[j].value.vehiclePrice,i,j)"
+
+                        />
+                      </div>
+                    </div>
+
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label"
+                          >{{'fleet.requests.purposeofUseValue'|translate}}</label
+                        >
+                        <input
+                          readonly
+                          formControlName="purposeValue"
+                          type="number"
+                          class="form-control"
+                          id="purposeValue"
+                        />
+                      </div>
+                    </div>
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label"
+                          >{{'fleet.requests.exteriorColor'|translate}}</label
+                        >
+                        <select
+                          formControlName="vehicleColor"
+                          class="form-control"
+                          id="exteriorColor"
+                        >
+                          <option *ngFor="let item of colors; let i = index" [value]="item.value">{{item.txt| translate}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label"
+                          >{{
+                            'fleet.requests.dealershipName' | translate
+                          }}</label
+                        >
+                        <select
+                          formControlName="dealerName"
+                          class="form-control"
+                          id="dealerName"
+                        >
+                          <option *ngFor="let dealer of dealersList"  [value]="dealer.dealerName"> {{ dealer.dealerName }}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="j === 0" class="container-fluid">
+                  <div class="sme-row-4-col">
+                    <div class="sme-col">
+                      <div class="form-group">
+                        <label class="sme-form-group-label">{{'fleet.requests.document'|translate}}</label>
+                        <!-- <input
+                          type="file"
+                          accept=".JPG,.PDF,.PNG,.GIF"
+                          class="form-control"
+                          id="documentsInfo"
+                          (change)="handleUpload($event, i, j)"
+                        /> -->
+
+                        <div class="sme-col form-control" >
+                          <div class='fileUpload btn' >
+                            <span class="upload"  (click)="fileUpload.click()">
+                              <input id="uploadDocVal_{{i}}"  name="uploadDocVal_{{i}}" value="" placeholder="Upload File" class="file-name" required disabled>
+                              <span id="upload_txt_{{i}}">{{'public.upload' | translate | uppercase}}</span>
+                              <img (click)="removeUploadedDocs($event,i)" class="display-none" id="cross_icon_{{i}}" src="assets/icons/cross.svg" width=12px>
+                              <input  id="uploadDoc_{{i}}"  name="uploadDoc_{{i}}" placeholder="" (change)="handleUpload($event, i, j)"  #fileUpload type='file' accept='.jpeg,.pdf,.gif,.jpg,.png' class="file-input upload"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                      <div class="sme-row" >
+                        <div class="sme-col">
+                          <p class="sme-card-msg error-color" id="invalid_file_{{i}}"></p>
+                        </div>
+                        <img src="assets/icons/info.svg" />
+                        <p id="errorFile_{{i}}" class="sme-card-msg">
+                          {{'fleet.requests.validationErrorFileSize'|translate}}
+                        </p>
+                        <br>
+                        
+                      </div>
+                </div>
+                <div
+                  *ngIf="j == getPurposes(i).controls.length - 1"
+                  class="container-fluid"
+                >
+                  <div class="sme-row-col">
+                    <div class="sme-page-block sme-form__actions">
+                      <button
+                        class="btn btn-default btn-wide"
+                        (click)="addNewPurpose(i)"
+                      >
+                        {{'fleet.requests.anotherPurpose'|translate}}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </sme-card>
+        </div>
+      </ng-container>
+    </ng-container>
+    <div id="note_{{i}}" class="container-fluid">
+      <sme-card>
+        <div class="card-body">
+          <div class="sme-row">
+            <img src="assets/icons/info.svg" />
+            <p class="sme-card-msg">
+              {{'fleet.requests.uploadQuotationNote'|translate}}
+            </p>
+          </div>
+        </div>
+      </sme-card>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+      <button class="btn btn-default btn-wide sme-back-btn" (click)="navigateTo()">
+        {{ 'fleet.btn.back' | translate }}
+      </button>
+      <div >
+        <button *ngIf="!editMode" class="btn btn-default btn-wide" type='button' (click)="addNewQuotation()">
+          {{'fleet.btn.additionalQuotation'|translate}}
+        </button>
+        <button class="btn btn-primary btn-wide" (click)="submit(quotationForm.value)"  [disabled]="personalUse || validationFileSize || !quotationForm.valid ">
+          {{ 'fleet.btn.next' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

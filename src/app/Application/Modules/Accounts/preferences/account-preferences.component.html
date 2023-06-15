@@ -1,0 +1,137 @@
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="active">{{ 'dashboard.accounts' | translate }}</li>
+        <li class="active">{{ 'accounts.preferences' | translate }}</li>
+    </ol>
+</div>
+
+<div class="container-fluid sme-content-container">
+    <div class="sme-page-block">
+        <ul class="sme-box sme-wizard__steps">
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 1, 'completed' : step > 1}">
+                <span>
+                    <span class="num">1</span>
+                    <span class="text">{{ 'preferences.step1' | translate }}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 2, 'completed' : step > 2}">
+                <span>
+                    <span class="num">2</span>
+                    <span class="text">{{ 'preferences.step2' | translate}}</span>
+                </span>
+            </li>
+            <li class="sme-wizard__step" [ngClass]="{'current' : step === 3, 'completed' : step > 3}">
+                <span>
+                    <span class="icon -check"></span>
+                    <span class="text">{{ 'preferences.step3' | translate }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+    <form autocomplete="off" class="sme-form__form" (ngSubmit)="checkForm()" #accountsForm="ngForm"
+          *ngIf="accountBalancePage && step !== 3">
+        <div class="sme-form">
+            <div class="sme-form__content">
+                <div class="sme-form__body">
+
+                    <ngx-datatable (page)="onPage($event)" [messages]="{emptyMessage: 'public.noData' | translate}"
+                                   #accountBalanceCertificateTable
+                                   class="material sme-table sme-table--responsive table"
+                                   [rows]="step===1?accountBalancePage.data: modifiedAccounts"
+                                   [columnMode]="defaultColumnMode" [headerHeight]="30"
+                                   [footerHeight]="50" [rowHeight]="defaultHeight" [limit]="pageLimit"
+                                   [sortType]="sortmulti" [offset]="currentPage">
+
+                        <ngx-datatable-column prop="fullAccountNumber" [resizeable]="false" [width]="290">
+                            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                                    {{'public.account' | translate }}
+                                </span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                <span>{{value}}</span>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column prop="alias">
+                            <ng-template ngx-datatable-header-template>
+                                <span>{{'accounts.accountNickname' | translate}}</span>
+                            </ng-template>
+                            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                                <input *ngIf="canEditNickName()" type="text" [(ngModel)]="row.alias"
+                                       name="{{row.fullAccountNumber}}"
+                                       [disabled]="isConfirming">
+                                <span *ngIf="!canEditNickName()"><label>{{row.alias}}</label></span>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                                         let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                                <div class="sme-data-table__footer">
+                                    <app-datatable-pager
+                                            [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                            [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                            [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                            [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                            [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                            [hidden]="!((rowCount / pageSize) > 1)"
+                                            (change)="accountBalanceCertificateTable.onFooterPage($event)">
+                                    </app-datatable-pager>
+
+                                    <div class="sme-data-table__actions form-inline">
+                                        <span
+                                                class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}}
+                                            {{this.currentPageElemnscount}} {{ 'public.ofLabel' | translate}}
+                                            {{rowCount}}</span>
+                                        <span class="hidden-xs"> | </span>
+                                        <span class="sme-data-table__action-group">
+                                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                                            <div class="sme-select form-control">
+                                                <select class="form-control" name="pageLimit" [(ngModel)]="pageLimit"
+                                                        (change)="modifyPageLimit($event)">
+                                                    <option [ngValue]="10">10</option>
+                                                    <option [ngValue]="20">20</option>
+                                                    <option [ngValue]="50">50</option>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngx-datatable-footer>
+                    </ngx-datatable>
+                </div>
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions" *ngIf="step===1">
+                    <button type="button" (click)="nextStep()" class=" btn btn-primary btn-wide"
+                            [disabled]="!isValid() || !canEditNickName()">{{ 'public.save' | translate }}</button>
+                </div>
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions" *ngIf="step===2">
+                    <button type="button" (click)="goBack()" class=" btn btn-default btn-wide">
+                        {{ 'public.back' | translate }}
+                    </button>
+                    <button type="submit" class=" btn btn-primary btn-wide">
+                        {{ 'public.confirm' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="sme-form" *ngIf="step===3">
+        <div class="sme-form__content">
+            <div class="sme-form__body">
+                <div class="text-center">
+                    <span> {{ 'preferences.updateDone' | translate }} </span>
+                </div>
+
+                <br/>
+
+                <div class="sme-page-block sme-wizard__navigation sme-form__actions">
+                    <button type="button" (click)="resetStepper()" class=" btn btn-default btn-wide">
+                        {{ 'public.back' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

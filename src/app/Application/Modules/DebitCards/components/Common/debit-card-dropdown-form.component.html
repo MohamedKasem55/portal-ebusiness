@@ -1,0 +1,17 @@
+<ng-container [formGroup]="formModel">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="form-group">
+                <label for="search-card">{{ label | translate }}</label>
+                <select id="search-card" class="form-control" name="card" formControlName="card">
+                    <option value="" disabled="disabled" selected="selected">
+                        -- {{ 'public.selectOption' | translate }} --
+                    </option>
+                    <option *ngFor="let item of itemList; index as i" [value]="i"
+                            [innerHTML]="item['cardNumber']">
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</ng-container>

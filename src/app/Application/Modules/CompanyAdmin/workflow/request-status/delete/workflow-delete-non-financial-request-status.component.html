@@ -1,0 +1,16 @@
+<arb-breadcrumb [routes]="routes" *ngIf="routes && routes.length>0">
+</arb-breadcrumb>
+
+<app-initiator-wizard-modify
+        [title]="'workflow.requestStatus.deleteNonFinancial'"
+        [currentItem]="deleteData"
+        [entityName]="null"
+        [markAllFormFieldAsTouched]="false"
+        [entityProperties]="entityProperties"
+        [service]="deleteService"
+        [translate_prefix]="'workflow'"
+        [backUrl]="getBackUrl()"
+        [combosKeys]="combosKey"
+        [combosData]="combosData"
+        [pending]="isPending()">
+</app-initiator-wizard-modify>

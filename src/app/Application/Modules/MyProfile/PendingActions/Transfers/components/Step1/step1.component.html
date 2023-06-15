@@ -1,0 +1,17 @@
+
+<app-transfer-common-table
+    [items]="pagedResults.items"
+    [modal]="modalAuth"
+    [tableDisplaySize]="displaySize"
+    [totalSize]="pagedResults.total"
+    [futureLevels]="false"
+    [externalPagination]="true"
+    [selectable]="true"
+    (setPage)="setPage($event)"
+    (changeDisplaySize)="changeDisplay($event)">
+</app-transfer-common-table>
+
+
+
+
+<app-levels-popup #modalAuth></app-levels-popup>

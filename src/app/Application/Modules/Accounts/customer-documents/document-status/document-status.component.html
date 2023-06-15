@@ -1,0 +1,209 @@
+<arb-breadcrumb [routes]="[
+	['public.accounts'],
+	['customer-documents.customerDocs'],
+	['customer-documents.requestStatus.requestStatus']]">
+</arb-breadcrumb>
+
+<arb-colapsable-panel [title]="'public.search'" [isCollapsedContent]="true">
+    <div class="sme-form">
+        <div class="sme-form__content">
+            <div class="sme-form__form" id="sme-demo--form--search-criteria-">
+                <form autocomplete="off" #vatInvoice="ngForm" [formGroup]="formModel"
+                      class="sme-wizard">
+
+                    <div class="sme-form__body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ 'customer-documents.request-new.selectDoc' | translate }}</label>
+                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="docType" class="form-control">
+                                        <ng-option *ngFor="let docType of docTypes" [value]="docType.key">
+                                            {{docType.value}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ 'customer-documents.requestStatus.custDocReqState' | translate }}</label>
+                                    <ng-select [notFoundText]="'public.noData' | translate" formControlName="reqState" class="form-control">
+                                        <ng-option *ngFor="let reqState of custDocsReqStates" [value]="reqState.key">
+                                            {{reqState.value}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ 'customer-documents.requestStatus.requesterId' | translate }}</label>
+                                    <input type="text" class="form-control" formControlName="requesterId" inputPattern="notArabic">
+                                    <div *ngIf="formModel.controls.requesterId.hasError('pattern')
+                                        && formModel.controls.requesterId.touched" class="alert alert-danger bottomAlert">
+                                        <small>
+                                            {{'customer-documents.requestStatus.requesterId' | translate }} {{'error.invalid' | translate }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <app-select-account [useOldDesign]="true" [accounts]="accounts"
+                                                        (onAccountChange)="selectAccount($event)">
+                                    </app-select-account>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <arb-buttons>
+                    <button type="submit" class="btn btn-default btn-wide" (click)="resetForm()">
+                        {{ 'public.reset' | translate }}
+                    </button>
+                    <button [disabled]="!canFilter()" type="submit" class="btn btn-primary btn-wide" (click)="setPageOffset(0)">
+                        {{ 'public.search' | translate }}
+                    </button>
+                </arb-buttons>
+            </div>
+        </div>
+    </div>
+</arb-colapsable-panel>
+
+
+<arb-table-panel [title]="'invoiceHUB.requestStatus'">
+    <table-export
+            [dataTable]="table" [header]="'invoiceHUB.requestStatus' | translate"
+            [columns]="[
+                {'title': 'customer-documents.request-new.requestedDoc' | translate, 'dataKey':'docType', 'modelKey': 'custDocs'},
+                {'title': 'customer-documents.requestStatus.creationDate' | translate, 'dataKey':'creationDate'},
+                {'title':'customer-documents.requestStatus.status' | translate, 'dataKey':'docReqStatus', 'modelKey': 'custDocsReqStates'}
+            ]">
+    </table-export>
+    <ngx-datatable [messages]="{emptyMessage: 'public.noData' | translate}" #table
+                   [rows]="custDocsReqsData.data" class="material sme-table sme-table--responsive table"
+                   [columnMode]="defaultColumnMode" [headerHeight]="40" [footerHeight]="footerHeight"
+                   [rowHeight]="defaultHeight" [count]="custDocsReqsData.page.totalElements" [offset]="custDocsReqsData.page.pageNumber"
+                   [limit]="pageSize" [externalPaging]="true" (page)='setPage($event)'
+                   [externalSorting]="false">
+
+        <ngx-datatable-row-detail [rowHeight]="defaultHeight" #myDetailRow (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>
+                                    {{'customer-documents.request-new.requestedDoc' | translate }}
+                                </label>
+                                <div>
+                                    <span>{{'custDocs' | modelPipe: row.docType}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <fieldset>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'customer-documents.requestStatus.creationDate' | translate }}</label>
+                                <div>
+                                    <span>{{ row.creationDate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>{{'customer-documents.requestStatus.status' | translate }}</label>
+                                <div>
+                                    <span>{{ row.docReqStatus }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+        <ngx-datatable-column prop="docType">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'customer-documents.request-new.requestedDoc' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span style="margin-left: 5%; margin-right: 5%">
+                    {{'custDocs' | modelPipe: value}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="creationDate">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'customer-documents.requestStatus.creationDate' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    {{ value | date: 'yyyy/MM/dd -'}}
+                    {{ value | date: 'mediumTime'}}
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column prop="docReqStatus">
+            <ng-template let-value="name" let-sort="sortFn" ngx-datatable-header-template>
+                <span (click)="sort()" class="datatable-header-cell-wrapper">
+                    {{'customer-documents.requestStatus.status' | translate }}
+                </span>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                <span>
+                    <a *ngIf="!isDownloadDisabled(row)" class="doc-status" (click)="viewDocumentStatusDetails(row)">
+                        <span>{{ translate.currentLang == 'en' ? row.docReqStatusDescEN : row.docReqStatusDescAR }}</span>
+                    </a>
+
+                    <a *ngIf="isDownloadDisabled(row)" class="undownloadable-doc">
+                        <span>{{ translate.currentLang == 'en' ? row.docReqStatusDescEN : row.docReqStatusDescAR }}</span>
+                    </a>
+                </span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount"
+                         let-curPage="curPage" let-offset="offset">
+                <div class="sme-data-table__footer">
+                    <app-datatable-pager [pagerLeftArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-left' : 'datatable-icon-right')"
+                                         [pagerRightArrowIcon]="(translate.currentLang === 'en' ? 'datatable-icon-right' : 'datatable-icon-left')"
+                                         [pagerPreviousIcon]="(translate.currentLang === 'en' ? 'datatable-icon-prev' : 'datatable-icon-skip')"
+                                         [pagerNextIcon]="(translate.currentLang === 'en' ? 'datatable-icon-skip' : 'datatable-icon-prev')"
+                                         [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                                         [visiblePagesCount]="visiblePagesCount"
+                                         (change)="table.onFooterPage($event)">
+                    </app-datatable-pager>
+
+                    <div class="sme-data-table__actions form-inline">
+                        <span class="sme-data-table__action-group">{{ 'public.showingLabel' | translate}} {{(pageSize > rowCount ? rowCount : pageSize)}} {{ 'public.ofLabel' | translate}} {{rowCount}}</span>
+                        <span class="hidden-xs"> | </span>
+                        <span class="sme-data-table__action-group">
+                            <span>{{ 'public.showRowsLabel' | translate}}</span>
+                            <div class="sme-select form-control">
+                                <select class="form-control" [(ngModel)]="custDocsReqsData.page.pageSize" (ngModelChange)="setPageSize($event)">
+                                    <option [value]="20">20</option>
+                                    <option [value]="30">30</option>
+                                    <option [value]="50">50</option>
+                                    <option [value]="100">100</option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </ngx-datatable-footer>
+    </ngx-datatable>
+</arb-table-panel>

@@ -1,0 +1,37 @@
+<!-- BREADCRUMB -->
+<div class="sme-breadcrumb">
+    <ol class="breadcrumb">
+        <li>
+            {{ 'myProfile.myProfile' | translate }}
+        </li>
+        <li class="active">
+            {{ 'myProfile.activityLogs.activityLogs' | translate }}
+        </li>
+    </ol>
+</div>
+<!-- BREADCRUMB -->
+
+<div class="sme-form__title" style="padding: 16px 20px 0px 16px;">
+    {{ 'myProfile.activityLogs.activityLogs' | translate }}
+</div>
+
+<div class="tabs-container">
+    <tabset>
+        <tab heading="Activity Logs" id="tab1">
+            <own-activity-logs [isCompanyAdmin]="isCompanyAdmin"></own-activity-logs>
+        </tab>
+        <tab
+                heading="Requested files"
+                class="tab-requested"
+                *ngIf="
+        this.authenticationService.activateOption(
+          'ActivityLogs',
+          [],
+          ['CompanyAdmins']
+        )
+      "
+        >
+            <my-profile-requested-files></my-profile-requested-files>
+        </tab>
+    </tabset>
+</div>

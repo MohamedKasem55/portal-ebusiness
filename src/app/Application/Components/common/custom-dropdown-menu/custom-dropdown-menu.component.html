@@ -1,0 +1,25 @@
+<div ngbDropdown class="d-inline-block" display="static" placement="translate.currentLang === 'en'
+    ? 'top-left' : 'bottom-right'">
+    <div class="button-wrapper">
+
+        <div ngbDropdown class="d-inline-block">
+
+            <button *ngIf="translate.currentLang == 'en'" (click)="toggleCollapse()" class="btn btn-outline-primary btn-background-ltr" id="dropdownBasic4" ngbDropdownToggle>
+                {{selectedTitle| translate}}
+                <span class="collapse-btn" [ngClass]="{'collapse-btn-collapse': isCollapsed}"></span>
+            </button>
+
+            <button *ngIf="translate.currentLang == 'ar'" (click)="toggleCollapse()" class="btn btn-outline-primary btn-background-rtl" id="dropdownBasic3" ngbDropdownToggle>
+                <span class="collapse-btn" [ngClass]="{'collapse-btn-collapse': isCollapsed}"></span>
+                {{selectedTitle | translate}}
+            </button>
+
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" >
+                <button ngbDropdownItem *ngFor="let title of menuTitles" (click)="onSelect($event, title)">
+                    {{ title | translate }}
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

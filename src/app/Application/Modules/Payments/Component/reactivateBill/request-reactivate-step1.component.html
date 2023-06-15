@@ -1,0 +1,59 @@
+<div class="container-fluid" *ngIf="batch">
+    <div class="sme-head">
+        <div class="sme-head__title">{{ 'public.add' | translate }} {{ 'payments.bill' | translate }}</div>
+    </div>
+    <form autocomplete="off" #form="ngForm">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__content">
+                    <div class="sme-form__form">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-8">
+                                        <div class="col-xs-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'payments.unity-service-provider-category' | translate }}</label>
+                                                <div class="form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" *ngIf="translate.currentLang==='ar' && sharedData.bill.length" placeholder="{{(!sharedData.selected ? '--'+('public.selectDropdown' | translate)+'--' : '' )}}" [items]="sharedData.bill" bindLabel="categoryAr" (change)="searchByGroup($event)" [(ngModel)]="sharedData.selected" name="billCode">
+                                                    </ng-select>
+                                                    <ng-select [notFoundText]="'public.noData' | translate" *ngIf="translate.currentLang!=='ar' && sharedData.bill.length" placeholder="{{(!sharedData.selected ? '--'+('public.selectDropdown' | translate)+'--' : '' )}}" [items]="sharedData.bill" bindLabel="categoryEn" (change)="searchByGroup($event)" [(ngModel)]="sharedData.selected" name="group">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="required">{{ 'payments.unity-service-provider' | translate }}</label>
+                                                <div class="form-control">
+                                                    <ng-select [notFoundText]="'public.noData' | translate" *ngIf="translate.currentLang!=='ar'" placeholder="{{(!sharedData.selectedBill ? '--'+('public.selectDropdown' | translate)+'--' : '' )}}" [disabled]='!(sharedData.selected)' [items]="sharedData.group" bindLabel="detailsDescriptionEn" [(ngModel)]="sharedData.selectedBill" name="billCode">
+                                                    </ng-select>
+                                                    <ng-select [notFoundText]="'public.noData' | translate" *ngIf="translate.currentLang==='ar'" placeholder="{{(!sharedData.selectedBill ? '--'+('public.selectDropdown' | translate)+'--' : '' )}}" [disabled]='!(sharedData.selected)' [items]="sharedData.group" bindLabel="detailsDescriptionAr" [(ngModel)]="sharedData.selectedBill" name="billCode">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="form-group">
+                                            <label class="required">{{ 'payments.subscriber-number' | translate }}</label>
+                                            <input [(ngModel)]="batch.billRef" name="subscriberNumber" type="text" class="form-control" required maxlength="16" inputPattern="onlyDigits">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="form-group">
+                                            <label class="required">{{ 'payments.nick-name' | translate }}</label>
+                                            <input [(ngModel)]="batch.nickname" name="nickName" type="text" class="form-control" required maxlength="20">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<app-levels-table *ngIf="batch" [futureSecurityLevels]="batch.securityLevelsDTOList">
+</app-levels-table>

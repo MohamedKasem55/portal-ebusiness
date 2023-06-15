@@ -1,0 +1,96 @@
+<arb-breadcrumb [routes]="getRoutes()">
+</arb-breadcrumb>
+
+<arb-steps
+        [currentStep]="wizardStep"
+        [steps]="['prePaidCard.stepper.step1', 'prePaidCard.stepper.step2', 'prePaidCard.stepper.step3', 'prePaidCard.stepper.step4']">
+</arb-steps>
+
+<div *ngIf="wizardStep===1">
+    <app-pre-paid-card-request-step1
+            [(canProceedStep1)]="canProceedStep1"
+            [(selectedUserJourney)]="selectedUserJourney"
+            [(selectedFullAccountNumber)]="selectedFullAccountNumber"
+            (onCompanyCRChange)="setCompanyRegistration($event)"
+            [(ownerData)]="ownerData"
+            [(form)]="form">
+    </app-pre-paid-card-request-step1>
+</div>
+
+<div *ngIf="wizardStep===2">
+    <app-pre-paid-card-request-step2
+            [selectedUserJourney]="selectedUserJourney"
+            (onIdIqamaChange)="setIdIqama($event)"
+            (onEmpCertificateChange)="setEmpCertificate($event)"
+            [selectedFiles] = prepaidCardAttachments
+            [form]="form">
+    </app-pre-paid-card-request-step2>
+</div>
+
+<div *ngIf="wizardStep===3">
+    <app-pre-paid-card-request-step3
+            [form]="form"
+            [selectedUserJourney]="selectedUserJourney">
+    </app-pre-paid-card-request-step3>
+
+    <arb-panel>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div class="form-group">
+                    <app-secured-authentication #authorization
+                        [generateChallengeAndOTP]="prepaidValidateResponse.generateChallengeAndOTP"
+                        [requestValidate]="prepaidCardRequestConfirm.requestValidate">
+                    </app-secured-authentication>
+                </div>
+            </div>
+        </div>
+    </arb-panel>
+</div>
+
+<div *ngIf="wizardStep > 3">
+    <app-pre-paid-card-request-step4 [cardOrderId]="cardOrderId">
+    </app-pre-paid-card-request-step4>
+</div>
+
+
+<div class="sme-page-block sme-wizard__navigation sme-form__actions">
+
+    <div class="row" style="display: flex; margin-top: 0">
+        <div class="col-xs-12 col-sm-6" style="text-align: start">
+            <button *ngIf="wizardStep < 4" (click)="backPrepaidCardList()" class=" btn btn-primary btn-wide"
+                    type="submit">{{'public.cancel' | translate}}</button>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <button *ngIf="wizardStep===1" (click)="backPrepaidCardList()"
+                    class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+
+            <button *ngIf="wizardStep!=1 && wizardStep<4" (click)="back()"
+                    class=" btn btn-default btn-wide">{{ 'public.back' | translate }}</button>
+
+            <button *ngIf="wizardStep=== 4" (click)="goToDashboard()" class="btn btn-default btn-wide"
+                    type="submit">{{'financeProduct.details.dashboard' | translate}}</button>
+
+            <button [disabled]="!canProceed()" *ngIf="wizardStep < 4" (click)="proceed()"
+                    class=" btn btn-primary btn-wide">{{ 'public.next' | translate }}</button>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" bsModal #addressModel="bs-modal" [config]="{backdrop: 'static'}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="headerDiv"></div>
+            </div>
+            <div class="ips-modal-body">
+                <p>{{ 'menu.prePaid_cards.addressWarning' | translate }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="closeAddressModal()" class="btn btn-default" data-dismiss="modal">{{
+                    'public.close' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

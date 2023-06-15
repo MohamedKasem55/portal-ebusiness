@@ -1,0 +1,324 @@
+<form autocomplete="off" [formGroup]="form" autocomplete="off">
+    <div class="container-fluid" formArrayName="cardOperations"
+         *ngFor="let cardOperation of cardOperations; let i=index">
+        <div [formGroupName]="i">
+            <div class="sme-page-block">
+                <div class="sme-form">
+                    <div class="sme-form__form">
+                        <div class="sme-form__content">
+                            <div class="sme-form__body">
+                                <div class="row">
+                                    <fieldset [disabled]="true">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="accountNo-input">{{'payments.hajjumrahcards.cardOperation.AccountNo' | translate }}</label>
+                                                <input type="text" class="form-control" id="accountNo-input"
+                                                       formControlName="accountNo">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="cardHolderName-input">{{'payments.hajjumrahcards.cardOperation.cardHolderName' | translate }}</label>
+                                                <input type="text" class="form-control" id="cardHolderName-input"
+                                                       formControlName="cardHolderName">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="passportNumber-input">{{'payments.hajjumrahcards.cardOperation.passportNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="passportNumber-input"
+                                                       formControlName="passportNumber">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="visaNumber-input">{{'payments.hajjumrahcards.cardOperation.visaNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="visaNumber-input"
+                                                       formControlName="visaNumber">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset [disabled]="true">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="visaExpiryDate-input">{{'payments.hajjumrahcards.cardOperation.visaExpiryDate' | translate }}</label>
+                                                <input type="text" class="form-control" id="visaExpiryDate-input"
+                                                       formControlName="visaExpiryDate">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="cardAllocationDate-input">{{'payments.hajjumrahcards.cardOperation.cardAllocationDate' | translate }}</label>
+                                                <input type="text" class="form-control" id="cardAllocationDate-input"
+                                                       formControlName="cardAllocationDate">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="cardExpiryDate-input">{{'payments.hajjumrahcards.cardOperation.cardExpiryDate' | translate }}</label>
+                                                <input type="text" class="form-control" id="cardExpiryDate-input"
+                                                       formControlName="cardExpiryDate">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="totalAmount-input">{{'payments.hajjumrahcards.cardOperation.totalAmount' | translate }}</label>
+                                                <input type="text" class="form-control" id="totalAmount-input"
+                                                       formControlName="totalAmount">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset [disabled]="true">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="currentBalance-input">{{'payments.hajjumrahcards.cardOperation.currentBalance' | translate }}</label>
+                                                <input type="text" class="form-control" id="currentBalance-input"
+                                                       formControlName="currentBalance">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="feesAmount-input">{{'payments.hajjumrahcards.cardOperation.expectedFees' | translate }}</label>
+                                                <input type="text" class="form-control" id="feesAmount-input"
+                                                       formControlName="feesAmount">
+                                                <app-vat-calculator
+                                                        [fee]="form.controls.cardOperations['controls'][i].controls.feesAmount.value">
+                                                </app-vat-calculator>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="status-input">{{'payments.hajjumrahcards.cardOperation.status' | translate }}</label>
+                                                <input type="text" class="form-control" id="status-input"
+                                                       formControlName="status">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset>
+                                        <div class="col-xs-12 col-sm-3" *ngIf="operationType === 'PR'">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        class="required">{{'payments.hajjumrahcards.cardOperation.refundAmount' | translate }}</label>
+                                                <input type="text" class="form-control" formControlName="refundAmount"
+                                                       maxlength="10" (keypress)="validateTwoDecimals($event)"
+                                                       inputPattern="onlyPositiveDecimalNumbers">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.refundAmount.hasError('required') && form.controls.cardOperations['controls'][i].controls.refundAmount.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.amountRequired' | translate }} </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3" *ngIf="operationType === 'LD'">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        class="required">{{'payments.hajjumrahcards.cardOperation.loadAmount' | translate }}</label>
+                                                <input type="text" class="form-control" formControlName="loadAmount"
+                                                       maxlength="10" inputPattern="onlyPositiveDecimalNumbers"
+                                                       decimal-precision>
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.loadAmount.hasError('required') && form.controls.cardOperations['controls'][i].controls.loadAmount.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{ 'error.amountRequired' | translate }} </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-3" *ngIf="operationType === 'SC'">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="refundAmount-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.newCardNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="refundAmount-input"
+                                                       formControlName="cardNumber" maxlength="19">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.cardNumber.hasError('required') && form.controls.cardOperations['controls'][i].controls.cardNumber.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.newCardNumber' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                    <fieldset *ngIf="operationType === 'UD'">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="address-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.address' | translate }}</label>
+                                                <input type="text" class="form-control" id="address-input"
+                                                       formControlName="address" maxlength="25">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.address.hasError('required') && form.controls.cardOperations['controls'][i].controls.address.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.address' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label
+                                                        for="country-input">{{'payments.hajjumrahcards.country' | translate }}</label>
+                                                <input type="text" class="form-control" id="country-input"
+                                                       value="{{'backEndCountryCode' | modelPipe:form.controls.cardOperations['controls'][i].controls.country.value}}"
+                                                       [disabled]="true">
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="city-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.city' | translate }}</label>
+                                                <input type="text" class="form-control" id="city-input"
+                                                       formControlName="city" maxlength="15">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.city.hasError('required') && form.controls.cardOperations['controls'][i].controls.city.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.city' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="email-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.email' | translate }}</label>
+                                                <input type="text" class="form-control" id="email-input"
+                                                       formControlName="email" maxlength=40>
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.email.hasError('required') && form.controls.cardOperations['controls'][i].controls.email.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.email' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.email.hasError('incorrectMailFormat') && form.controls.cardOperations['controls'][i].controls.email.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.email' | translate }}{{ 'error.formatNotValid' | translate }}</small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="row">
+                                    <fieldset *ngIf="operationType === 'UD'">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="mobileKSA-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.mobileKSA' | translate }}</label>
+                                                <input type="text" class="form-control" id="mobileKSA-input"
+                                                       formControlName="mobileKSA" maxlength=15
+                                                       inputPattern="onlyMobileNumbers">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.mobileKSA.hasError('required') && form.controls.cardOperations['controls'][i].controls.mobileKSA.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.mobileKSA' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="mobileNumber-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.mobileNumber' | translate }}</label>
+                                                <input type="text" class="form-control" id="mobileNumber-input"
+                                                       formControlName="mobileNumber" maxlength=15
+                                                       inputPattern="onlyMobileNumbers">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.mobileNumber.hasError('required') && form.controls.cardOperations['controls'][i].controls.mobileNumber.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.mobileNumber' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="postalCode-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.postalCode' | translate }}</label>
+                                                <input type="text" class="form-control" id="postalCode-input"
+                                                       formControlName="postalCode" inputPattern="onlyDigits"
+                                                       maxlength="9">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.postalCode.hasError('required') && form.controls.cardOperations['controls'][i].controls.postalCode.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.postalCode' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <!-- sme-form-group -->
+                                            <div class="form-group">
+                                                <label for="stateRegion-input"
+                                                       class="required">{{'payments.hajjumrahcards.cardOperation.stateRegion' | translate }}</label>
+                                                <input type="text" class="form-control" id="stateRegion-input"
+                                                       formControlName="stateRegion" maxlength="15">
+                                                <div *ngIf="form.controls.cardOperations['controls'][i].controls.stateRegion.hasError('required') && form.controls.cardOperations['controls'][i].controls.stateRegion.touched"
+                                                     class="alert alert-danger">
+                                                    <small>{{'payments.hajjumrahcards.cardOperation.stateRegion' | translate }}{{ 'error.required' | translate }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <!-- ./sme-form-group -->
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-levels-table [futureSecurityLevels]="this.selectedCardOperations[0]?.futureSecurityLevelsDTOList">
+    </app-levels-table>
+</form>

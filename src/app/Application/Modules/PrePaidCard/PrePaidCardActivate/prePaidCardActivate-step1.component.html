@@ -1,0 +1,76 @@
+<form [formGroup]="form" *ngIf="form">
+    <div class="container-fluid">
+        <div class="sme-page-block">
+            <div class="sme-form">
+                <div class="sme-form__form">
+                    <div class="sme-form__content">
+                        <div class="sme-form__body">
+                            <fieldset>
+                                <div class="legend" class="title-legend">
+                                    {{'commercialCards.titleOnePass' | translate}}
+                                </div>
+                                <hr class="hr-title">
+                                <div class="page">
+                                    <div class="form-center">
+                                        <div class="head">
+
+                                            <div id="image" class="display-div-column">
+                                                <span class="image-target-prepaid"></span>
+                                            </div>
+                                            <div><span
+                                                    class="display-div-column act-card-message-margin">{{'commercialCards.createPin'
+                                                    | translate}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="footer">
+                                            <div class="titlePin message"> <span
+                                                    class="display-div-column new-pin">{{'commercialCards.newPin' |
+                                                    translate}}</span>
+                                            </div>
+                                            <ng-container formGroupName="newPin">
+                                                <div class="inputPin"><input type="password" class="input-digit-otp"
+                                                        maxlength="1" formControlName="newPin1"
+                                                        inputPattern="onlyDigits" #pin1 (keyup)="focus(1)">
+                                                    <input type="password" class="input-digit-otp" maxlength="1"
+                                                        formControlName="newPin2" inputPattern="onlyDigits" #pin2 (keyup)="focus(2)">
+
+                                                    <input type="password" class="input-digit-otp" maxlength="1"
+                                                        formControlName="newPin3" inputPattern="onlyDigits" #pin3 (keyup)="focus(3)">
+                                                    <input type="password" class="input-digit-otp" maxlength="1"
+                                                        formControlName="newPin4" inputPattern="onlyDigits" #pin4 (keyup)="focus(4)">
+                                                </div>
+                                                <div class="titleRepeatPin message"> <span
+                                                        class="display-div-column new-pin">{{'commercialCards.repeatNewPin'
+                                                        | translate}}</span>
+                                                </div>
+                                            </ng-container>
+                                            <ng-container formGroupName="repeatNewPin">
+                                                <div class="inputRepeatPin"> <input type="password"
+                                                        class="input-digit-otp" maxlength="1"
+                                                        formControlName="repeatNewPin1" inputPattern="onlyDigits" #pin5 (keyup)="focus(5)">
+                                                    <input type="password" class="input-digit-otp" maxlength="1"
+                                                        formControlName="repeatNewPin2" inputPattern="onlyDigits" #pin6 (keyup)="focus(6)">
+                                                    <input type="password" class="input-digit-otp" maxlength="1"
+                                                        formControlName="repeatNewPin3" inputPattern="onlyDigits" #pin7 (keyup)="focus(7)">
+                                                    <input type="password" class="input-digit-otp" maxlength="1"
+                                                        formControlName="repeatNewPin4" inputPattern="onlyDigits" #pin8 (keyup)="focus(8)">
+                                                </div>
+                                                <div class="center-error">
+                                                    <!-- <p *ngIf="!( form.get('newPin1').valid && form.get('newPin2').valid && form.get('newPin3').valid && form.get('newPin4').valid && form.get('repeatNewPin1').valid && form.get('repeatNewPin2').valid && form.get('repeatNewPin3').valid && form.get('repeatNewPin4').valid) && !validatePin()" -->
+                                                    <p *ngIf="!validatePin()" class="alert alert-danger"
+                                                        style="margin:10px;">
+                                                        {{ 'commercialCards.errorPin' | translate }}
+                                                    </p>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
